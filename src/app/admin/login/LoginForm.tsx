@@ -2,14 +2,13 @@
 
 import { useState } from "react";
 import { signIn } from "next-auth/react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { AlertCircle } from "lucide-react";
 
 export function LoginForm() {
   const searchParams = useSearchParams();
-  const router = useRouter();
   const callbackUrl = searchParams.get("callbackUrl") || "/admin";
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -32,9 +31,11 @@ export function LoginForm() {
 
       if (result?.error) {
         setError("Invalid email or password");
+      } else if (result?.ok) {
+        window.location.href = callbackUrl;
+        return;
       } else {
-        router.push(callbackUrl);
-        router.refresh();
+        setError("Sign in failed. Please try again.");
       }
     } catch {
       setError("Something went wrong. Please try again.");
