@@ -4,9 +4,23 @@ import { getAllResearch, getFeaturedResearch } from "@/lib/queries";
 import { ResearchListClient } from "./ResearchListClient";
 
 export const metadata: Metadata = {
-  title: "Research & Publications — SOWA",
+  title: "Research & Publications",
   description:
     "Explore the latest research, reports, and publications on Ireland's offshore wind energy workforce and skills landscape.",
+  alternates: { canonical: "/research" },
+  openGraph: {
+    title: "Research & Publications — Offshore Wind Energy",
+    description:
+      "Research, reports, and publications on Ireland's offshore wind energy workforce and skills landscape.",
+    url: "/research",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Research & Publications — SOWA",
+    description:
+      "Research and publications on Ireland's offshore wind workforce.",
+  },
 };
 
 export default function ResearchPage() {

@@ -23,12 +23,23 @@ export async function generateMetadata({
 }: ResearchDetailProps): Promise<Metadata> {
   const { slug } = await params;
   const research = getResearchBySlug(slug);
-  if (!research) return { title: "Research Not Found — SOWA" };
+  if (!research) return { title: "Research Not Found" };
   const desc = research.summary.slice(0, 160);
   return {
-    title: `${research.title} — SOWA Research`,
+    title: `${research.title} — Research`,
     description: desc,
-    openGraph: { title: `${research.title} — SOWA Research`, description: desc, type: "article" },
+    alternates: { canonical: `/research/${research.slug}` },
+    openGraph: {
+      title: `${research.title} — SOWA Research`,
+      description: desc,
+      url: `/research/${research.slug}`,
+      type: "article",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${research.title} — SOWA`,
+      description: desc,
+    },
   };
 }
 

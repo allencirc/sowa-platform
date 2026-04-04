@@ -4,9 +4,23 @@ import { getAllEvents } from "@/lib/queries";
 import { EventsListClient } from "./EventsListClient";
 
 export const metadata: Metadata = {
-  title: "Events & Workshops — SOWA",
+  title: "Events & Workshops",
   description:
-    "Upcoming conferences, webinars, workshops, and roadshows for Ireland's offshore wind energy sector.",
+    "Upcoming conferences, webinars, workshops, and roadshows for Ireland's offshore wind energy sector. Register for in-person and virtual events.",
+  alternates: { canonical: "/events" },
+  openGraph: {
+    title: "Events & Workshops — Offshore Wind Energy",
+    description:
+      "Upcoming conferences, webinars, workshops, and roadshows for Ireland's offshore wind energy sector.",
+    url: "/events",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Events & Workshops — SOWA",
+    description:
+      "Conferences, webinars, and workshops for Ireland's offshore wind sector.",
+  },
 };
 
 export default function EventsPage() {

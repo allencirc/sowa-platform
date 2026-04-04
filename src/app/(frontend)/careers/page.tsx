@@ -5,9 +5,23 @@ import { CareerFilters } from "@/components/careers/CareerFilters";
 import { getAllCareers } from "@/lib/queries";
 
 export const metadata: Metadata = {
-  title: "Career Pathways — SOWA",
+  title: "Career Pathways",
   description:
     "Explore 12 career pathways across Ireland's offshore wind energy sector. View interactive maps, salary ranges, and progression routes.",
+  alternates: { canonical: "/careers" },
+  openGraph: {
+    title: "Career Pathways — Offshore Wind Energy",
+    description:
+      "Explore 12 career pathways across Ireland's offshore wind energy sector. View interactive maps, salary ranges, and progression routes.",
+    url: "/careers",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Career Pathways — SOWA",
+    description:
+      "Explore 12 career pathways across Ireland's offshore wind energy sector.",
+  },
 };
 
 export default function CareersPage() {

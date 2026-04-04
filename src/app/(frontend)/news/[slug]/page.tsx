@@ -22,12 +22,25 @@ export async function generateMetadata({
 }: NewsDetailProps): Promise<Metadata> {
   const { slug } = await params;
   const article = getNewsBySlug(slug);
-  if (!article) return { title: "Article Not Found — SOWA" };
+  if (!article) return { title: "Article Not Found" };
   const desc = article.excerpt.slice(0, 160);
   return {
-    title: `${article.title} — SOWA News`,
+    title: `${article.title} — News`,
     description: desc,
-    openGraph: { title: `${article.title} — SOWA News`, description: desc, type: "article" },
+    alternates: { canonical: `/news/${article.slug}` },
+    openGraph: {
+      title: article.title,
+      description: desc,
+      url: `/news/${article.slug}`,
+      type: "article",
+      publishedTime: article.date,
+      authors: [article.author],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${article.title} — SOWA`,
+      description: desc,
+    },
   };
 }
 

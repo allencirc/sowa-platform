@@ -8,9 +8,23 @@ import { getAllNews } from "@/lib/queries";
 import { formatDate } from "@/lib/utils";
 
 export const metadata: Metadata = {
-  title: "News — SOWA",
+  title: "News",
   description:
-    "Latest news and updates from Ireland's offshore wind energy sector.",
+    "Latest news and updates from Ireland's offshore wind energy sector. Industry developments, policy changes, and sector growth.",
+  alternates: { canonical: "/news" },
+  openGraph: {
+    title: "News — Offshore Wind Energy Ireland",
+    description:
+      "Latest news and updates from Ireland's offshore wind energy sector.",
+    url: "/news",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "News — SOWA",
+    description:
+      "Latest news from Ireland's offshore wind energy sector.",
+  },
 };
 
 export default function NewsPage() {

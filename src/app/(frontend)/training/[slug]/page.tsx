@@ -38,15 +38,22 @@ export async function generateMetadata({
 }: CourseDetailProps): Promise<Metadata> {
   const { slug } = await params;
   const course = getCourseBySlug(slug);
-  if (!course) return { title: "Course Not Found — SOWA" };
+  if (!course) return { title: "Course Not Found" };
   const desc = course.description.slice(0, 160);
   return {
-    title: `${course.title} — SOWA Training`,
+    title: `${course.title} — Training`,
     description: desc,
+    alternates: { canonical: `/training/${course.slug}` },
     openGraph: {
-      title: `${course.title} — SOWA Training`,
+      title: `${course.title} — Offshore Wind Training`,
       description: desc,
+      url: `/training/${course.slug}`,
       type: "article",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${course.title} — SOWA`,
+      description: desc,
     },
   };
 }

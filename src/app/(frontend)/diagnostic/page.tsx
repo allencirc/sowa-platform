@@ -4,9 +4,23 @@ import { User, Building2, GraduationCap, ArrowRight, Clock, Target, BarChart3 } 
 import { Container } from "@/components/ui/Container";
 
 export const metadata: Metadata = {
-  title: "Skills Diagnostic — SOWA",
+  title: "Skills Diagnostic",
   description:
     "Assess your offshore wind energy skills in 5 minutes and get personalised career and training recommendations.",
+  alternates: { canonical: "/diagnostic" },
+  openGraph: {
+    title: "OWE Skills Diagnostic — Assess Your Skills",
+    description:
+      "Assess your offshore wind energy skills in 5 minutes and get personalised career and training recommendations.",
+    url: "/diagnostic",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Skills Diagnostic — SOWA",
+    description:
+      "Assess your offshore wind skills in 5 minutes. Get personalised recommendations.",
+  },
 };
 
 const audiences = [

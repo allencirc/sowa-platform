@@ -26,15 +26,23 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: CareerDetailProps): Promise<Metadata> {
   const { slug } = await params;
   const career = getCareerBySlug(slug);
-  if (!career) return { title: "Career Not Found — SOWA" };
+  if (!career) return { title: "Career Not Found" };
   const desc = career.description.slice(0, 160);
   return {
-    title: `${career.title} — SOWA Careers`,
+    title: `${career.title} — Careers`,
     description: desc,
+    alternates: { canonical: `/careers/${career.slug}` },
     openGraph: {
-      title: `${career.title} — SOWA Careers`,
+      title: `${career.title} — Offshore Wind Career`,
       description: desc,
+      url: `/careers/${career.slug}`,
       type: "article",
+      section: career.sector,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${career.title} — SOWA`,
+      description: desc,
     },
   };
 }

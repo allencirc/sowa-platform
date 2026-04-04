@@ -5,9 +5,23 @@ import { getAllCourses } from "@/lib/queries";
 import { CourseListingClient } from "./CourseListingClient";
 
 export const metadata: Metadata = {
-  title: "Training & Courses — SOWA",
+  title: "Training & Courses",
   description:
-    "Find accredited courses, certifications, and training programmes for offshore wind careers in Ireland.",
+    "Find accredited courses, certifications, and training programmes for offshore wind careers in Ireland. Filter by format, NFQ level, provider, and cost.",
+  alternates: { canonical: "/training" },
+  openGraph: {
+    title: "Training & Courses — Offshore Wind Energy",
+    description:
+      "Find accredited courses, certifications, and training programmes for offshore wind careers in Ireland.",
+    url: "/training",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Training & Courses — SOWA",
+    description:
+      "Accredited courses and training for offshore wind careers in Ireland.",
+  },
 };
 
 export default function TrainingPage() {

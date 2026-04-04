@@ -29,12 +29,23 @@ export async function generateMetadata({
 }: EventDetailProps): Promise<Metadata> {
   const { slug } = await params;
   const event = getEventBySlug(slug);
-  if (!event) return { title: "Event Not Found — SOWA" };
+  if (!event) return { title: "Event Not Found" };
   const desc = event.description.slice(0, 160);
   return {
-    title: `${event.title} — SOWA Events`,
+    title: `${event.title} — Events`,
     description: desc,
-    openGraph: { title: `${event.title} — SOWA Events`, description: desc, type: "article" },
+    alternates: { canonical: `/events/${event.slug}` },
+    openGraph: {
+      title: `${event.title} — SOWA Event`,
+      description: desc,
+      url: `/events/${event.slug}`,
+      type: "article",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${event.title} — SOWA`,
+      description: desc,
+    },
   };
 }
 
