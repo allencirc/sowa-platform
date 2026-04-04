@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { signIn } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
@@ -23,23 +22,35 @@ export function LoginForm() {
     const password = formData.get("password") as string;
 
     try {
-      const result = await signIn("credentials", {
-        email,
-        password,
-        redirect: false,
+      // 1. Get CSRF token
+      const csrfRes = await fetch("/api/auth/csrf");
+      const { csrfToken } = await csrfRes.json();
+
+      // 2. Sign in via credentials callback
+      const res = await fetch("/api/auth/callback/credentials", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({
+          email,
+          password,
+          csrfToken,
+          callbackUrl,
+        }),
+        redirect: "follow",
       });
 
-      if (result?.error) {
+      // If we get redirected to the login page with an error, credentials were wrong
+      const url = new URL(res.url);
+      if (url.searchParams.has("error")) {
         setError("Invalid email or password");
-      } else if (result?.ok) {
-        window.location.href = callbackUrl;
+        setLoading(false);
         return;
-      } else {
-        setError("Sign in failed. Please try again.");
       }
+
+      // Success — cookie is set, do a full navigation
+      window.location.href = callbackUrl;
     } catch {
       setError("Something went wrong. Please try again.");
-    } finally {
       setLoading(false);
     }
   }
