@@ -11,9 +11,11 @@ import {
   Plus,
   ArrowRight,
   Clock,
+  ClipboardList,
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
+import { HubSpotSyncWidget } from "@/components/admin/HubSpotSyncWidget";
 import { formatDate } from "@/lib/utils";
 
 interface StatCardProps {
@@ -67,13 +69,14 @@ interface RecentItem {
 export default async function AdminDashboardPage() {
   const session = await auth();
 
-  const [careers, courses, events, research, news, users] = await Promise.all([
+  const [careers, courses, events, research, news, users, registrations] = await Promise.all([
     prisma.career.count(),
     prisma.course.count(),
     prisma.event.count(),
     prisma.research.count(),
     prisma.newsArticle.count(),
     prisma.user.count(),
+    prisma.registration.count(),
   ]);
 
   // Get recent activity across all content types
@@ -168,6 +171,12 @@ export default async function AdminDashboardPage() {
           href="/admin/news"
         />
         <StatCard
+          label="Registrations"
+          value={registrations}
+          icon={<ClipboardList className="h-6 w-6" />}
+          href="/admin/registrations"
+        />
+        <StatCard
           label="Users"
           value={users}
           icon={<Users className="h-6 w-6" />}
@@ -176,8 +185,9 @@ export default async function AdminDashboardPage() {
       </div>
 
       <div className="mt-8 grid gap-6 lg:grid-cols-3">
-        {/* Quick Actions */}
-        <div className="rounded-xl bg-surface-card p-6 shadow-sm">
+        {/* Quick Actions + HubSpot */}
+        <div className="space-y-6">
+          <div className="rounded-xl bg-surface-card p-6 shadow-sm">
           <h2 className="mb-4 text-lg font-semibold text-text-primary">
             Quick Actions
           </h2>
@@ -213,6 +223,9 @@ export default async function AdminDashboardPage() {
               </Button>
             </Link>
           </div>
+          </div>
+
+          <HubSpotSyncWidget />
         </div>
 
         {/* Recent Activity */}

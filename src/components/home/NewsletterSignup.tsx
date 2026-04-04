@@ -12,6 +12,8 @@ export function NewsletterSignup() {
   const [email, setEmail] = useState("");
   const [selectedTopics, setSelectedTopics] = useState<string[]>([]);
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   function toggleTopic(topic: string) {
     setSelectedTopics((prev) =>
@@ -19,10 +21,31 @@ export function NewsletterSignup() {
     );
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!email) return;
-    setSubmitted(true);
+    if (!email || submitting) return;
+
+    setSubmitting(true);
+    setError(null);
+
+    try {
+      const res = await fetch("/api/newsletter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, topics: selectedTopics }),
+      });
+
+      if (!res.ok) {
+        const body = await res.json().catch(() => null);
+        throw new Error(body?.error ?? "Subscription failed");
+      }
+
+      setSubmitted(true);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong");
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   if (submitted) {
@@ -77,7 +100,9 @@ export function NewsletterSignup() {
                 aria-label="Email address"
                 className="flex-1 rounded-lg border border-gray-200 bg-white px-4 py-3 text-base text-text-primary placeholder:text-text-muted focus:border-accent focus:ring-2 focus:ring-accent/20 focus:outline-none transition-colors"
               />
-              <Button type="submit">Subscribe</Button>
+              <Button type="submit" disabled={submitting}>
+                {submitting ? "Subscribing..." : "Subscribe"}
+              </Button>
             </div>
 
             <div className="flex flex-wrap justify-center gap-x-6 gap-y-3">
@@ -91,6 +116,10 @@ export function NewsletterSignup() {
                 />
               ))}
             </div>
+
+            {error && (
+              <p className="mt-3 text-sm text-status-error">{error}</p>
+            )}
           </form>
         </div>
       </Container>

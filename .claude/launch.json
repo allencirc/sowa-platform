@@ -4,7 +4,7 @@
     {
       "name": "sowa-dev",
       "runtimeExecutable": "/Users/allenwixted/.nvm/versions/node/v22.22.0/bin/node",
-      "runtimeArgs": ["node_modules/.bin/next", "dev", "-p", "3000"],
+      "runtimeArgs": ["node_modules/next/dist/bin/next", "dev", "-p", "3000"],
       "port": 3000
     }
   ]

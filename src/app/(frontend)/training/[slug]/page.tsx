@@ -9,12 +9,11 @@ import {
   Building2,
   CreditCard,
   CheckCircle2,
-  ArrowRight,
 } from "lucide-react";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
 import { Container } from "@/components/ui/Container";
 import { Badge } from "@/components/ui/Badge";
-import { Button } from "@/components/ui/Button";
+import { RegisterButton } from "@/components/registration/RegisterButton";
 import { SkillBadge } from "@/components/careers/SkillBadge";
 import { CareerCard } from "@/components/careers/CareerCard";
 import {
@@ -83,6 +82,8 @@ export default async function CourseDetailPage({ params }: CourseDetailProps) {
   const relatedCareers = careerResults.filter(
     (c): c is NonNullable<typeof c> => c !== undefined
   );
+
+  const enableRegistration = process.env.ENABLE_COURSE_REGISTRATION === "true";
 
   const infoItems = [
     {
@@ -237,23 +238,23 @@ export default async function CourseDetailPage({ params }: CourseDetailProps) {
             )}
 
             {/* CTA */}
-            <div className="bg-gradient-to-r from-primary to-primary-light rounded-xl p-6 sm:p-8 text-center">
-              <h3 className="text-xl font-bold text-white mb-2">
-                Interested in this course?
-              </h3>
-              <p className="text-white/80 mb-5 text-sm">
-                Register your interest and we&apos;ll connect you with the
-                training provider.
-              </p>
-              <Button
-                variant="secondary"
-                size="lg"
-                className="shadow-lg"
-              >
-                Register Interest
-                <ArrowRight className="h-5 w-5" />
-              </Button>
-            </div>
+            {enableRegistration && (
+              <div className="bg-gradient-to-r from-primary to-primary-light rounded-xl p-6 sm:p-8 text-center">
+                <h3 className="text-xl font-bold text-white mb-2">
+                  Interested in this course?
+                </h3>
+                <p className="text-white/80 mb-5 text-sm">
+                  Register your interest and we&apos;ll connect you with the
+                  training provider.
+                </p>
+                <RegisterButton
+                  type="COURSE"
+                  contentId={course.slug}
+                  contentTitle={course.title}
+                  label="Register Interest"
+                />
+              </div>
+            )}
           </div>
         </Container>
       </section>

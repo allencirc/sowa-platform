@@ -285,9 +285,51 @@ export const skillFiltersSchema = paginationSchema.merge(sortSchema).extend({
 
 export const diagnosticAnswersSchema = z.object({
   answers: z.record(z.string(), z.union([z.string(), z.array(z.string())])),
+  // Optional contact info for HubSpot sync (only sent if user consents)
+  contact: z
+    .object({
+      email: z.string().email(),
+      name: z.string().min(1),
+      consent: z.literal(true),
+    })
+    .optional(),
 });
 
-// ─── Search schema ───────────────────────────────────────
+// ─── Registration schemas ───────────���───────────────────
+
+export const RegistrationTypeEnum = z.enum(["EVENT", "COURSE"]);
+
+export const RegistrationStatusEnum = z.enum(["PENDING", "CONFIRMED", "CANCELLED"]);
+
+export const createRegistrationSchema = z.object({
+  type: RegistrationTypeEnum,
+  contentId: z.string().min(1),
+  name: z.string().min(1, "Name is required").max(200),
+  email: z.string().email("Please enter a valid email address"),
+  phone: z.string().optional(),
+  organisation: z.string().optional(),
+  role: z.string().optional(),
+  dietaryRequirements: z.string().optional(),
+  additionalNotes: z.string().max(1000).optional(),
+  gdprConsent: z.boolean().refine((val) => val === true, {
+    message: "You must consent to data processing to register",
+  }),
+});
+
+export const updateRegistrationStatusSchema = z.object({
+  status: RegistrationStatusEnum,
+});
+
+export const registrationFiltersSchema = paginationSchema.merge(sortSchema).extend({
+  type: RegistrationTypeEnum.optional(),
+  contentId: z.string().optional(),
+  status: RegistrationStatusEnum.optional(),
+  dateFrom: z.string().optional(),
+  dateTo: z.string().optional(),
+  search: z.string().optional(),
+});
+
+// ─── Search schema ─────���─────────────────────────��───────
 
 export const searchSchema = paginationSchema.extend({
   q: z.string().min(1),

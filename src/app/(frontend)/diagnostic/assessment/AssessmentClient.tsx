@@ -16,6 +16,7 @@ import { QuestionStep } from "@/components/diagnostic/QuestionStep";
 import { ResultsChart } from "@/components/diagnostic/ResultsChart";
 import { GapCard } from "@/components/diagnostic/GapCard";
 import { RecommendationCards } from "@/components/diagnostic/RecommendationCards";
+import { AISummary } from "@/components/diagnostic/AISummary";
 import { calculateResults } from "@/lib/diagnostic";
 import type { Career, Course, DiagnosticQuestion, DiagnosticResult, Skill } from "@/lib/types";
 
@@ -246,6 +247,12 @@ export default function AssessmentClient({ questions, allSkills, allCareers, all
             <RecommendationCards result={result} />
           </Container>
         </section>
+
+        <AISummary
+          result={result}
+          answers={answers}
+          overallScorePercent={overallPct}
+        />
       </div>
     );
   }

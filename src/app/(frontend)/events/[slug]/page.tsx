@@ -8,13 +8,13 @@ import {
   Monitor,
   Globe,
   Users,
-  ArrowRight,
 } from "lucide-react";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
 import { Container } from "@/components/ui/Container";
 import { Badge } from "@/components/ui/Badge";
-import { Button } from "@/components/ui/Button";
+import { RegisterButton } from "@/components/registration/RegisterButton";
 import { getEventBySlug, getAllEvents } from "@/lib/queries";
+import { prisma } from "@/lib/prisma";
 
 interface EventDetailProps {
   params: Promise<{ slug: string }>;
@@ -98,6 +98,21 @@ export default async function EventDetailPage({ params }: EventDetailProps) {
 
   const LocationIcon = locationIcons[event.locationType] ?? MapPin;
 
+  const enableRegistration = process.env.ENABLE_EVENT_REGISTRATION === "true";
+
+  let registeredCount = 0;
+  if (event.capacity) {
+    registeredCount = await prisma.registration.count({
+      where: {
+        type: "EVENT",
+        contentId: event.slug,
+        status: { not: "CANCELLED" },
+      },
+    });
+  }
+
+  const isFull = event.capacity ? registeredCount >= event.capacity : false;
+
   return (
     <>
       <Breadcrumbs
@@ -168,7 +183,12 @@ export default async function EventDetailPage({ params }: EventDetailProps) {
               {event.capacity && (
                 <div className="flex items-center gap-2">
                   <Users className="h-5 w-5 text-accent" />
-                  <span>{event.capacity} places</span>
+                  <span>
+                    {registeredCount} / {event.capacity} places
+                    {isFull && (
+                      <span className="ml-1 text-status-error font-medium">(Full)</span>
+                    )}
+                  </span>
                 </div>
               )}
             </div>
@@ -190,18 +210,32 @@ export default async function EventDetailPage({ params }: EventDetailProps) {
             </div>
 
             {/* CTA */}
-            <div className="bg-gradient-to-r from-primary to-primary-light rounded-xl p-6 sm:p-8 text-center">
-              <h3 className="text-xl font-bold text-white mb-2">
-                Interested in attending?
-              </h3>
-              <p className="text-white/80 mb-5 text-sm">
-                Register your place and we&apos;ll send you all the details.
-              </p>
-              <Button variant="secondary" size="lg" className="shadow-lg">
-                Register
-                <ArrowRight className="h-5 w-5" />
-              </Button>
-            </div>
+            {enableRegistration && !isFull && (
+              <div className="bg-gradient-to-r from-primary to-primary-light rounded-xl p-6 sm:p-8 text-center">
+                <h3 className="text-xl font-bold text-white mb-2">
+                  Interested in attending?
+                </h3>
+                <p className="text-white/80 mb-5 text-sm">
+                  Register your place and we&apos;ll send you all the details.
+                </p>
+                <RegisterButton
+                  type="EVENT"
+                  contentId={event.slug}
+                  contentTitle={event.title}
+                  showDietary
+                />
+              </div>
+            )}
+            {enableRegistration && isFull && (
+              <div className="bg-gradient-to-r from-gray-600 to-gray-700 rounded-xl p-6 sm:p-8 text-center">
+                <h3 className="text-xl font-bold text-white mb-2">
+                  This event is fully booked
+                </h3>
+                <p className="text-white/80 text-sm">
+                  All places have been taken. Please check back for future events.
+                </p>
+              </div>
+            )}
           </div>
         </Container>
       </section>

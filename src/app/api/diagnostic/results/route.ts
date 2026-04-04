@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { applyRateLimit, parseBody, errorResponse } from "@/lib/api-utils";
 import { diagnosticAnswersSchema } from "@/lib/validations";
 import { calculateResults } from "@/lib/diagnostic";
+import { syncDiagnosticResults } from "@/lib/hubspot";
 import type { Career, Course, DiagnosticQuestion, Skill } from "@/lib/types";
 
 // Enum display maps
@@ -125,7 +126,7 @@ export async function POST(request: NextRequest) {
   const parsed = await parseBody(request, diagnosticAnswersSchema);
   if (parsed.error) return parsed.error;
 
-  const { answers } = parsed.data;
+  const { answers, contact } = parsed.data;
 
   try {
     // Fetch all reference data from DB
@@ -147,6 +148,18 @@ export async function POST(request: NextRequest) {
       allCareers,
       allCourses,
     });
+
+    // If user consented, sync results to HubSpot in the background
+    if (contact?.consent && contact.email) {
+      syncDiagnosticResults({
+        email: contact.email,
+        name: contact.name,
+        topGaps: result.gaps.slice(0, 3).map((g) => g.skill.name),
+        recommendedCareers: result.recommendedCareers.map((c) => c.slug),
+      }).catch((err) => {
+        console.error("[Diagnostic] HubSpot sync failed:", err);
+      });
+    }
 
     return NextResponse.json(result);
   } catch (err) {

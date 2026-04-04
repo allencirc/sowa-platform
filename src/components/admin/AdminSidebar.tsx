@@ -16,6 +16,7 @@ import {
   LogOut,
   Wind,
   Image,
+  ClipboardList,
   type LucideIcon,
 } from "lucide-react";
 
@@ -62,6 +63,12 @@ const navItems: NavItem[] = [
     href: "/admin/news",
     icon: Newspaper,
     roles: ["ADMIN", "EDITOR"],
+  },
+  {
+    label: "Registrations",
+    href: "/admin/registrations",
+    icon: ClipboardList,
+    roles: ["ADMIN", "EDITOR", "VIEWER"],
   },
   {
     label: "Media",
