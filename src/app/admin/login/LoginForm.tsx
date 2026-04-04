@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
@@ -9,54 +9,26 @@ import { AlertCircle } from "lucide-react";
 export function LoginForm() {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") || "/admin";
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  const authError = searchParams.get("error");
+  const [csrfToken, setCsrfToken] = useState("");
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setError(null);
-    setLoading(true);
-
-    const formData = new FormData(e.currentTarget);
-    const email = formData.get("email") as string;
-    const password = formData.get("password") as string;
-
-    try {
-      // 1. Get CSRF token
-      const csrfRes = await fetch("/api/auth/csrf");
-      const { csrfToken } = await csrfRes.json();
-
-      // 2. Sign in via credentials callback
-      const res = await fetch("/api/auth/callback/credentials", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: new URLSearchParams({
-          email,
-          password,
-          csrfToken,
-          callbackUrl,
-        }),
-        redirect: "follow",
-      });
-
-      // If we get redirected to the login page with an error, credentials were wrong
-      const url = new URL(res.url);
-      if (url.searchParams.has("error")) {
-        setError("Invalid email or password");
-        setLoading(false);
-        return;
-      }
-
-      // Success — cookie is set, do a full navigation
-      window.location.href = callbackUrl;
-    } catch {
-      setError("Something went wrong. Please try again.");
-      setLoading(false);
-    }
-  }
+  // Fetch CSRF token on mount
+  useEffect(() => {
+    fetch("/api/auth/csrf")
+      .then((res) => res.json())
+      .then((data) => setCsrfToken(data.csrfToken))
+      .catch(() => {});
+  }, []);
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+    <form
+      method="POST"
+      action="/api/auth/callback/credentials"
+      className="flex flex-col gap-5"
+    >
+      <input type="hidden" name="csrfToken" value={csrfToken} />
+      <input type="hidden" name="callbackUrl" value={callbackUrl} />
+
       <Input
         id="email"
         name="email"
@@ -77,10 +49,10 @@ export function LoginForm() {
         required
       />
 
-      {error && (
+      {authError && (
         <div className="flex items-center gap-2 rounded-lg bg-status-error/10 px-4 py-3 text-sm text-status-error">
           <AlertCircle className="h-4 w-4 shrink-0" />
-          {error}
+          Invalid email or password
         </div>
       )}
 
@@ -89,9 +61,9 @@ export function LoginForm() {
         variant="primary"
         size="lg"
         className="w-full"
-        disabled={loading}
+        disabled={!csrfToken}
       >
-        {loading ? "Signing in..." : "Sign In"}
+        Sign In
       </Button>
     </form>
   );
