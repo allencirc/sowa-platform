@@ -38,6 +38,20 @@ export async function syncNewsletterSubscription(data: NewsletterSync): Promise<
   console.log("[HubSpot] Would sync newsletter subscription:", data.email, data.topics);
 }
 
+interface DiagnosticResultsSync {
+  email: string;
+  name?: string;
+  topGaps: string[];
+  recommendedCareers: string[];
+}
+
+export async function syncDiagnosticResults(data: DiagnosticResultsSync): Promise<void> {
+  // No-op until HubSpot integration is configured
+  if (!process.env.HUBSPOT_API_KEY) return;
+
+  console.log("[HubSpot] Would sync diagnostic results:", data.email, data.topGaps);
+}
+
 export function getSyncStatus(): SyncStatus {
   return {
     configured: !!process.env.HUBSPOT_API_KEY,
