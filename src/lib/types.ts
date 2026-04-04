@@ -70,6 +70,7 @@ export interface Event {
   location?: string;
   description: string;
   capacity?: number;
+  image?: string;
 }
 
 export interface Research {
@@ -81,6 +82,7 @@ export interface Research {
   summary: string;
   categories: string[];
   isFeatured?: boolean;
+  image?: string;
 }
 
 export interface Skill {
@@ -129,6 +131,7 @@ export interface NewsArticle {
   content: string;
   category: string;
   author: string;
+  image?: string;
 }
 
 export interface SearchResult {

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Wind } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 
@@ -26,7 +27,19 @@ function TurbineSVG({ className }: { className?: string }) {
 
 export function HeroSection() {
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-[#0a1c33] via-primary to-primary-light text-text-inverse">
+    <section className="relative overflow-hidden text-text-inverse">
+      {/* Background image */}
+      <Image
+        src="https://images.unsplash.com/photo-1532601224476-15c79f2f7a51?w=1920&h=1080&fit=crop"
+        alt=""
+        fill
+        className="object-cover"
+        sizes="100vw"
+        priority
+      />
+      {/* Overlay gradient */}
+      <div className="absolute inset-0 bg-gradient-to-r from-[#0a1c33]/90 via-primary/80 to-primary-light/60" />
+
       {/* Decorative turbine silhouettes */}
       <div className="absolute inset-0 pointer-events-none select-none">
         <TurbineSVG className="absolute -right-4 bottom-0 h-[420px] w-auto text-white sm:right-8 lg:right-24" />

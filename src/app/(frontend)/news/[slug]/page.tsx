@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { Calendar, User, ArrowLeft } from "lucide-react";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
 import { Container } from "@/components/ui/Container";
@@ -69,6 +70,20 @@ export default async function NewsDetailPage({ params }: NewsDetailProps) {
           </div>
         </Container>
       </section>
+
+      {/* Hero image */}
+      {article.image && (
+        <div className="relative h-64 sm:h-80 lg:h-96 bg-gray-100">
+          <Image
+            src={article.image}
+            alt={article.title}
+            fill
+            className="object-cover"
+            sizes="100vw"
+            priority
+          />
+        </div>
+      )}
 
       {/* Article body */}
       <section className="py-12 sm:py-16 bg-white">

@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import Image from "next/image";
 import {
   Calendar,
   Clock,
@@ -94,6 +95,21 @@ export default async function EventDetailPage({ params }: EventDetailProps) {
           { label: event.title, href: `/events/${event.slug}` },
         ]}
       />
+
+      {/* Hero image */}
+      {event.image && (
+        <div className="relative h-64 sm:h-80 lg:h-96 bg-gray-100">
+          <Image
+            src={event.image}
+            alt={event.title}
+            fill
+            className="object-cover"
+            sizes="100vw"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+        </div>
+      )}
 
       {/* Hero */}
       <section className="bg-surface py-10 sm:py-14">

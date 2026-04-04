@@ -8,7 +8,8 @@
     "locationType": "Physical",
     "location": "Convention Centre Dublin",
     "description": "Join us for the national launch of Ireland's Offshore Wind Career Pathway Platform. Hear from industry leaders, policy makers, and education providers about Ireland's offshore wind future.",
-    "capacity": 300
+    "capacity": 300,
+    "image": "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&h=500&fit=crop"
   },
   {
     "slug": "careers-in-offshore-wind-webinar",
@@ -18,7 +19,8 @@
     "endDate": "2026-05-14T14:30:00",
     "locationType": "Virtual",
     "description": "An introductory webinar for anyone curious about careers in offshore wind energy. Learn about entry points, training pathways, and what a typical career looks like.",
-    "capacity": 500
+    "capacity": 500,
+    "image": "https://images.unsplash.com/photo-1591115765373-5207764f72e7?w=800&h=500&fit=crop"
   },
   {
     "slug": "owe-employer-roundtable",
@@ -29,7 +31,8 @@
     "locationType": "Hybrid",
     "location": "Wind Energy Ireland, Dublin + Online",
     "description": "A facilitated discussion for employers on workforce planning, upskilling strategies, and accessing Skillnet Ireland supports for OWE training.",
-    "capacity": 50
+    "capacity": 50,
+    "image": "https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&h=500&fit=crop"
   },
   {
     "slug": "offshore-wind-skills-roadshow-cork",
@@ -40,7 +43,8 @@
     "locationType": "Physical",
     "location": "Cork International Hotel",
     "description": "Part of a national roadshow series bringing offshore wind career information directly to communities. Meet training providers, hear from technicians, and explore career pathways.",
-    "capacity": 150
+    "capacity": 150,
+    "image": "https://images.unsplash.com/photo-1466611653911-95081537e5b7?w=800&h=500&fit=crop"
   },
   {
     "slug": "research-symposium-owe-skills",
@@ -51,7 +55,8 @@
     "locationType": "Physical",
     "location": "University of Galway",
     "description": "Academic and industry researchers present the latest findings on skills gaps, workforce trends, and training effectiveness in offshore wind energy.",
-    "capacity": 200
+    "capacity": 200,
+    "image": "https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=800&h=500&fit=crop"
   },
   {
     "slug": "gwo-awareness-session",
@@ -61,6 +66,7 @@
     "endDate": "2026-05-28T12:00:00",
     "locationType": "Virtual",
     "description": "A free information session explaining GWO (Global Wind Organisation) safety certifications — what they are, why you need them, and where to get trained in Ireland.",
-    "capacity": 300
+    "capacity": 300,
+    "image": "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=800&h=500&fit=crop"
   }
 ]

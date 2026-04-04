@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { Calendar, ArrowRight } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Badge } from "@/components/ui/Badge";
@@ -37,19 +38,29 @@ export default function NewsPage() {
                 href={`/news/${article.slug}`}
                 className="group block bg-surface-card rounded-xl border border-gray-100 overflow-hidden transition-all duration-200 hover:shadow-lg hover:shadow-primary/5 hover:-translate-y-0.5"
               >
-                {/* Featured image placeholder */}
-                <div className="h-44 bg-gradient-to-br from-primary/80 to-accent/60 flex items-center justify-center relative overflow-hidden">
-                  <div
-                    className="absolute inset-0 opacity-10"
-                    style={{
-                      backgroundImage:
-                        "radial-gradient(circle, white 1px, transparent 1px)",
-                      backgroundSize: "16px 16px",
-                    }}
-                  />
+                {/* Featured image */}
+                <div className="h-44 relative overflow-hidden bg-gradient-to-br from-primary/80 to-accent/60">
+                  {article.image ? (
+                    <Image
+                      src={article.image}
+                      alt={article.title}
+                      fill
+                      className="object-cover transition-transform duration-300 group-hover:scale-105"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    />
+                  ) : (
+                    <div
+                      className="absolute inset-0 opacity-10"
+                      style={{
+                        backgroundImage:
+                          "radial-gradient(circle, white 1px, transparent 1px)",
+                        backgroundSize: "16px 16px",
+                      }}
+                    />
+                  )}
                   <Badge
                     variant="default"
-                    className="absolute top-3 left-3 bg-white/90 text-text-primary"
+                    className="absolute top-3 left-3 bg-white/90 text-text-primary z-10"
                   >
                     {article.category}
                   </Badge>

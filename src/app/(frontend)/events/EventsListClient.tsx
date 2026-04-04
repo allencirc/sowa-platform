@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { MapPin, Monitor, Globe, ArrowRight, Calendar } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
 import { cn } from "@/lib/utils";
@@ -100,8 +101,21 @@ export function EventsListClient({ events }: EventsListClientProps) {
               <Link
                 key={event.slug}
                 href={`/events/${event.slug}`}
-                className="group block bg-surface-card rounded-xl border border-gray-100 p-5 sm:p-6 transition-all duration-200 hover:shadow-lg hover:shadow-primary/5 hover:border-gray-200"
+                className="group block bg-surface-card rounded-xl border border-gray-100 overflow-hidden transition-all duration-200 hover:shadow-lg hover:shadow-primary/5 hover:border-gray-200"
               >
+                {/* Event image */}
+                {event.image && (
+                  <div className="relative h-40 sm:h-48 overflow-hidden bg-gradient-to-br from-primary/80 to-accent/60">
+                    <Image
+                      src={event.image}
+                      alt={event.title}
+                      fill
+                      className="object-cover transition-transform duration-300 group-hover:scale-105"
+                      sizes="(max-width: 768px) 100vw, 100vw"
+                    />
+                  </div>
+                )}
+                <div className="p-5 sm:p-6">
                 <div className="flex flex-col sm:flex-row sm:items-start gap-4 sm:gap-6">
                   {/* Date block */}
                   <div className="hidden sm:flex flex-col items-center justify-center bg-primary/5 rounded-xl w-20 h-20 shrink-0">
@@ -158,6 +172,7 @@ export function EventsListClient({ events }: EventsListClientProps) {
                       <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
                     </span>
                   </div>
+                </div>
                 </div>
               </Link>
             );

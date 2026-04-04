@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { FileText, ArrowRight } from "lucide-react";
 import { cn, formatDate } from "@/lib/utils";
 import { Badge } from "@/components/ui/Badge";
@@ -19,15 +20,25 @@ export function ResearchCard({ research, featured = false, className }: Research
         className
       )}
     >
-      {/* Decorative header */}
+      {/* Header image */}
       <div className={cn(
-        "bg-gradient-to-br from-primary to-primary-light flex items-center justify-center",
+        "relative overflow-hidden bg-gradient-to-br from-primary to-primary-light flex items-center justify-center",
         featured ? "h-48" : "h-32"
       )}>
-        <FileText className={cn(
-          "text-white/20",
-          featured ? "h-20 w-20" : "h-12 w-12"
-        )} />
+        {research.image ? (
+          <Image
+            src={research.image}
+            alt={research.title}
+            fill
+            className="object-cover transition-transform duration-300 group-hover:scale-105"
+            sizes={featured ? "(max-width: 768px) 100vw, 50vw" : "(max-width: 768px) 100vw, 33vw"}
+          />
+        ) : (
+          <FileText className={cn(
+            "text-white/20",
+            featured ? "h-20 w-20" : "h-12 w-12"
+          )} />
+        )}
       </div>
 
       <div className={cn("p-5", featured && "p-6")}>
