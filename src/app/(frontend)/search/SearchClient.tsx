@@ -1,12 +1,11 @@
 "use client";
 
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { Search, ArrowRight, FileText } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Badge } from "@/components/ui/Badge";
-import { globalSearch } from "@/lib/queries";
 import type { SearchResult } from "@/lib/types";
 
 const typeConfig: Record<
@@ -25,8 +24,22 @@ export function SearchClient() {
   const router = useRouter();
   const initialQuery = searchParams.get("q") ?? "";
   const [query, setQuery] = useState(initialQuery);
+  const [results, setResults] = useState<SearchResult[]>([]);
 
-  const results = useMemo(() => globalSearch(query), [query]);
+  // Fetch search results from API
+  useEffect(() => {
+    if (!query.trim()) {
+      setResults([]);
+      return;
+    }
+    let cancelled = false;
+    fetch(`/api/search?q=${encodeURIComponent(query)}`)
+      .then((res) => res.json())
+      .then((data: SearchResult[]) => {
+        if (!cancelled) setResults(data);
+      });
+    return () => { cancelled = true; };
+  }, [query]);
 
   // Group results by type
   const grouped = useMemo(() => {

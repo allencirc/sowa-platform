@@ -20,12 +20,12 @@ interface CareerDetailProps {
 }
 
 export async function generateStaticParams() {
-  return getAllCareers().map((c) => ({ slug: c.slug }));
+  return (await getAllCareers()).map((c) => ({ slug: c.slug }));
 }
 
 export async function generateMetadata({ params }: CareerDetailProps): Promise<Metadata> {
   const { slug } = await params;
-  const career = getCareerBySlug(slug);
+  const career = await getCareerBySlug(slug);
   if (!career) return { title: "Career Not Found" };
   const desc = career.description.slice(0, 160);
   return {
@@ -49,13 +49,16 @@ export async function generateMetadata({ params }: CareerDetailProps): Promise<M
 
 export default async function CareerDetailPage({ params }: CareerDetailProps) {
   const { slug } = await params;
-  const career = getCareerBySlug(slug);
+  const career = await getCareerBySlug(slug);
   if (!career) notFound();
 
-  const skills = getSkillsByCareer(career.slug);
-  const relatedCourses = (career.relatedCourses ?? [])
-    .map((s) => getCourseBySlug(s))
-    .filter((c): c is NonNullable<typeof c> => c !== undefined);
+  const skills = await getSkillsByCareer(career.slug);
+  const relatedCourseResults = await Promise.all(
+    (career.relatedCourses ?? []).map((s) => getCourseBySlug(s))
+  );
+  const relatedCourses = relatedCourseResults.filter(
+    (c): c is NonNullable<typeof c> => c !== undefined
+  );
 
   return (
     <>

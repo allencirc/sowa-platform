@@ -5,6 +5,7 @@ import { Calendar, ArrowRight } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Badge } from "@/components/ui/Badge";
 import { getAllNews } from "@/lib/queries";
+
 import { formatDate } from "@/lib/utils";
 
 export const metadata: Metadata = {
@@ -27,8 +28,8 @@ export const metadata: Metadata = {
   },
 };
 
-export default function NewsPage() {
-  const articles = getAllNews();
+export default async function NewsPage() {
+  const articles = await getAllNews();
 
   return (
     <>

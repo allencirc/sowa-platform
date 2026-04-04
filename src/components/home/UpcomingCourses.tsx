@@ -4,8 +4,8 @@ import { Container } from "@/components/ui/Container";
 import { CourseCard } from "@/components/courses/CourseCard";
 import { getAllCourses } from "@/lib/queries";
 
-export function UpcomingCourses() {
-  const courses = getAllCourses()
+export async function UpcomingCourses() {
+  const courses = (await getAllCourses())
     .filter((c) => c.nextStartDate)
     .sort((a, b) => (a.nextStartDate ?? "").localeCompare(b.nextStartDate ?? ""))
     .slice(0, 3);

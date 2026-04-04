@@ -1,0 +1,329 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─── Enums ────────────────────────────────────────────────
+
+enum CareerSector {
+  OPERATIONS_MAINTENANCE    @map("Operations & Maintenance")
+  MARINE_OPERATIONS         @map("Marine Operations")
+  SURVEY_DESIGN             @map("Survey & Design")
+  HSE                       @map("Health, Safety & Environment")
+  ELECTRICAL                @map("Electrical")
+  POLICY_REGULATION         @map("Policy & Regulation")
+  PROJECT_MANAGEMENT        @map("Project Management")
+}
+
+enum EntryLevel {
+  APPRENTICE  @map("Apprentice")
+  ENTRY       @map("Entry")
+  MID         @map("Mid")
+  SENIOR      @map("Senior")
+  LEADERSHIP  @map("Leadership")
+}
+
+enum ProviderType {
+  UNIVERSITY       @map("University")
+  ETB              @map("ETB")
+  PRIVATE          @map("Private")
+  INDUSTRY         @map("Industry")
+  SKILLNET_NETWORK @map("Skillnet_Network")
+  GOVERNMENT       @map("Government")
+}
+
+enum DeliveryFormat {
+  IN_PERSON @map("In-Person")
+  ONLINE    @map("Online")
+  BLENDED   @map("Blended")
+  SELF_PACED @map("Self-Paced")
+}
+
+enum EventType {
+  WORKSHOP    @map("Workshop")
+  WEBINAR     @map("Webinar")
+  CONFERENCE  @map("Conference")
+  NETWORKING  @map("Networking")
+  TRAINING    @map("Training")
+  ROADSHOW    @map("Roadshow")
+}
+
+enum LocationType {
+  PHYSICAL @map("Physical")
+  VIRTUAL  @map("Virtual")
+  HYBRID   @map("Hybrid")
+}
+
+enum SkillCategory {
+  TECHNICAL   @map("Technical")
+  SAFETY      @map("Safety")
+  REGULATORY  @map("Regulatory")
+  DIGITAL     @map("Digital")
+  MANAGEMENT  @map("Management")
+}
+
+enum PathwayType {
+  PROGRESSION     @map("progression")
+  LATERAL         @map("lateral")
+  SPECIALISATION  @map("specialisation")
+}
+
+enum DiagnosticQuestionType {
+  SINGLE_CHOICE   @map("single_choice")
+  MULTIPLE_CHOICE @map("multiple_choice")
+  SCALE           @map("scale")
+}
+
+enum UserRole {
+  ADMIN
+  EDITOR
+  VIEWER
+}
+
+enum ContentStatus {
+  DRAFT
+  IN_REVIEW
+  PUBLISHED
+  ARCHIVED
+}
+
+enum ContentType {
+  CAREER
+  COURSE
+  EVENT
+  RESEARCH
+  NEWS
+}
+
+// ─── Models ───────────────────────────────────────────────
+
+model Skill {
+  id        String        @id @default(cuid())
+  slug      String        @unique
+  name      String
+  category  SkillCategory
+
+  careers   CareerSkill[]
+  courses   CourseSkill[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("skills")
+}
+
+model Career {
+  id                  String        @id @default(cuid())
+  slug                String        @unique
+  title               String
+  sector              CareerSector
+  entryLevel          EntryLevel
+  description         String
+  salaryMin           Int?
+  salaryMax           Int?
+  keyResponsibilities String[]
+  qualifications      String[]
+  workingConditions   String?
+  growthOutlook       String?
+  status              ContentStatus @default(DRAFT)
+  publishAt           DateTime?
+  rejectionNote       String?
+
+  skills              CareerSkill[]
+  pathwayFrom         PathwayConnection[] @relation("PathwayFrom")
+  pathwayTo           PathwayConnection[] @relation("PathwayTo")
+  relatedCourses      CourseCareer[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("careers")
+}
+
+model CareerSkill {
+  career   Career @relation(fields: [careerId], references: [id], onDelete: Cascade)
+  careerId String
+  skill    Skill  @relation(fields: [skillId], references: [id], onDelete: Cascade)
+  skillId  String
+
+  @@id([careerId, skillId])
+  @@map("career_skills")
+}
+
+model PathwayConnection {
+  id        String      @id @default(cuid())
+  from      Career      @relation("PathwayFrom", fields: [fromId], references: [id], onDelete: Cascade)
+  fromId    String
+  to        Career      @relation("PathwayTo", fields: [toId], references: [id], onDelete: Cascade)
+  toId      String
+  type      PathwayType
+  timeframe String
+
+  @@unique([fromId, toId])
+  @@map("pathway_connections")
+}
+
+model Course {
+  id                   String         @id @default(cuid())
+  slug                 String         @unique
+  title                String
+  provider             String
+  providerType         ProviderType
+  description          String
+  entryRequirements    String?
+  deliveryFormat       DeliveryFormat
+  location             String?
+  nfqLevel             Int?
+  duration             String
+  cost                 Float          @default(0)
+  costNotes            String?
+  nextStartDate        DateTime?
+  accredited           Boolean        @default(false)
+  certificationAwarded String?
+  tags                 String[]
+  status               ContentStatus  @default(DRAFT)
+  publishAt            DateTime?
+  rejectionNote        String?
+
+  skills               CourseSkill[]
+  careerRelevance      CourseCareer[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("courses")
+}
+
+model CourseSkill {
+  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  courseId String
+  skill    Skill  @relation(fields: [skillId], references: [id], onDelete: Cascade)
+  skillId  String
+
+  @@id([courseId, skillId])
+  @@map("course_skills")
+}
+
+model CourseCareer {
+  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  courseId String
+  career   Career @relation(fields: [careerId], references: [id], onDelete: Cascade)
+  careerId String
+
+  @@id([courseId, careerId])
+  @@map("course_careers")
+}
+
+model Event {
+  id           String        @id @default(cuid())
+  slug         String        @unique
+  title        String
+  type         EventType
+  startDate    DateTime
+  endDate      DateTime?
+  locationType LocationType
+  location     String?
+  description  String
+  capacity     Int?
+  image        String?
+  status       ContentStatus @default(DRAFT)
+  publishAt    DateTime?
+  rejectionNote String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("events")
+}
+
+model Research {
+  id              String        @id @default(cuid())
+  slug            String        @unique
+  title           String
+  author          String
+  organisation    String
+  publicationDate DateTime
+  summary         String
+  categories      String[]
+  isFeatured      Boolean       @default(false)
+  image           String?
+  status          ContentStatus @default(DRAFT)
+  publishAt       DateTime?
+  rejectionNote   String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("research")
+}
+
+model NewsArticle {
+  id            String        @id @default(cuid())
+  slug          String        @unique
+  title         String
+  date          DateTime
+  excerpt       String
+  content       String
+  category      String
+  author        String
+  image         String?
+  status        ContentStatus @default(DRAFT)
+  publishAt     DateTime?
+  rejectionNote String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("news_articles")
+}
+
+model DiagnosticQuestion {
+  id          String                 @id
+  text        String
+  type        DiagnosticQuestionType
+  options     Json?                  // DiagnosticOption[]
+  scaleMin    Int?
+  scaleMax    Int?
+  scaleLabels Json?                  // Record<string, string>
+  scoreImpact Json?                  // Record<string, number>
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("diagnostic_questions")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String?
+  role         UserRole @default(VIEWER)
+  passwordHash String?
+
+  contentVersions ContentVersion[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+model ContentVersion {
+  id          String      @id @default(cuid())
+  contentType ContentType
+  contentId   String
+  version     Int
+  snapshot    Json
+  changeNote  String?
+  changedBy   User        @relation(fields: [changedById], references: [id])
+  changedById String
+  changedAt   DateTime    @default(now())
+
+  @@unique([contentType, contentId, version])
+  @@index([contentType, contentId])
+  @@map("content_versions")
+}

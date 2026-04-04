@@ -24,8 +24,8 @@ export const metadata: Metadata = {
   },
 };
 
-export default function CareersPage() {
-  const careers = getAllCareers();
+export default async function CareersPage() {
+  const careers = await getAllCareers();
 
   return (
     <>

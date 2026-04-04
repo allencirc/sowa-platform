@@ -30,14 +30,14 @@ interface CourseDetailProps {
 }
 
 export async function generateStaticParams() {
-  return getAllCourses().map((c) => ({ slug: c.slug }));
+  return (await getAllCourses()).map((c) => ({ slug: c.slug }));
 }
 
 export async function generateMetadata({
   params,
 }: CourseDetailProps): Promise<Metadata> {
   const { slug } = await params;
-  const course = getCourseBySlug(slug);
+  const course = await getCourseBySlug(slug);
   if (!course) return { title: "Course Not Found" };
   const desc = course.description.slice(0, 160);
   return {
@@ -67,16 +67,22 @@ const formatBadgeMap: Record<string, "info" | "success" | "accent" | "default"> 
 
 export default async function CourseDetailPage({ params }: CourseDetailProps) {
   const { slug } = await params;
-  const course = getCourseBySlug(slug);
+  const course = await getCourseBySlug(slug);
   if (!course) notFound();
 
-  const skills = course.skills
-    .map((s) => getSkillBySlug(s))
-    .filter((s): s is NonNullable<typeof s> => s !== undefined);
+  const skillResults = await Promise.all(
+    course.skills.map((s) => getSkillBySlug(s))
+  );
+  const skills = skillResults.filter(
+    (s): s is NonNullable<typeof s> => s !== undefined
+  );
 
-  const relatedCareers = course.careerRelevance
-    .map((s) => getCareerBySlug(s))
-    .filter((c): c is NonNullable<typeof c> => c !== undefined);
+  const careerResults = await Promise.all(
+    course.careerRelevance.map((s) => getCareerBySlug(s))
+  );
+  const relatedCareers = careerResults.filter(
+    (c): c is NonNullable<typeof c> => c !== undefined
+  );
 
   const infoItems = [
     {

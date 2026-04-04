@@ -19,8 +19,8 @@ const sectorColours: Record<string, string> = {
   "Project Management": "border-sector-project-management",
 };
 
-export function MiniPathway({ career }: MiniPathwayProps) {
-  const allCareers = getAllCareers();
+export async function MiniPathway({ career }: MiniPathwayProps) {
+  const allCareers = await getAllCareers();
 
   // Find who leads TO this career
   const incomingConnections = allCareers

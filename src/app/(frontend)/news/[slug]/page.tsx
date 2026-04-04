@@ -14,14 +14,14 @@ interface NewsDetailProps {
 }
 
 export async function generateStaticParams() {
-  return getAllNews().map((n) => ({ slug: n.slug }));
+  return (await getAllNews()).map((n) => ({ slug: n.slug }));
 }
 
 export async function generateMetadata({
   params,
 }: NewsDetailProps): Promise<Metadata> {
   const { slug } = await params;
-  const article = getNewsBySlug(slug);
+  const article = await getNewsBySlug(slug);
   if (!article) return { title: "Article Not Found" };
   const desc = article.excerpt.slice(0, 160);
   return {
@@ -46,7 +46,7 @@ export async function generateMetadata({
 
 export default async function NewsDetailPage({ params }: NewsDetailProps) {
   const { slug } = await params;
-  const article = getNewsBySlug(slug);
+  const article = await getNewsBySlug(slug);
   if (!article) notFound();
 
   return (

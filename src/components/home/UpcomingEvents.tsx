@@ -4,8 +4,8 @@ import { Container } from "@/components/ui/Container";
 import { EventCard } from "@/components/events/EventCard";
 import { getAllEvents } from "@/lib/queries";
 
-export function UpcomingEvents() {
-  const events = getAllEvents()
+export async function UpcomingEvents() {
+  const events = (await getAllEvents())
     .sort((a, b) => a.startDate.localeCompare(b.startDate))
     .slice(0, 3);
 

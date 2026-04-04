@@ -4,8 +4,8 @@ import { Container } from "@/components/ui/Container";
 import { CareerCard } from "@/components/careers/CareerCard";
 import { getAllCareers } from "@/lib/queries";
 
-export function FeaturedCareers() {
-  const careers = getAllCareers().slice(0, 4);
+export async function FeaturedCareers() {
+  const careers = (await getAllCareers()).slice(0, 4);
 
   return (
     <section className="py-16 sm:py-20 bg-white">

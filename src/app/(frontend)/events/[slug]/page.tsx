@@ -21,14 +21,14 @@ interface EventDetailProps {
 }
 
 export async function generateStaticParams() {
-  return getAllEvents().map((e) => ({ slug: e.slug }));
+  return (await getAllEvents()).map((e) => ({ slug: e.slug }));
 }
 
 export async function generateMetadata({
   params,
 }: EventDetailProps): Promise<Metadata> {
   const { slug } = await params;
-  const event = getEventBySlug(slug);
+  const event = await getEventBySlug(slug);
   if (!event) return { title: "Event Not Found" };
   const desc = event.description.slice(0, 160);
   return {
@@ -93,7 +93,7 @@ function formatTime(dateString: string): string {
 
 export default async function EventDetailPage({ params }: EventDetailProps) {
   const { slug } = await params;
-  const event = getEventBySlug(slug);
+  const event = await getEventBySlug(slug);
   if (!event) notFound();
 
   const LocationIcon = locationIcons[event.locationType] ?? MapPin;

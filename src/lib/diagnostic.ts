@@ -1,10 +1,11 @@
-import type { DiagnosticResult, DiagnosticGap } from "./types";
-import {
-  getDiagnosticQuestions,
-  getAllCareers,
-  getAllCourses,
-  getAllSkills,
-} from "./queries";
+import type {
+  Career,
+  Course,
+  DiagnosticQuestion,
+  DiagnosticResult,
+  DiagnosticGap,
+  Skill,
+} from "./types";
 
 // Maps q8 interest area values to relevant career slugs
 const interestToCareerMap: Record<string, string[]> = {
@@ -41,13 +42,43 @@ const interestToCareerMap: Record<string, string[]> = {
   ],
 };
 
+/**
+ * Calculate diagnostic results.
+ * All reference data is passed in so this function stays synchronous
+ * and can run on the client.
+ */
 export function calculateResults(
-  answers: Record<string, string | string[]>
+  answers: Record<string, string | string[]>,
+  data?: {
+    questions: DiagnosticQuestion[];
+    allSkills: Skill[];
+    allCareers: Career[];
+    allCourses: Course[];
+  }
 ): DiagnosticResult {
-  const questions = getDiagnosticQuestions();
-  const allSkills = getAllSkills();
-  const allCareers = getAllCareers();
-  const allCourses = getAllCourses();
+  // When called from client, data must be provided.
+  // Fallback: import from JSON for backwards compat during build/seed.
+  let questions: DiagnosticQuestion[];
+  let allSkills: Skill[];
+  let allCareers: Career[];
+  let allCourses: Course[];
+
+  if (data) {
+    questions = data.questions;
+    allSkills = data.allSkills;
+    allCareers = data.allCareers;
+    allCourses = data.allCourses;
+  } else {
+    // Synchronous fallback using JSON imports for client/build
+    const questionsJson = require("./data/diagnosticQuestions.json");
+    const skillsJson = require("./data/skills.json");
+    const careersJson = require("./data/careers.json");
+    const coursesJson = require("./data/courses.json");
+    questions = questionsJson.questions as DiagnosticQuestion[];
+    allSkills = skillsJson as Skill[];
+    allCareers = careersJson as Career[];
+    allCourses = coursesJson as Course[];
+  }
 
   // Track scores and max possible per skill
   const scores: Record<string, number> = {};
@@ -83,7 +114,6 @@ export function calculateResults(
     if (answer === undefined) continue;
 
     if (q.type === "scale" && q.scoreImpact) {
-      // Scale questions: score = value * impact weight
       const value = typeof answer === "string" ? parseInt(answer, 10) : 0;
       const maxValue = q.scaleMax ?? 5;
       for (const [skill, weight] of Object.entries(q.scoreImpact)) {
@@ -91,7 +121,6 @@ export function calculateResults(
         maxPossible[skill] = (maxPossible[skill] ?? 0) + maxValue * weight;
       }
     } else if (q.type === "single_choice" && q.options) {
-      // Calculate max possible from best option
       const bestScores: Record<string, number> = {};
       for (const opt of q.options) {
         if (opt.scoreImpact) {
@@ -104,7 +133,6 @@ export function calculateResults(
         maxPossible[skill] = (maxPossible[skill] ?? 0) + pts;
       }
 
-      // Add actual score from selected option
       const selected = q.options.find((o) => o.value === answer);
       if (selected?.scoreImpact) {
         for (const [skill, pts] of Object.entries(selected.scoreImpact)) {
@@ -114,7 +142,6 @@ export function calculateResults(
     } else if (q.type === "multiple_choice" && q.options) {
       const selectedValues = Array.isArray(answer) ? answer : [answer];
 
-      // Max possible = sum of all positive scoreImpacts (excl "none")
       for (const opt of q.options) {
         if (opt.value === "none") continue;
         if (opt.scoreImpact) {
@@ -124,7 +151,6 @@ export function calculateResults(
         }
       }
 
-      // Add actual scores from selected options
       for (const val of selectedValues) {
         const opt = q.options.find((o) => o.value === val);
         if (opt?.scoreImpact) {
@@ -136,7 +162,7 @@ export function calculateResults(
     }
   }
 
-  // Identify gaps — sort by lowest percentage score
+  // Identify gaps
   const gaps: DiagnosticGap[] = [];
   for (const slug of assessedSkillSlugs) {
     const max = maxPossible[slug] ?? 0;
@@ -155,7 +181,6 @@ export function calculateResults(
     gaps.push({ skill, score, maxScore: max, severity });
   }
 
-  // Sort gaps by percentage ascending (biggest gaps first)
   gaps.sort((a, b) => {
     const pctA = a.score / a.maxScore;
     const pctB = b.score / b.maxScore;
@@ -175,21 +200,18 @@ export function calculateResults(
     .filter((c): c is NonNullable<typeof c> => c !== undefined)
     .slice(0, 3);
 
-  // Recommend courses that address gaps, prioritise free/Skillnet-funded
+  // Recommend courses that address gaps
   const gapSkillSlugs = new Set(topGaps.map((g) => g.skill.slug));
 
   const scoredCourses = allCourses
     .map((course) => {
       let relevance = 0;
-      // Score based on how many gap skills this course addresses
       for (const skillSlug of course.skills) {
         if (gapSkillSlugs.has(skillSlug)) relevance += 2;
       }
-      // Also check career relevance to recommended careers
       for (const career of recommendedCareers) {
         if (course.careerRelevance.includes(career.slug)) relevance += 1;
       }
-      // Boost free courses
       if (course.cost === 0) relevance += 1;
       return { course, relevance };
     })

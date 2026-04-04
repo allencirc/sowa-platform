@@ -23,9 +23,9 @@ export const metadata: Metadata = {
   },
 };
 
-export default function ResearchPage() {
-  const research = getAllResearch();
-  const featured = getFeaturedResearch();
+export default async function ResearchPage() {
+  const research = await getAllResearch();
+  const featured = await getFeaturedResearch();
 
   return (
     <>

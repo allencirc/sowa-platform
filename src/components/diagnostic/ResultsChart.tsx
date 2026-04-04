@@ -9,8 +9,7 @@ import {
   ResponsiveContainer,
   Legend,
 } from "recharts";
-import type { DiagnosticResult } from "@/lib/types";
-import { getAllSkills } from "@/lib/queries";
+import type { DiagnosticResult, Skill } from "@/lib/types";
 
 const categoryColours: Record<string, string> = {
   Technical: "#4A90D9",
@@ -22,10 +21,10 @@ const categoryColours: Record<string, string> = {
 
 interface ResultsChartProps {
   result: DiagnosticResult;
+  allSkills: Skill[];
 }
 
-export function ResultsChart({ result }: ResultsChartProps) {
-  const allSkills = getAllSkills();
+export function ResultsChart({ result, allSkills }: ResultsChartProps) {
 
   // Group scores by skill category and average them
   const categoryScores: Record<string, { total: number; max: number; count: number }> = {};

@@ -24,8 +24,8 @@ export const metadata: Metadata = {
   },
 };
 
-export default function TrainingPage() {
-  const courses = getAllCourses();
+export default async function TrainingPage() {
+  const courses = await getAllCourses();
 
   return (
     <>

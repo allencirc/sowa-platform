@@ -15,14 +15,14 @@ interface ResearchDetailProps {
 }
 
 export async function generateStaticParams() {
-  return getAllResearch().map((r) => ({ slug: r.slug }));
+  return (await getAllResearch()).map((r) => ({ slug: r.slug }));
 }
 
 export async function generateMetadata({
   params,
 }: ResearchDetailProps): Promise<Metadata> {
   const { slug } = await params;
-  const research = getResearchBySlug(slug);
+  const research = await getResearchBySlug(slug);
   if (!research) return { title: "Research Not Found" };
   const desc = research.summary.slice(0, 160);
   return {
@@ -47,7 +47,7 @@ export default async function ResearchDetailPage({
   params,
 }: ResearchDetailProps) {
   const { slug } = await params;
-  const research = getResearchBySlug(slug);
+  const research = await getResearchBySlug(slug);
   if (!research) notFound();
 
   return (
