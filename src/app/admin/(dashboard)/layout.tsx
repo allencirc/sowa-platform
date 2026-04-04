@@ -11,7 +11,7 @@ export default async function DashboardLayout({
   const session = await auth();
 
   if (!session?.user) {
-    redirect("/admin/login");
+    redirect("/api/auth/signin?callbackUrl=/admin");
   }
 
   const user = {

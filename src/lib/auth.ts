@@ -38,7 +38,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     }),
   ],
   session: { strategy: "jwt" },
-  pages: { signIn: "/admin/login" },
+  // Use NextAuth's built-in sign-in page (no custom page to avoid redirect loops)
   callbacks: {
     jwt({ token, user }) {
       if (user) {
