@@ -1,3 +1,5 @@
+import { AdminProviders } from "./providers";
+
 export const metadata = {
   title: {
     template: "%s — SOWA Admin",
@@ -10,5 +12,5 @@ export default function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return children;
+  return <AdminProviders>{children}</AdminProviders>;
 }
