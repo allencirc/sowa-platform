@@ -1,26 +1,89 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+
+  /* Primary — Deep ocean blue */
+  --color-primary: #0C2340;
+  --color-primary-light: #1A3A5C;
+  --color-primary-dark: #081828;
+
+  /* Secondary — Teal/wind green */
+  --color-secondary: #00A878;
+  --color-secondary-light: #00C98E;
+  --color-secondary-dark: #008A62;
+
+  /* Accent — Sky blue */
+  --color-accent: #4A90D9;
+  --color-accent-light: #6BA8E8;
+  --color-accent-dark: #3578C0;
+
+  /* Surface */
+  --color-surface: #F7F9FC;
+  --color-surface-card: #FFFFFF;
+  --color-surface-dark: #0C2340;
+
+  /* Text */
+  --color-text-primary: #1A1A2E;
+  --color-text-secondary: #6B7280;
+  --color-text-inverse: #FFFFFF;
+  --color-text-muted: #9CA3AF;
+
+  /* Status */
+  --color-status-warning: #F59E0B;
+  --color-status-error: #DC2626;
+  --color-status-success: #00A878;
+  --color-status-info: #4A90D9;
+
+  /* Sector colours */
+  --color-sector-operations: #0C2340;
+  --color-sector-marine: #1E6091;
+  --color-sector-electrical: #F59E0B;
+  --color-sector-survey-design: #7C3AED;
+  --color-sector-hse: #DC2626;
+  --color-sector-policy: #059669;
+  --color-sector-project-management: #EA580C;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+}
+
+/* Focus visible ring for accessibility */
+*:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* Screen reader only utility (backup for Tailwind sr-only) */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
 }

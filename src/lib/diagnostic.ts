@@ -1,0 +1,210 @@
+import type { DiagnosticResult, DiagnosticGap } from "./types";
+import {
+  getDiagnosticQuestions,
+  getAllCareers,
+  getAllCourses,
+  getAllSkills,
+} from "./queries";
+
+// Maps q8 interest area values to relevant career slugs
+const interestToCareerMap: Record<string, string[]> = {
+  technical: [
+    "offshore-wind-turbine-technician",
+    "blade-technician",
+    "onshore-wind-technician",
+  ],
+  engineering: [
+    "owe-project-engineer",
+    "electrical-engineer-substations",
+  ],
+  marine: [
+    "marine-coordinator",
+    "offshore-logistics-manager",
+  ],
+  hse: [
+    "hse-advisor-offshore-wind",
+  ],
+  digital: [
+    "offshore-wind-data-analyst",
+  ],
+  management: [
+    "owe-commercial-manager",
+    "offshore-installation-manager",
+  ],
+  policy: [
+    "consenting-and-environmental-specialist",
+  ],
+  unsure: [
+    "offshore-wind-turbine-technician",
+    "onshore-wind-technician",
+    "offshore-wind-data-analyst",
+  ],
+};
+
+export function calculateResults(
+  answers: Record<string, string | string[]>
+): DiagnosticResult {
+  const questions = getDiagnosticQuestions();
+  const allSkills = getAllSkills();
+  const allCareers = getAllCareers();
+  const allCourses = getAllCourses();
+
+  // Track scores and max possible per skill
+  const scores: Record<string, number> = {};
+  const maxPossible: Record<string, number> = {};
+
+  // Initialize all assessed skills to 0
+  const assessedSkillSlugs = new Set<string>();
+  for (const q of questions) {
+    if (q.scoreImpact) {
+      for (const slug of Object.keys(q.scoreImpact)) {
+        assessedSkillSlugs.add(slug);
+      }
+    }
+    if (q.options) {
+      for (const opt of q.options) {
+        if (opt.scoreImpact) {
+          for (const slug of Object.keys(opt.scoreImpact)) {
+            assessedSkillSlugs.add(slug);
+          }
+        }
+      }
+    }
+  }
+
+  for (const slug of assessedSkillSlugs) {
+    scores[slug] = 0;
+    maxPossible[slug] = 0;
+  }
+
+  // Calculate scores from answers
+  for (const q of questions) {
+    const answer = answers[q.id];
+    if (answer === undefined) continue;
+
+    if (q.type === "scale" && q.scoreImpact) {
+      // Scale questions: score = value * impact weight
+      const value = typeof answer === "string" ? parseInt(answer, 10) : 0;
+      const maxValue = q.scaleMax ?? 5;
+      for (const [skill, weight] of Object.entries(q.scoreImpact)) {
+        scores[skill] = (scores[skill] ?? 0) + value * weight;
+        maxPossible[skill] = (maxPossible[skill] ?? 0) + maxValue * weight;
+      }
+    } else if (q.type === "single_choice" && q.options) {
+      // Calculate max possible from best option
+      const bestScores: Record<string, number> = {};
+      for (const opt of q.options) {
+        if (opt.scoreImpact) {
+          for (const [skill, pts] of Object.entries(opt.scoreImpact)) {
+            bestScores[skill] = Math.max(bestScores[skill] ?? 0, pts);
+          }
+        }
+      }
+      for (const [skill, pts] of Object.entries(bestScores)) {
+        maxPossible[skill] = (maxPossible[skill] ?? 0) + pts;
+      }
+
+      // Add actual score from selected option
+      const selected = q.options.find((o) => o.value === answer);
+      if (selected?.scoreImpact) {
+        for (const [skill, pts] of Object.entries(selected.scoreImpact)) {
+          scores[skill] = (scores[skill] ?? 0) + pts;
+        }
+      }
+    } else if (q.type === "multiple_choice" && q.options) {
+      const selectedValues = Array.isArray(answer) ? answer : [answer];
+
+      // Max possible = sum of all positive scoreImpacts (excl "none")
+      for (const opt of q.options) {
+        if (opt.value === "none") continue;
+        if (opt.scoreImpact) {
+          for (const [skill, pts] of Object.entries(opt.scoreImpact)) {
+            maxPossible[skill] = (maxPossible[skill] ?? 0) + pts;
+          }
+        }
+      }
+
+      // Add actual scores from selected options
+      for (const val of selectedValues) {
+        const opt = q.options.find((o) => o.value === val);
+        if (opt?.scoreImpact) {
+          for (const [skill, pts] of Object.entries(opt.scoreImpact)) {
+            scores[skill] = (scores[skill] ?? 0) + pts;
+          }
+        }
+      }
+    }
+  }
+
+  // Identify gaps — sort by lowest percentage score
+  const gaps: DiagnosticGap[] = [];
+  for (const slug of assessedSkillSlugs) {
+    const max = maxPossible[slug] ?? 0;
+    if (max === 0) continue;
+    const score = scores[slug] ?? 0;
+    const pct = score / max;
+
+    const skill = allSkills.find((s) => s.slug === slug);
+    if (!skill) continue;
+
+    let severity: DiagnosticGap["severity"];
+    if (pct < 0.33) severity = "high";
+    else if (pct < 0.66) severity = "medium";
+    else severity = "low";
+
+    gaps.push({ skill, score, maxScore: max, severity });
+  }
+
+  // Sort gaps by percentage ascending (biggest gaps first)
+  gaps.sort((a, b) => {
+    const pctA = a.score / a.maxScore;
+    const pctB = b.score / b.maxScore;
+    return pctA - pctB;
+  });
+
+  const topGaps = gaps.slice(0, 3);
+
+  // Recommend careers based on q8 interest area + scores
+  const interestArea =
+    typeof answers["q8"] === "string" ? answers["q8"] : "unsure";
+  const relevantCareerSlugs =
+    interestToCareerMap[interestArea] ?? interestToCareerMap["unsure"];
+
+  const recommendedCareers = relevantCareerSlugs
+    .map((slug) => allCareers.find((c) => c.slug === slug))
+    .filter((c): c is NonNullable<typeof c> => c !== undefined)
+    .slice(0, 3);
+
+  // Recommend courses that address gaps, prioritise free/Skillnet-funded
+  const gapSkillSlugs = new Set(topGaps.map((g) => g.skill.slug));
+
+  const scoredCourses = allCourses
+    .map((course) => {
+      let relevance = 0;
+      // Score based on how many gap skills this course addresses
+      for (const skillSlug of course.skills) {
+        if (gapSkillSlugs.has(skillSlug)) relevance += 2;
+      }
+      // Also check career relevance to recommended careers
+      for (const career of recommendedCareers) {
+        if (course.careerRelevance.includes(career.slug)) relevance += 1;
+      }
+      // Boost free courses
+      if (course.cost === 0) relevance += 1;
+      return { course, relevance };
+    })
+    .filter((c) => c.relevance > 0)
+    .sort((a, b) => b.relevance - a.relevance);
+
+  const recommendedCourses = scoredCourses
+    .map((c) => c.course)
+    .slice(0, 5);
+
+  return {
+    scores,
+    maxPossible,
+    gaps,
+    recommendedCareers,
+    recommendedCourses,
+  };
+}

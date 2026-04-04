@@ -1,0 +1,175 @@
+{
+  "title": "OWE Skills & Knowledge Assessment",
+  "description": "Assess your current knowledge and skills in relation to the offshore wind energy sector. This takes approximately 5 minutes and will recommend personalised career pathways and training.",
+  "questions": [
+    {
+      "id": "q1",
+      "text": "Which best describes your current situation?",
+      "type": "single_choice",
+      "options": [
+        { "label": "Student or considering a career change", "value": "new_entrant" },
+        { "label": "Working in a related industry (onshore wind, oil & gas, marine, construction, electrical)", "value": "adjacent" },
+        { "label": "Already working in offshore wind", "value": "current_owe" },
+        { "label": "Employer looking to develop my workforce", "value": "employer" },
+        { "label": "Training provider or educator", "value": "educator" }
+      ]
+    },
+    {
+      "id": "q2",
+      "text": "How familiar are you with Ireland's offshore wind targets and pipeline?",
+      "type": "scale",
+      "scaleMin": 1,
+      "scaleMax": 5,
+      "scaleLabels": { "1": "Not at all", "3": "Somewhat", "5": "Very familiar" },
+      "scoreImpact": { "industry-knowledge": 1 }
+    },
+    {
+      "id": "q3",
+      "text": "Do you hold any of the following safety certifications?",
+      "type": "multiple_choice",
+      "options": [
+        { "label": "GWO Basic Safety Training", "value": "gwo_bst", "scoreImpact": { "safety-protocols": 2 } },
+        { "label": "BOSIET/FOET", "value": "bosiet", "scoreImpact": { "safety-protocols": 2, "marine-operations": 1 } },
+        { "label": "IRATA Rope Access", "value": "irata", "scoreImpact": { "working-at-height": 2 } },
+        { "label": "NEBOSH or equivalent HSE qualification", "value": "nebosh", "scoreImpact": { "safety-management": 2 } },
+        { "label": "None of the above", "value": "none" }
+      ]
+    },
+    {
+      "id": "q4",
+      "text": "What is your highest relevant technical qualification?",
+      "type": "single_choice",
+      "options": [
+        { "label": "No formal technical qualification", "value": "none" },
+        { "label": "Apprenticeship or trade qualification", "value": "trade", "scoreImpact": { "technical-foundation": 1 } },
+        { "label": "Level 6-7 (Certificate/Ordinary Degree)", "value": "level6-7", "scoreImpact": { "technical-foundation": 2 } },
+        { "label": "Level 8 (Honours Degree)", "value": "level8", "scoreImpact": { "technical-foundation": 3 } },
+        { "label": "Level 9-10 (Masters/PhD)", "value": "postgrad", "scoreImpact": { "technical-foundation": 4 } }
+      ]
+    },
+    {
+      "id": "q5",
+      "text": "Which technical areas are you experienced in? (Select all that apply)",
+      "type": "multiple_choice",
+      "options": [
+        { "label": "Electrical systems", "value": "electrical", "scoreImpact": { "electrical-systems": 2 } },
+        { "label": "Mechanical maintenance", "value": "mechanical", "scoreImpact": { "mechanical-maintenance": 2 } },
+        { "label": "Marine/vessel operations", "value": "marine", "scoreImpact": { "marine-operations": 2 } },
+        { "label": "Project management", "value": "pm", "scoreImpact": { "project-management": 2 } },
+        { "label": "Data analysis / SCADA", "value": "data", "scoreImpact": { "data-analysis": 2 } },
+        { "label": "Environmental / regulatory", "value": "env", "scoreImpact": { "regulatory-compliance": 2 } },
+        { "label": "Commercial / procurement", "value": "commercial", "scoreImpact": { "commercial-management": 2 } },
+        { "label": "None of these", "value": "none" }
+      ]
+    },
+    {
+      "id": "q6",
+      "text": "Have you worked offshore before?",
+      "type": "single_choice",
+      "options": [
+        { "label": "Yes, in offshore wind", "value": "owe_offshore", "scoreImpact": { "marine-operations": 2, "safety-protocols": 1 } },
+        { "label": "Yes, in oil & gas or marine", "value": "other_offshore", "scoreImpact": { "marine-operations": 2 } },
+        { "label": "No, but I'm interested", "value": "no_interested" },
+        { "label": "No, I prefer onshore roles", "value": "no_onshore" }
+      ]
+    },
+    {
+      "id": "q7",
+      "text": "How comfortable are you working at height?",
+      "type": "scale",
+      "scaleMin": 1,
+      "scaleMax": 5,
+      "scaleLabels": { "1": "Not comfortable", "3": "With training", "5": "Very comfortable" },
+      "scoreImpact": { "working-at-height": 1 }
+    },
+    {
+      "id": "q8",
+      "text": "Which career area interests you most?",
+      "type": "single_choice",
+      "options": [
+        { "label": "Hands-on technical work (maintenance, repair, installation)", "value": "technical" },
+        { "label": "Engineering and design", "value": "engineering" },
+        { "label": "Marine and logistics operations", "value": "marine" },
+        { "label": "Health, safety & environment", "value": "hse" },
+        { "label": "Data and digital", "value": "digital" },
+        { "label": "Project/commercial management", "value": "management" },
+        { "label": "Policy and regulation", "value": "policy" },
+        { "label": "Not sure yet", "value": "unsure" }
+      ]
+    },
+    {
+      "id": "q9",
+      "text": "Are you aware of the GWO (Global Wind Organisation) standards?",
+      "type": "single_choice",
+      "options": [
+        { "label": "Yes, I hold GWO certifications", "value": "certified", "scoreImpact": { "industry-knowledge": 2 } },
+        { "label": "Yes, I know what they are", "value": "aware", "scoreImpact": { "industry-knowledge": 1 } },
+        { "label": "No, I haven't heard of them", "value": "unaware" }
+      ]
+    },
+    {
+      "id": "q10",
+      "text": "How would you rate your understanding of wind turbine technology?",
+      "type": "scale",
+      "scaleMin": 1,
+      "scaleMax": 5,
+      "scaleLabels": { "1": "Minimal", "3": "Moderate", "5": "Expert" },
+      "scoreImpact": { "technical-foundation": 1 }
+    },
+    {
+      "id": "q11",
+      "text": "Do you have experience with any of these digital tools?",
+      "type": "multiple_choice",
+      "options": [
+        { "label": "SCADA systems", "value": "scada", "scoreImpact": { "scada-systems": 2 } },
+        { "label": "Python or R for data analysis", "value": "python", "scoreImpact": { "python-programming": 2 } },
+        { "label": "Power BI or Tableau", "value": "bi", "scoreImpact": { "data-analysis": 1 } },
+        { "label": "CAD/engineering software", "value": "cad", "scoreImpact": { "engineering-design": 1 } },
+        { "label": "GIS/mapping tools", "value": "gis", "scoreImpact": { "environmental-assessment": 1 } },
+        { "label": "None of these", "value": "none" }
+      ]
+    },
+    {
+      "id": "q12",
+      "text": "What is your experience level with risk assessment and safety management?",
+      "type": "single_choice",
+      "options": [
+        { "label": "No experience", "value": "none" },
+        { "label": "Basic awareness", "value": "basic", "scoreImpact": { "safety-management": 1 } },
+        { "label": "Regular part of my role", "value": "regular", "scoreImpact": { "safety-management": 2 } },
+        { "label": "I lead safety management for my organisation", "value": "lead", "scoreImpact": { "safety-management": 3 } }
+      ]
+    },
+    {
+      "id": "q13",
+      "text": "How familiar are you with Irish energy policy and the Maritime Area Planning Act?",
+      "type": "scale",
+      "scaleMin": 1,
+      "scaleMax": 5,
+      "scaleLabels": { "1": "Not at all", "3": "Somewhat", "5": "Very familiar" },
+      "scoreImpact": { "regulatory-compliance": 1, "industry-knowledge": 1 }
+    },
+    {
+      "id": "q14",
+      "text": "What is your preferred learning format?",
+      "type": "single_choice",
+      "options": [
+        { "label": "In-person, hands-on training", "value": "in_person" },
+        { "label": "Online self-paced", "value": "online" },
+        { "label": "Blended (mix of online and in-person)", "value": "blended" },
+        { "label": "Short workshops and webinars", "value": "short" }
+      ]
+    },
+    {
+      "id": "q15",
+      "text": "When are you looking to start upskilling or transition?",
+      "type": "single_choice",
+      "options": [
+        { "label": "Immediately — I'm ready now", "value": "immediate" },
+        { "label": "Within the next 3 months", "value": "soon" },
+        { "label": "Within the next year", "value": "year" },
+        { "label": "Just exploring for now", "value": "exploring" }
+      ]
+    }
+  ]
+}

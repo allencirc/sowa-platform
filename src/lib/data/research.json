@@ -1,0 +1,48 @@
+[
+  {
+    "slug": "building-our-potential-2024",
+    "title": "Building our Potential: Ireland's Offshore Wind Skills and Talent Needs",
+    "author": "GreenTech Skillnet",
+    "organisation": "Skillnet Ireland / GreenTech Skillnet",
+    "publicationDate": "2024-06-15",
+    "summary": "Comprehensive analysis of the workforce requirements to meet Ireland's offshore wind targets. Identifies critical skills gaps, training needs, and recommendations for education providers and policy makers.",
+    "categories": ["Workforce Development", "Policy"],
+    "isFeatured": true
+  },
+  {
+    "slug": "offshore-wind-skills-action-plan-2024",
+    "title": "Offshore Wind Skills Action Plan 2024",
+    "author": "Department of Further and Higher Education, Research, Innovation and Science",
+    "organisation": "DFHERIS",
+    "publicationDate": "2024-03-20",
+    "summary": "Government action plan outlining strategic priorities and actions to develop the skilled workforce needed for Ireland's offshore wind sector.",
+    "categories": ["Policy", "Government"]
+  },
+  {
+    "slug": "irish-offshore-wind-workforce-forecast",
+    "title": "Irish Offshore Wind Workforce Demand Forecast 2025–2035",
+    "author": "Wind Energy Ireland",
+    "organisation": "Wind Energy Ireland",
+    "publicationDate": "2025-11-01",
+    "summary": "Projections of workforce demand across all offshore wind roles over the next decade, broken down by project phase and skill category.",
+    "categories": ["Workforce Development", "Research"]
+  },
+  {
+    "slug": "gwo-training-standards-overview",
+    "title": "Global Wind Organisation Training Standards: A Guide for Ireland",
+    "author": "Skillnet Offshore Wind Academy",
+    "organisation": "Skillnet Offshore Wind Academy",
+    "publicationDate": "2025-08-10",
+    "summary": "Overview of GWO training standards relevant to the Irish offshore wind market, including where to access accredited training and how standards map to career requirements.",
+    "categories": ["Standards", "Training"]
+  },
+  {
+    "slug": "transition-workers-owe-case-studies",
+    "title": "Career Transitions into Offshore Wind: Irish Case Studies",
+    "author": "Skillnet Offshore Wind Academy",
+    "organisation": "SOWA",
+    "publicationDate": "2026-01-22",
+    "summary": "Real stories of Irish workers who have successfully transitioned from adjacent industries (oil & gas, marine, construction, electrical) into offshore wind careers.",
+    "categories": ["Case Studies", "Workforce Development"]
+  }
+]

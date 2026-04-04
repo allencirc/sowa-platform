@@ -1,0 +1,66 @@
+[
+  {
+    "slug": "sowa-national-launch-event",
+    "title": "Skillnet Offshore Wind Academy — National Platform Launch",
+    "type": "Conference",
+    "startDate": "2026-06-18T09:00:00",
+    "endDate": "2026-06-18T17:00:00",
+    "locationType": "Physical",
+    "location": "Convention Centre Dublin",
+    "description": "Join us for the national launch of Ireland's Offshore Wind Career Pathway Platform. Hear from industry leaders, policy makers, and education providers about Ireland's offshore wind future.",
+    "capacity": 300
+  },
+  {
+    "slug": "careers-in-offshore-wind-webinar",
+    "title": "Careers in Offshore Wind: Where to Start",
+    "type": "Webinar",
+    "startDate": "2026-05-14T13:00:00",
+    "endDate": "2026-05-14T14:30:00",
+    "locationType": "Virtual",
+    "description": "An introductory webinar for anyone curious about careers in offshore wind energy. Learn about entry points, training pathways, and what a typical career looks like.",
+    "capacity": 500
+  },
+  {
+    "slug": "owe-employer-roundtable",
+    "title": "Employer Roundtable: Building Your OWE Workforce",
+    "type": "Workshop",
+    "startDate": "2026-07-02T10:00:00",
+    "endDate": "2026-07-02T13:00:00",
+    "locationType": "Hybrid",
+    "location": "Wind Energy Ireland, Dublin + Online",
+    "description": "A facilitated discussion for employers on workforce planning, upskilling strategies, and accessing Skillnet Ireland supports for OWE training.",
+    "capacity": 50
+  },
+  {
+    "slug": "offshore-wind-skills-roadshow-cork",
+    "title": "Offshore Wind Skills Roadshow — Cork",
+    "type": "Roadshow",
+    "startDate": "2026-08-05T10:00:00",
+    "endDate": "2026-08-05T16:00:00",
+    "locationType": "Physical",
+    "location": "Cork International Hotel",
+    "description": "Part of a national roadshow series bringing offshore wind career information directly to communities. Meet training providers, hear from technicians, and explore career pathways.",
+    "capacity": 150
+  },
+  {
+    "slug": "research-symposium-owe-skills",
+    "title": "Research Symposium: OWE Skills & Workforce Development",
+    "type": "Conference",
+    "startDate": "2026-09-22T09:30:00",
+    "endDate": "2026-09-22T17:00:00",
+    "locationType": "Physical",
+    "location": "University of Galway",
+    "description": "Academic and industry researchers present the latest findings on skills gaps, workforce trends, and training effectiveness in offshore wind energy.",
+    "capacity": 200
+  },
+  {
+    "slug": "gwo-awareness-session",
+    "title": "GWO Certification: What You Need to Know",
+    "type": "Webinar",
+    "startDate": "2026-05-28T11:00:00",
+    "endDate": "2026-05-28T12:00:00",
+    "locationType": "Virtual",
+    "description": "A free information session explaining GWO (Global Wind Organisation) safety certifications — what they are, why you need them, and where to get trained in Ireland.",
+    "capacity": 300
+  }
+]
