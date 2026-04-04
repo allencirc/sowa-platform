@@ -2,7 +2,6 @@
 
 import { signIn } from "@/lib/auth";
 import { AuthError } from "next-auth";
-import { redirect } from "next/navigation";
 
 export interface LoginState {
   error?: string;
@@ -21,6 +20,8 @@ export async function loginAction(
   }
 
   try {
+    // signIn throws NEXT_REDIRECT on success — this is expected
+    // signIn throws AuthError on invalid credentials
     await signIn("credentials", {
       email,
       password,
@@ -30,9 +31,10 @@ export async function loginAction(
     if (error instanceof AuthError) {
       return { error: "Invalid email or password" };
     }
-    // NEXT_REDIRECT is thrown by signIn on success — must re-throw
+    // Re-throw NEXT_REDIRECT and other non-auth errors
     throw error;
   }
 
+  // This line should never be reached due to redirect
   return {};
 }

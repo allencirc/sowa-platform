@@ -1,32 +1,39 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useActionState } from "react";
+import { useFormStatus } from "react-dom";
 import { useSearchParams } from "next/navigation";
+import { loginAction, type LoginState } from "./actions";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { AlertCircle } from "lucide-react";
 
+function SubmitButton() {
+  const { pending } = useFormStatus();
+
+  return (
+    <Button
+      type="submit"
+      variant="primary"
+      size="lg"
+      className="w-full"
+      disabled={pending}
+    >
+      {pending ? "Signing in..." : "Sign In"}
+    </Button>
+  );
+}
+
 export function LoginForm() {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") || "/admin";
-  const authError = searchParams.get("error");
-  const [csrfToken, setCsrfToken] = useState("");
-
-  // Fetch CSRF token on mount
-  useEffect(() => {
-    fetch("/api/auth/csrf")
-      .then((res) => res.json())
-      .then((data) => setCsrfToken(data.csrfToken))
-      .catch(() => {});
-  }, []);
+  const [state, formAction] = useActionState<LoginState, FormData>(
+    loginAction,
+    {}
+  );
 
   return (
-    <form
-      method="POST"
-      action="/api/auth/callback/credentials"
-      className="flex flex-col gap-5"
-    >
-      <input type="hidden" name="csrfToken" value={csrfToken} />
+    <form action={formAction} className="flex flex-col gap-5">
       <input type="hidden" name="callbackUrl" value={callbackUrl} />
 
       <Input
@@ -49,22 +56,14 @@ export function LoginForm() {
         required
       />
 
-      {authError && (
+      {state.error && (
         <div className="flex items-center gap-2 rounded-lg bg-status-error/10 px-4 py-3 text-sm text-status-error">
           <AlertCircle className="h-4 w-4 shrink-0" />
-          Invalid email or password
+          {state.error}
         </div>
       )}
 
-      <Button
-        type="submit"
-        variant="primary"
-        size="lg"
-        className="w-full"
-        disabled={!csrfToken}
-      >
-        Sign In
-      </Button>
+      <SubmitButton />
     </form>
   );
 }
