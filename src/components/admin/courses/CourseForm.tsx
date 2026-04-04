@@ -46,7 +46,7 @@ export function CourseForm({ course, mode }: CourseFormProps) {
     setValue,
     formState: { errors, isSubmitting },
   } = useForm<CourseFormData>({
-    resolver: zodResolver(createCourseSchema),
+    resolver: zodResolver(createCourseSchema) as any,
     defaultValues: course
       ? {
           slug: course.slug,
