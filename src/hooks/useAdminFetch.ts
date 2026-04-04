@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 
 interface PaginatedResponse<T> {
   data: T[];
@@ -32,7 +32,13 @@ export function useAdminFetch<T>(
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  // Serialize filters to avoid object reference changes triggering re-fetches
+  const filtersKey = JSON.stringify(filters ?? {});
+  const filtersRef = useRef(filters);
+  filtersRef.current = filters;
+
   const fetchData = useCallback(async () => {
+    const filters = filtersRef.current;
     setLoading(true);
     setError(null);
     try {
@@ -60,7 +66,8 @@ export function useAdminFetch<T>(
     } finally {
       setLoading(false);
     }
-  }, [endpoint, page, limit, search, sortBy, order, filters]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [endpoint, page, limit, search, sortBy, order, filtersKey]);
 
   useEffect(() => {
     fetchData();
