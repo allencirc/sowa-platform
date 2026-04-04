@@ -2,6 +2,7 @@ import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
+import type { UserRole } from "@/generated/prisma/client";
 import type {} from "@/lib/auth.types";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
@@ -38,7 +39,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     }),
   ],
   session: { strategy: "jwt" },
-  // Use NextAuth's built-in sign-in page (no custom page to avoid redirect loops)
+  pages: { signIn: "/admin/login" },
   callbacks: {
     jwt({ token, user }) {
       if (user) {
@@ -48,8 +49,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return token;
     },
     session({ session, token }) {
-      session.user.id = token.id;
-      session.user.role = token.role;
+      session.user.id = token.id as string;
+      session.user.role = token.role as UserRole;
       return session;
     },
   },
