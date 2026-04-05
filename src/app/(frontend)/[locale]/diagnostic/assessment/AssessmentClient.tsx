@@ -1,30 +1,24 @@
 "use client";
 
+import { useState, useCallback, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 import {
-  useState,
-  useCallback,
-  useEffect,
-  useRef,
-  useMemo,
-  useLayoutEffect,
-} from "react";
-import { useRouter, useParams } from "next/navigation";
-import { ArrowLeft, ArrowRight, Sparkles } from "lucide-react";
+  ArrowLeft,
+  ArrowRight,
+  Sparkles,
+  Trophy,
+  TrendingDown,
+} from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { ProgressBar } from "@/components/diagnostic/ProgressBar";
 import { QuestionStep } from "@/components/diagnostic/QuestionStep";
-import { ResultsView } from "@/components/diagnostic/ResultsView";
+import { ResultsChart } from "@/components/diagnostic/ResultsChart";
+import { GapCard } from "@/components/diagnostic/GapCard";
+import { RecommendationCards } from "@/components/diagnostic/RecommendationCards";
+import { AISummary } from "@/components/diagnostic/AISummary";
 import { calculateResults } from "@/lib/diagnostic";
-import { encodeAnswers, type ResultsTab } from "@/lib/diagnostic-share";
-import { trackDiagnosticComplete } from "@/lib/analytics";
-import type {
-  Career,
-  Course,
-  DiagnosticQuestion,
-  DiagnosticResult,
-  Skill,
-} from "@/lib/types";
+import type { Career, Course, DiagnosticQuestion, DiagnosticResult, Skill } from "@/lib/types";
 
 interface AssessmentClientProps {
   questions: DiagnosticQuestion[];
@@ -33,82 +27,23 @@ interface AssessmentClientProps {
   allCourses: Course[];
 }
 
-const AUTO_ADVANCE_STORAGE_KEY = "sowa_diagnostic_auto_advance";
-const AUTO_ADVANCE_DELAY_MS = 400;
-
-/**
- * Detect whether the user environment suggests a screen reader or
- * reduced-motion preference — in both cases we default auto-advance OFF
- * so progress is fully under user control (WCAG 2.2.1 Timing Adjustable).
- */
-function detectDefaultAutoAdvance(): boolean {
-  if (typeof window === "undefined") return true;
-  const reduceMotion = window.matchMedia?.(
-    "(prefers-reduced-motion: reduce)"
-  ).matches;
-  if (reduceMotion) return false;
-  // Conservative SR heuristics: NVDA / JAWS typically set no UA flag;
-  // VoiceOver on iOS sets `speechSynthesis.speaking` false but the
-  // accessibility API exposes touch-exploration. We can't reliably
-  // detect, so we rely on the user toggle. Default ON for sighted
-  // mouse/keyboard users.
-  return true;
-}
-
-export default function AssessmentClient({
-  questions,
-  allSkills,
-  allCareers,
-  allCourses,
-}: AssessmentClientProps) {
+export default function AssessmentClient({ questions, allSkills, allCareers, allCourses }: AssessmentClientProps) {
   const router = useRouter();
-  const params = useParams();
-  const locale = typeof params?.locale === "string" ? params.locale : "";
   const totalQuestions = questions.length;
 
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [answers, setAnswers] = useState<Record<string, string | string[]>>(
-    {}
-  );
+  const [answers, setAnswers] = useState<Record<string, string | string[]>>({});
   const [showResults, setShowResults] = useState(false);
   const [result, setResult] = useState<DiagnosticResult | null>(null);
   const [isCalculating, setIsCalculating] = useState(false);
-  const [tab, setTab] = useState<ResultsTab>("gaps");
-  const [autoAdvance, setAutoAdvance] = useState<boolean>(true);
-
-  const questionHeadingRef = useRef<HTMLHeadingElement>(null);
-  const optionsContainerRef = useRef<HTMLDivElement>(null);
-  const liveRegionRef = useRef<HTMLDivElement>(null);
-
-  // Hydrate auto-advance preference on mount.
-  useEffect(() => {
-    const stored = window.localStorage.getItem(AUTO_ADVANCE_STORAGE_KEY);
-    if (stored !== null) {
-      setAutoAdvance(stored === "true");
-    } else {
-      setAutoAdvance(detectDefaultAutoAdvance());
-    }
-  }, []);
-
-  const setAutoAdvancePersisted = useCallback((next: boolean) => {
-    setAutoAdvance(next);
-    try {
-      window.localStorage.setItem(AUTO_ADVANCE_STORAGE_KEY, String(next));
-    } catch {
-      // localStorage disabled — fine, the in-memory state is enough.
-    }
-  }, []);
+  const resultsRef = useRef<HTMLDivElement>(null);
 
   const currentQuestion = questions[currentIndex];
-  const currentAnswer = currentQuestion
-    ? answers[currentQuestion.id]
-    : undefined;
+  const currentAnswer = currentQuestion ? answers[currentQuestion.id] : undefined;
 
   const hasAnswer =
     currentAnswer !== undefined &&
-    (Array.isArray(currentAnswer)
-      ? currentAnswer.length > 0
-      : currentAnswer !== "");
+    (Array.isArray(currentAnswer) ? currentAnswer.length > 0 : currentAnswer !== "");
 
   const isLastQuestion = currentIndex === totalQuestions - 1;
 
@@ -120,11 +55,13 @@ export default function AssessmentClient({
     [currentQuestion]
   );
 
-  const completeAssessment = useCallback(
-    (finalAnswers: Record<string, string | string[]>) => {
+  const handleNext = useCallback(() => {
+    if (!hasAnswer) return;
+
+    if (isLastQuestion) {
       setIsCalculating(true);
       setTimeout(() => {
-        const res = calculateResults(finalAnswers, {
+        const res = calculateResults(answers, {
           questions,
           allSkills,
           allCareers,
@@ -133,150 +70,46 @@ export default function AssessmentClient({
         setResult(res);
         setIsCalculating(false);
         setShowResults(true);
-        trackDiagnosticComplete({
-          top_gaps: res.gaps
-            .slice(0, 3)
-            .map((g) => g.skill.slug)
-            .join(","),
-          recommended_careers_count: res.recommendedCareers.length,
-          recommended_courses_count: res.recommendedCourses.length,
-        });
-
-        // Update the URL so the result is shareable and reload-safe.
-        // We use history.replaceState rather than router.replace so we
-        // don't trigger a full Next navigation — the in-memory result
-        // is already rendered and we don't want to unmount/refetch.
-        try {
-          const encoded = encodeAnswers(finalAnswers);
-          const localePrefix = locale ? `/${locale}` : "";
-          const url = `${localePrefix}/diagnostic/assessment/results?a=${encoded}&tab=gaps`;
-          window.history.replaceState({}, "", url);
-        } catch {
-          // URL update is a best-effort enhancement.
-        }
       }, 1500);
-    },
-    [questions, allSkills, allCareers, allCourses, locale]
-  );
-
-  const handleNext = useCallback(() => {
-    if (!hasAnswer) return;
-    if (isLastQuestion) {
-      completeAssessment(answers);
     } else {
       setCurrentIndex((prev) => prev + 1);
     }
-  }, [hasAnswer, isLastQuestion, answers, completeAssessment]);
+  }, [hasAnswer, isLastQuestion, answers]);
 
   const handleBack = useCallback(() => {
     if (currentIndex > 0) {
       setCurrentIndex((prev) => prev - 1);
     } else {
-      router.push(locale ? `/${locale}/diagnostic` : "/diagnostic");
+      router.push("/diagnostic");
     }
-  }, [currentIndex, router, locale]);
+  }, [currentIndex, router]);
 
-  // Keep URL in sync when the user switches tabs.
-  const handleTabChange = useCallback(
-    (next: ResultsTab) => {
-      setTab(next);
-      try {
-        const url = new URL(window.location.href);
-        url.searchParams.set("tab", next);
-        window.history.replaceState({}, "", url.toString());
-      } catch {
-        // no-op
-      }
-    },
-    []
-  );
-
-  // Smooth-scroll to top when results render.
   useEffect(() => {
     if (showResults) {
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
   }, [showResults]);
 
-  // Auto-advance: only when user has opted in AND the answer is a
-  // single_choice. This is the WCAG 2.2.1 fix — the user can disable
-  // it entirely, and a "Next" button is always rendered when it's off.
   useEffect(() => {
-    if (!autoAdvance) return;
-    if (currentQuestion?.type !== "single_choice") return;
-    if (!hasAnswer) return;
-    if (isLastQuestion) return;
-    const timer = setTimeout(() => {
-      setCurrentIndex((prev) => prev + 1);
-    }, AUTO_ADVANCE_DELAY_MS);
-    return () => clearTimeout(timer);
-  }, [
-    autoAdvance,
-    currentAnswer,
-    currentQuestion?.type,
-    hasAnswer,
-    isLastQuestion,
-  ]);
-
-  // Move focus to the new question's heading on change, and announce
-  // via the live region so screen reader users always know which
-  // question they're on.
-  useLayoutEffect(() => {
-    if (showResults || isCalculating) return;
-    questionHeadingRef.current?.focus();
-    if (liveRegionRef.current) {
-      liveRegionRef.current.textContent = `Question ${currentIndex + 1} of ${totalQuestions}. ${
-        currentQuestion?.text ?? ""
-      }`;
+    if (
+      currentQuestion?.type === "single_choice" &&
+      hasAnswer &&
+      !isLastQuestion
+    ) {
+      const timer = setTimeout(() => {
+        setCurrentIndex((prev) => prev + 1);
+      }, 400);
+      return () => clearTimeout(timer);
     }
-  }, [currentIndex, showResults, isCalculating, currentQuestion?.text, totalQuestions]);
-
-  // Arrow-key navigation within an option group for single_choice
-  // questions. The browser default keyboard behaviour for a group of
-  // <button>s is to advance focus one-at-a-time with Tab, which WCAG
-  // allows, but users familiar with radiogroup semantics expect arrow
-  // keys. We support both.
-  const handleOptionsKeyDown = useCallback(
-    (e: React.KeyboardEvent<HTMLDivElement>) => {
-      if (currentQuestion?.type !== "single_choice") return;
-      const buttons = Array.from(
-        optionsContainerRef.current?.querySelectorAll<HTMLButtonElement>(
-          'button[data-option="true"]'
-        ) ?? []
-      );
-      if (buttons.length === 0) return;
-      const activeIndex = buttons.findIndex((b) => b === document.activeElement);
-      if (e.key === "ArrowDown" || e.key === "ArrowRight") {
-        e.preventDefault();
-        const next = buttons[(activeIndex + 1 + buttons.length) % buttons.length];
-        next?.focus();
-      } else if (e.key === "ArrowUp" || e.key === "ArrowLeft") {
-        e.preventDefault();
-        const prev = buttons[(activeIndex - 1 + buttons.length) % buttons.length];
-        prev?.focus();
-      } else if (e.key === "Home") {
-        e.preventDefault();
-        buttons[0]?.focus();
-      } else if (e.key === "End") {
-        e.preventDefault();
-        buttons[buttons.length - 1]?.focus();
-      }
-    },
-    [currentQuestion?.type]
-  );
-
-  const progressPct = useMemo(
-    () => Math.round(((currentIndex + 1) / totalQuestions) * 100),
-    [currentIndex, totalQuestions]
-  );
+  }, [currentAnswer, currentQuestion?.type, hasAnswer, isLastQuestion]);
 
   if (isCalculating) {
     return (
       <div className="min-h-[80vh] flex items-center justify-center bg-gradient-to-br from-primary via-primary to-primary-light">
-        <div className="text-center" role="status" aria-live="polite">
+        <div className="text-center">
           <div className="relative mb-8">
-            <div className="w-24 h-24 border-4 border-white/20 border-t-secondary rounded-full animate-spin mx-auto motion-reduce:animate-none" />
-            <Sparkles className="absolute inset-0 m-auto h-10 w-10 text-secondary-dark animate-pulse motion-reduce:animate-none" aria-hidden="true" />
+            <div className="w-24 h-24 border-4 border-white/20 border-t-secondary rounded-full animate-spin mx-auto" />
+            <Sparkles className="absolute inset-0 m-auto h-10 w-10 text-secondary-dark animate-pulse" />
           </div>
           <h2 className="text-2xl font-bold text-white mb-2">
             Analysing Your Skills
@@ -290,104 +123,181 @@ export default function AssessmentClient({
   }
 
   if (showResults && result) {
+    const topGaps = result.gaps.slice(0, 3);
+
+    let totalScore = 0;
+    let totalMax = 0;
+    for (const [slug, score] of Object.entries(result.scores)) {
+      const max = result.maxPossible[slug] ?? 0;
+      if (max > 0) {
+        totalScore += score;
+        totalMax += max;
+      }
+    }
+    const overallPct = totalMax > 0 ? Math.round((totalScore / totalMax) * 100) : 0;
+
     return (
-      <ResultsView
-        result={result}
-        answers={answers}
-        allSkills={allSkills}
-        initialTab={tab}
-        localePrefix={locale}
-        onTabChange={handleTabChange}
-      />
+      <div ref={resultsRef}>
+        <section className="relative bg-gradient-to-br from-primary via-primary to-primary-light py-14 sm:py-20 overflow-hidden">
+          <div className="absolute inset-0 overflow-hidden">
+            <div className="absolute -top-24 -right-24 w-96 h-96 bg-secondary/5 rounded-full blur-3xl" />
+            <div className="absolute -bottom-32 -left-16 w-80 h-80 bg-accent/5 rounded-full blur-3xl" />
+            <div
+              className="absolute inset-0 opacity-[0.03]"
+              style={{
+                backgroundImage:
+                  "radial-gradient(circle, white 1px, transparent 1px)",
+                backgroundSize: "24px 24px",
+              }}
+            />
+          </div>
+
+          <Container className="relative z-10">
+            <div className="text-center max-w-2xl mx-auto">
+              <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-secondary/20 mb-6">
+                <Trophy className="h-10 w-10 text-secondary-dark" />
+              </div>
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">
+                Your OWE Skills Profile
+              </h1>
+              <p className="text-white/70 text-lg mb-8">
+                Here&apos;s your personalised skills assessment and recommendations
+              </p>
+
+              <div className="inline-flex flex-col items-center bg-white/10 backdrop-blur-sm rounded-2xl px-10 py-8">
+                <div className="relative w-32 h-32 mb-3">
+                  <svg className="w-full h-full -rotate-90" viewBox="0 0 128 128">
+                    <circle
+                      cx="64"
+                      cy="64"
+                      r="56"
+                      stroke="rgba(255,255,255,0.1)"
+                      strokeWidth="10"
+                      fill="none"
+                    />
+                    <circle
+                      cx="64"
+                      cy="64"
+                      r="56"
+                      stroke="#00A878"
+                      strokeWidth="10"
+                      fill="none"
+                      strokeLinecap="round"
+                      strokeDasharray={`${(overallPct / 100) * 352} 352`}
+                      className="transition-all duration-1000 ease-out"
+                    />
+                  </svg>
+                  <span className="absolute inset-0 flex items-center justify-center text-3xl font-bold text-white">
+                    {overallPct}%
+                  </span>
+                </div>
+                <span className="text-sm font-medium text-white/70">
+                  Overall Score
+                </span>
+              </div>
+            </div>
+          </Container>
+        </section>
+
+        <section className="py-12 sm:py-16 bg-white">
+          <Container>
+            <div className="max-w-3xl mx-auto">
+              <h2 className="text-2xl font-bold text-text-primary mb-2 text-center">
+                Skills Breakdown
+              </h2>
+              <p className="text-text-secondary text-center mb-8">
+                Your scores across skill categories compared to the industry benchmark
+              </p>
+              <div className="bg-surface rounded-2xl p-6 sm:p-8">
+                <ResultsChart result={result} allSkills={allSkills} />
+              </div>
+            </div>
+          </Container>
+        </section>
+
+        {topGaps.length > 0 && (
+          <section className="py-12 sm:py-16 bg-surface">
+            <Container>
+              <div className="max-w-3xl mx-auto">
+                <div className="flex items-center gap-3 mb-8">
+                  <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-status-error/10">
+                    <TrendingDown className="h-5 w-5 text-status-error" />
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-bold text-text-primary">
+                      Top Skill Gaps
+                    </h2>
+                    <p className="text-sm text-text-secondary">
+                      Areas where targeted training would have the most impact
+                    </p>
+                  </div>
+                </div>
+                <div className="space-y-4">
+                  {topGaps.map((gap, i) => (
+                    <GapCard key={gap.skill.slug} gap={gap} rank={i + 1} />
+                  ))}
+                </div>
+              </div>
+            </Container>
+          </section>
+        )}
+
+        <section className="py-12 sm:py-16 bg-white">
+          <Container>
+            <RecommendationCards result={result} />
+          </Container>
+        </section>
+
+        <AISummary
+          result={result}
+          answers={answers}
+          overallScorePercent={overallPct}
+        />
+      </div>
     );
   }
 
   return (
     <div className="min-h-[80vh] bg-surface">
-      {/* Live region for screen reader announcements */}
-      <div
-        ref={liveRegionRef}
-        role="status"
-        aria-live="polite"
-        aria-atomic="true"
-        className="sr-only"
-      />
-
       <div className="bg-white border-b border-gray-100 sticky top-0 z-20">
         <Container>
           <div className="py-4">
-            <ProgressBar current={currentIndex + 1} total={totalQuestions} />
+            <ProgressBar
+              current={currentIndex + 1}
+              total={totalQuestions}
+            />
           </div>
         </Container>
       </div>
 
       <Container>
         <div className="max-w-2xl mx-auto py-10 sm:py-16">
-          {/* Auto-advance toggle */}
-          <div className="flex justify-end mb-4">
-            <label className="inline-flex items-center gap-2 text-sm text-text-secondary cursor-pointer select-none">
-              <input
-                type="checkbox"
-                checked={autoAdvance}
-                onChange={(e) => setAutoAdvancePersisted(e.target.checked)}
-                className="h-4 w-4 rounded border-gray-300 text-secondary focus:ring-2 focus:ring-secondary focus:ring-offset-2"
-                aria-describedby="auto-advance-help"
-              />
-              Auto-advance questions
-            </label>
-            <span id="auto-advance-help" className="sr-only">
-              When enabled, the next question loads automatically 400 milliseconds
-              after you pick an answer. Turn off to advance manually with the Next
-              button.
-            </span>
-          </div>
-
-          <div
-            className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-10 mb-8"
-            role="group"
-            aria-labelledby="current-question-heading"
-            aria-describedby="progress-description"
-          >
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-10 mb-8">
             <div className="mb-8">
               <span className="inline-block text-xs font-bold text-accent-dark bg-accent/10 px-3 py-1 rounded-full mb-4">
-                Question {currentIndex + 1} of {totalQuestions}
+                Question {currentIndex + 1}
               </span>
-              <h2
-                id="current-question-heading"
-                ref={questionHeadingRef}
-                tabIndex={-1}
-                className="text-xl sm:text-2xl font-bold text-text-primary leading-snug focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-4 rounded"
-              >
+              <h2 className="text-xl sm:text-2xl font-bold text-text-primary leading-snug">
                 {currentQuestion?.text}
               </h2>
-              <span id="progress-description" className="sr-only">
-                {progressPct} percent complete
-              </span>
             </div>
 
             {currentQuestion && (
-              <div
-                ref={optionsContainerRef}
-                onKeyDown={handleOptionsKeyDown}
-              >
-                <QuestionStep
-                  question={currentQuestion}
-                  answer={currentAnswer}
-                  onAnswer={handleAnswer}
-                />
-              </div>
+              <QuestionStep
+                question={currentQuestion}
+                answer={currentAnswer}
+                onAnswer={handleAnswer}
+              />
             )}
           </div>
 
           <div className="flex items-center justify-between">
             <Button variant="ghost" onClick={handleBack}>
-              <ArrowLeft className="h-4 w-4" aria-hidden="true" />
+              <ArrowLeft className="h-4 w-4" />
               Back
             </Button>
 
-            {(currentQuestion?.type !== "single_choice" ||
-              !autoAdvance ||
-              isLastQuestion) && (
+            {(currentQuestion?.type !== "single_choice" || isLastQuestion) && (
               <Button
                 variant={isLastQuestion ? "secondary" : "primary"}
                 onClick={handleNext}
@@ -396,13 +306,13 @@ export default function AssessmentClient({
               >
                 {isLastQuestion ? (
                   <>
-                    <Sparkles className="h-4 w-4" aria-hidden="true" />
+                    <Sparkles className="h-4 w-4" />
                     See My Results
                   </>
                 ) : (
                   <>
                     Next
-                    <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                    <ArrowRight className="h-4 w-4" />
                   </>
                 )}
               </Button>

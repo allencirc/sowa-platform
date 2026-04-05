@@ -3,7 +3,6 @@ import { Inter } from "next/font/google";
 import { headers } from "next/headers";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { CookieConsent } from "@/components/layout/CookieConsent";
-import { ExternalLinkTracker } from "@/components/layout/ExternalLinkTracker";
 import {
   defaultLocale,
   isLocale,
@@ -134,7 +133,6 @@ export default async function RootLayout({
           Skip to main content
         </a>
         {children}
-        <ExternalLinkTracker />
         <CookieConsent />
         <SpeedInsights />
       </body>

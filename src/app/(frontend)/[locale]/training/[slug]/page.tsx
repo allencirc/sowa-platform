@@ -14,7 +14,6 @@ import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
 import { Container } from "@/components/ui/Container";
 import { Badge } from "@/components/ui/Badge";
 import { RegisterButton } from "@/components/registration/RegisterButton";
-import { EnrolWithProviderLink } from "@/components/courses/EnrolWithProviderLink";
 import { SkillBadge } from "@/components/careers/SkillBadge";
 import { CareerCard } from "@/components/careers/CareerCard";
 import {
@@ -83,6 +82,8 @@ export default async function CourseDetailPage({ params }: CourseDetailProps) {
   const relatedCareers = careerResults.filter(
     (c): c is NonNullable<typeof c> => c !== undefined
   );
+
+  const enableRegistration = process.env.ENABLE_COURSE_REGISTRATION === "true";
 
   const infoItems = [
     {
@@ -237,23 +238,7 @@ export default async function CourseDetailPage({ params }: CourseDetailProps) {
             )}
 
             {/* CTA */}
-            {course.signupUrl ? (
-              <div className="bg-gradient-to-r from-primary to-primary-light rounded-xl p-6 sm:p-8 text-center">
-                <h3 className="text-xl font-bold text-white mb-2">
-                  Ready to enrol?
-                </h3>
-                <p className="text-white/80 mb-5 text-sm">
-                  Sign up directly with {course.provider} on their
-                  course page.
-                </p>
-                <EnrolWithProviderLink
-                  courseId={course.slug}
-                  courseTitle={course.title}
-                  provider={course.provider}
-                  signupUrl={course.signupUrl}
-                />
-              </div>
-            ) : (
+            {enableRegistration && (
               <div className="bg-gradient-to-r from-primary to-primary-light rounded-xl p-6 sm:p-8 text-center">
                 <h3 className="text-xl font-bold text-white mb-2">
                   Interested in this course?
