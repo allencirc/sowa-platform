@@ -219,11 +219,34 @@ curl -X POST http://localhost:3000/api/courses \
 
 ### PUT /api/courses/[slug]
 
-**Auth:** ADMIN / EDITOR. All fields optional. Creates version.
+Update a course. All fields optional (partial update).
+
+**Auth:** ADMIN / EDITOR
+
+```bash
+curl -X PUT http://localhost:3000/api/courses/gwo-bst \
+  -H 'Content-Type: application/json' \
+  -H 'Cookie: next-auth.session-token=...' \
+  -d '{
+    "cost": 1350,
+    "nextStartDate": "2026-05-12T09:00:00.000Z",
+    "tags": ["safety", "gwo", "mandatory", "summer-intake"],
+    "changeNote": "Summer intake pricing and date"
+  }'
+```
+
+Creates a content version snapshot automatically.
 
 ### DELETE /api/courses/[slug]
 
-**Auth:** ADMIN / EDITOR. Returns `204`.
+**Auth:** ADMIN / EDITOR
+
+```bash
+curl -X DELETE http://localhost:3000/api/courses/gwo-bst \
+  -H 'Cookie: next-auth.session-token=...'
+```
+
+**Response:** `204 No Content`
 
 ---
 
@@ -264,9 +287,43 @@ curl -X POST http://localhost:3000/api/events \
   }'
 ```
 
-### GET/PUT/DELETE /api/events/[slug]
+### GET /api/events/[slug]
 
-Same patterns as Careers.
+**Auth:** Public
+
+```bash
+curl http://localhost:3000/api/events/owe-skills-summit-2026
+```
+
+### PUT /api/events/[slug]
+
+Update an event. All fields optional (partial update).
+
+**Auth:** ADMIN / EDITOR
+
+```bash
+curl -X PUT http://localhost:3000/api/events/owe-skills-summit-2026 \
+  -H 'Content-Type: application/json' \
+  -H 'Cookie: next-auth.session-token=...' \
+  -d '{
+    "capacity": 650,
+    "locationType": "HYBRID",
+    "changeNote": "Expanded capacity and added virtual attendance"
+  }'
+```
+
+Creates a content version snapshot automatically.
+
+### DELETE /api/events/[slug]
+
+**Auth:** ADMIN / EDITOR
+
+```bash
+curl -X DELETE http://localhost:3000/api/events/owe-skills-summit-2026 \
+  -H 'Cookie: next-auth.session-token=...'
+```
+
+**Response:** `204 No Content`
 
 ---
 
@@ -385,7 +442,19 @@ Submit answers and receive career/course recommendations.
 
 **Auth:** Public
 
+If `contact` is provided with `consent: true`, the top 3 skill gaps and recommended career slugs are synced to HubSpot asynchronously. Sync failures are logged and do not affect the response.
+
+**Request fields:**
+
+| Field | Type | Required | Notes |
+|---|---|---|---|
+| `answers` | `Record<string, string \| string[]>` | yes | Keyed by question id |
+| `contact.email` | string (email) | no | Required if `contact` is present |
+| `contact.name` | string | no | Required if `contact` is present |
+| `contact.consent` | `true` (literal) | no | Must be `true`; omit `contact` entirely otherwise |
+
 ```bash
+# Minimal — anonymous
 curl -X POST http://localhost:3000/api/diagnostic/results \
   -H 'Content-Type: application/json' \
   -d '{
@@ -393,6 +462,18 @@ curl -X POST http://localhost:3000/api/diagnostic/results \
       "q1": "junior",
       "q2": ["safety", "electrical"],
       "q10": "3"
+    }
+  }'
+
+# With consented contact sync to HubSpot
+curl -X POST http://localhost:3000/api/diagnostic/results \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "answers": { "q1": "junior", "q10": "3" },
+    "contact": {
+      "email": "jane@example.com",
+      "name": "Jane Doe",
+      "consent": true
     }
   }'
 ```
@@ -556,11 +637,16 @@ Password is hashed with bcrypt before storage.
 
 Create a new skill.
 
+**Auth:** ADMIN or EDITOR
+
 ```bash
 curl -X POST http://localhost:3000/api/skills \
   -H 'Content-Type: application/json' \
+  -H 'Cookie: next-auth.session-token=...' \
   -d '{ "slug": "blade-inspection", "name": "Blade Inspection", "category": "TECHNICAL" }'
 ```
+
+Returns `401 Unauthorized` if no session, `403 Forbidden` if the session user is not ADMIN or EDITOR.
 
 ---
 

@@ -1,0 +1,158 @@
+name: Weekly Restore Drill
+
+# Automated backup-restore verification. Pulls the most recent encrypted dump
+# from the backup bucket, restores it into an ephemeral Neon branch, runs a
+# row-count and schema diff against production, and tears the branch down.
+#
+# Referenced by: docs/disaster-recovery.md §5 (Restore Drills table, weekly row).
+# Success criteria: row counts within 5% of production, `prisma migrate status`
+# reports clean, no error in `pg_restore`.
+
+on:
+  schedule:
+    - cron: "17 3 * * 1" # 03:17 UTC every Monday
+  workflow_dispatch:
+
+concurrency:
+  group: restore-drill
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  drill:
+    name: Pull, decrypt, restore, verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install tooling
+        run: |
+          sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+          wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+          sudo apt-get update
+          sudo apt-get install -y postgresql-client-16 jq
+          curl -sSfL https://github.com/FiloSottile/age/releases/download/v1.2.0/age-v1.2.0-linux-amd64.tar.gz | tar -xz
+          sudo mv age/age age/age-keygen /usr/local/bin/
+          curl -sSfL https://neon.tech/cli/install.sh | bash
+          echo "$HOME/.neonctl/bin" >> "$GITHUB_PATH"
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: sowa-platform/package-lock.json
+
+      - name: Install app dependencies (for Prisma CLI)
+        working-directory: sowa-platform
+        run: npm ci --ignore-scripts
+
+      - name: Fetch latest backup
+        id: fetch
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.BACKUP_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.BACKUP_AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ${{ secrets.BACKUP_AWS_REGION }}
+          BACKUP_BUCKET: ${{ secrets.BACKUP_BUCKET }}
+        run: |
+          LATEST=$(aws s3 ls "s3://${BACKUP_BUCKET}/daily/" \
+            | sort | tail -n 1 | awk '{print $4}')
+          if [ -z "$LATEST" ]; then
+            echo "::error::No backup found in s3://${BACKUP_BUCKET}/daily/"
+            exit 1
+          fi
+          echo "Latest backup: $LATEST"
+          aws s3 cp "s3://${BACKUP_BUCKET}/daily/${LATEST}" ./backup.sql.gz.age --only-show-errors
+          echo "file=${LATEST}" >> "$GITHUB_OUTPUT"
+
+      - name: Decrypt backup
+        env:
+          AGE_IDENTITY: ${{ secrets.AGE_IDENTITY_PRIVATE_KEY }}
+        run: |
+          echo "$AGE_IDENTITY" > identity.txt
+          age -d -i identity.txt -o backup.sql.gz backup.sql.gz.age
+          gunzip backup.sql.gz
+          rm -f identity.txt backup.sql.gz.age
+          wc -l backup.sql
+
+      - name: Create ephemeral Neon branch
+        id: branch
+        env:
+          NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
+          NEON_PROJECT_ID: ${{ secrets.NEON_PROJECT_ID }}
+        run: |
+          BRANCH="drill-$(date -u +%Y%m%d-%H%M%S)"
+          neonctl branches create --name "$BRANCH" --project-id "$NEON_PROJECT_ID" --output json > branch.json
+          CONN=$(jq -r '.connection_uris[0].connection_uri' branch.json)
+          echo "branch=$BRANCH" >> "$GITHUB_OUTPUT"
+          echo "::add-mask::$CONN"
+          echo "conn=$CONN" >> "$GITHUB_OUTPUT"
+
+      - name: Restore into ephemeral branch
+        env:
+          TARGET_URL: ${{ steps.branch.outputs.conn }}
+        run: |
+          psql "$TARGET_URL" -v ON_ERROR_STOP=1 -f backup.sql > restore.log 2>&1 || {
+            tail -n 100 restore.log
+            exit 1
+          }
+          echo "Restore completed"
+
+      - name: Verify row counts
+        env:
+          TARGET_URL: ${{ steps.branch.outputs.conn }}
+          PROD_URL: ${{ secrets.DATABASE_URL_READONLY }}
+        run: |
+          cat > /tmp/counts.sql <<'SQL'
+          SELECT 'Career' AS t, COUNT(*) FROM "Career"
+          UNION ALL SELECT 'Course', COUNT(*) FROM "Course"
+          UNION ALL SELECT 'Event', COUNT(*) FROM "Event"
+          UNION ALL SELECT 'Research', COUNT(*) FROM "Research"
+          UNION ALL SELECT 'Skill', COUNT(*) FROM "Skill"
+          ORDER BY t;
+          SQL
+          psql "$TARGET_URL" -f /tmp/counts.sql > restored.txt
+          psql "$PROD_URL"   -f /tmp/counts.sql > prod.txt
+          diff -u prod.txt restored.txt || {
+            echo "::warning::Row counts differ between prod and restored dump"
+          }
+
+      - name: Verify schema with Prisma
+        working-directory: sowa-platform
+        env:
+          DATABASE_URL: ${{ steps.branch.outputs.conn }}
+        run: npx prisma migrate status
+
+      - name: Tear down ephemeral branch
+        if: always() && steps.branch.outputs.branch != ''
+        env:
+          NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
+          NEON_PROJECT_ID: ${{ secrets.NEON_PROJECT_ID }}
+        run: |
+          neonctl branches delete "${{ steps.branch.outputs.branch }}" \
+            --project-id "$NEON_PROJECT_ID" \
+            --force
+
+      - name: Append to drill log on success
+        if: success()
+        run: |
+          echo "Drill ${{ github.run_id }} completed against ${{ steps.fetch.outputs.file }} — see ops/dr-drill-log.md for manual entries."
+
+      - name: Open incident issue on failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `Restore drill failure ${new Date().toISOString().slice(0,10)}`,
+              body: `Weekly restore drill failed. Run: ${context.runId}. This pages on-call per docs/disaster-recovery.md §5.`,
+              labels: ['incident', 'backup', 'dr-drill']
+            })

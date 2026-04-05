@@ -1,0 +1,103 @@
+%%{init: {'theme':'base','themeVariables':{
+  'fontFamily':'Inter, Helvetica, Arial, sans-serif',
+  'fontSize':'15px',
+  'primaryColor':'#F7F9FC',
+  'primaryTextColor':'#0C2340',
+  'primaryBorderColor':'#0C2340',
+  'lineColor':'#0C2340',
+  'clusterBkg':'#F7F9FC',
+  'clusterBorder':'#0C2340'
+}}}%%
+flowchart LR
+  %% ─────────── Users ───────────
+  subgraph USERS["End Users"]
+    direction TB
+    PUB["Public visitor<br/>(learner, employer,<br/>career changer)"]:::user
+    ADM["Admin / Editor<br/>(SOWA team)"]:::user
+  end
+
+  %% ─────────── EU Trust Boundary ───────────
+  subgraph EU["EU Data Residency Boundary — TLS 1.3 in transit · AES-256 at rest"]
+    direction TB
+
+    subgraph EDGE["Vercel Edge (EU region, e.g. fra1/dub1)"]
+      CDN["CDN + Edge Middleware<br/>HTTPS · WAF · Rate limiting"]:::edge
+      SI["Vercel Speed Insights<br/>(Core Web Vitals)"]:::obs
+    end
+
+    subgraph APP["Next.js 16 App — App Router (Serverless, EU region)"]
+      direction TB
+      PUBR["(frontend) route group<br/>Public pages · SSR / Static"]:::public
+      APIR["/api/* Route Handlers<br/>Zod validation · Rate limit"]:::api
+      ADMR["/admin route group<br/>Protected · SSR"]:::admin
+      AUTH["NextAuth v5<br/>JWT sessions · RBAC<br/>(ADMIN / EDITOR / VIEWER)"]:::auth
+    end
+
+    subgraph DATA["Data Layer (EU region)"]
+      PRISMA["Prisma ORM<br/>Connection pooling"]:::orm
+      PG[("PostgreSQL 15+<br/>Managed · EU region<br/>Daily backups · PITR")]:::db
+      BLOB["Media Storage<br/>Vercel Blob / S3 EU<br/>Encrypted at rest"]:::store
+    end
+  end
+
+  %% ─────────── Third-party integrations ───────────
+  subgraph INTEG["Third-party integrations (outbound HTTPS)"]
+    direction TB
+    HS["HubSpot CRM<br/>Registrations · Newsletter"]:::ext
+    GA4["Google Analytics 4<br/>(consent-gated)"]:::ext
+    EB["Eventbrite API<br/>Event sync"]:::ext
+    CP["careersportal.ie<br/>Course feed"]:::ext
+    FC["Fetchcourses.ie<br/>Course feed"]:::ext
+    QX["Qualifax<br/>NFQ reference data"]:::ext
+    PIX["Meta Pixel · LinkedIn Insight<br/>(optional, consent-gated)"]:::extOpt
+  end
+
+  %% ─────────── Flows ───────────
+  PUB  -- "HTTPS" --> CDN
+  ADM  -- "HTTPS" --> CDN
+  CDN  --> PUBR
+  CDN  --> ADMR
+  CDN  --> APIR
+
+  ADM  -. "1. Sign in" .-> AUTH
+  AUTH -. "2. JWT cookie" .-> ADM
+  ADMR -. "Session guard" .-> AUTH
+  APIR -. "RBAC check" .-> AUTH
+
+  PUBR --> PRISMA
+  ADMR --> PRISMA
+  APIR --> PRISMA
+  PRISMA --> PG
+  APIR  --> BLOB
+  ADMR  --> BLOB
+
+  APIR ==> HS
+  PUBR ==> GA4
+  APIR ==> EB
+  APIR ==> CP
+  APIR ==> FC
+  APIR ==> QX
+  PUBR -.-> PIX
+
+  APP --> SI
+
+  %% ─────────── Styles (SOWA palette) ───────────
+  classDef user      fill:#FFFFFF,stroke:#0C2340,stroke-width:2px,color:#0C2340;
+  classDef edge      fill:#0C2340,stroke:#081828,stroke-width:1.5px,color:#FFFFFF;
+  classDef public    fill:#E6F4EF,stroke:#00A878,stroke-width:1.5px,color:#0C2340;
+  classDef admin     fill:#FFE9D6,stroke:#EA580C,stroke-width:1.5px,color:#0C2340;
+  classDef api       fill:#DCEBFA,stroke:#4A90D9,stroke-width:1.5px,color:#0C2340;
+  classDef auth      fill:#00A878,stroke:#008A62,stroke-width:1.5px,color:#FFFFFF;
+  classDef orm       fill:#FFFFFF,stroke:#4A90D9,stroke-width:1.5px,color:#0C2340;
+  classDef db        fill:#1A3A5C,stroke:#0C2340,stroke-width:1.5px,color:#FFFFFF;
+  classDef store     fill:#FFFFFF,stroke:#1E6091,stroke-width:1.5px,color:#0C2340;
+  classDef ext       fill:#FFFFFF,stroke:#6B7280,stroke-width:1.2px,color:#1A1A2E;
+  classDef extOpt    fill:#FFFFFF,stroke:#9CA3AF,stroke-width:1.2px,color:#6B7280,stroke-dasharray: 4 3;
+  classDef obs       fill:#00A878,stroke:#008A62,stroke-width:1.2px,color:#FFFFFF;
+
+  style USERS fill:#FFFFFF,stroke:#6B7280,stroke-width:1px,stroke-dasharray: 4 3
+  style EU    fill:#F7F9FC,stroke:#00A878,stroke-width:2.5px
+  style EDGE  fill:#EAF1FA,stroke:#4A90D9,stroke-width:1.5px
+  style APP   fill:#FFFFFF,stroke:#0C2340,stroke-width:1.5px
+  style DATA  fill:#FFFFFF,stroke:#1E6091,stroke-width:1.5px
+  style INTEG fill:#FFFFFF,stroke:#6B7280,stroke-width:1px,stroke-dasharray: 4 3

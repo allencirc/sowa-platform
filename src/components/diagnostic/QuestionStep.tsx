@@ -205,7 +205,7 @@ function ScaleQuestion({
                 "w-14 h-14 sm:w-16 sm:h-16 rounded-full border-2 flex items-center justify-center text-lg sm:text-xl font-bold transition-all duration-200 cursor-pointer",
                 "hover:border-secondary/60 hover:bg-secondary/10 hover:scale-105",
                 isSelected
-                  ? "border-secondary bg-secondary text-white shadow-lg shadow-secondary/20 scale-110"
+                  ? "border-secondary bg-secondary text-primary shadow-lg shadow-secondary/20 scale-110"
                   : "border-gray-200 bg-white text-text-secondary"
               )}
             >

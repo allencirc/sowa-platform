@@ -19,7 +19,7 @@ export function RecommendationCards({ result }: RecommendationCardsProps) {
         <div>
           <div className="flex items-center gap-3 mb-6">
             <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-accent/10">
-              <Compass className="h-5 w-5 text-accent" />
+              <Compass className="h-5 w-5 text-accent-dark" />
             </div>
             <div>
               <h3 className="text-xl font-bold text-text-primary">
@@ -43,7 +43,7 @@ export function RecommendationCards({ result }: RecommendationCardsProps) {
         <div>
           <div className="flex items-center gap-3 mb-6">
             <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-secondary/10">
-              <BookOpen className="h-5 w-5 text-secondary" />
+              <BookOpen className="h-5 w-5 text-secondary-dark" />
             </div>
             <div>
               <h3 className="text-xl font-bold text-text-primary">

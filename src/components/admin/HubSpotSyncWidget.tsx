@@ -58,7 +58,7 @@ export function HubSpotSyncWidget() {
     <div className="rounded-xl bg-surface-card p-6 shadow-sm">
       <div className="flex items-center justify-between mb-4">
         <h2 className="flex items-center gap-2 text-lg font-semibold text-text-primary">
-          <Cloud className="h-5 w-5 text-accent" />
+          <Cloud className="h-5 w-5 text-accent-dark" />
           HubSpot CRM
         </h2>
         <button
@@ -83,11 +83,11 @@ export function HubSpotSyncWidget() {
           {/* Connection status */}
           <div className="flex items-center gap-2 text-sm">
             {isHealthy ? (
-              <CheckCircle className="h-4 w-4 text-secondary shrink-0" />
+              <CheckCircle className="h-4 w-4 text-secondary-dark shrink-0" />
             ) : (
               <XCircle className="h-4 w-4 text-status-error shrink-0" />
             )}
-            <span className={isHealthy ? "text-secondary" : "text-status-error"}>
+            <span className={isHealthy ? "text-secondary-dark" : "text-status-error"}>
               {isHealthy ? "Connected & healthy" : "Connected with errors"}
             </span>
           </div>

@@ -55,7 +55,7 @@ export default function EditResearchPage() {
     return (
       <div className="flex h-64 flex-col items-center justify-center gap-2">
         <p className="text-lg font-medium text-text-primary">{error ?? "Research not found"}</p>
-        <a href="/admin/research" className="text-sm text-accent hover:underline">Back to research</a>
+        <a href="/admin/research" className="text-sm text-accent-dark hover:underline">Back to research</a>
       </div>
     );
   }

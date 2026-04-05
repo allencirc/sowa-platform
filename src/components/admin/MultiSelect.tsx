@@ -152,7 +152,7 @@ export function MultiSelect({
             {showCreate && (
               <button
                 type="button"
-                className="flex w-full items-center gap-2 rounded-md px-3 py-1.5 text-sm text-secondary hover:bg-secondary/5"
+                className="flex w-full items-center gap-2 rounded-md px-3 py-1.5 text-sm text-secondary-dark hover:bg-secondary/5"
                 onClick={() => {
                   onCreateOption?.(search.trim());
                   setSearch("");

@@ -90,7 +90,7 @@ export function FilterPanel({ courses, className }: FilterPanelProps) {
         {hasAnyFilters && (
           <button
             onClick={clearAll}
-            className="inline-flex items-center gap-1.5 text-xs font-medium text-accent hover:text-accent-dark transition-colors cursor-pointer"
+            className="inline-flex items-center gap-1.5 text-xs font-medium text-accent-dark hover:text-accent-dark transition-colors cursor-pointer"
           >
             <RotateCcw className="h-3.5 w-3.5" />
             Clear All

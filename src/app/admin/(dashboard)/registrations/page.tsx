@@ -26,7 +26,7 @@ export default async function AdminRegistrationsPage() {
   return (
     <div>
       <div className="mb-8 flex items-center gap-3">
-        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-secondary/10 text-secondary">
+        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-secondary/10 text-secondary-dark">
           <ClipboardList className="h-5 w-5" />
         </div>
         <div>

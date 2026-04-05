@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test";
-import AxeBuilder from "@axe-core/playwright";
+
+// WCAG 2.2 AA axe sweeps live in a11y.spec.ts.
 
 test.describe("Training journey", () => {
   test("Homepage → Find Training → Filter courses → View course details", async ({
@@ -13,8 +14,10 @@ test.describe("Training journey", () => {
     await page.waitForURL("**/training**");
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
 
-    // 3. Expect course cards to be visible
-    const courseCards = page.locator('[href^="/training/"]');
+    // 3. Expect course cards to be visible (ignore nav/footer links that share the prefix).
+    const courseCards = page
+      .locator('main [href^="/training/"]')
+      .locator("visible=true");
     await expect(courseCards.first()).toBeVisible();
 
     // 4. Click on a course card
@@ -29,14 +32,4 @@ test.describe("Training journey", () => {
     expect(pageContent).toBeTruthy();
   });
 
-  test("training page passes accessibility checks", async ({ page }) => {
-    await page.goto("/training");
-    await page.waitForLoadState("networkidle");
-
-    const results = await new AxeBuilder({ page })
-      .withTags(["wcag2a", "wcag2aa"])
-      .analyze();
-
-    expect(results.violations).toEqual([]);
-  });
 });

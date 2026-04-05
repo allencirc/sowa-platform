@@ -76,7 +76,7 @@ export function FilterChips() {
       {chips.length > 1 && (
         <button
           onClick={clearAll}
-          className="text-xs font-medium text-accent hover:text-accent-dark transition-colors cursor-pointer"
+          className="text-xs font-medium text-accent-dark hover:text-accent-dark transition-colors cursor-pointer"
         >
           Clear all
         </button>

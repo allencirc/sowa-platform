@@ -63,7 +63,7 @@ export function CookieConsent() {
         {view === 'banner' && (
           <div className="p-5 sm:p-6">
             <div className="flex items-start gap-4">
-              <Shield className="mt-0.5 hidden size-6 shrink-0 text-secondary sm:block" />
+              <Shield className="mt-0.5 hidden size-6 shrink-0 text-secondary-dark sm:block" />
               <div className="flex-1 space-y-3">
                 <p className="text-sm leading-relaxed text-text-inverse">
                   We use cookies to understand how you use SOWA and improve your
@@ -74,7 +74,7 @@ export function CookieConsent() {
                 <div className="flex flex-wrap items-center gap-2">
                   <button
                     onClick={acceptAll}
-                    className="rounded-lg bg-secondary px-4 py-2 text-sm font-semibold text-white transition hover:bg-secondary-light focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary-light focus-visible:ring-offset-2 focus-visible:ring-offset-primary"
+                    className="rounded-lg bg-secondary px-4 py-2 text-sm font-semibold text-primary transition hover:bg-secondary-light focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary-light focus-visible:ring-offset-2 focus-visible:ring-offset-primary"
                   >
                     Accept All
                   </button>
@@ -142,7 +142,7 @@ export function CookieConsent() {
             <div className="mt-5 flex flex-wrap items-center gap-2">
               <button
                 onClick={savePreferences}
-                className="rounded-lg bg-secondary px-4 py-2 text-sm font-semibold text-white transition hover:bg-secondary-light focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary-light focus-visible:ring-offset-2 focus-visible:ring-offset-primary"
+                className="rounded-lg bg-secondary px-4 py-2 text-sm font-semibold text-primary transition hover:bg-secondary-light focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-secondary-light focus-visible:ring-offset-2 focus-visible:ring-offset-primary"
               >
                 Save Preferences
               </button>

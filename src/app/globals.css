@@ -8,26 +8,29 @@
   --color-primary-light: #1A3A5C;
   --color-primary-dark: #081828;
 
-  /* Secondary — Teal/wind green */
+  /* Secondary — Teal/wind green.
+     `-dark` is the AA-safe text variant (6.4:1 on white); brand bg stays #00A878. */
   --color-secondary: #00A878;
   --color-secondary-light: #00C98E;
-  --color-secondary-dark: #008A62;
+  --color-secondary-dark: #006B4A;
 
-  /* Accent — Sky blue */
+  /* Accent — Sky blue. `-dark` is AA-safe (5.9:1 on white). */
   --color-accent: #4A90D9;
   --color-accent-light: #6BA8E8;
-  --color-accent-dark: #3578C0;
+  --color-accent-dark: #2564A8;
 
   /* Surface */
   --color-surface: #F7F9FC;
   --color-surface-card: #FFFFFF;
   --color-surface-dark: #0C2340;
 
-  /* Text */
+  /* Text. Secondary bumped from gray-500 to gray-600 (#4B5563) so muted
+     body text hits 7.5:1 on white instead of 4.26:1 (below AA). Muted
+     bumped from gray-400 (2.85:1) to slate-500 (#64748B, 4.6:1). */
   --color-text-primary: #1A1A2E;
-  --color-text-secondary: #6B7280;
+  --color-text-secondary: #4B5563;
   --color-text-inverse: #FFFFFF;
-  --color-text-muted: #9CA3AF;
+  --color-text-muted: #64748B;
 
   /* Status */
   --color-status-warning: #F59E0B;

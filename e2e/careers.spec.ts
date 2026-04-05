@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test";
-import AxeBuilder from "@axe-core/playwright";
+
+// WCAG 2.2 AA axe sweeps live in a11y.spec.ts.
 
 test.describe("Careers journey", () => {
   test("Homepage → Explore Careers → Filter by sector → View career → See related courses", async ({
@@ -14,8 +15,12 @@ test.describe("Careers journey", () => {
     await page.waitForURL("**/careers**");
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
 
-    // 3. Expect career cards to be visible
-    const careerCards = page.locator('[href^="/careers/"]');
+    // 3. Expect career cards to be visible. `[href^="/careers/"]` also matches
+    //    links inside the React Flow pathway map (rendered but off-screen),
+    //    so filter for visibility before asserting.
+    const careerCards = page
+      .locator('main [href^="/careers/"]')
+      .locator("visible=true");
     await expect(careerCards.first()).toBeVisible();
 
     // 4. Click on a career card
@@ -32,14 +37,4 @@ test.describe("Careers journey", () => {
     }
   });
 
-  test("careers page passes accessibility checks", async ({ page }) => {
-    await page.goto("/careers");
-    await page.waitForLoadState("networkidle");
-
-    const results = await new AxeBuilder({ page })
-      .withTags(["wcag2a", "wcag2aa"])
-      .analyze();
-
-    expect(results.violations).toEqual([]);
-  });
 });

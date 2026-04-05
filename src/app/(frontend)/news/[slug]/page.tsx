@@ -72,11 +72,11 @@ export default async function NewsDetailPage({ params }: NewsDetailProps) {
 
             <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-text-secondary">
               <div className="flex items-center gap-2">
-                <User className="h-4 w-4 text-accent" />
+                <User className="h-4 w-4 text-accent-dark" />
                 <span>{article.author}</span>
               </div>
               <div className="flex items-center gap-2">
-                <Calendar className="h-4 w-4 text-accent" />
+                <Calendar className="h-4 w-4 text-accent-dark" />
                 <span>{formatDate(article.date)}</span>
               </div>
             </div>
@@ -113,7 +113,7 @@ export default async function NewsDetailPage({ params }: NewsDetailProps) {
             <div className="mt-12 pt-8 border-t border-gray-100">
               <Link
                 href="/news"
-                className="inline-flex items-center gap-2 text-sm font-semibold text-accent hover:text-accent-dark transition-colors"
+                className="inline-flex items-center gap-2 text-sm font-semibold text-accent-dark hover:text-accent-dark transition-colors"
               >
                 <ArrowLeft className="h-4 w-4" />
                 Back to News

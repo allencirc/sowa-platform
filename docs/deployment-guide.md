@@ -134,6 +134,7 @@ This generates a new SQL migration file in `prisma/migrations/`.
 |-----------|-------------|
 | `20260404112931_init` | Initial schema: all content models, enums, junction tables, users, versions |
 | `20260404115459_add_registrations` | Registration system with status tracking |
+| `20260405120000_add_content_source` | Adds `ContentSource` enum and `source`/`externalId` columns to `courses` and `events` for external feed ingestion (Eventbrite, CareersPortal, FetchCourses, Qualifax) |
 
 ### Checking Migration Status
 
@@ -157,6 +158,38 @@ This runs `prisma/seed.ts` which:
 5. Creates a default admin user (`admin@sowa.ie` / `changeme123`)
 
 **Important:** The seed script is designed for initial setup and demo environments. It clears all existing data before inserting. Do NOT run on a production database with real content.
+
+---
+
+## Production Hosting Recommendation (Green, EU-Region)
+
+**Primary recommendation: Vercel — `cdg1` (Paris, France) region, backed by a Neon PostgreSQL database in `aws-eu-west-3` (Paris).**
+
+### Why this stack
+
+| Requirement | How it is met |
+|-------------|---------------|
+| EU-region data residency | Both compute (`cdg1`) and database (`aws-eu-west-3`) are located in Paris, France. No user data leaves the EU. |
+| Renewable-energy powered | Vercel's compute and bandwidth run on AWS infrastructure. AWS has been **100% renewable-energy matched since 2023**, seven years ahead of its 2030 commitment. See: https://sustainability.aboutamazon.com/2023-aws-renewable-energy (AWS Sustainability, 2023). |
+| Data-centre efficiency | The `eu-west-3` (Paris) AWS region operates at a reported trailing-twelve-month PUE of ~1.13 and publishes a regional carbon methodology. See: https://sustainability.aboutamazon.com/products-services/the-cloud |
+| Carbon transparency | Vercel publishes emissions and methodology in its Trust Center: https://vercel.com/security and https://vercel.com/legal/dpa. Neon publishes sustainability and region data at: https://neon.tech/docs/introduction/regions |
+| Managed SLAs | Vercel Enterprise: 99.99% uptime SLA. Neon: 99.95% uptime SLA on paid tiers (https://neon.tech/docs/introduction/support). |
+| Irish/EU compliance | Both providers are GDPR-compliant, offer signed DPAs, and list sub-processors publicly. |
+
+### Named alternatives (if Vercel is not acceptable)
+
+| Provider | EU Region | Renewable-energy source |
+|----------|-----------|-------------------------|
+| **Scaleway Serverless** | Paris (`fr-par`) | 100% renewable-powered datacentres (DC5 adiabatic cooling, no A/C). https://www.scaleway.com/en/environmental-leadership/ |
+| **OVHcloud Public Cloud** | Gravelines / Strasbourg (FR) | Water-cooled, PUE ~1.09, 100% low-carbon electricity. https://corporate.ovhcloud.com/en/sustainability/ |
+| **Microsoft Azure App Service** | North Europe (Dublin) | 100% renewable-matched since 2025 commitment; Dublin region. https://www.microsoft.com/en-us/sustainability |
+
+**Decision:** Vercel Paris + Neon Paris is the chosen configuration for this tender. It minimises operational overhead (no Kubernetes, no VM patching), keeps all user data within the EU, and runs on verifiably renewable-matched infrastructure. Scaleway `fr-par` is the fallback if the awarding body requires a French-owned provider.
+
+> **Green host sources quoted in the tender response:**
+> - AWS 100% renewable energy (2023): https://sustainability.aboutamazon.com/2023-aws-renewable-energy
+> - Scaleway environmental leadership: https://www.scaleway.com/en/environmental-leadership/
+> - OVHcloud sustainability report: https://corporate.ovhcloud.com/en/sustainability/
 
 ---
 
@@ -214,26 +247,40 @@ Vercel automatically rebuilds on push to the main branch. If the deployment incl
 
 ## Alternative: Docker Deployment
 
-```dockerfile
-FROM node:20-alpine AS builder
-WORKDIR /app
-COPY package*.json ./
-RUN npm ci
-COPY . .
-RUN npx prisma generate
-RUN npm run build
+A production-ready multi-stage `Dockerfile` ships at the repository root
+alongside a `.dockerignore`. It is the canonical artefact for Scenario E
+(complete Vercel outage) and Scenario G (self-hosted VM rebuild) in
+`disaster-recovery.md`.
 
-FROM node:20-alpine AS runner
-WORKDIR /app
-COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/package.json ./
-COPY --from=builder /app/prisma ./prisma
-COPY --from=builder /app/public ./public
+Highlights:
 
-EXPOSE 3000
-CMD ["npm", "start"]
+- Three stages (`deps` → `builder` → `runner`) to keep the runtime image small.
+- Runs `prisma generate` during build and `npm prune --omit=dev` before
+  assembling the runner layer.
+- Runs as a non-root `nextjs` user, with `tini` as PID 1 so SIGTERM reaches
+  `next start` cleanly.
+- Ships a `HEALTHCHECK` that hits the homepage over loopback.
+
+Build and run:
+
+```bash
+# Build the image
+docker build -t sowa-platform:latest .
+
+# Apply migrations against the target database
+docker run --rm \
+  -e DATABASE_URL="postgresql://..." \
+  sowa-platform:latest npx prisma migrate deploy
+
+# Start the app
+docker run -d --name sowa -p 3000:3000 \
+  -e DATABASE_URL="postgresql://..." \
+  -e NEXTAUTH_SECRET="..." \
+  -e NEXTAUTH_URL="https://sowa.ie" \
+  sowa-platform:latest
 ```
+
+See the `Dockerfile` in the repo root for the full definition.
 
 ---
 

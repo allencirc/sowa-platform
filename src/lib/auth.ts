@@ -34,6 +34,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           email: user.email,
           name: user.name,
           role: user.role,
+          mustChangePassword: user.mustChangePassword,
         };
       },
     }),
@@ -41,16 +42,32 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   session: { strategy: "jwt" },
   pages: { signIn: "/admin/login" },
   callbacks: {
-    jwt({ token, user }) {
+    async jwt({ token, user, trigger }) {
       if (user) {
         token.id = user.id!;
         token.role = user.role;
+        token.mustChangePassword = user.mustChangePassword ?? false;
       }
+
+      // When the password-change flow calls `update()`, refresh the flag
+      // from the DB so the next request sees the cleared value.
+      if (trigger === "update" && token.id) {
+        const fresh = await prisma.user.findUnique({
+          where: { id: token.id as string },
+          select: { mustChangePassword: true, role: true },
+        });
+        if (fresh) {
+          token.mustChangePassword = fresh.mustChangePassword;
+          token.role = fresh.role;
+        }
+      }
+
       return token;
     },
     session({ session, token }) {
       session.user.id = token.id as string;
       session.user.role = token.role as UserRole;
+      session.user.mustChangePassword = Boolean(token.mustChangePassword);
       return session;
     },
   },

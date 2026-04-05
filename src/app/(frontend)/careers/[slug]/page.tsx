@@ -83,7 +83,7 @@ export default async function CareerDetailPage({ params }: CareerDetailProps) {
             </h1>
 
             {career.salaryRange && (
-              <div className="flex items-center gap-2 text-lg font-semibold text-secondary">
+              <div className="flex items-center gap-2 text-lg font-semibold text-secondary-dark">
                 <Briefcase className="h-5 w-5" />
                 {formatCurrency(career.salaryRange.min)} –{" "}
                 {formatCurrency(career.salaryRange.max)}
@@ -100,7 +100,7 @@ export default async function CareerDetailPage({ params }: CareerDetailProps) {
             {/* About */}
             <div>
               <h2 className="text-xl font-bold text-text-primary mb-3 flex items-center gap-2">
-                <Briefcase className="h-5 w-5 text-accent" />
+                <Briefcase className="h-5 w-5 text-accent-dark" />
                 About This Role
               </h2>
               <p className="text-text-secondary leading-relaxed">
@@ -128,7 +128,7 @@ export default async function CareerDetailPage({ params }: CareerDetailProps) {
             {/* Skills & Qualifications */}
             <div>
               <h2 className="text-xl font-bold text-text-primary mb-4 flex items-center gap-2">
-                <GraduationCap className="h-5 w-5 text-accent" />
+                <GraduationCap className="h-5 w-5 text-accent-dark" />
                 Skills &amp; Qualifications
               </h2>
 
@@ -152,7 +152,7 @@ export default async function CareerDetailPage({ params }: CareerDetailProps) {
                 <ul className="space-y-2">
                   {career.qualifications.map((q, i) => (
                     <li key={i} className="flex items-start gap-3 text-text-secondary">
-                      <Shield className="h-4 w-4 text-secondary shrink-0 mt-0.5" />
+                      <Shield className="h-4 w-4 text-secondary-dark shrink-0 mt-0.5" />
                       {q}
                     </li>
                   ))}
@@ -164,7 +164,7 @@ export default async function CareerDetailPage({ params }: CareerDetailProps) {
             {career.workingConditions && (
               <div>
                 <h2 className="text-xl font-bold text-text-primary mb-3 flex items-center gap-2">
-                  <MapPin className="h-5 w-5 text-accent" />
+                  <MapPin className="h-5 w-5 text-accent-dark" />
                   Working Conditions
                 </h2>
                 <p className="text-text-secondary leading-relaxed">
@@ -177,7 +177,7 @@ export default async function CareerDetailPage({ params }: CareerDetailProps) {
             {career.growthOutlook && (
               <div className="bg-secondary/5 border border-secondary/20 rounded-xl p-6">
                 <h2 className="text-xl font-bold text-text-primary mb-2 flex items-center gap-2">
-                  <TrendingUp className="h-5 w-5 text-secondary" />
+                  <TrendingUp className="h-5 w-5 text-secondary-dark" />
                   Growth Outlook
                 </h2>
                 <p className="text-text-primary font-medium leading-relaxed">

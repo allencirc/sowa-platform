@@ -53,7 +53,7 @@ export function NewsletterSignup() {
       <section className="py-16 sm:py-20 bg-white">
         <Container>
           <div className="max-w-xl mx-auto text-center">
-            <div className="inline-flex items-center justify-center h-14 w-14 rounded-full bg-secondary/10 text-secondary mb-4">
+            <div className="inline-flex items-center justify-center h-14 w-14 rounded-full bg-secondary/10 text-secondary-dark mb-4">
               <CheckCircle className="h-7 w-7" />
             </div>
             <h3 className="text-2xl font-bold text-text-primary mb-2">
@@ -73,7 +73,7 @@ export function NewsletterSignup() {
     <section className="py-16 sm:py-20 bg-white">
       <Container>
         <div className="max-w-xl mx-auto text-center">
-          <div className="inline-flex items-center justify-center h-14 w-14 rounded-full bg-accent/10 text-accent mb-4">
+          <div className="inline-flex items-center justify-center h-14 w-14 rounded-full bg-accent/10 text-accent-dark mb-4">
             <Mail className="h-7 w-7" />
           </div>
 

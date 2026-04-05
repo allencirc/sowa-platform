@@ -24,7 +24,7 @@ export default function AdminSettingsPage() {
         {/* Profile */}
         <div className="rounded-xl border border-gray-200 bg-surface-card p-6">
           <div className="mb-4 flex items-center gap-2">
-            <User className="h-5 w-5 text-accent" />
+            <User className="h-5 w-5 text-accent-dark" />
             <h2 className="text-lg font-semibold text-text-primary">Profile</h2>
           </div>
           <div className="space-y-4">
@@ -48,7 +48,7 @@ export default function AdminSettingsPage() {
         {/* Security */}
         <div className="rounded-xl border border-gray-200 bg-surface-card p-6">
           <div className="mb-4 flex items-center gap-2">
-            <Shield className="h-5 w-5 text-accent" />
+            <Shield className="h-5 w-5 text-accent-dark" />
             <h2 className="text-lg font-semibold text-text-primary">Security</h2>
           </div>
           <div className="space-y-4">
@@ -78,7 +78,7 @@ export default function AdminSettingsPage() {
         {/* Notifications */}
         <div className="rounded-xl border border-gray-200 bg-surface-card p-6">
           <div className="mb-4 flex items-center gap-2">
-            <Bell className="h-5 w-5 text-accent" />
+            <Bell className="h-5 w-5 text-accent-dark" />
             <h2 className="text-lg font-semibold text-text-primary">Notifications</h2>
           </div>
           <p className="text-sm text-text-secondary">
@@ -89,7 +89,7 @@ export default function AdminSettingsPage() {
         {/* Platform */}
         <div className="rounded-xl border border-gray-200 bg-surface-card p-6">
           <div className="mb-4 flex items-center gap-2">
-            <Settings className="h-5 w-5 text-accent" />
+            <Settings className="h-5 w-5 text-accent-dark" />
             <h2 className="text-lg font-semibold text-text-primary">Platform</h2>
           </div>
           <p className="text-sm text-text-secondary">

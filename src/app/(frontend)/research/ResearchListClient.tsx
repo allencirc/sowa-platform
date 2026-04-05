@@ -74,7 +74,7 @@ export function ResearchListClient({
               <p className="text-white/80 leading-relaxed mb-6 line-clamp-3">
                 {featured.summary}
               </p>
-              <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-secondary group-hover:text-secondary-light transition-colors">
+              <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-secondary-dark group-hover:text-secondary-light transition-colors">
                 Read More
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
               </span>

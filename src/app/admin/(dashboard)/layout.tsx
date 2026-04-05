@@ -1,6 +1,6 @@
 import { auth } from "@/lib/auth";
-import { AdminSidebar } from "@/components/admin/AdminSidebar";
-import { AdminTopbar } from "@/components/admin/AdminTopbar";
+import { AdminShell } from "@/components/admin/AdminShell";
+import { ReadOnlyBanner } from "@/components/admin/ReadOnlyBanner";
 
 export default async function DashboardLayout({
   children,
@@ -21,12 +21,8 @@ export default async function DashboardLayout({
   };
 
   return (
-    <div className="flex h-screen overflow-hidden bg-surface">
-      <AdminSidebar user={user} />
-      <div className="flex flex-1 flex-col overflow-hidden">
-        <AdminTopbar user={user} />
-        <main className="flex-1 overflow-y-auto p-6">{children}</main>
-      </div>
-    </div>
+    <AdminShell user={user} banner={<ReadOnlyBanner />}>
+      {children}
+    </AdminShell>
   );
 }

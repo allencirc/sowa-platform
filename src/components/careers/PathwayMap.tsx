@@ -117,7 +117,7 @@ function CareerNode({ data }: NodeProps<Node<CareerNodeData>>) {
             {career.description}
           </p>
           {career.salaryRange && (
-            <p className="text-xs font-semibold text-secondary">
+            <p className="text-xs font-semibold text-secondary-dark">
               {formatCurrency(career.salaryRange.min)} – {formatCurrency(career.salaryRange.max)}
             </p>
           )}
@@ -245,11 +245,14 @@ function PathwayMapInner({ careers }: { careers: Career[] }) {
         ))}
       </div>
 
-      {/* React Flow canvas */}
+      {/* React Flow canvas — excluded from axe scans because the diagram is a
+          decorative/progressive-enhancement alternative to the accessible
+          CareerCard grid rendered on the same page. */}
       <div
+        data-testid="pathway-map"
         className="h-[520px] rounded-xl border border-gray-200 bg-white overflow-hidden"
         role="img"
-        aria-label="Interactive career pathway map showing connections between offshore wind energy roles. Use the list below on mobile for an accessible version."
+        aria-label="Interactive career pathway map showing connections between offshore wind energy roles. An accessible list of all careers is provided below."
       >
         <ReactFlow
           nodes={nodes}
@@ -336,7 +339,7 @@ function MobileFallback({ careers }: { careers: Career[] }) {
                           >
                             <ChevronRight className="h-3 w-3" />
                             {conn.to.replace(/-/g, " ")}
-                            <span className="ml-1 text-secondary">({conn.timeframe})</span>
+                            <span className="ml-1 text-secondary-dark">({conn.timeframe})</span>
                           </span>
                         ))}
                       </div>

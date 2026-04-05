@@ -1,0 +1,43 @@
+# Version control
+.git
+.gitignore
+.gitattributes
+
+# Dependencies (rebuilt inside image)
+node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build output
+.next
+out
+dist
+*.tsbuildinfo
+next-env.d.ts
+
+# Local env — must be injected at runtime, never baked into the image
+.env
+.env.local
+.env.*.local
+
+# Test / CI artefacts
+coverage
+playwright-report
+test-results
+e2e/.auth
+
+# Editor / OS
+.vscode
+.idea
+.DS_Store
+Thumbs.db
+
+# Docs and meta (not needed at runtime)
+docs
+*.md
+!README.md
+
+# Docker itself
+Dockerfile
+.dockerignore

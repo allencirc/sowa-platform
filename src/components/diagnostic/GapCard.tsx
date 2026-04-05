@@ -22,7 +22,7 @@ const severityConfig = {
   low: {
     icon: CheckCircle,
     label: "Low Gap",
-    colour: "text-secondary",
+    colour: "text-secondary-dark",
     bg: "bg-secondary/10",
     barColour: "bg-secondary",
     border: "border-secondary/20",

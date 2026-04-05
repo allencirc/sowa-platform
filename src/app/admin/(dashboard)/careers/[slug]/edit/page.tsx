@@ -73,7 +73,7 @@ export default function EditCareerPage() {
         <p className="text-lg font-medium text-text-primary">
           {error ?? "Career not found"}
         </p>
-        <a href="/admin/careers" className="text-sm text-accent hover:underline">
+        <a href="/admin/careers" className="text-sm text-accent-dark hover:underline">
           Back to careers
         </a>
       </div>

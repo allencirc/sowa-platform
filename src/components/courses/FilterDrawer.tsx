@@ -97,13 +97,13 @@ export function FilterDrawer({ courses, activeFilterCount }: FilterDrawerProps) 
         onClick={() => setOpen(true)}
         className={cn(
           "lg:hidden inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border border-gray-200 text-sm font-medium text-text-primary transition-colors hover:bg-gray-50 cursor-pointer",
-          activeFilterCount > 0 && "border-secondary text-secondary"
+          activeFilterCount > 0 && "border-secondary text-secondary-dark"
         )}
       >
         <SlidersHorizontal className="h-4 w-4" />
         Filters
         {activeFilterCount > 0 && (
-          <span className="ml-1 bg-secondary text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+          <span className="ml-1 bg-secondary text-primary text-xs font-semibold rounded-full h-5 w-5 flex items-center justify-center">
             {activeFilterCount}
           </span>
         )}
@@ -130,7 +130,7 @@ export function FilterDrawer({ courses, activeFilterCount }: FilterDrawerProps) 
           <div className="flex items-center gap-3">
             <button
               onClick={clearAll}
-              className="text-xs font-medium text-accent hover:text-accent-dark cursor-pointer"
+              className="text-xs font-medium text-accent-dark hover:text-accent-dark cursor-pointer"
             >
               Clear All
             </button>

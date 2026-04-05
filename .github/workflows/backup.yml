@@ -1,0 +1,112 @@
+name: Daily Database Backup
+
+# Runs a logical pg_dump of the production Neon database, encrypts it with
+# age (https://age-encryption.org), and uploads to an S3-compatible bucket
+# in a separate cloud account (control separation).
+#
+# Referenced by: docs/disaster-recovery.md §2.1, docs/hosting-posture-summary.md
+# RPO: ≤ 1 minute (Neon WAL). This dump is the secondary 30-day rolling backup.
+
+on:
+  schedule:
+    - cron: "0 2 * * *" # 02:00 UTC daily
+  workflow_dispatch: # allow manual trigger for ad-hoc backups
+
+concurrency:
+  group: db-backup
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  backup:
+    name: Dump, encrypt, upload
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      PGSSLMODE: require
+      BACKUP_NAME: sowa-${{ github.run_id }}-$(date -u +%Y%m%dT%H%M%SZ)
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install PostgreSQL client (matching Neon version)
+        run: |
+          sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+          wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+          sudo apt-get update
+          sudo apt-get install -y postgresql-client-16
+
+      - name: Install age encryption
+        run: |
+          curl -sSfL https://github.com/FiloSottile/age/releases/download/v1.2.0/age-v1.2.0-linux-amd64.tar.gz \
+            | tar -xz
+          sudo mv age/age /usr/local/bin/
+          age --version
+
+      - name: Compute backup filename
+        id: name
+        run: |
+          TS=$(date -u +%Y%m%dT%H%M%SZ)
+          echo "file=sowa-${TS}.sql.gz.age" >> "$GITHUB_OUTPUT"
+          echo "timestamp=${TS}" >> "$GITHUB_OUTPUT"
+
+      - name: Dump database
+        env:
+          DATABASE_URL: ${{ secrets.BACKUP_DATABASE_URL }}
+        run: |
+          pg_dump \
+            --format=plain \
+            --no-owner \
+            --no-privileges \
+            --quote-all-identifiers \
+            --encoding=UTF8 \
+            --verbose \
+            "$DATABASE_URL" \
+            | gzip -9 > dump.sql.gz
+          ls -lh dump.sql.gz
+
+      - name: Encrypt with age
+        env:
+          AGE_RECIPIENT: ${{ secrets.AGE_RECIPIENT_PUBLIC_KEY }}
+        run: |
+          echo "$AGE_RECIPIENT" > recipient.txt
+          age -R recipient.txt -o "${{ steps.name.outputs.file }}" dump.sql.gz
+          rm -f dump.sql.gz recipient.txt
+          ls -lh "${{ steps.name.outputs.file }}"
+
+      - name: Upload to S3 (separate account, Object Lock enabled)
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.BACKUP_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.BACKUP_AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ${{ secrets.BACKUP_AWS_REGION }}
+          BACKUP_BUCKET: ${{ secrets.BACKUP_BUCKET }}
+        run: |
+          aws s3 cp "${{ steps.name.outputs.file }}" \
+            "s3://${BACKUP_BUCKET}/daily/${{ steps.name.outputs.file }}" \
+            --only-show-errors \
+            --metadata "run=${{ github.run_id }},sha=${{ github.sha }}"
+
+      - name: Verify upload
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.BACKUP_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.BACKUP_AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ${{ secrets.BACKUP_AWS_REGION }}
+          BACKUP_BUCKET: ${{ secrets.BACKUP_BUCKET }}
+        run: |
+          aws s3 ls "s3://${BACKUP_BUCKET}/daily/${{ steps.name.outputs.file }}"
+
+      - name: Notify on failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `Backup failure ${new Date().toISOString().slice(0,10)}`,
+              body: `Daily backup workflow failed. Run: ${context.runId}. See docs/disaster-recovery.md §2.1.`,
+              labels: ['incident', 'backup']
+            })

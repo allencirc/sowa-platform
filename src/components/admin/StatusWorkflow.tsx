@@ -45,7 +45,7 @@ const STATUS_CONFIG: Record<
   PUBLISHED: {
     label: "Published",
     icon: CheckCircle2,
-    color: "text-secondary",
+    color: "text-secondary-dark",
     bgColor: "bg-emerald-50 border-emerald-200",
   },
   ARCHIVED: {
@@ -222,7 +222,7 @@ export function StatusWorkflow({
                   <ArrowRight
                     className={cn(
                       "h-3.5 w-3.5 shrink-0",
-                      isPast ? "text-secondary" : "text-gray-300"
+                      isPast ? "text-secondary-dark" : "text-gray-300"
                     )}
                   />
                 )}
@@ -232,7 +232,7 @@ export function StatusWorkflow({
                     isActive
                       ? stepConfig.bgColor + " " + stepConfig.color
                       : isPast
-                        ? "text-secondary"
+                        ? "text-secondary-dark"
                         : "text-gray-400"
                   )}
                 >

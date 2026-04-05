@@ -40,7 +40,7 @@ export function AudienceCards() {
               href={item.href}
               className="group flex flex-col bg-surface-card rounded-xl border border-gray-100 p-6 transition-all duration-200 hover:shadow-lg hover:shadow-primary/5 hover:-translate-y-1"
             >
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-secondary/10 text-secondary group-hover:bg-secondary group-hover:text-white transition-colors">
+              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-secondary/10 text-secondary-dark group-hover:bg-secondary group-hover:text-white transition-colors">
                 <item.icon className="h-6 w-6" />
               </div>
 
@@ -52,7 +52,7 @@ export function AudienceCards() {
                 {item.description}
               </p>
 
-              <div className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-accent group-hover:text-accent-dark transition-colors">
+              <div className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-accent-dark group-hover:text-accent-dark transition-colors">
                 Learn more
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
               </div>

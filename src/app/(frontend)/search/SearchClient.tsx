@@ -146,7 +146,7 @@ export function SearchClient() {
                                   {result.excerpt}
                                 </p>
                               </div>
-                              <ArrowRight className="h-5 w-5 text-text-muted shrink-0 mt-1 transition-transform group-hover:translate-x-0.5 group-hover:text-accent" />
+                              <ArrowRight className="h-5 w-5 text-text-muted shrink-0 mt-1 transition-transform group-hover:translate-x-0.5 group-hover:text-accent-dark" />
                             </div>
                           </Link>
                         ))}

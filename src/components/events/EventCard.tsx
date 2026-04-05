@@ -63,7 +63,7 @@ export function EventCard({ event, className }: EventCardProps) {
           {event.title}
         </h3>
 
-        <p className="text-sm font-medium text-accent mb-2">
+        <p className="text-sm font-medium text-accent-dark mb-2">
           {formatEventDate(event.startDate)}
         </p>
 

@@ -152,12 +152,12 @@ export function EventsListClient({ events }: EventsListClientProps) {
 
                     <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-text-secondary mb-2">
                       <span className="flex items-center gap-1.5">
-                        <Calendar className="h-3.5 w-3.5 text-accent" />
+                        <Calendar className="h-3.5 w-3.5 text-accent-dark" />
                         {formatEventDate(event.startDate)}
                       </span>
                       {event.location && (
                         <span className="flex items-center gap-1.5">
-                          <MapPin className="h-3.5 w-3.5 text-accent" />
+                          <MapPin className="h-3.5 w-3.5 text-accent-dark" />
                           {event.location}
                         </span>
                       )}
@@ -167,7 +167,7 @@ export function EventsListClient({ events }: EventsListClientProps) {
                       {event.description}
                     </p>
 
-                    <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-accent group-hover:text-accent-dark transition-colors">
+                    <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-accent-dark group-hover:text-accent-dark transition-colors">
                       View Details
                       <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
                     </span>

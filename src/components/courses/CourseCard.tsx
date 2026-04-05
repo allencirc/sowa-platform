@@ -70,7 +70,7 @@ export function CourseCard({ course, className }: CourseCardProps) {
             {formatCurrency(course.cost)}
           </span>
           {course.costNotes && (
-            <span className="text-xs text-secondary font-medium">
+            <span className="text-xs text-secondary-dark font-medium">
               {course.costNotes}
             </span>
           )}

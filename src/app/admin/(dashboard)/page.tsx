@@ -31,7 +31,7 @@ function StatCard({ label, value, icon, href }: StatCardProps) {
       href={href}
       className="flex items-center gap-4 rounded-xl bg-surface-card p-6 shadow-sm transition-shadow hover:shadow-md"
     >
-      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-secondary/10 text-secondary">
+      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-secondary/10 text-secondary-dark">
         {icon}
       </div>
       <div className="flex-1">

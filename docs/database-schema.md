@@ -14,13 +14,14 @@ Schema file: `prisma/schema.prisma`
 |------|--------|
 | `ContentStatus` | `DRAFT`, `IN_REVIEW`, `PUBLISHED`, `ARCHIVED` |
 | `ContentType` | `CAREER`, `COURSE`, `EVENT`, `RESEARCH`, `NEWS` |
+| `ContentSource` | `MANUAL`, `EVENTBRITE`, `CAREERSPORTAL`, `FETCHCOURSES`, `QUALIFAX` |
 | `UserRole` | `ADMIN`, `EDITOR`, `VIEWER` |
 
 ### Career Domain
 
 | Enum | Values |
 |------|--------|
-| `CareerSector` | `OPERATIONS_MAINTENANCE`, `MARINE_OPERATIONS`, `SURVEY_DESIGN`, `HEALTH_SAFETY_ENVIRONMENT`, `ELECTRICAL`, `POLICY_REGULATION`, `PROJECT_MANAGEMENT` |
+| `CareerSector` | `OPERATIONS_MAINTENANCE`, `MARINE_OPERATIONS`, `SURVEY_DESIGN`, `HSE`, `ELECTRICAL`, `POLICY_REGULATION`, `PROJECT_MANAGEMENT` |
 | `EntryLevel` | `APPRENTICE`, `ENTRY`, `MID`, `SENIOR`, `LEADERSHIP` |
 | `PathwayType` | `PROGRESSION`, `LATERAL`, `SPECIALISATION` |
 
@@ -148,8 +149,12 @@ A training course from an Irish education or training provider.
 | `status` | ContentStatus | Default: DRAFT | |
 | `publishAt` | DateTime? | | |
 | `rejectionNote` | String? | | |
+| `source` | ContentSource | Default: MANUAL | Origin of record (e.g. external integration adapter) |
+| `externalId` | String? | | Identifier from the source system, used for idempotent upserts |
 | `createdAt` | DateTime | | |
 | `updatedAt` | DateTime | | |
+
+**Unique constraint:** `(source, externalId)` — ensures a single course record per external system ID.
 
 **Relations:** CourseSkill[], CourseCareer[]
 
@@ -175,8 +180,12 @@ An event (conference, webinar, workshop, roadshow, etc.).
 | `status` | ContentStatus | Default: DRAFT | |
 | `publishAt` | DateTime? | | |
 | `rejectionNote` | String? | | |
+| `source` | ContentSource | Default: MANUAL | Origin of record (e.g. external integration adapter) |
+| `externalId` | String? | | Identifier from the source system, used for idempotent upserts |
 | `createdAt` | DateTime | | |
 | `updatedAt` | DateTime | | |
+
+**Unique constraint:** `(source, externalId)` — ensures a single event record per external system ID.
 
 ---
 

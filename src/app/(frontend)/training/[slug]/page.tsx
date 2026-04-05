@@ -174,7 +174,7 @@ export default async function CourseDetailPage({ params }: CourseDetailProps) {
             {infoItems.map((item) => (
               <div key={item.label} className="px-5 py-5">
                 <div className="flex items-center gap-2 mb-1.5">
-                  <item.icon className="h-4 w-4 text-accent" />
+                  <item.icon className="h-4 w-4 text-accent-dark" />
                   <span className="text-xs font-semibold text-text-muted uppercase tracking-wide">
                     {item.label}
                   </span>
@@ -182,14 +182,14 @@ export default async function CourseDetailPage({ params }: CourseDetailProps) {
                 <p
                   className={`text-base font-semibold ${
                     item.highlight
-                      ? "text-secondary"
+                      ? "text-secondary-dark"
                       : "text-text-primary"
                   }`}
                 >
                   {item.value}
                 </p>
                 {item.note && (
-                  <p className="text-xs text-secondary mt-0.5">{item.note}</p>
+                  <p className="text-xs text-secondary-dark mt-0.5">{item.note}</p>
                 )}
               </div>
             ))}

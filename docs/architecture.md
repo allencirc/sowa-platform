@@ -1,5 +1,131 @@
 # System Architecture
 
+## Deployment Diagram
+
+The diagram below is the canonical reference for the production topology used in the tender submission. Source: [`diagrams/architecture.mmd`](diagrams/architecture.mmd). Exports for the tender PDF live at [`diagrams/architecture.svg`](diagrams/architecture.svg) and [`diagrams/architecture.png`](diagrams/architecture.png) (A4 landscape, 300 dpi).
+
+```mermaid
+%%{init: {'theme':'base','themeVariables':{
+  'fontFamily':'Inter, Helvetica, Arial, sans-serif',
+  'fontSize':'15px',
+  'primaryColor':'#F7F9FC',
+  'primaryTextColor':'#0C2340',
+  'primaryBorderColor':'#0C2340',
+  'lineColor':'#0C2340',
+  'clusterBkg':'#F7F9FC',
+  'clusterBorder':'#0C2340'
+}}}%%
+flowchart LR
+  subgraph USERS["End Users"]
+    direction TB
+    PUB["Public visitor<br/>(learner, employer,<br/>career changer)"]:::user
+    ADM["Admin / Editor<br/>(SOWA team)"]:::user
+  end
+
+  subgraph EU["EU Data Residency Boundary — TLS 1.3 in transit · AES-256 at rest"]
+    direction TB
+
+    subgraph EDGE["Vercel Edge (EU region, e.g. fra1/dub1)"]
+      CDN["CDN + Edge Middleware<br/>HTTPS · WAF · Rate limiting"]:::edge
+      SI["Vercel Speed Insights<br/>(Core Web Vitals)"]:::obs
+    end
+
+    subgraph APP["Next.js 16 App — App Router (Serverless, EU region)"]
+      direction TB
+      PUBR["(frontend) route group<br/>Public pages · SSR / Static"]:::public
+      APIR["/api/* Route Handlers<br/>Zod validation · Rate limit"]:::api
+      ADMR["/admin route group<br/>Protected · SSR"]:::admin
+      AUTH["NextAuth v5<br/>JWT sessions · RBAC<br/>(ADMIN / EDITOR / VIEWER)"]:::auth
+    end
+
+    subgraph DATA["Data Layer (EU region)"]
+      PRISMA["Prisma ORM<br/>Connection pooling"]:::orm
+      PG[("PostgreSQL 15+<br/>Managed · EU region<br/>Daily backups · PITR")]:::db
+      BLOB["Media Storage<br/>Vercel Blob / S3 EU<br/>Encrypted at rest"]:::store
+    end
+  end
+
+  subgraph INTEG["Third-party integrations (outbound HTTPS)"]
+    direction TB
+    HS["HubSpot CRM<br/>Registrations · Newsletter"]:::ext
+    GA4["Google Analytics 4<br/>(consent-gated)"]:::ext
+    EB["Eventbrite API<br/>Event sync"]:::ext
+    CP["careersportal.ie<br/>Course feed"]:::ext
+    FC["Fetchcourses.ie<br/>Course feed"]:::ext
+    QX["Qualifax<br/>NFQ reference data"]:::ext
+    PIX["Meta Pixel · LinkedIn Insight<br/>(optional, consent-gated)"]:::extOpt
+  end
+
+  PUB  -- "HTTPS" --> CDN
+  ADM  -- "HTTPS" --> CDN
+  CDN  --> PUBR
+  CDN  --> ADMR
+  CDN  --> APIR
+
+  ADM  -. "1. Sign in" .-> AUTH
+  AUTH -. "2. JWT cookie" .-> ADM
+  ADMR -. "Session guard" .-> AUTH
+  APIR -. "RBAC check" .-> AUTH
+
+  PUBR --> PRISMA
+  ADMR --> PRISMA
+  APIR --> PRISMA
+  PRISMA --> PG
+  APIR  --> BLOB
+  ADMR  --> BLOB
+
+  APIR ==> HS
+  PUBR ==> GA4
+  APIR ==> EB
+  APIR ==> CP
+  APIR ==> FC
+  APIR ==> QX
+  PUBR -.-> PIX
+
+  APP --> SI
+
+  classDef user      fill:#FFFFFF,stroke:#0C2340,stroke-width:2px,color:#0C2340;
+  classDef edge      fill:#0C2340,stroke:#081828,stroke-width:1.5px,color:#FFFFFF;
+  classDef public    fill:#E6F4EF,stroke:#00A878,stroke-width:1.5px,color:#0C2340;
+  classDef admin     fill:#FFE9D6,stroke:#EA580C,stroke-width:1.5px,color:#0C2340;
+  classDef api       fill:#DCEBFA,stroke:#4A90D9,stroke-width:1.5px,color:#0C2340;
+  classDef auth      fill:#00A878,stroke:#008A62,stroke-width:1.5px,color:#FFFFFF;
+  classDef orm       fill:#FFFFFF,stroke:#4A90D9,stroke-width:1.5px,color:#0C2340;
+  classDef db        fill:#1A3A5C,stroke:#0C2340,stroke-width:1.5px,color:#FFFFFF;
+  classDef store     fill:#FFFFFF,stroke:#1E6091,stroke-width:1.5px,color:#0C2340;
+  classDef ext       fill:#FFFFFF,stroke:#6B7280,stroke-width:1.2px,color:#1A1A2E;
+  classDef extOpt    fill:#FFFFFF,stroke:#9CA3AF,stroke-width:1.2px,color:#6B7280,stroke-dasharray: 4 3;
+  classDef obs       fill:#00A878,stroke:#008A62,stroke-width:1.2px,color:#FFFFFF;
+
+  style USERS fill:#FFFFFF,stroke:#6B7280,stroke-width:1px,stroke-dasharray: 4 3
+  style EU    fill:#F7F9FC,stroke:#00A878,stroke-width:2.5px
+  style EDGE  fill:#EAF1FA,stroke:#4A90D9,stroke-width:1.5px
+  style APP   fill:#FFFFFF,stroke:#0C2340,stroke-width:1.5px
+  style DATA  fill:#FFFFFF,stroke:#1E6091,stroke-width:1.5px
+  style INTEG fill:#FFFFFF,stroke:#6B7280,stroke-width:1px,stroke-dasharray: 4 3
+```
+
+### Trust Boundaries
+
+Three boundaries are enforced:
+
+1. **Public internet → Vercel Edge.** All traffic is HTTPS (TLS 1.3), terminated at the Vercel edge. WAF and per-IP rate limiting run at the edge before any request reaches the application.
+2. **Edge → EU data residency boundary.** The Next.js functions, Postgres and media storage are all provisioned in an EU region (e.g. Frankfurt `fra1` or Dublin). No personal data leaves the EU boundary except through explicit, consent-gated integrations listed below.
+3. **Application → Third-party integrations.** Every outbound integration is an HTTPS call from server-side route handlers (never browser-direct), keeping API secrets off the client. Analytics and marketing pixels are the only client-side calls, and they are gated by the cookie consent banner.
+
+### Security & Compliance Notes (cross-referenced with the diagram)
+
+| Concern | Control |
+|---|---|
+| Encryption in transit | TLS 1.3 for all public traffic and all outbound integration calls. HSTS enabled at the edge. |
+| Encryption at rest | Managed Postgres and object storage both use AES-256 at rest (provider-managed keys). |
+| EU data residency | Vercel serverless functions, Postgres (Neon / Supabase / RDS), and media (Vercel Blob / S3) are all pinned to an EU region. |
+| Backups | Managed Postgres provides daily automated backups and point-in-time recovery (PITR) for a minimum 7-day window. |
+| Rate limiting | Applied at the edge (coarse) and in `/api/*` route handlers (fine, per-identity) via the limiter in `src/lib/rate-limit.ts`. |
+| AuthN/AuthZ | NextAuth v5 with JWT sessions. Role-based access (`ADMIN` / `EDITOR` / `VIEWER`) enforced in middleware for `/admin/**` and in each protected API route. |
+| Consent-gated analytics | GA4, Meta Pixel and LinkedIn Insight Tag only load after the user grants the corresponding consent category in the `sowa_consent` cookie. |
+| Secrets | All integration keys (HubSpot, Eventbrite, Qualifax, feed APIs) live in Vercel environment variables and are only readable by server functions. |
+
 ## Tech Stack
 
 | Layer | Technology | Version | Rationale |
@@ -215,6 +341,19 @@ Admin dashboard     →  GET /api/admin/hubspot/status  →  getSyncStatus()
 
 To activate: set `HUBSPOT_API_KEY`, `HUBSPOT_PORTAL_ID`, and `HUBSPOT_NEWSLETTER_LIST_ID` environment variables, then implement the actual API calls in `src/lib/hubspot.ts` using the `@hubspot/api-client` package (already installed).
 
+### External Data Feeds (course & qualification sources)
+
+To keep the course directory and NFQ metadata current without double-keying, the admin CMS can ingest from three Irish sources via scheduled server-side jobs. All calls are outbound HTTPS from `/api/*` route handlers; credentials live in Vercel environment variables.
+
+| Source | Purpose | Mode |
+|---|---|---|
+| **Eventbrite API** | Pulls SOWA-hosted events and writes them as draft `Event` rows for editor review | Scheduled sync + webhook |
+| **careersportal.ie** | Reference feed for Irish career descriptors and labour-market signals | Scheduled pull |
+| **Fetchcourses.ie** | Authoritative feed of FET/HET courses to pre-populate `Course` drafts | Scheduled pull |
+| **Qualifax** | NFQ level reference data used to validate `Course.nfqLevel` on save | On-demand lookup |
+
+Ingested records are always created in `DRAFT` status and routed through the standard editorial workflow (DRAFT → IN_REVIEW → PUBLISHED) so an SOWA editor approves anything that goes public.
+
 ### AI-Powered Career Summary
 
 The diagnostic tool includes an optional AI summary feature:
@@ -260,10 +399,99 @@ Consent-aware tracking is implemented in `src/lib/analytics.ts` and `src/lib/mar
 
 | Decision | Choice | Alternative Considered | Rationale |
 |----------|--------|----------------------|-----------|
-| Database | PostgreSQL + Prisma | Payload CMS + MongoDB | Structured relational data model fits the career/course/skill domain. Prisma provides type safety. Payload CMS planned for future phase. |
+| Database | PostgreSQL + Prisma | Payload CMS + MongoDB, Supabase | Structured relational data model fits the career/course/skill/pathway domain, which has many cross-entity relationships. Prisma provides end-to-end type safety, migrations, and a familiar workflow. A headless CMS was considered and rejected: the content model is tightly constrained and relational, not free-form, so a custom admin UI on top of Prisma is a better fit than a generic CMS. |
 | Auth | NextAuth credentials | OAuth providers | Admin-only auth. Credentials provider is simplest for internal users. OAuth can be added later. |
 | Styling | Tailwind CSS 4 | CSS Modules, styled-components | Utility-first approach, design tokens in config, no runtime overhead, good DX with IDE support |
 | State management | Server Components + URL state | Redux, Zustand | Most pages are server-rendered. Filter state lives in URL params. Client state only for modals and forms. |
 | Rate limiting | In-memory Map | Redis, Upstash | Sufficient for single-instance deployment. Redis recommended for production multi-instance. |
 | Rich text | TipTap | Draft.js, Slate | Modern ProseMirror-based editor with good extension ecosystem. Outputs HTML for flexible rendering. |
 | Pathway visualisation | React Flow | D3.js, Cytoscape | Purpose-built for node/edge diagrams with built-in pan, zoom, and interactivity |
+
+---
+
+## Third-Party Content Integrations
+
+Per Appendix 1 §§ 313–323 of the tender, the platform is deliberately
+systems-agnostic and architecturally capable of ingesting content from
+external sources. Final scope (which sources go live, at what cadence) is
+confirmed in the post-award kick-off workshop, as per Appendix 1 § 322.
+
+### Named sources
+
+- **Eventbrite** — events
+- **careersportal.ie** — courses / career information
+- **Fetchcourses.ie** — courses
+- **Qualifax.ie** — accredited course records
+- **Bespoke partner platforms** — events or courses, case-by-case
+- **Future: eTenders** — opportunity notices (reserved)
+
+Content created directly in the admin UI uses the `MANUAL` source and has
+no adapter.
+
+### Adapter pattern
+
+Each source is a thin adapter implementing the `ContentSourceAdapter`
+interface in `src/lib/integrations/types.ts`:
+
+```ts
+interface ContentSourceAdapter {
+  readonly source: SourceId;
+  readonly name: string;
+  fetch(): Promise<NormalisedItem[]>;
+}
+```
+
+Adapters live in `src/lib/integrations/` and are exposed through a typed
+`registry.ts`. They own auth, pagination, and rate-limit compliance; they
+do **not** own database writes, retry policy, or scheduling. Each adapter
+returns a list of `NormalisedItem` records — a superset shape that maps
+cleanly onto either the `Course` or `Event` Prisma model depending on
+`kind`.
+
+### Normalisation and upsert
+
+The `Course` and `Event` Prisma models carry `source` (ContentSource enum,
+default `MANUAL`) and `externalId` (nullable string) columns, with a
+unique index on `(source, externalId)`. The sync runner upserts by this
+compound key, so repeated syncs are idempotent and an item's identity is
+stable across runs without depending on slugs or titles. Items authored
+manually and items pulled from a feed coexist in the same tables and flow
+through the same editorial status machine (`DRAFT → IN_REVIEW → PUBLISHED
+→ ARCHIVED`).
+
+### Error handling
+
+The sync runner wraps each `fetch()` call with:
+
+- **Retry with exponential backoff** — 3 attempts with jitter on transient
+  5xx and network errors.
+- **Per-source circuit breaker** — trips after sustained failure, isolates
+  one bad source from the rest of the sync, auto-resets after a cool-down.
+- **Structured logging** — request id, HTTP status, item count, duration,
+  and error category, emitted to the platform's log pipeline.
+- **Admin alerting** — email plus an ops channel notification on circuit
+  trip or repeated failure, so a dropped feed is visible the same day.
+
+Adapters themselves throw on genuine errors and resolve (possibly to `[]`)
+on "no new content", so an empty day is not treated as a failure.
+
+### Security
+
+- Credentials are loaded from environment variables only, managed via the
+  hosting provider's secret store. Nothing is hardcoded, committed, or
+  logged.
+- Outbound calls are restricted to an allowlist of documented source
+  endpoints configured at the network layer.
+- Rate limits are honoured per source (e.g. Eventbrite's 1000 req/hour/
+  token); the sync runner paces requests and respects `Retry-After`.
+- Every ingested item retains its source URL for attribution and audit.
+
+### Current state
+
+At time of writing, the `EVENTBRITE` adapter is registered as a stub — it
+implements the interface and returns `[]` pending workshop scope. The
+remaining sources (`CAREERSPORTAL`, `FETCHCOURSES`, `QUALIFAX`) are
+reserved in the `SourceId` union and Prisma enum so adding them is a
+one-file change. A vitest case in
+`src/__tests__/lib/integrations.test.ts` asserts that every registered
+adapter satisfies the interface contract.

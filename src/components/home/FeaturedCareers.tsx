@@ -21,7 +21,7 @@ export async function FeaturedCareers() {
           </div>
           <Link
             href="/careers"
-            className="hidden sm:inline-flex items-center gap-1.5 text-sm font-semibold text-accent hover:text-accent-dark transition-colors"
+            className="hidden sm:inline-flex items-center gap-1.5 text-sm font-semibold text-accent-dark hover:text-accent-dark transition-colors"
           >
             View all careers
             <ArrowRight className="h-4 w-4" />
@@ -42,7 +42,7 @@ export async function FeaturedCareers() {
         <div className="mt-6 sm:hidden">
           <Link
             href="/careers"
-            className="inline-flex items-center gap-1.5 text-sm font-semibold text-accent"
+            className="inline-flex items-center gap-1.5 text-sm font-semibold text-accent-dark"
           >
             View all careers
             <ArrowRight className="h-4 w-4" />

@@ -195,7 +195,7 @@ export function AISummary({ result, answers, overallScorePercent }: AISummaryPro
         <div className="max-w-3xl mx-auto px-4 sm:px-6">
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 sm:p-8 text-center">
             <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-accent/10 mb-4">
-              <Sparkles className="h-6 w-6 text-accent" />
+              <Sparkles className="h-6 w-6 text-accent-dark" />
             </div>
             <h3 className="text-xl font-bold text-text-primary mb-2">
               AI Career Guidance
@@ -226,7 +226,7 @@ export function AISummary({ result, answers, overallScorePercent }: AISummaryPro
           <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 sm:p-8">
             <div className="flex items-center gap-3 mb-6">
               <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-accent/10">
-                <Sparkles className="h-5 w-5 text-accent animate-pulse" />
+                <Sparkles className="h-5 w-5 text-accent-dark animate-pulse" />
               </div>
               <div>
                 <h3 className="text-lg font-bold text-text-primary">
@@ -262,7 +262,7 @@ export function AISummary({ result, answers, overallScorePercent }: AISummaryPro
             <div className="flex items-start justify-between gap-4 mb-6">
               <div className="flex items-center gap-3">
                 <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-accent/10">
-                  <Sparkles className="h-5 w-5 text-accent" />
+                  <Sparkles className="h-5 w-5 text-accent-dark" />
                 </div>
                 <div>
                   <h3 className="text-lg font-bold text-text-primary">

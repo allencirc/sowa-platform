@@ -30,7 +30,7 @@ const audiences = [
     description:
       "Discover which offshore wind careers match your skills and find the training you need to get there.",
     colour: "from-secondary to-secondary-dark",
-    iconBg: "bg-secondary/10 text-secondary",
+    iconBg: "bg-secondary/10 text-secondary-dark",
   },
   {
     icon: Building2,
@@ -38,7 +38,7 @@ const audiences = [
     description:
       "Identify skills gaps in your workforce and find targeted training programmes to upskill your team.",
     colour: "from-accent to-accent-dark",
-    iconBg: "bg-accent/10 text-accent",
+    iconBg: "bg-accent/10 text-accent-dark",
   },
   {
     icon: GraduationCap,
@@ -115,7 +115,7 @@ export default function DiagnosticPage() {
                   key={f.label}
                   className="flex items-center gap-3 bg-white/10 backdrop-blur-sm rounded-xl px-5 py-3"
                 >
-                  <f.icon className="h-5 w-5 text-secondary" />
+                  <f.icon className="h-5 w-5 text-secondary-dark" />
                   <div className="text-left">
                     <p className="text-sm font-semibold text-white">{f.label}</p>
                     <p className="text-xs text-white/60">{f.description}</p>
@@ -166,7 +166,7 @@ export default function DiagnosticPage() {
                   {a.description}
                 </p>
 
-                <span className="inline-flex items-center gap-2 text-sm font-semibold text-accent group-hover:text-accent-dark transition-colors">
+                <span className="inline-flex items-center gap-2 text-sm font-semibold text-accent-dark group-hover:text-accent-dark transition-colors">
                   Start Assessment
                   <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </span>

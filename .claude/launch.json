@@ -3,8 +3,11 @@
   "configurations": [
     {
       "name": "sowa-dev",
-      "runtimeExecutable": "/Users/allenwixted/.nvm/versions/node/v22.22.0/bin/node",
-      "runtimeArgs": ["node_modules/next/dist/bin/next", "dev", "-p", "3000"],
+      "runtimeExecutable": "/bin/sh",
+      "runtimeArgs": [
+        "-c",
+        "READ_ONLY=true /Users/allenwixted/.nvm/versions/node/v22.22.0/bin/node node_modules/next/dist/bin/next dev -p 3000"
+      ],
       "port": 3000
     }
   ]

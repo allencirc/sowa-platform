@@ -96,7 +96,7 @@ export function RegistrationModal({
       <Modal open={open} onClose={handleClose} className="max-w-md">
         <div className="flex flex-col items-center py-6 text-center">
           <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-secondary/10">
-            <CheckCircle2 className="h-8 w-8 text-secondary" />
+            <CheckCircle2 className="h-8 w-8 text-secondary-dark" />
           </div>
           <h2 className="mb-2 text-xl font-bold text-text-primary">
             Registration Submitted
@@ -204,13 +204,13 @@ export function RegistrationModal({
           <label className="flex items-start gap-3 cursor-pointer">
             <input
               type="checkbox"
-              className="mt-1 h-4 w-4 rounded border-gray-300 text-secondary focus:ring-secondary"
+              className="mt-1 h-4 w-4 rounded border-gray-300 text-secondary-dark focus:ring-secondary"
               {...register("gdprConsent")}
             />
             <span className="text-sm text-text-secondary">
               I consent to SOWA processing my personal data for the purpose of
               this registration. Your data will be handled in accordance with our{" "}
-              <a href="/privacy" className="text-accent underline">
+              <a href="/privacy" className="text-accent-dark underline">
                 Privacy Policy
               </a>
               . *

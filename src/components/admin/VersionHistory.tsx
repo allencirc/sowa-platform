@@ -229,7 +229,7 @@ export function VersionHistory({
                             v{version.version}
                           </span>
                           {isLatest && (
-                            <span className="rounded-full bg-secondary/10 px-2 py-0.5 text-[10px] font-medium text-secondary">
+                            <span className="rounded-full bg-secondary/10 px-2 py-0.5 text-[10px] font-medium text-secondary-dark">
                               Current
                             </span>
                           )}

@@ -55,7 +55,7 @@ export default function EditEventPage() {
     return (
       <div className="flex h-64 flex-col items-center justify-center gap-2">
         <p className="text-lg font-medium text-text-primary">{error ?? "Event not found"}</p>
-        <a href="/admin/events" className="text-sm text-accent hover:underline">Back to events</a>
+        <a href="/admin/events" className="text-sm text-accent-dark hover:underline">Back to events</a>
       </div>
     );
   }

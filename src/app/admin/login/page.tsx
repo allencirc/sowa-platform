@@ -29,7 +29,7 @@ export default function AdminLoginPage() {
         </div>
 
         <p className="mt-6 text-center text-sm text-text-muted">
-          <Link href="/" className="text-accent hover:text-accent-dark transition-colors">
+          <Link href="/" className="text-accent-dark hover:text-accent-dark transition-colors">
             &larr; Back to main site
           </Link>
         </p>

@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test";
-import AxeBuilder from "@axe-core/playwright";
+
+// WCAG 2.2 AA axe sweeps live in a11y.spec.ts.
 
 test.describe("Diagnostic assessment journey", () => {
   test("Homepage → Take Skills Assessment → Complete diagnostic → View results", async ({
@@ -15,10 +16,13 @@ test.describe("Diagnostic assessment journey", () => {
     // 3. Expect diagnostic landing page
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
 
-    // 4. Start the assessment
-    const startButton = page.getByRole("link", { name: /start|begin|take/i }).or(
-      page.getByRole("button", { name: /start|begin|take/i })
-    );
+    // 4. Start the assessment — use .first() because the landing page has
+    //    multiple audience-cards ("I'm an Individual…", "I'm an Employer…")
+    //    that each link into the assessment and match /take/.
+    const startButton = page
+      .getByRole("link", { name: /start|begin|take/i })
+      .or(page.getByRole("button", { name: /start|begin|take/i }))
+      .first();
     if (await startButton.isVisible()) {
       await startButton.click();
     }
@@ -40,14 +44,4 @@ test.describe("Diagnostic assessment journey", () => {
     }
   });
 
-  test("diagnostic page passes accessibility checks", async ({ page }) => {
-    await page.goto("/diagnostic");
-    await page.waitForLoadState("networkidle");
-
-    const results = await new AxeBuilder({ page })
-      .withTags(["wcag2a", "wcag2aa"])
-      .analyze();
-
-    expect(results.violations).toEqual([]);
-  });
 });

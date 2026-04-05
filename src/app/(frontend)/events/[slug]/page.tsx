@@ -158,7 +158,7 @@ export default async function EventDetailPage({ params }: EventDetailProps) {
             {/* Info row */}
             <div className="flex flex-col sm:flex-row flex-wrap gap-4 sm:gap-6 text-text-secondary">
               <div className="flex items-center gap-2">
-                <Calendar className="h-5 w-5 text-accent" />
+                <Calendar className="h-5 w-5 text-accent-dark" />
                 <span className="font-medium">
                   {formatEventDateTime(event.startDate)}
                 </span>
@@ -166,7 +166,7 @@ export default async function EventDetailPage({ params }: EventDetailProps) {
 
               {event.endDate && (
                 <div className="flex items-center gap-2">
-                  <Clock className="h-5 w-5 text-accent" />
+                  <Clock className="h-5 w-5 text-accent-dark" />
                   <span>
                     Until {formatTime(event.endDate)}
                   </span>
@@ -175,14 +175,14 @@ export default async function EventDetailPage({ params }: EventDetailProps) {
 
               {event.location && (
                 <div className="flex items-center gap-2">
-                  <MapPin className="h-5 w-5 text-accent" />
+                  <MapPin className="h-5 w-5 text-accent-dark" />
                   <span>{event.location}</span>
                 </div>
               )}
 
               {event.capacity && (
                 <div className="flex items-center gap-2">
-                  <Users className="h-5 w-5 text-accent" />
+                  <Users className="h-5 w-5 text-accent-dark" />
                   <span>
                     {registeredCount} / {event.capacity} places
                     {isFull && (

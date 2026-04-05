@@ -130,7 +130,7 @@ export function ResearchForm({ research, mode }: ResearchFormProps) {
           </FormField>
         </div>
         <div className="mt-4 flex items-center gap-2">
-          <input type="checkbox" id="isFeatured" {...register("isFeatured")} className="h-4 w-4 rounded border-gray-300 text-secondary focus:ring-accent" />
+          <input type="checkbox" id="isFeatured" {...register("isFeatured")} className="h-4 w-4 rounded border-gray-300 text-secondary-dark focus:ring-accent" />
           <label htmlFor="isFeatured" className="text-sm font-medium text-text-primary">Featured Research</label>
         </div>
       </div>

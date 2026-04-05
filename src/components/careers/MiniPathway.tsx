@@ -66,7 +66,7 @@ export async function MiniPathway({ career }: MiniPathwayProps) {
                   <div className="text-xs text-text-muted">{from.sector}</div>
                 </Link>
                 <div className="shrink-0 flex flex-col items-center gap-0.5">
-                  <MoveRight className="h-5 w-5 text-secondary" />
+                  <MoveRight className="h-5 w-5 text-secondary-dark" />
                   <span className="text-[10px] text-text-muted whitespace-nowrap">
                     {connection.timeframe}
                   </span>
@@ -105,7 +105,7 @@ export async function MiniPathway({ career }: MiniPathwayProps) {
               <div key={to.slug} className="flex items-center gap-3">
                 <div className="flex-1" />
                 <div className="shrink-0 flex flex-col items-center gap-0.5">
-                  <ArrowDown className="h-5 w-5 text-secondary" />
+                  <ArrowDown className="h-5 w-5 text-secondary-dark" />
                   <span className="text-[10px] text-text-muted whitespace-nowrap">
                     {connection.timeframe}
                   </span>

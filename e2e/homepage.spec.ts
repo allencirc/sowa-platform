@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test";
-import AxeBuilder from "@axe-core/playwright";
+
+// WCAG 2.2 AA axe sweeps live in a11y.spec.ts (every public route × desktop + mobile).
 
 test.describe("Homepage", () => {
   test("loads and renders key sections", async ({ page }) => {
@@ -14,19 +15,6 @@ test.describe("Homepage", () => {
     // Check for key homepage sections
     const body = await page.textContent("body");
     expect(body).toBeTruthy();
-  });
-
-  test("homepage passes WCAG 2.2 AA accessibility checks", async ({
-    page,
-  }) => {
-    await page.goto("/");
-    await page.waitForLoadState("networkidle");
-
-    const results = await new AxeBuilder({ page })
-      .withTags(["wcag2a", "wcag2aa"])
-      .analyze();
-
-    expect(results.violations).toEqual([]);
   });
 
   test("responsive: mobile viewport renders correctly", async ({ page }) => {

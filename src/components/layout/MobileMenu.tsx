@@ -2,6 +2,7 @@
 
 import { useEffect, useCallback } from "react";
 import Link from "next/link";
+import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/Button";
 
@@ -61,6 +62,15 @@ export function MobileMenu({ open, onClose, links }: MobileMenuProps) {
         aria-label="Navigation menu"
         aria-hidden={!open}
       >
+        <button
+          type="button"
+          onClick={onClose}
+          className="absolute top-4 right-4 p-2 rounded-lg text-text-secondary hover:bg-surface hover:text-primary transition-colors cursor-pointer"
+          aria-label="Close menu"
+          tabIndex={open ? 0 : -1}
+        >
+          <X className="h-6 w-6" />
+        </button>
         <nav className="flex flex-col p-6 pt-20 gap-1" aria-label="Mobile navigation">
           {links.map((link) => (
             <Link

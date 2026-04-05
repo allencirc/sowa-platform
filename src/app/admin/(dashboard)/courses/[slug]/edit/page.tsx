@@ -55,7 +55,7 @@ export default function EditCoursePage() {
     return (
       <div className="flex h-64 flex-col items-center justify-center gap-2">
         <p className="text-lg font-medium text-text-primary">{error ?? "Course not found"}</p>
-        <a href="/admin/courses" className="text-sm text-accent hover:underline">Back to courses</a>
+        <a href="/admin/courses" className="text-sm text-accent-dark hover:underline">Back to courses</a>
       </div>
     );
   }

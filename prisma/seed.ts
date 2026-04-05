@@ -415,14 +415,17 @@ async function main() {
   // ─── 12. Admin User ───────────────────────────────────────
   console.log("Seeding admin user...");
   const passwordHash = await bcrypt.hash("changeme123", 12);
+  // Seeded with a documented default password — force rotation on first login
+  // so a leaked seed DB cannot be reused verbatim against a deployed instance.
   await prisma.user.upsert({
     where: { email: "admin@sowa.ie" },
-    update: { passwordHash, role: "ADMIN" },
+    update: { passwordHash, role: "ADMIN", mustChangePassword: true },
     create: {
       email: "admin@sowa.ie",
       name: "SOWA Admin",
       role: "ADMIN",
       passwordHash,
+      mustChangePassword: true,
     },
   });
 

@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test";
-import AxeBuilder from "@axe-core/playwright";
+
+// WCAG 2.2 AA axe sweeps live in a11y.spec.ts.
 
 test.describe("Search journey", () => {
   test("Search → enter query → view results across all types", async ({
@@ -7,10 +8,12 @@ test.describe("Search journey", () => {
   }) => {
     await page.goto("/");
 
-    // Find and click search icon/button in header
+    // Find and click search icon/button in header. Exact match on the
+    //    accessible name to avoid matching "Research" in the nav/footer.
     const searchTrigger = page
-      .getByRole("button", { name: /search/i })
-      .or(page.getByRole("link", { name: /search/i }));
+      .getByRole("link", { name: "Search", exact: true })
+      .or(page.getByRole("button", { name: "Search", exact: true }))
+      .first();
 
     if (await searchTrigger.isVisible()) {
       await searchTrigger.click();
@@ -35,16 +38,4 @@ test.describe("Search journey", () => {
     }
   });
 
-  test("search results page passes accessibility checks", async ({
-    page,
-  }) => {
-    await page.goto("/search?q=wind");
-    await page.waitForLoadState("networkidle");
-
-    const results = await new AxeBuilder({ page })
-      .withTags(["wcag2a", "wcag2aa"])
-      .analyze();
-
-    expect(results.violations).toEqual([]);
-  });
 });

@@ -21,12 +21,13 @@ export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-100">
+    <>
+      <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-100">
       <Container>
         <div className="flex items-center justify-between h-16 lg:h-18">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 shrink-0">
-            <Wind className="h-8 w-8 text-secondary" />
+            <Wind className="h-8 w-8 text-secondary-dark" />
             <div className="flex flex-col leading-tight">
               <span className="text-lg font-bold text-primary tracking-tight">
                 SOWA
@@ -79,9 +80,11 @@ export function Header() {
           </div>
         </div>
       </Container>
+      </header>
 
-      {/* Mobile menu */}
+      {/* Mobile menu — rendered outside <header> because the header's backdrop-blur
+          creates a containing block that would trap fixed-position descendants. */}
       <MobileMenu open={mobileOpen} onClose={() => setMobileOpen(false)} links={navLinks} />
-    </header>
+    </>
   );
 }

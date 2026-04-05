@@ -30,7 +30,7 @@ export function PathwayTeaser() {
 
       <Container className="relative">
         <div className="max-w-2xl mx-auto text-center">
-          <div className="inline-flex items-center justify-center h-14 w-14 rounded-2xl bg-secondary/20 text-secondary mb-6">
+          <div className="inline-flex items-center justify-center h-14 w-14 rounded-2xl bg-secondary/20 text-secondary-dark mb-6">
             <GitBranch className="h-7 w-7" />
           </div>
 

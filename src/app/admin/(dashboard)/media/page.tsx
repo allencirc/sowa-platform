@@ -163,7 +163,7 @@ export default function AdminMediaPage() {
                     onClick={() => copyUrl(file.url)}
                   >
                     {copied === file.url ? (
-                      <Check className="h-4 w-4 text-secondary" />
+                      <Check className="h-4 w-4 text-secondary-dark" />
                     ) : (
                       <Copy className="h-4 w-4" />
                     )}

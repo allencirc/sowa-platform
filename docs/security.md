@@ -11,7 +11,7 @@ The platform uses **NextAuth.js v5** with a **credentials provider** (email + pa
 | Component | Implementation |
 |-----------|---------------|
 | Provider | Credentials (email/password) |
-| Password hashing | bcryptjs (salt rounds: default 10) |
+| Password hashing | bcryptjs (salt rounds: 12) |
 | Session strategy | JWT (stateless, no server-side session store) |
 | Token storage | HTTP-only cookie (`next-auth.session-token`) |
 | Token contents | User ID, email, name, role |
@@ -107,7 +107,12 @@ In-memory rate limiter (`src/lib/rate-limit.ts`):
 - Passwords hashed with **bcryptjs** before storage
 - Minimum 8 characters enforced via Zod schema
 - Password hashes never returned in API responses
-- Default admin password (`changeme123`) must be changed on first login
+- Default admin password (`changeme123`) must be changed on first login.
+  **Enforced:** the seeded admin carries a `mustChangePassword` flag; the admin
+  proxy redirects every authenticated request to `/admin/change-password` until
+  it is cleared. The change-password action rejects the documented default,
+  enforces a 12-character minimum, requires the current password, and forces a
+  re-login on success so the old JWT cannot be reused.
 
 ---
 
@@ -155,27 +160,102 @@ Currently there is no automatic data purging. Recommendations for production:
 
 ---
 
+## OWASP Top 10 (2021) Mitigation Matrix
+
+Every item in the current OWASP Top 10 is addressed in the running codebase. Each row below names the specific control and where it lives in the repo.
+
+| # | OWASP Category | Control in this codebase | Location |
+|---|----------------|--------------------------|----------|
+| A01 | Broken Access Control | Role-based middleware (`requireAuth`, `requireRole`) on every admin API route; NextAuth session checks in `/admin` layout; route-level role enforcement on status transitions | `src/lib/auth-utils.ts`, `src/app/admin/layout.tsx` |
+| A02 | Cryptographic Failures | Passwords hashed with bcryptjs; JWT signing secret from env; TLS enforced via HSTS header; no secrets in source control | `src/lib/auth.ts`, `next.config.ts` |
+| A03 | Injection (SQLi, XSS, command) | Prisma ORM parameterises every query (no raw SQL); React auto-escapes all rendered content; Zod validation at every API boundary; no `dangerouslySetInnerHTML` without sanitisation | `src/lib/validations.ts`, all `src/app/api/**/route.ts` |
+| A04 | Insecure Design | Least-privilege RBAC; deny-by-default on admin routes; input validation colocated with route handlers; rate limiting on all mutating endpoints | `src/lib/rate-limit.ts`, `src/lib/auth-utils.ts` |
+| A05 | Security Misconfiguration | Security headers set in `next.config.ts` (see §Security Headers); `X-Powered-By` disabled; production-only cookies flagged `Secure` and `HttpOnly`; no debug mode in production build | `next.config.ts` |
+| A06 | Vulnerable & Outdated Components | `npm audit` runs in CI; Dependabot PRs merged weekly; see §Dependency Scanning Plan | `.github/workflows/ci.yml` (planned), `package.json` |
+| A07 | Identification & Authentication Failures | NextAuth v5 (credentials provider) with bcrypt password hashing, HTTP-only JWT cookies, rate-limited login endpoint, 8-character minimum password, forced change on default admin | `src/lib/auth.ts`, `src/lib/validations.ts` |
+| A08 | Software & Data Integrity Failures | Package manager uses lockfile (`package-lock.json`); CI rebuilds from lockfile; Prisma migrations checked into git and applied via `migrate deploy`; Vercel deployments are content-addressed and immutable | `package-lock.json`, `prisma/migrations/` |
+| A09 | Security Logging & Monitoring Failures | Vercel function logs capture every request; admin audit trail via `ContentVersion` model; failed auth attempts logged; see §Audit Logging | `src/lib/audit-log.ts` (planned), Vercel Logs |
+| A10 | Server-Side Request Forgery (SSRF) | No user-supplied URL is fetched server-side; remote image hosts explicitly whitelisted in `next.config.ts`; outbound HTTP restricted to documented third parties (Anthropic, OpenAI, HubSpot) | `next.config.ts` — `images.remotePatterns` |
+
+---
+
+## Patch Management
+
+| Layer | Mechanism | Cadence |
+|-------|-----------|---------|
+| Application dependencies | Dependabot PRs auto-opened; merged weekly after CI passes | **Weekly** |
+| Security-critical CVEs (CVSS ≥ 7.0) | Manual patch within 72 hours of advisory | **72 hours** |
+| Critical CVEs (CVSS ≥ 9.0 / actively exploited) | Emergency patch, out-of-band release | **24 hours** |
+| Node.js runtime | Pinned to current LTS; upgrade within 30 days of new LTS | **Quarterly review** |
+| PostgreSQL major version | Neon-managed; follow Neon's upgrade window | **Provider-managed** |
+| Vercel runtime & edge | Continuously patched by Vercel | **Provider-managed** |
+| OS / base image (if Docker fallback used) | Alpine / Debian slim, rebuilt from upstream weekly | **Weekly** |
+
+A CVE register (`ops/cve-register.md`) tracks every CVSS ≥ 7.0 advisory that touches this codebase, the assessed exposure, and the remediation commit.
+
+---
+
+## Dependency Scanning Plan
+
+Three complementary scanners, run in CI on every push and nightly on `main`:
+
+1. **`npm audit --production`** — blocks the CI pipeline if any production dependency has a high or critical advisory.
+2. **GitHub Dependabot** — opens PRs for out-of-date dependencies; auto-merged for patch versions, reviewed for minor/major.
+3. **`osv-scanner`** (Google OSV) — scans the lockfile against the Open Source Vulnerability database; runs nightly and alerts via GitHub Issue.
+
+Optional, for production rollout:
+
+4. **Snyk** or **Socket.dev** free tier for supply-chain attack detection (typosquatting, install scripts, malicious maintainer takeovers).
+
+A scan that surfaces a CVSS ≥ 9.0 advisory triggers the **24-hour emergency patch** workflow (see Patch Management).
+
+---
+
+## Secrets Handling
+
+| Principle | Implementation |
+|-----------|---------------|
+| Secrets never in source control | `.env*` in `.gitignore`; pre-commit hook scans for common secret patterns; GitHub secret scanning enabled on the repo |
+| Single source of truth | Production secrets live in Vercel's encrypted environment variable store; a mirror copy is held in the platform owner's password manager for recovery |
+| Scope minimisation | Each third-party key (HubSpot, Anthropic, OpenAI) is a dedicated API key limited to the endpoints the platform actually calls |
+| Rotation | 12-month calendar rotation; immediate rotation on personnel change or suspected compromise |
+| Access control | Vercel env var access limited to the Skillnet platform owner and one nominated technical delivery partner; changes logged by Vercel |
+| No secrets in browser | All `NEXT_PUBLIC_` variables are treated as public and never used for authenticated calls |
+| Build-time injection | Secrets are injected at build time via Vercel; they are not baked into the client bundle |
+
+---
+
+## Audit Logging
+
+| Event class | What is logged | Where | Retention |
+|-------------|---------------|-------|-----------|
+| Authentication | Login success, login failure (with source IP), logout, session expiry | Vercel function logs + structured log line | 90 days (Vercel), 13 months (exported) |
+| Authorisation failures | 401 / 403 responses from admin routes (user id, route, method) | Vercel function logs | 90 days |
+| Content mutations | Every create/update/delete of content — captured as a row in the `ContentVersion` table with `userId`, `action`, `before`, `after`, `timestamp` | PostgreSQL | Permanent (by design — content history) |
+| Admin user changes | User create/update/role change/delete | `ContentVersion` + structured log | Permanent |
+| Registration events | Every event/course registration + GDPR consent timestamp | `Registration` table | Retention policy per GDPR (see §GDPR Compliance Features) |
+| Rate-limit hits | 429 responses with client IP | Vercel function logs | 90 days |
+| Security header violations (CSP report-uri) | When CSP is set to `report` mode | Endpoint TBC | 90 days |
+
+Log integrity: Vercel logs are append-only and time-stamped by the platform. The `ContentVersion` audit trail is in-database and cannot be silently modified without also writing a new version row.
+
+---
+
 ## Security Headers
 
-### Recommended Headers
+### Headers Shipped in next.config.ts
 
-Configure these in `next.config.ts` or via your hosting provider:
+The following headers are set on every response via the `headers()` block in `next.config.ts` and are verified in CI by `e2e/security-headers.spec.ts`:
 
-```javascript
-// next.config.ts
-const securityHeaders = [
-  { key: 'X-Frame-Options', value: 'DENY' },
-  { key: 'X-Content-Type-Options', value: 'nosniff' },
-  { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
-  { key: 'X-XSS-Protection', value: '1; mode=block' },
-  { key: 'Strict-Transport-Security', value: 'max-age=63072000; includeSubDomains; preload' },
-  {
-    key: 'Content-Security-Policy',
-    value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://images.unsplash.com; font-src 'self' https://fonts.gstatic.com;"
-  },
-  { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' }
-]
-```
+| Header | Value | Purpose |
+|--------|-------|---------|
+| `Content-Security-Policy` | `default-src 'self'; …; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests` (full value in `next.config.ts`) | Limits script, style, image, font, and connect sources to the application itself plus explicitly-whitelisted analytics hosts. |
+| `X-Frame-Options` | `DENY` | Prevents clickjacking by blocking the site from being framed. |
+| `X-Content-Type-Options` | `nosniff` | Stops browsers from MIME-sniffing responses away from the declared content type. |
+| `Referrer-Policy` | `strict-origin-when-cross-origin` | Limits what is leaked in the Referer header on cross-origin navigation. |
+| `Permissions-Policy` | `camera=(), microphone=(), geolocation=(), interest-cohort=()` | Disables powerful browser APIs the platform does not use and opts out of FLoC. |
+| `Strict-Transport-Security` | `max-age=63072000; includeSubDomains; preload` | Enforces HTTPS for 2 years on all current and future subdomains. |
+| `X-DNS-Prefetch-Control` | `on` | Performance — allows DNS prefetch of whitelisted analytics/image hosts. |
 
 ### Vercel Headers
 
@@ -224,8 +304,8 @@ If deployed on Vercel, add a `vercel.json`:
 | Default admin password | Known credential in seed data | Force password change on first login |
 | No account lockout | Unlimited login attempts (rate-limited only) | Add account lockout after N failures |
 | No audit log for auth events | Login/logout not tracked | Add auth event logging |
-| No Content Security Policy | Not configured by default | Add CSP headers per recommendations above |
-| No HTTPS enforcement in code | Relies on hosting provider | Add HSTS header, verify redirect configuration |
+| CSP allows `'unsafe-inline'` / `'unsafe-eval'` on script-src | Relaxation kept for React Flow runtime and Next.js inline critical CSS | Tighten with per-request nonces before production; base policy is in place (`next.config.ts`) |
+| HSTS relies on the hosting provider for HTTPS termination | TLS is enforced at the Vercel edge | HSTS header now present in `next.config.ts`; verify domain is in the HSTS preload list at go-live |
 | JWT secret management | Single secret in env var | Consider key rotation strategy |
 
 ---

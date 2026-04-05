@@ -95,15 +95,15 @@ export default async function ResearchDetailPage({
 
             <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-text-secondary">
               <div className="flex items-center gap-2">
-                <User className="h-4 w-4 text-accent" />
+                <User className="h-4 w-4 text-accent-dark" />
                 <span className="font-medium">{research.author}</span>
               </div>
               <div className="flex items-center gap-2">
-                <Building2 className="h-4 w-4 text-accent" />
+                <Building2 className="h-4 w-4 text-accent-dark" />
                 <span>{research.organisation}</span>
               </div>
               <div className="flex items-center gap-2">
-                <Calendar className="h-4 w-4 text-accent" />
+                <Calendar className="h-4 w-4 text-accent-dark" />
                 <span>{formatDate(research.publicationDate)}</span>
               </div>
             </div>
@@ -143,7 +143,7 @@ export default async function ResearchDetailPage({
             {/* Back */}
             <Link
               href="/research"
-              className="inline-flex items-center gap-2 text-sm font-semibold text-accent hover:text-accent-dark transition-colors"
+              className="inline-flex items-center gap-2 text-sm font-semibold text-accent-dark hover:text-accent-dark transition-colors"
             >
               <ArrowLeft className="h-4 w-4" />
               Back to Research

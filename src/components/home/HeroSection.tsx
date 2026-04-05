@@ -26,8 +26,11 @@ function TurbineSVG({ className }: { className?: string }) {
 }
 
 export function HeroSection() {
+  // Section has an explicit bg-primary under the image/gradient so WCAG
+  // contrast holds even if the background image fails to load — axe (and
+  // users with blocked images) only sees the composited gradient+colour.
   return (
-    <section className="relative overflow-hidden text-text-inverse">
+    <section className="relative overflow-hidden bg-primary text-text-inverse">
       {/* Background image */}
       <Image
         src="https://images.unsplash.com/photo-1532601224476-15c79f2f7a51?w=1920&h=1080&fit=crop"

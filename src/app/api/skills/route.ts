@@ -8,6 +8,7 @@ import {
   paginatedResponse,
 } from "@/lib/api-utils";
 import { skillFiltersSchema, createSkillSchema } from "@/lib/validations";
+import { requireRole, AuthError } from "@/lib/auth-utils";
 
 const skillCategoryToEnum: Record<string, string> = {
   Technical: "TECHNICAL",
@@ -77,6 +78,13 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   const rateLimited = applyRateLimit(request);
   if (rateLimited) return rateLimited;
+
+  try {
+    await requireRole(["ADMIN", "EDITOR"]);
+  } catch (err) {
+    if (err instanceof AuthError) return errorResponse(err.message, err.status);
+    throw err;
+  }
 
   const parsed = await parseBody(request, createSkillSchema);
   if (parsed.error) return parsed.error;

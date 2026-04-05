@@ -109,7 +109,7 @@ export default function AssessmentClient({ questions, allSkills, allCareers, all
         <div className="text-center">
           <div className="relative mb-8">
             <div className="w-24 h-24 border-4 border-white/20 border-t-secondary rounded-full animate-spin mx-auto" />
-            <Sparkles className="absolute inset-0 m-auto h-10 w-10 text-secondary animate-pulse" />
+            <Sparkles className="absolute inset-0 m-auto h-10 w-10 text-secondary-dark animate-pulse" />
           </div>
           <h2 className="text-2xl font-bold text-white mb-2">
             Analysing Your Skills
@@ -155,7 +155,7 @@ export default function AssessmentClient({ questions, allSkills, allCareers, all
           <Container className="relative z-10">
             <div className="text-center max-w-2xl mx-auto">
               <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-secondary/20 mb-6">
-                <Trophy className="h-10 w-10 text-secondary" />
+                <Trophy className="h-10 w-10 text-secondary-dark" />
               </div>
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">
                 Your OWE Skills Profile
@@ -274,7 +274,7 @@ export default function AssessmentClient({ questions, allSkills, allCareers, all
         <div className="max-w-2xl mx-auto py-10 sm:py-16">
           <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-10 mb-8">
             <div className="mb-8">
-              <span className="inline-block text-xs font-bold text-accent bg-accent/10 px-3 py-1 rounded-full mb-4">
+              <span className="inline-block text-xs font-bold text-accent-dark bg-accent/10 px-3 py-1 rounded-full mb-4">
                 Question {currentIndex + 1}
               </span>
               <h2 className="text-xl sm:text-2xl font-bold text-text-primary leading-snug">

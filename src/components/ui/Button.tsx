@@ -13,8 +13,9 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 const variantStyles: Record<ButtonVariant, string> = {
   primary:
     "bg-primary text-text-inverse hover:bg-primary-light active:bg-primary-dark",
+  // Navy text on green bg (6.1:1) — white on #00A878 only reaches 3.05:1 and fails WCAG AA.
   secondary:
-    "bg-secondary text-text-inverse hover:bg-secondary-light active:bg-secondary-dark",
+    "bg-secondary text-primary hover:bg-secondary-light active:bg-secondary-dark",
   outline:
     "border-2 border-primary text-primary hover:bg-primary hover:text-text-inverse",
   ghost: "text-primary hover:bg-primary/10",

@@ -17,7 +17,7 @@ export function ProgressBar({ current, total, className }: ProgressBarProps) {
         <span className="text-sm font-medium text-text-secondary">
           Question {current} of {total}
         </span>
-        <span className="text-sm font-bold text-secondary">{pct}%</span>
+        <span className="text-sm font-bold text-secondary-dark">{pct}%</span>
       </div>
       <div
         className="h-2.5 bg-gray-100 rounded-full overflow-hidden"

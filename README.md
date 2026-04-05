@@ -1,36 +1,78 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# SOWA OWE Platform
 
-## Getting Started
+The Skillnet Offshore Wind Academy (SOWA) careers platform connects learners, workers, and employers to Ireland's offshore wind energy sector. This web application provides career pathway mapping, a training course directory, events and research repositories, and a skills diagnostic tool that matches users to careers and courses based on their current capabilities.
 
-First, run the development server:
+## Screenshots
+
+<!-- TODO: add screenshots / GIF of homepage, pathway map, and diagnostic results -->
+
+## Tech Stack
+
+- Next.js 16 (App Router)
+- React 19
+- TypeScript (strict)
+- Tailwind CSS v4
+- Prisma ORM + PostgreSQL
+- NextAuth v5
+- @xyflow/react (pathway visualisation)
+- Recharts (diagnostic results)
+- Vitest (unit) + Playwright (e2e)
+
+## Quick Start
 
 ```bash
+# 1. Clone
+git clone <repo-url>
+cd sowa-platform
+
+# 2. Install
+npm install
+
+# 3. Environment
+cp .env.example .env
+# Edit .env with DATABASE_URL, NEXTAUTH_SECRET, etc.
+
+# 4. Database
+npx prisma migrate dev
+npx prisma db seed
+
+# 5. Run
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+App runs at http://localhost:3000.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Documentation
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- [Architecture](docs/architecture.md)
+- [API Reference](docs/api-reference.md)
+- [Admin Guide](docs/admin-guide.md)
+- [Deployment Guide](docs/deployment-guide.md)
+- [Security](docs/security.md)
+- [Database Schema](docs/database-schema.md)
 
-## Learn More
+## Testing
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm test               # Vitest unit tests
+npm run test:e2e       # Playwright end-to-end tests
+npm run test:coverage  # Coverage report
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Project Structure
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+sowa-platform/
+├── src/
+│   ├── app/          # Next.js App Router pages and layouts
+│   ├── components/   # UI primitives and feature components
+│   └── lib/          # Data access, types, utilities, diagnostic engine
+├── prisma/           # Schema, migrations, seed scripts
+├── e2e/              # Playwright test suites
+├── docs/             # Project documentation
+└── public/           # Static assets
+```
 
-## Deploy on Vercel
+## Status
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Built for the SOWA tender (2026).

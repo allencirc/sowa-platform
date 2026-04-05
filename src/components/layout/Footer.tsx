@@ -54,7 +54,7 @@ export function Footer() {
             {/* Logo area */}
             <div className="col-span-2 md:col-span-1">
               <Link href="/" className="flex items-center gap-2 mb-4">
-                <Wind className="h-8 w-8 text-secondary" />
+                <Wind className="h-8 w-8 text-secondary-dark" />
                 <span className="text-lg font-bold tracking-tight">SOWA</span>
               </Link>
               <p className="text-sm text-text-inverse/60 leading-relaxed">
@@ -74,7 +74,7 @@ export function Footer() {
                     <li key={link.href}>
                       <Link
                         href={link.href}
-                        className="text-sm text-text-inverse/50 hover:text-secondary transition-colors"
+                        className="text-sm text-text-inverse/50 hover:text-secondary-dark transition-colors"
                       >
                         {link.label}
                       </Link>
@@ -88,7 +88,7 @@ export function Footer() {
           {/* Divider */}
           <div className="mt-12 pt-8 border-t border-white/10">
             <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-              <p className="text-xs text-text-inverse/40">
+              <p className="text-xs text-text-inverse/70">
                 &copy; {new Date().getFullYear()} Skillnet Ireland. All rights reserved.
               </p>
               <div className="flex flex-wrap gap-4">
@@ -96,7 +96,7 @@ export function Footer() {
                   <Link
                     key={link.href}
                     href={link.href}
-                    className="text-xs text-text-inverse/40 hover:text-text-inverse/70 transition-colors"
+                    className="text-xs text-text-inverse/70 hover:text-text-inverse transition-colors"
                   >
                     {link.label}
                   </Link>

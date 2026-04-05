@@ -24,7 +24,7 @@ export async function UpcomingCourses() {
           </div>
           <Link
             href="/training"
-            className="hidden sm:inline-flex items-center gap-1.5 text-sm font-semibold text-accent hover:text-accent-dark transition-colors"
+            className="hidden sm:inline-flex items-center gap-1.5 text-sm font-semibold text-accent-dark hover:text-accent-dark transition-colors"
           >
             View all courses
             <ArrowRight className="h-4 w-4" />
@@ -40,7 +40,7 @@ export async function UpcomingCourses() {
         <div className="mt-6 sm:hidden">
           <Link
             href="/training"
-            className="inline-flex items-center gap-1.5 text-sm font-semibold text-accent"
+            className="inline-flex items-center gap-1.5 text-sm font-semibold text-accent-dark"
           >
             View all courses
             <ArrowRight className="h-4 w-4" />
