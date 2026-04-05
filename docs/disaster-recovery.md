@@ -228,8 +228,53 @@ The combined **application-layer SLA** for the Vercel + Neon stack, assuming ind
 
 ---
 
-## 8. Change Log
+## 8. Automation Prerequisites
+
+The daily backup and weekly restore-drill workflows are committed to the
+repository at `.github/workflows/backup.yml` and `.github/workflows/restore-drill.yml`.
+They do not execute until the following GitHub Actions secrets and external
+resources are provisioned. Until that is complete, the workflows remain in a
+"configured, pending first production run" state.
+
+### 8.1 Required GitHub Actions secrets
+
+Configure under **Repository → Settings → Secrets and variables → Actions**:
+
+| Secret | Used by | Description |
+|--------|---------|-------------|
+| `BACKUP_DATABASE_URL` | `backup.yml` | Read-only Postgres connection string for production Neon (separate role, `pg_dump`-only grants recommended). |
+| `AGE_RECIPIENT_PUBLIC_KEY` | `backup.yml` | Public half of the age keypair. Dumps are encrypted to this recipient. |
+| `AGE_IDENTITY_PRIVATE_KEY` | `restore-drill.yml` | Private half, used only by the drill workflow to decrypt the dump into an ephemeral branch. Stored **only** in GitHub Secrets and in the platform owner's password manager. |
+| `BACKUP_AWS_ACCESS_KEY_ID` | both | IAM user credentials in a **separate AWS account** from any Vercel/Neon integrations, with access scoped to the backup bucket only. |
+| `BACKUP_AWS_SECRET_ACCESS_KEY` | both | As above. |
+| `BACKUP_AWS_REGION` | both | Region of the backup bucket (e.g. `eu-west-3` Paris). |
+| `BACKUP_BUCKET` | both | S3 bucket name. Must have Object Lock (Governance or Compliance mode), Versioning, and lifecycle rules matching the 30-day rolling / 12 monthly / 7 yearly retention in §2.1. |
+| `NEON_API_KEY` | `restore-drill.yml` | Neon API token scoped to branch create/delete on the project. |
+| `NEON_PROJECT_ID` | `restore-drill.yml` | Project ID for the production Neon project. |
+| `DATABASE_URL_READONLY` | `restore-drill.yml` | Read-only connection string against production, used for row-count comparison during the drill. |
+
+### 8.2 One-time setup checklist
+
+1. **Generate age keypair** (`age-keygen -o sowa-backup.key`). Store the private key file in the password manager; paste the `AGE-SECRET-KEY-...` line as `AGE_IDENTITY_PRIVATE_KEY`; paste the public `age1...` line as `AGE_RECIPIENT_PUBLIC_KEY`.
+2. **Provision the S3 backup bucket** in the separate AWS account with Object Lock, Versioning, and the retention lifecycle rules from §2.1.
+3. **Create the backup IAM user** with a policy limited to `s3:PutObject`, `s3:ListBucket`, and `s3:GetObject` against that one bucket.
+4. **Create the Neon backup role** with `SELECT`-only grants on application schemas plus the system catalogue access `pg_dump` requires. Use its connection string as `BACKUP_DATABASE_URL`.
+5. **Create the Neon read-only role** used for drill verification queries. Use its connection string as `DATABASE_URL_READONLY`.
+6. **Issue the Neon API token** scoped to the production project with branch management permissions. This becomes `NEON_API_KEY`.
+7. **Populate all GitHub Actions secrets** from steps 1–6.
+8. **Manually trigger `backup.yml`** via *Actions → Daily Database Backup → Run workflow* and confirm an encrypted object lands in the bucket.
+9. **Manually trigger `restore-drill.yml`** and confirm it creates, populates, verifies, and tears down the ephemeral Neon branch without errors.
+10. **Record the first successful drill** in `ops/dr-drill-log.md`, replacing the "pending" placeholder row.
+
+Steps 1–7 are prerequisites for automation; steps 8–10 mark the workflows as
+live. Prior to step 10 completing, the cells in §5 marked "Automated" should
+be read as "configured, pending first production run".
+
+---
+
+## 9. Change Log
 
 | Date | Change | Author |
 |------|--------|--------|
 | 2026-04-05 | Initial DR document created for tender submission | Platform Lead |
+| 2026-04-05 | Added §8 Automation Prerequisites documenting the setup checklist for `backup.yml` and `restore-drill.yml` | Platform Lead |
