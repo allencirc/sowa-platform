@@ -3,10 +3,12 @@
 import { useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { signOut } from "next-auth/react";
 import { cn } from "@/lib/utils";
 import type { UserRole } from "@/generated/prisma/client";
 import {
   LayoutDashboard,
+  BarChart3,
   Briefcase,
   GraduationCap,
   Calendar,
@@ -77,6 +79,12 @@ const navItems: NavItem[] = [
     href: "/admin/media",
     icon: Image,
     roles: ["ADMIN", "EDITOR"],
+  },
+  {
+    label: "Analytics",
+    href: "/admin/analytics",
+    icon: BarChart3,
+    roles: ["ADMIN", "EDITOR", "VIEWER"],
   },
   {
     label: "Users",
@@ -212,15 +220,14 @@ export function AdminSidebar({ user, mobileOpen, onMobileClose }: AdminSidebarPr
             <p className="truncate text-sm font-medium">{user.name || user.email}</p>
             <p className="truncate text-xs text-white/50">{user.role}</p>
           </div>
-          <form action="/api/auth/signout" method="POST">
-            <button
-              type="submit"
-              className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-white/70 transition-colors hover:bg-primary-light hover:text-white"
-            >
-              <LogOut className="h-5 w-5 shrink-0" />
-              Sign Out
-            </button>
-          </form>
+          <button
+            type="button"
+            onClick={() => signOut({ callbackUrl: "/admin/login" })}
+            className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-white/70 transition-colors hover:bg-primary-light hover:text-white"
+          >
+            <LogOut className="h-5 w-5 shrink-0" />
+            Sign Out
+          </button>
         </div>
       </aside>
     </>
