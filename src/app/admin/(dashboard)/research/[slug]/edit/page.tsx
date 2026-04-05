@@ -27,6 +27,8 @@ export default function EditResearchPage() {
   const [error, setError] = useState<string | null>(null);
 
   const fetchResearch = useCallback(() => {
+    setLoading(true);
+    setError(null);
     fetch(`/api/research/${slug}`)
       .then((res) => {
         if (!res.ok) throw new Error(res.status === 404 ? "Research not found" : "Failed to load");
@@ -38,6 +40,12 @@ export default function EditResearchPage() {
   }, [slug]);
 
   useEffect(() => { fetchResearch(); }, [fetchResearch]);
+
+  const handleStatusChange = (newStatus: ContentStatus) => {
+    setResearch((prev) =>
+      prev ? { ...prev, status: newStatus, rejectionNote: null, publishAt: null } : prev
+    );
+  };
 
   const userRole = (session?.user?.role ?? "VIEWER") as "ADMIN" | "EDITOR" | "VIEWER";
 
@@ -68,7 +76,7 @@ export default function EditResearchPage() {
             contentType="RESEARCH"
             slug={research.slug}
             userRole={userRole}
-            onStatusChange={fetchResearch}
+            onStatusChange={handleStatusChange}
           />
           <VersionHistory
             contentType="RESEARCH"

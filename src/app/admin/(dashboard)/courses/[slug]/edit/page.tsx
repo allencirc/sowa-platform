@@ -27,6 +27,8 @@ export default function EditCoursePage() {
   const [error, setError] = useState<string | null>(null);
 
   const fetchCourse = useCallback(() => {
+    setLoading(true);
+    setError(null);
     fetch(`/api/courses/${slug}`)
       .then((res) => {
         if (!res.ok) throw new Error(res.status === 404 ? "Course not found" : "Failed to load");
@@ -38,6 +40,12 @@ export default function EditCoursePage() {
   }, [slug]);
 
   useEffect(() => { fetchCourse(); }, [fetchCourse]);
+
+  const handleStatusChange = (newStatus: ContentStatus) => {
+    setCourse((prev) =>
+      prev ? { ...prev, status: newStatus, rejectionNote: null, publishAt: null } : prev
+    );
+  };
 
   const userRole = (session?.user?.role ?? "VIEWER") as "ADMIN" | "EDITOR" | "VIEWER";
 
@@ -68,7 +76,7 @@ export default function EditCoursePage() {
             contentType="COURSE"
             slug={course.slug}
             userRole={userRole}
-            onStatusChange={fetchCourse}
+            onStatusChange={handleStatusChange}
           />
           <VersionHistory
             contentType="COURSE"

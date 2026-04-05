@@ -27,6 +27,8 @@ export default function EditEventPage() {
   const [error, setError] = useState<string | null>(null);
 
   const fetchEvent = useCallback(() => {
+    setLoading(true);
+    setError(null);
     fetch(`/api/events/${slug}`)
       .then((res) => {
         if (!res.ok) throw new Error(res.status === 404 ? "Event not found" : "Failed to load");
@@ -38,6 +40,12 @@ export default function EditEventPage() {
   }, [slug]);
 
   useEffect(() => { fetchEvent(); }, [fetchEvent]);
+
+  const handleStatusChange = (newStatus: ContentStatus) => {
+    setEvent((prev) =>
+      prev ? { ...prev, status: newStatus, rejectionNote: null, publishAt: null } : prev
+    );
+  };
 
   const userRole = (session?.user?.role ?? "VIEWER") as "ADMIN" | "EDITOR" | "VIEWER";
 
@@ -68,7 +76,7 @@ export default function EditEventPage() {
             contentType="EVENT"
             slug={event.slug}
             userRole={userRole}
-            onStatusChange={fetchEvent}
+            onStatusChange={handleStatusChange}
           />
           <VersionHistory
             contentType="EVENT"

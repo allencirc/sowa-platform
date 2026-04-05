@@ -27,6 +27,8 @@ export default function EditCareerPage() {
   const [error, setError] = useState<string | null>(null);
 
   const fetchCareer = useCallback(() => {
+    setLoading(true);
+    setError(null);
     fetch(`/api/careers/${slug}`)
       .then((res) => {
         if (!res.ok) throw new Error(res.status === 404 ? "Career not found" : "Failed to load");
@@ -41,9 +43,11 @@ export default function EditCareerPage() {
     fetchCareer();
   }, [fetchCareer]);
 
-  const handleStatusChange = () => {
-    // Reload career data to reflect new status
-    fetchCareer();
+  const handleStatusChange = (newStatus: ContentStatus) => {
+    // Update local state immediately — avoids a fragile re-fetch
+    setCareer((prev) =>
+      prev ? { ...prev, status: newStatus, rejectionNote: null, publishAt: null } : prev
+    );
   };
 
   const handleRestore = (snapshot: Record<string, unknown>) => {

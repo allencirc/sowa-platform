@@ -27,6 +27,8 @@ export default function EditNewsPage() {
   const [error, setError] = useState<string | null>(null);
 
   const fetchArticle = useCallback(() => {
+    setLoading(true);
+    setError(null);
     fetch(`/api/news/${slug}`)
       .then((res) => {
         if (!res.ok) throw new Error(res.status === 404 ? "Article not found" : "Failed to load");
@@ -38,6 +40,12 @@ export default function EditNewsPage() {
   }, [slug]);
 
   useEffect(() => { fetchArticle(); }, [fetchArticle]);
+
+  const handleStatusChange = (newStatus: ContentStatus) => {
+    setArticle((prev) =>
+      prev ? { ...prev, status: newStatus, rejectionNote: null, publishAt: null } : prev
+    );
+  };
 
   const userRole = (session?.user?.role ?? "VIEWER") as "ADMIN" | "EDITOR" | "VIEWER";
 
@@ -68,7 +76,7 @@ export default function EditNewsPage() {
             contentType="NEWS"
             slug={article.slug}
             userRole={userRole}
-            onStatusChange={fetchArticle}
+            onStatusChange={handleStatusChange}
           />
           <VersionHistory
             contentType="NEWS"
