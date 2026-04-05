@@ -114,6 +114,22 @@ export interface DiagnosticResult {
   gaps: DiagnosticGap[];
   recommendedCareers: Career[];
   recommendedCourses: Course[];
+  roleFamilyFit: RoleFamilyFit[];
+}
+
+export interface RoleFamilyFit {
+  /** Stable key from diagnostic-role-weights.ts */
+  family: string;
+  /** Human-readable label */
+  label: string;
+  /** Short tagline describing the family */
+  tagline: string;
+  /** 0–100 confidence score */
+  confidence: number;
+  /** Deterministic English reasoning bullets (no runtime AI) */
+  reasoning: string[];
+  /** Career slugs that belong to this family (for "Explore roles" CTAs) */
+  careerSlugs: string[];
 }
 
 export interface DiagnosticGap {
