@@ -2,9 +2,58 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { auth } from "@/lib/auth";
 import { applyReadOnly } from "@/lib/read-only";
+import { isLocale, matchLocale, type Locale } from "@/lib/i18n";
+
+// Paths that are NOT localised — admin UI, API routes, and Next internals.
+// Everything else sits under `/[locale]/...` and should be redirected if
+// a visitor hits it without a locale prefix.
+const NON_LOCALISED_PREFIXES = [
+  "/admin",
+  "/api",
+  "/_next",
+  "/favicon",
+  "/icon",
+  "/apple-icon",
+  "/og-image",
+  "/robots",
+  "/sitemap",
+  "/manifest",
+];
+
+function isNonLocalised(pathname: string): boolean {
+  return NON_LOCALISED_PREFIXES.some(
+    (p) => pathname === p || pathname.startsWith(`${p}.`) || pathname.startsWith(`${p}/`),
+  );
+}
+
+function extractLocale(pathname: string): Locale | null {
+  const segments = pathname.split("/").filter(Boolean);
+  return segments.length > 0 && isLocale(segments[0]) ? segments[0] : null;
+}
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
+
+  // ── i18n: public surface ───────────────────────────────────────────────
+  // See docs/adr/0001-i18n.md. Non-localised surfaces (admin, api, static
+  // assets) fall through untouched. Any other request that doesn't start
+  // with a supported locale is redirected to `/{preferred}{path}` using the
+  // visitor's Accept-Language header (falling back to `en`). Requests that
+  // already carry a locale segment get an `x-sowa-locale` header attached
+  // so the root layout — which sits above `[locale]` — can set `<html lang>`
+  // without re-parsing the URL.
+  if (!isNonLocalised(pathname)) {
+    const current = extractLocale(pathname);
+    if (!current) {
+      const preferred = matchLocale(request.headers.get("accept-language"));
+      const url = request.nextUrl.clone();
+      url.pathname = `/${preferred}${pathname === "/" ? "" : pathname}`;
+      return NextResponse.redirect(url);
+    }
+    const requestHeaders = new Headers(request.headers);
+    requestHeaders.set("x-sowa-locale", current);
+    return NextResponse.next({ request: { headers: requestHeaders } });
+  }
 
   // ── READ_ONLY kill switch ──────────────────────────────────────────────
   // See docs/disaster-recovery.md §4.2. When READ_ONLY=true, block any
@@ -63,5 +112,8 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*", "/api/:path*"],
+  // Run on everything except Next internals and static files with an
+  // extension (images, fonts, etc.). The proxy itself decides per-path
+  // whether to apply i18n redirects, read-only checks, or admin auth.
+  matcher: ["/((?!_next/static|_next/image|.*\\..*).*)"],
 };

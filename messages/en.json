@@ -1,0 +1,78 @@
+{
+  "locale": {
+    "name": "English",
+    "nativeName": "English"
+  },
+  "nav": {
+    "careers": "Careers",
+    "training": "Training",
+    "events": "Events",
+    "research": "Research",
+    "news": "News",
+    "diagnostic": "Diagnostic",
+    "search": "Search",
+    "getInvolved": "Get Involved",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "mainNavigation": "Main navigation",
+    "languageSwitcher": "Change language",
+    "skipToContent": "Skip to main content",
+    "siteTagline": "Offshore Wind Academy"
+  },
+  "hero": {
+    "title": "Your Career in Offshore Wind Starts Here",
+    "subtitle": "Explore career pathways, training courses, events and skills diagnostics for Ireland's offshore wind energy sector.",
+    "exploreCareers": "Explore Careers",
+    "takeAssessment": "Take Skills Assessment"
+  },
+  "cta": {
+    "learnMore": "Learn more",
+    "readMore": "Read more",
+    "viewAll": "View all",
+    "seeDetails": "See details",
+    "apply": "Apply",
+    "subscribe": "Subscribe",
+    "getStarted": "Get started",
+    "back": "Back",
+    "next": "Next",
+    "submit": "Submit",
+    "cancel": "Cancel"
+  },
+  "footer": {
+    "tagline": "Ireland's national careers platform for offshore wind energy.",
+    "columns": {
+      "careers": "Careers",
+      "training": "Training",
+      "events": "Events",
+      "research": "Research",
+      "about": "About",
+      "legal": "Legal"
+    },
+    "legal": {
+      "privacy": "Privacy",
+      "terms": "Terms",
+      "accessibility": "Accessibility",
+      "cookies": "Cookies"
+    },
+    "copyright": "© {year} Skillnet Offshore Wind Academy. All rights reserved."
+  },
+  "diagnostic": {
+    "title": "Skills Diagnostic",
+    "intro": "Answer a few questions to discover offshore wind career pathways that fit your background.",
+    "start": "Start assessment",
+    "questionLabel": "Question {current} of {total}",
+    "progressLabel": "Assessment progress",
+    "stems": {
+      "experience": "How much experience do you have in the offshore wind or broader energy sector?",
+      "background": "Which of the following best describes your current background?",
+      "interests": "Which areas of offshore wind work interest you most?",
+      "safetyTraining": "Which safety qualifications do you already hold?",
+      "technicalSkills": "Rate your confidence with technical problem-solving.",
+      "digitalSkills": "Rate your confidence with digital tools and data analysis.",
+      "mobility": "Are you able to travel or relocate for work?",
+      "education": "What is the highest level of education you have completed?",
+      "languages": "Which languages do you work in professionally?",
+      "timeCommitment": "How much time per week can you commit to training?"
+    }
+  }
+}

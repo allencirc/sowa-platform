@@ -1,6 +1,8 @@
+import { notFound } from "next/navigation";
 import { type ReactNode } from "react";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { getDictionary, isLocale, locales, type Locale } from "@/lib/i18n";
 
 const organizationJsonLd = {
   "@context": "https://schema.org",
@@ -42,7 +44,22 @@ const websiteJsonLd = {
   },
 };
 
-export default function FrontendLayout({ children }: { children: ReactNode }) {
+export function generateStaticParams() {
+  return locales.map((locale) => ({ locale }));
+}
+
+export default async function FrontendLayout({
+  children,
+  params,
+}: {
+  children: ReactNode;
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale: rawLocale } = await params;
+  if (!isLocale(rawLocale)) notFound();
+  const locale: Locale = rawLocale;
+  const dict = await getDictionary(locale);
+
   return (
     <>
       <script
@@ -57,9 +74,9 @@ export default function FrontendLayout({ children }: { children: ReactNode }) {
           __html: JSON.stringify(websiteJsonLd),
         }}
       />
-      <Header />
+      <Header locale={locale} dict={dict} />
       <main id="main-content" className="flex-1">{children}</main>
-      <Footer />
+      <Footer locale={locale} dict={dict} />
     </>
   );
 }

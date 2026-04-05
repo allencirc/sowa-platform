@@ -1,0 +1,78 @@
+{
+  "locale": {
+    "name": "Ukrainian",
+    "nativeName": "Українська"
+  },
+  "nav": {
+    "careers": "Кар'єра",
+    "training": "Навчання",
+    "events": "Події",
+    "research": "Дослідження",
+    "news": "Новини",
+    "diagnostic": "Діагностика",
+    "search": "Пошук",
+    "getInvolved": "Долучитися",
+    "openMenu": "Відкрити меню",
+    "closeMenu": "Закрити меню",
+    "mainNavigation": "Головна навігація",
+    "languageSwitcher": "Змінити мову",
+    "skipToContent": "Перейти до основного вмісту",
+    "siteTagline": "[TODO] Offshore Wind Academy"
+  },
+  "hero": {
+    "title": "[TODO] Your Career in Offshore Wind Starts Here",
+    "subtitle": "[TODO] Explore career pathways, training courses, events and skills diagnostics for Ireland's offshore wind energy sector.",
+    "exploreCareers": "[TODO] Explore Careers",
+    "takeAssessment": "[TODO] Take Skills Assessment"
+  },
+  "cta": {
+    "learnMore": "Дізнатися більше",
+    "readMore": "Читати далі",
+    "viewAll": "Переглянути все",
+    "seeDetails": "Детальніше",
+    "apply": "Подати заявку",
+    "subscribe": "Підписатися",
+    "getStarted": "Розпочати",
+    "back": "Назад",
+    "next": "Далі",
+    "submit": "Надіслати",
+    "cancel": "Скасувати"
+  },
+  "footer": {
+    "tagline": "[TODO] Ireland's national careers platform for offshore wind energy.",
+    "columns": {
+      "careers": "Кар'єра",
+      "training": "Навчання",
+      "events": "Події",
+      "research": "Дослідження",
+      "about": "Про нас",
+      "legal": "Правова інформація"
+    },
+    "legal": {
+      "privacy": "Конфіденційність",
+      "terms": "Умови",
+      "accessibility": "Доступність",
+      "cookies": "Файли cookie"
+    },
+    "copyright": "© {year} Skillnet Offshore Wind Academy. Усі права захищені."
+  },
+  "diagnostic": {
+    "title": "[TODO] Skills Diagnostic",
+    "intro": "[TODO] Answer a few questions to discover offshore wind career pathways that fit your background.",
+    "start": "[TODO] Start assessment",
+    "questionLabel": "[TODO] Question {current} of {total}",
+    "progressLabel": "[TODO] Assessment progress",
+    "stems": {
+      "experience": "[TODO] How much experience do you have in the offshore wind or broader energy sector?",
+      "background": "[TODO] Which of the following best describes your current background?",
+      "interests": "[TODO] Which areas of offshore wind work interest you most?",
+      "safetyTraining": "[TODO] Which safety qualifications do you already hold?",
+      "technicalSkills": "[TODO] Rate your confidence with technical problem-solving.",
+      "digitalSkills": "[TODO] Rate your confidence with digital tools and data analysis.",
+      "mobility": "[TODO] Are you able to travel or relocate for work?",
+      "education": "[TODO] What is the highest level of education you have completed?",
+      "languages": "[TODO] Which languages do you work in professionally?",
+      "timeCommitment": "[TODO] How much time per week can you commit to training?"
+    }
+  }
+}

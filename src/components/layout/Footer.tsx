@@ -1,50 +1,55 @@
 import Link from "next/link";
 import { Wind } from "lucide-react";
 import { Container } from "@/components/ui/Container";
+import { format, type Dictionary, type Locale } from "@/lib/i18n";
 
-const footerColumns = [
-  {
-    title: "Careers",
-    links: [
-      { label: "Explore Careers", href: "/careers" },
-      { label: "Career Pathways", href: "/careers#pathways" },
-      { label: "Skills Map", href: "/careers#skills" },
-    ],
-  },
-  {
-    title: "Training",
-    links: [
-      { label: "Course Directory", href: "/training" },
-      { label: "Providers", href: "/training#providers" },
-      { label: "Certifications", href: "/training#certs" },
-    ],
-  },
-  {
-    title: "Events",
-    links: [
-      { label: "Upcoming Events", href: "/events" },
-      { label: "Webinars", href: "/events?type=Webinar" },
-      { label: "Conferences", href: "/events?type=Conference" },
-    ],
-  },
-  {
-    title: "Resources",
-    links: [
-      { label: "Research", href: "/research" },
-      { label: "News", href: "/news" },
-      { label: "Skills Diagnostic", href: "/diagnostic" },
-    ],
-  },
-];
+export function Footer({
+  locale,
+  dict,
+}: {
+  locale: Locale;
+  dict: Dictionary;
+}) {
+  const prefix = `/${locale}`;
 
-const legalLinks = [
-  { label: "Privacy Policy", href: "/privacy" },
-  { label: "Terms of Use", href: "/terms" },
-  { label: "Accessibility", href: "/accessibility" },
-  { label: "Cookie Policy", href: "/cookies" },
-];
+  const footerColumns = [
+    {
+      title: dict.footer.columns.careers,
+      links: [
+        { label: dict.nav.careers, href: `${prefix}/careers` },
+        { label: dict.nav.research, href: `${prefix}/careers#pathways` },
+      ],
+    },
+    {
+      title: dict.footer.columns.training,
+      links: [
+        { label: dict.nav.training, href: `${prefix}/training` },
+        { label: dict.nav.training, href: `${prefix}/training#providers` },
+      ],
+    },
+    {
+      title: dict.footer.columns.events,
+      links: [
+        { label: dict.nav.events, href: `${prefix}/events` },
+      ],
+    },
+    {
+      title: dict.footer.columns.research,
+      links: [
+        { label: dict.nav.research, href: `${prefix}/research` },
+        { label: dict.nav.news, href: `${prefix}/news` },
+        { label: dict.nav.diagnostic, href: `${prefix}/diagnostic` },
+      ],
+    },
+  ];
 
-export function Footer() {
+  const legalLinks = [
+    { label: dict.footer.legal.privacy, href: `${prefix}/privacy` },
+    { label: dict.footer.legal.terms, href: `${prefix}/terms` },
+    { label: dict.footer.legal.accessibility, href: `${prefix}/accessibility` },
+    { label: dict.footer.legal.cookies, href: `${prefix}/cookies` },
+  ];
+
   return (
     <footer className="bg-surface-dark text-text-inverse" role="contentinfo">
       <Container>
@@ -53,13 +58,12 @@ export function Footer() {
           <div className="grid grid-cols-2 md:grid-cols-5 gap-8 lg:gap-12">
             {/* Logo area */}
             <div className="col-span-2 md:col-span-1">
-              <Link href="/" className="flex items-center gap-2 mb-4">
+              <Link href={prefix} className="flex items-center gap-2 mb-4">
                 <Wind className="h-8 w-8 text-secondary-dark" />
                 <span className="text-lg font-bold tracking-tight">SOWA</span>
               </Link>
               <p className="text-sm text-text-inverse/60 leading-relaxed">
-                Skillnet Offshore Wind Academy — Ireland&apos;s national careers
-                platform for offshore wind energy.
+                {dict.footer.tagline}
               </p>
             </div>
 
@@ -89,7 +93,7 @@ export function Footer() {
           <div className="mt-12 pt-8 border-t border-white/10">
             <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
               <p className="text-xs text-text-inverse/70">
-                &copy; {new Date().getFullYear()} Skillnet Ireland. All rights reserved.
+                {format(dict.footer.copyright, { year: new Date().getFullYear() })}
               </p>
               <div className="flex flex-wrap gap-4">
                 {legalLinks.map((link) => (
