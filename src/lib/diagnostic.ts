@@ -4,11 +4,13 @@ import type {
   DiagnosticQuestion,
   DiagnosticResult,
   DiagnosticGap,
+  RoleFamilyFit,
   Skill,
 } from "./types";
+import { ROLE_FAMILIES } from "./diagnostic-role-weights";
 
 // Maps q8 interest area values to relevant career slugs
-const interestToCareerMap: Record<string, string[]> = {
+export const interestToCareerMap: Record<string, string[]> = {
   technical: [
     "offshore-wind-turbine-technician",
     "blade-technician",
@@ -222,11 +224,110 @@ export function calculateResults(
     .map((c) => c.course)
     .slice(0, 5);
 
+  const roleFamilyFit = computeRoleFamilyFit(scores, maxPossible, allSkills);
+
   return {
     scores,
     maxPossible,
     gaps,
     recommendedCareers,
     recommendedCourses,
+    roleFamilyFit,
   };
+}
+
+/**
+ * Compute role-family fit scores from the user's skill percentages.
+ *
+ * This is a pure function sitting on top of calculateResults' scores /
+ * maxPossible output. It does NOT re-run the scoring engine or touch
+ * gap severity — callers can opt in to role-first presentation without
+ * affecting the existing gap-first flow.
+ *
+ * Confidence is a weighted average of skill percentages:
+ *   confidence = Σ (pct_skill × weight_skill) / Σ weight_skill
+ * where pct_skill is 0–1 and weight_skill comes from ROLE_FAMILIES.
+ * Only skills that were actually assessed (maxPossible > 0) contribute,
+ * so a missing skill reduces the denominator rather than silently
+ * scoring 0.
+ *
+ * Reasoning bullets are deterministic English strings derived from the
+ * highest-contributing skills — static, accessible, SEO-friendly, and
+ * available even when the AISummary service is unavailable.
+ */
+export function computeRoleFamilyFit(
+  scores: Record<string, number>,
+  maxPossible: Record<string, number>,
+  allSkills: Skill[]
+): RoleFamilyFit[] {
+  const skillByName = new Map(allSkills.map((s) => [s.slug, s]));
+
+  const fits: RoleFamilyFit[] = ROLE_FAMILIES.map((family) => {
+    let weightedSum = 0;
+    let totalWeight = 0;
+    const contributions: Array<{
+      slug: string;
+      label: string;
+      pct: number;
+      weight: number;
+      contribution: number;
+    }> = [];
+
+    for (const [slug, weight] of Object.entries(family.skillWeights)) {
+      const max = maxPossible[slug] ?? 0;
+      if (max === 0) continue; // skill not assessed — skip, don't penalise
+      const pct = (scores[slug] ?? 0) / max;
+      weightedSum += pct * weight;
+      totalWeight += weight;
+      contributions.push({
+        slug,
+        label: skillByName.get(slug)?.name ?? slug,
+        pct,
+        weight,
+        contribution: pct * weight,
+      });
+    }
+
+    const confidence =
+      totalWeight > 0 ? Math.round((weightedSum / totalWeight) * 100) : 0;
+
+    // Reasoning: pick the top 3 weighted contributions and describe them.
+    contributions.sort((a, b) => b.contribution - a.contribution);
+    const topContribs = contributions.slice(0, 3);
+    const reasoning: string[] = [];
+    for (const c of topContribs) {
+      if (c.pct >= 0.75) {
+        reasoning.push(`Strong score on ${c.label} (${Math.round(c.pct * 100)}%)`);
+      } else if (c.pct >= 0.5) {
+        reasoning.push(
+          `Solid foundation in ${c.label} (${Math.round(c.pct * 100)}%)`
+        );
+      } else if (c.pct >= 0.25) {
+        reasoning.push(
+          `Emerging strength in ${c.label} (${Math.round(c.pct * 100)}%) — worth building`
+        );
+      } else {
+        reasoning.push(
+          `Developing area: ${c.label} (${Math.round(c.pct * 100)}%) — a focused course could unlock this family`
+        );
+      }
+    }
+    if (reasoning.length === 0) {
+      reasoning.push("No relevant skills were assessed for this family yet.");
+    }
+
+    const careerSlugs = interestToCareerMap[family.interestArea] ?? [];
+
+    return {
+      family: family.key,
+      label: family.label,
+      tagline: family.tagline,
+      confidence,
+      reasoning,
+      careerSlugs,
+    };
+  });
+
+  fits.sort((a, b) => b.confidence - a.confidence);
+  return fits;
 }

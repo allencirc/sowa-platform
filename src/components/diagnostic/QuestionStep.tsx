@@ -57,16 +57,27 @@ function SingleChoice({
   onSelect: (value: string) => void;
 }) {
   return (
-    <div className="space-y-3">
+    <div className="space-y-3" role="radiogroup">
       {question.options?.map((opt) => {
         const isSelected = selected === opt.value;
         return (
           <button
             key={opt.value}
+            type="button"
+            role="radio"
+            aria-checked={isSelected}
+            data-option="true"
             onClick={() => onSelect(opt.value)}
+            onKeyDown={(e) => {
+              if (e.key === " " || e.key === "Enter") {
+                e.preventDefault();
+                onSelect(opt.value);
+              }
+            }}
             className={cn(
               "w-full text-left p-4 sm:p-5 rounded-xl border-2 transition-all duration-200 cursor-pointer",
               "hover:border-secondary/40 hover:bg-secondary/5",
+              "focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-dark focus-visible:ring-offset-2",
               isSelected
                 ? "border-secondary bg-secondary/5 shadow-sm shadow-secondary/10"
                 : "border-gray-100 bg-white"
@@ -81,6 +92,7 @@ function SingleChoice({
                     ? "border-secondary bg-secondary"
                     : "border-gray-300"
                 )}
+                aria-hidden="true"
               >
                 {isSelected && (
                   <div className="w-2 h-2 rounded-full bg-white" />
@@ -128,17 +140,28 @@ function MultipleChoice({
   };
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-3" role="group" aria-label="Select all that apply">
       <p className="text-sm text-text-muted mb-1">Select all that apply</p>
       {question.options?.map((opt) => {
         const isSelected = selected.includes(opt.value);
         return (
           <button
             key={opt.value}
+            type="button"
+            role="checkbox"
+            aria-checked={isSelected}
+            data-option="true"
             onClick={() => toggle(opt.value)}
+            onKeyDown={(e) => {
+              if (e.key === " " || e.key === "Enter") {
+                e.preventDefault();
+                toggle(opt.value);
+              }
+            }}
             className={cn(
               "w-full text-left p-4 sm:p-5 rounded-xl border-2 transition-all duration-200 cursor-pointer",
               "hover:border-secondary/40 hover:bg-secondary/5",
+              "focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-dark focus-visible:ring-offset-2",
               isSelected
                 ? "border-secondary bg-secondary/5 shadow-sm shadow-secondary/10"
                 : "border-gray-100 bg-white"
@@ -194,18 +217,38 @@ function ScaleQuestion({
   return (
     <div>
       {/* Scale circles */}
-      <div className="flex items-center justify-center gap-3 sm:gap-5 mb-6">
+      <div
+        className="flex items-center justify-center gap-3 sm:gap-5 mb-6"
+        role="radiogroup"
+        aria-label={`Rate from ${min} to ${max}`}
+      >
         {values.map((v) => {
           const isSelected = selected === v;
           return (
             <button
               key={v}
+              type="button"
+              role="radio"
+              aria-checked={isSelected}
+              aria-label={
+                question.scaleLabels?.[v]
+                  ? `${v} — ${question.scaleLabels[v]}`
+                  : `${v}`
+              }
+              data-option="true"
               onClick={() => onSelect(v)}
+              onKeyDown={(e) => {
+                if (e.key === " " || e.key === "Enter") {
+                  e.preventDefault();
+                  onSelect(v);
+                }
+              }}
               className={cn(
                 "w-14 h-14 sm:w-16 sm:h-16 rounded-full border-2 flex items-center justify-center text-lg sm:text-xl font-bold transition-all duration-200 cursor-pointer",
-                "hover:border-secondary/60 hover:bg-secondary/10 hover:scale-105",
+                "hover:border-secondary/60 hover:bg-secondary/10 hover:scale-105 motion-reduce:hover:scale-100",
+                "focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-dark focus-visible:ring-offset-2",
                 isSelected
-                  ? "border-secondary bg-secondary text-primary shadow-lg shadow-secondary/20 scale-110"
+                  ? "border-secondary bg-secondary text-primary shadow-lg shadow-secondary/20 scale-110 motion-reduce:scale-100"
                   : "border-gray-200 bg-white text-text-secondary"
               )}
             >
