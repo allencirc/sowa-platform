@@ -1,0 +1,78 @@
+{
+  "locale": {
+    "name": "Irish",
+    "nativeName": "Gaeilge"
+  },
+  "nav": {
+    "careers": "Gairmeacha",
+    "training": "Oiliúint",
+    "events": "Imeachtaí",
+    "research": "Taighde",
+    "news": "Nuacht",
+    "diagnostic": "Diagnóisic",
+    "search": "Cuardaigh",
+    "getInvolved": "Bí páirteach",
+    "openMenu": "Oscail an roghchlár",
+    "closeMenu": "Dún an roghchlár",
+    "mainNavigation": "Príomhnascleanúint",
+    "languageSwitcher": "Athraigh teanga",
+    "skipToContent": "Téigh go dtí an príomhábhar",
+    "siteTagline": "[TODO] Offshore Wind Academy"
+  },
+  "hero": {
+    "title": "[TODO] Your Career in Offshore Wind Starts Here",
+    "subtitle": "[TODO] Explore career pathways, training courses, events and skills diagnostics for Ireland's offshore wind energy sector.",
+    "exploreCareers": "[TODO] Explore Careers",
+    "takeAssessment": "[TODO] Take Skills Assessment"
+  },
+  "cta": {
+    "learnMore": "Foghlaim níos mó",
+    "readMore": "Léigh níos mó",
+    "viewAll": "Féach ar gach rud",
+    "seeDetails": "Féach ar shonraí",
+    "apply": "Cuir isteach",
+    "subscribe": "Liostáil",
+    "getStarted": "Tosaigh",
+    "back": "Ar ais",
+    "next": "Ar aghaidh",
+    "submit": "Seol",
+    "cancel": "Cealaigh"
+  },
+  "footer": {
+    "tagline": "[TODO] Ireland's national careers platform for offshore wind energy.",
+    "columns": {
+      "careers": "Gairmeacha",
+      "training": "Oiliúint",
+      "events": "Imeachtaí",
+      "research": "Taighde",
+      "about": "Fúinn",
+      "legal": "Dlíthiúil"
+    },
+    "legal": {
+      "privacy": "Príobháideachas",
+      "terms": "Téarmaí",
+      "accessibility": "Inrochtaineacht",
+      "cookies": "Fianáin"
+    },
+    "copyright": "© {year} Skillnet Offshore Wind Academy. Gach ceart ar cosaint."
+  },
+  "diagnostic": {
+    "title": "[TODO] Skills Diagnostic",
+    "intro": "[TODO] Answer a few questions to discover offshore wind career pathways that fit your background.",
+    "start": "[TODO] Start assessment",
+    "questionLabel": "[TODO] Question {current} of {total}",
+    "progressLabel": "[TODO] Assessment progress",
+    "stems": {
+      "experience": "[TODO] How much experience do you have in the offshore wind or broader energy sector?",
+      "background": "[TODO] Which of the following best describes your current background?",
+      "interests": "[TODO] Which areas of offshore wind work interest you most?",
+      "safetyTraining": "[TODO] Which safety qualifications do you already hold?",
+      "technicalSkills": "[TODO] Rate your confidence with technical problem-solving.",
+      "digitalSkills": "[TODO] Rate your confidence with digital tools and data analysis.",
+      "mobility": "[TODO] Are you able to travel or relocate for work?",
+      "education": "[TODO] What is the highest level of education you have completed?",
+      "languages": "[TODO] Which languages do you work in professionally?",
+      "timeCommitment": "[TODO] How much time per week can you commit to training?"
+    }
+  }
+}

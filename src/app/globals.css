@@ -1,7 +1,13 @@
 @import "tailwindcss";
 
 @theme inline {
-  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  /* Font stack: Inter (loaded with latin, latin-ext and cyrillic subsets in
+     src/app/layout.tsx) first, then system fallbacks that cover Cyrillic
+     (Segoe UI on Windows, Helvetica Neue / SF on Apple, Roboto/Noto on
+     Android) in case Inter fails to load. See docs/adr/0001-i18n.md. */
+  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans",
+    "Noto Sans Cyrillic", sans-serif;
 
   /* Primary — Deep ocean blue */
   --color-primary: #0C2340;
@@ -70,6 +76,20 @@ body {
   background: var(--color-surface);
   color: var(--color-text-primary);
   font-family: var(--font-sans);
+}
+
+/* i18n — long-word handling for headings.
+   Polish, Portuguese and Ukrainian can produce words longer than any
+   English equivalent (e.g. "Nieprzyzwoicie", "Inaceitavelmente",
+   "Переконливо"). Without this, those words overflow card headers and
+   hero titles at narrow viewports. `overflow-wrap: break-word` lets the
+   browser break inside a word as a last resort; `hyphens: auto` inserts
+   soft hyphens using the UA's hyphenation dictionary for the active
+   `lang`, which is why it's important that `<html lang>` is set to the
+   active locale (see src/app/layout.tsx and src/proxy.ts). */
+h1, h2, h3, h4, h5, h6 {
+  overflow-wrap: break-word;
+  hyphens: auto;
 }
 
 /* Focus visible ring for accessibility */

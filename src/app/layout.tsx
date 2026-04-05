@@ -1,11 +1,22 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
+import { headers } from "next/headers";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { CookieConsent } from "@/components/layout/CookieConsent";
+import {
+  defaultLocale,
+  isLocale,
+  localeBcp47,
+  type Locale,
+} from "@/lib/i18n";
 import "./globals.css";
 
+// Subsets cover every script SOWA ships: `latin` for English,
+// `latin-ext` for Polish (ł, ą, ę) and European Portuguese diacritics,
+// and `cyrillic` for Ukrainian. Irish uses standard Latin glyphs already
+// in `latin`. See docs/adr/0001-i18n.md.
 const inter = Inter({
-  subsets: ["latin"],
+  subsets: ["latin", "latin-ext", "cyrillic"],
   display: "swap",
   variable: "--font-inter",
 });
@@ -97,13 +108,22 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // The proxy sets `x-sowa-locale` on every localised request (see
+  // src/proxy.ts). This layout sits above `[locale]`, so we can't pull the
+  // locale from route params — we read the header instead. Admin/API and
+  // other non-localised surfaces get the default locale's BCP-47 tag.
+  const headerList = await headers();
+  const rawLocale = headerList.get("x-sowa-locale");
+  const locale: Locale = isLocale(rawLocale) ? rawLocale : defaultLocale;
+  const htmlLang = localeBcp47[locale];
+
   return (
-    <html lang="en" className={`${inter.variable} h-full antialiased`}>
+    <html lang={htmlLang} className={`${inter.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col font-sans">
         {/* Skip to main content — accessibility */}
         <a

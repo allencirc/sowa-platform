@@ -50,6 +50,85 @@ App runs at http://localhost:3000.
 - [Deployment Guide](docs/deployment-guide.md)
 - [Security](docs/security.md)
 - [Database Schema](docs/database-schema.md)
+- [ADR 0001 — Internationalisation](docs/adr/0001-i18n.md)
+
+## Internationalisation
+
+SOWA ships in **English (default)**, **Irish** (`ga`), **Polish** (`pl`),
+**Ukrainian** (`uk`) and **Portuguese** (`pt`). Public routes live under
+`/[locale]/...`; requests without a locale prefix are redirected by
+`src/proxy.ts` to the visitor's preferred locale (derived from
+`Accept-Language`, falling back to `en`).
+
+Admin (`/admin/*`) and API (`/api/*`) surfaces are **not** localised.
+
+### File layout
+
+```
+messages/
+├── en.json   # source of truth — every key lives here first
+├── ga.json
+├── pl.json
+├── uk.json
+└── pt.json
+src/lib/i18n.ts          # locale list, getDictionary(), matchLocale(), format()
+src/proxy.ts             # locale detection + redirect + x-sowa-locale header
+src/components/layout/LanguageSwitcher.tsx   # globe-icon menu in header
+```
+
+The approach (Next.js built-in vs `next-intl`) is documented in
+[ADR 0001](docs/adr/0001-i18n.md).
+
+### Adding a string
+
+1. Add the key to `messages/en.json` under an appropriate namespace
+   (`nav`, `hero`, `footer`, `cta`, `diagnostic`, …).
+2. Add the same key to **every** other locale file. If you don't have a
+   translation yet, prefix the English value with `[TODO] `. These are
+   easy to find later:
+   ```bash
+   grep -rn "\[TODO\]" messages/
+   ```
+3. Consume it in a Server Component:
+   ```tsx
+   import { getDictionary } from "@/lib/i18n";
+
+   export default async function Page({ params }) {
+     const { locale } = await params;
+     const dict = await getDictionary(locale);
+     return <h1>{dict.hero.title}</h1>;
+   }
+   ```
+   For interpolation (`{year}`, `{current}`, etc.) use the `format()`
+   helper:
+   ```ts
+   import { format } from "@/lib/i18n";
+   format(dict.footer.copyright, { year: new Date().getFullYear() });
+   ```
+
+### Adding a locale
+
+1. Add the code to `locales` in `src/lib/i18n.ts` and fill in
+   `localeLabels` (native script) and `localeBcp47` (e.g. `"it-IT"`).
+2. Add the same code to the `LOCALES` constant in
+   `src/components/layout/LanguageSwitcher.tsx` — it's duplicated there
+   because the switcher is a client component and can't import from a
+   `server-only` module.
+3. Copy `messages/en.json` to `messages/{code}.json` and prefix every
+   value with `[TODO] ` until translations land.
+4. If the language uses a new script (e.g. Greek, Arabic), add the
+   relevant `next/font` subset in `src/app/layout.tsx` and extend the
+   font-family fallback in `src/app/globals.css`.
+5. `generateStaticParams` in `src/app/(frontend)/[locale]/layout.tsx`
+   picks the new locale up automatically from `locales`.
+
+### Linking between localised pages
+
+Server components can build hrefs as ``` `/${locale}/careers` ```. For
+cases where you already have a path and just need to ensure it carries a
+locale, use the `localeHref` helper from `@/lib/i18n`. Hard-coded links
+like `/careers` still work because the proxy will redirect, but explicit
+is preferred.
 
 ## Testing
 

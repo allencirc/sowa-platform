@@ -98,8 +98,6 @@ export default async function EventDetailPage({ params }: EventDetailProps) {
 
   const LocationIcon = locationIcons[event.locationType] ?? MapPin;
 
-  const enableRegistration = process.env.ENABLE_EVENT_REGISTRATION === "true";
-
   let registeredCount = 0;
   if (event.capacity) {
     registeredCount = await prisma.registration.count({
@@ -210,7 +208,7 @@ export default async function EventDetailPage({ params }: EventDetailProps) {
             </div>
 
             {/* CTA */}
-            {enableRegistration && !isFull && (
+            {!isFull ? (
               <div className="bg-gradient-to-r from-primary to-primary-light rounded-xl p-6 sm:p-8 text-center">
                 <h3 className="text-xl font-bold text-white mb-2">
                   Interested in attending?
@@ -225,8 +223,7 @@ export default async function EventDetailPage({ params }: EventDetailProps) {
                   showDietary
                 />
               </div>
-            )}
-            {enableRegistration && isFull && (
+            ) : (
               <div className="bg-gradient-to-r from-gray-600 to-gray-700 rounded-xl p-6 sm:p-8 text-center">
                 <h3 className="text-xl font-bold text-white mb-2">
                   This event is fully booked
