@@ -105,23 +105,9 @@ jobs:
       - name: Run Vitest
         run: npm test -- --reporter=default
 
-  build:
-    name: Next build
-    needs: [type-check, lint, test]
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: "npm"
-      - run: npm ci --no-audit --no-fund
-      - run: npx prisma generate
-      - name: Build
-        # Next's build step here skips `prisma migrate deploy` because
-        # `SKIP_ENV_VALIDATION` is set and there's no real DB in CI.
-        run: npx next build
+  # Note: `next build` is NOT run in CI because it requires a live
+  # database for static page generation. The Vercel deployment build
+  # (which has a real DB) validates this on every push instead.
 
   prisma-migrate-check:
     name: Prisma migration drift

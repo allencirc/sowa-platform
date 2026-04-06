@@ -7,6 +7,9 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+      // `server-only` throws at import time outside Next.js server
+      // context. Stub it as an empty module for unit tests.
+      "server-only": path.resolve(__dirname, "./src/__tests__/stubs/server-only.ts"),
     },
   },
   test: {

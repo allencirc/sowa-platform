@@ -45,6 +45,7 @@ export function CourseForm({ course, mode }: CourseFormProps) {
     setValue,
     formState: { errors, isSubmitting },
   } = useForm<CourseFormData>({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     resolver: zodResolver(createCourseSchema) as any,
     defaultValues: course
       ? {

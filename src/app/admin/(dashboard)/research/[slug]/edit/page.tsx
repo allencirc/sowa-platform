@@ -40,7 +40,6 @@ export default function EditResearchPage() {
       .finally(() => setLoading(false));
   }, [slug]);
 
-  // eslint-disable-next-line react-compiler/react-compiler
   useEffect(() => {
     fetchResearch();
   }, [fetchResearch]);

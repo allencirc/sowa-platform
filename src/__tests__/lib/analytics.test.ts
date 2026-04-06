@@ -102,6 +102,7 @@ describe("Analytics tracking", () => {
   beforeEach(() => {
     clearCookies();
     gtagSpy = vi.fn();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     window.gtag = gtagSpy as any;
     window.dataLayer = [];
   });
