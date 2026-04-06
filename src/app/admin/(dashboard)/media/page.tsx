@@ -1,7 +1,16 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
-import { Upload, Trash2, Copy, Check, Search, Image as ImageIcon } from "lucide-react";
+import {
+  Upload,
+  Trash2,
+  Copy,
+  Check,
+  Search,
+  Image as ImageIcon,
+  Film,
+  Music,
+} from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { DeleteDialog } from "@/components/admin/DeleteDialog";
@@ -12,6 +21,7 @@ interface MediaFile {
   url: string;
   size: number;
   createdAt: string;
+  category?: "image" | "video" | "audio";
   variants?: Record<string, string>;
 }
 
@@ -96,19 +106,21 @@ export default function AdminMediaPage() {
       <div className="mb-6 flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-text-primary">Media Library</h1>
-          <p className="mt-1 text-sm text-text-secondary">Upload and manage images for content.</p>
+          <p className="mt-1 text-sm text-text-secondary">
+            Upload and manage images, audio, and video for content.
+          </p>
         </div>
         <div>
           <input
             ref={fileInputRef}
             type="file"
-            accept="image/*"
+            accept="image/*,video/mp4,video/webm,audio/mpeg,audio/wav"
             onChange={handleUpload}
             className="hidden"
           />
           <Button onClick={() => fileInputRef.current?.click()} disabled={uploading}>
             <Upload className="h-4 w-4" />
-            {uploading ? "Uploading..." : "Upload Image"}
+            {uploading ? "Uploading..." : "Upload Media"}
           </Button>
         </div>
       </div>
@@ -137,7 +149,7 @@ export default function AdminMediaPage() {
         <div className="flex h-64 flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed border-gray-200 bg-gray-50/50">
           <ImageIcon className="h-12 w-12 text-text-muted" />
           <p className="text-sm text-text-muted">
-            {files.length === 0 ? "No images uploaded yet." : "No files match your search."}
+            {files.length === 0 ? "No media uploaded yet." : "No files match your search."}
           </p>
         </div>
       ) : (
@@ -148,13 +160,23 @@ export default function AdminMediaPage() {
               className="group relative overflow-hidden rounded-xl border border-gray-200 bg-surface-card shadow-sm"
             >
               <div className="relative aspect-square bg-gray-100">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={file.variants?.thumb ?? file.url}
-                  alt={file.filename}
-                  className="h-full w-full object-cover"
-                  loading="lazy"
-                />
+                {file.category === "video" ? (
+                  <div className="flex h-full w-full items-center justify-center bg-gray-900/5">
+                    <Film className="h-12 w-12 text-text-muted" />
+                  </div>
+                ) : file.category === "audio" ? (
+                  <div className="flex h-full w-full items-center justify-center bg-gray-900/5">
+                    <Music className="h-12 w-12 text-text-muted" />
+                  </div>
+                ) : (
+                  /* eslint-disable-next-line @next/next/no-img-element */
+                  <img
+                    src={file.variants?.thumb ?? file.url}
+                    alt={file.filename}
+                    className="h-full w-full object-cover"
+                    loading="lazy"
+                  />
+                )}
                 <div className="absolute inset-0 flex items-center justify-center gap-2 bg-black/50 opacity-0 transition-opacity group-hover:opacity-100">
                   <Button
                     variant="ghost"
@@ -210,8 +232,8 @@ export default function AdminMediaPage() {
         open={!!deleteFile}
         onClose={() => setDeleteFile(null)}
         onConfirm={handleDelete}
-        title="Delete Image?"
-        description="This will permanently remove this image. Any content using it will show a broken image."
+        title="Delete File?"
+        description="This will permanently remove this file. Any content referencing it will show a broken link."
       />
     </div>
   );

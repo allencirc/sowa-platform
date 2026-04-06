@@ -7,12 +7,48 @@ import sharp from "sharp";
 const UPLOAD_DIR = path.join(process.cwd(), "public", "uploads");
 
 // Variants generated for every raster upload.
-// SVGs are stored as-is (vector — no resize needed).
+// SVGs, audio, and video are stored as-is (no resize needed).
 const VARIANTS = [
   { suffix: "hero", width: 1200, height: 675 },
   { suffix: "inline", width: 800, height: 400 },
   { suffix: "thumb", width: 400, height: 225 },
 ] as const;
+
+// ─── Accepted MIME types by category ───────────────────────────────────────
+const IMAGE_TYPES = [
+  "image/jpeg",
+  "image/png",
+  "image/gif",
+  "image/webp",
+  "image/svg+xml",
+];
+
+const VIDEO_TYPES = ["video/mp4", "video/webm"];
+
+const AUDIO_TYPES = ["audio/mpeg", "audio/wav", "audio/mp3", "audio/x-wav"];
+
+const ALLOWED_TYPES = [...IMAGE_TYPES, ...VIDEO_TYPES, ...AUDIO_TYPES];
+
+// Size limits per category
+const MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5 MB
+const MAX_VIDEO_SIZE = 50 * 1024 * 1024; // 50 MB
+const MAX_AUDIO_SIZE = 20 * 1024 * 1024; // 20 MB
+
+function getMediaCategory(mime: string): "image" | "video" | "audio" {
+  if (VIDEO_TYPES.includes(mime)) return "video";
+  if (AUDIO_TYPES.includes(mime)) return "audio";
+  return "image";
+}
+
+function getMaxSize(category: "image" | "video" | "audio"): number {
+  if (category === "video") return MAX_VIDEO_SIZE;
+  if (category === "audio") return MAX_AUDIO_SIZE;
+  return MAX_IMAGE_SIZE;
+}
+
+function formatSizeLimit(bytes: number): string {
+  return `${bytes / (1024 * 1024)}MB`;
+}
 
 // ─── GET: list all media ────────────────────────────────────────────────────
 
@@ -48,11 +84,20 @@ export async function GET() {
           }
         }
 
+        // Determine media category from extension
+        const ext = path.extname(filename).toLowerCase();
+        const category = [".mp4", ".webm"].includes(ext)
+          ? "video"
+          : [".mp3", ".wav"].includes(ext)
+            ? "audio"
+            : "image";
+
         return {
           filename,
           url: `/uploads/${filename}`,
           size: stats.size,
           createdAt: stats.birthtime.toISOString(),
+          category,
           ...(Object.keys(variants).length > 0 && { variants }),
         };
       }),
@@ -84,17 +129,24 @@ export async function POST(request: NextRequest) {
     }
 
     // Validate file type
-    const allowedTypes = ["image/jpeg", "image/png", "image/gif", "image/webp", "image/svg+xml"];
-    if (!allowedTypes.includes(file.type)) {
+    if (!ALLOWED_TYPES.includes(file.type)) {
       return NextResponse.json(
-        { error: "Invalid file type. Allowed: JPEG, PNG, GIF, WebP, SVG" },
+        {
+          error:
+            "Invalid file type. Allowed: JPEG, PNG, GIF, WebP, SVG, MP4, WebM, MP3, WAV",
+        },
         { status: 400 },
       );
     }
 
-    // Max 5 MB
-    if (file.size > 5 * 1024 * 1024) {
-      return NextResponse.json({ error: "File too large. Max 5MB." }, { status: 400 });
+    // Size limit depends on media category
+    const category = getMediaCategory(file.type);
+    const maxSize = getMaxSize(category);
+    if (file.size > maxSize) {
+      return NextResponse.json(
+        { error: `File too large. Max ${formatSizeLimit(maxSize)} for ${category}.` },
+        { status: 400 },
+      );
     }
 
     await mkdir(UPLOAD_DIR, { recursive: true });
@@ -109,11 +161,15 @@ export async function POST(request: NextRequest) {
     const filename = `${base}-${timestamp}${ext}`;
     const buffer = Buffer.from(await file.arrayBuffer());
 
-    // ── SVGs: store verbatim (vector, nothing to resize) ──
-    if (file.type === "image/svg+xml") {
+    // ── SVGs, audio, and video: store verbatim (no processing) ──
+    if (
+      file.type === "image/svg+xml" ||
+      category === "audio" ||
+      category === "video"
+    ) {
       await writeFile(path.join(UPLOAD_DIR, filename), buffer);
       return NextResponse.json(
-        { filename, url: `/uploads/${filename}`, size: buffer.length },
+        { filename, url: `/uploads/${filename}`, size: buffer.length, category },
         { status: 201 },
       );
     }
@@ -170,6 +226,7 @@ export async function POST(request: NextRequest) {
         originalSize: buffer.length,
         dimensions: { width: origWidth, height: origHeight },
         variants: variantResults,
+        category: "image",
       },
       { status: 201 },
     );

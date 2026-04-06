@@ -1,12 +1,14 @@
 # Media Library & Asset Management
 
-This guide covers uploading images, managing the media library, using images in content, file constraints, naming conventions, and best practices for image sizing and web optimization.
+This guide covers uploading media (images, audio, and video), managing the media library, using media in content, file constraints, naming conventions, and best practices for optimization.
 
 ---
 
 ## Overview
 
-The Media Library is the central repository for all images used on the SOWA platform. All Editors and Admins can upload and delete images. The media library stores original files and provides URLs for use in content.
+The Media Library is the central repository for all media used on the SOWA platform — images, audio clips, and video files. All Editors and Admins can upload and delete media. The media library stores original files and provides URLs for use in content.
+
+For third-party video content (YouTube, Vimeo), use the **video embed** button in the rich text editor instead — it provides seamless embedding via whitelisted iframe providers. Direct video upload is for self-hosted clips only.
 
 ### Accessing the Media Library
 
@@ -23,7 +25,9 @@ Before uploading, check that your image meets the following requirements.
 
 ### Accepted Formats
 
-The platform accepts the following image formats:
+The platform accepts the following formats:
+
+**Images:**
 
 - **JPEG** (.jpg, .jpeg) — For photographs and complex images
 - **PNG** (.png) — For graphics, logos, and images with transparency
@@ -31,25 +35,40 @@ The platform accepts the following image formats:
 - **WebP** (.webp) — Modern, efficient format (recommended)
 - **SVG** (.svg) — Scalable vector graphics (for logos and icons)
 
+**Video:**
+
+- **MP4** (.mp4) — Universal video format (H.264 codec recommended)
+- **WebM** (.webm) — Modern, open-source video format
+
+**Audio:**
+
+- **MP3** (.mp3) — Standard compressed audio
+- **WAV** (.wav) — Uncompressed audio (higher quality, larger file size)
+
 ### File Size Limits
 
-- **Maximum file size:** 5 MB
-- **Recommended size:** 500 KB to 2 MB
+| Media Type | Maximum Size | Recommended Size |
+|------------|-------------|-----------------|
+| **Images** | 5 MB | 500 KB – 2 MB |
+| **Video** | 50 MB | 5 – 20 MB |
+| **Audio** | 20 MB | 1 – 5 MB |
 
-Large files slow down page load times. See "Best Practices" section for guidance on resizing.
+Large files slow down page load times. Compress media before uploading where possible.
+
+> **Tip:** For longer or higher-quality video, upload to YouTube or Vimeo and embed via the rich text editor's video embed button. Direct upload is best suited for short self-hosted clips.
 
 ### Unsupported Formats
 
 The following formats are NOT accepted:
 
 - BMP, TIFF, PSD, ICO, HEIC
-- Video formats (MP4, MOV, etc.)
+- MOV, AVI, FLV, MKV (convert to MP4 or WebM)
 - Documents (PDF, Word, Excel)
 
-If you have an image in an unsupported format, convert it to JPEG, PNG, or WebP using free tools like:
+If you have media in an unsupported format, convert it using free tools like:
 
-- Online: TinyPNG, Convertio, CloudConvert
-- Desktop: Preview (macOS), Paint.NET (Windows), GIMP (cross-platform)
+- Online: TinyPNG (images), CloudConvert (any format), HandBrake (video)
+- Desktop: Preview (macOS images), VLC (video), Audacity (audio)
 
 ---
 
@@ -290,18 +309,18 @@ You do not need to manually back up images. However, if you want to preserve a c
 
 ---
 
-## Summary: Image Upload Checklist
+## Summary: Upload Checklist
 
-Before uploading an image to the media library:
+Before uploading media to the library:
 
-- [ ] File format is JPEG, PNG, WebP, GIF, or SVG
-- [ ] File size is under 5 MB (ideally 500 KB–2 MB)
-- [ ] Image is compressed using TinyPNG, Compressor.io, or similar
-- [ ] Dimensions are appropriate for the content type (see table above)
-- [ ] Filename is descriptive and uses lowercase with hyphens (e.g. `wind-farm-2026.jpg`)
-- [ ] Image is high-quality and relevant to the content
-- [ ] Image is licensed for use (no copyright issues)
-- [ ] Image will display correctly at the intended size
+- [ ] File format is supported (images: JPEG/PNG/WebP/GIF/SVG; video: MP4/WebM; audio: MP3/WAV)
+- [ ] File size is within limits (images: 5 MB, video: 50 MB, audio: 20 MB)
+- [ ] Media is compressed/optimised where possible
+- [ ] Dimensions are appropriate for the content type (see table above for images)
+- [ ] Filename is descriptive and uses lowercase with hyphens (e.g. `wind-farm-2026.jpg`, `turbine-safety-demo.mp4`)
+- [ ] Media is high-quality and relevant to the content
+- [ ] Media is licensed for use (no copyright issues)
+- [ ] For longer video, consider embedding via YouTube/Vimeo instead of direct upload
 
 **After uploading:**
 
