@@ -31,7 +31,11 @@ const globalForPrisma = globalThis as unknown as {
 };
 
 function createClient() {
-  const adapter = new PrismaPg({ connectionString, ssl });
+  const adapter = new PrismaPg({
+    connectionString,
+    ssl,
+    max: parseInt(process.env.DATABASE_POOL_SIZE ?? "5", 10),
+  });
   return new PrismaClient({ adapter });
 }
 
