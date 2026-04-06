@@ -37,6 +37,7 @@
     "@tiptap/react": "^3.22.1",
     "@tiptap/starter-kit": "^3.22.1",
     "@types/papaparse": "^5.5.2",
+    "@vercel/blob": "^2.3.3",
     "@vercel/speed-insights": "^2.0.0",
     "@xyflow/react": "^12.10.2",
     "bcryptjs": "^3.0.3",

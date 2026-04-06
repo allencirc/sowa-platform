@@ -76,7 +76,9 @@ export default function AdminMediaPage() {
 
   const handleDelete = async () => {
     if (!deleteFile) return;
-    const res = await fetch(`/api/media?filename=${encodeURIComponent(deleteFile)}`, {
+    const fileToDelete = files.find((f) => f.filename === deleteFile);
+    if (!fileToDelete) return;
+    const res = await fetch(`/api/media?url=${encodeURIComponent(fileToDelete.url)}`, {
       method: "DELETE",
     });
     if (!res.ok) throw new Error("Delete failed");
@@ -84,8 +86,7 @@ export default function AdminMediaPage() {
   };
 
   const copyUrl = (url: string) => {
-    const fullUrl = `${window.location.origin}${url}`;
-    navigator.clipboard.writeText(fullUrl);
+    navigator.clipboard.writeText(url);
     setCopied(url);
     setTimeout(() => setCopied(null), 2000);
   };
