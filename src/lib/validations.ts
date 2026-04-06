@@ -86,6 +86,14 @@ export const sortSchema = z.object({
   order: z.enum(["asc", "desc"]).default("asc"),
 });
 
+// ─── SEO fields (shared) ────────────────────────────────
+
+export const seoFieldsSchema = z.object({
+  metaTitle: z.string().max(70).optional(),
+  metaDescription: z.string().max(160).optional(),
+  metaKeywords: z.string().max(500).optional(),
+});
+
 // ─── Career schemas ──────────────────────────────────────
 
 export const pathwayConnectionSchema = z.object({
@@ -94,29 +102,31 @@ export const pathwayConnectionSchema = z.object({
   timeframe: z.string().min(1),
 });
 
-export const createCareerSchema = z.object({
-  slug: z
-    .string()
-    .min(1)
-    .regex(/^[a-z0-9-]+$/, "Slug must be lowercase alphanumeric with hyphens"),
-  title: z.string().min(1).max(200),
-  sector: CareerSectorEnum,
-  entryLevel: EntryLevelEnum,
-  description: z.string().min(1),
-  salaryRange: z
-    .object({
-      min: z.number().int().min(0),
-      max: z.number().int().min(0),
-    })
-    .optional(),
-  keyResponsibilities: z.array(z.string()).optional(),
-  qualifications: z.array(z.string().min(1)).min(1),
-  workingConditions: z.string().optional(),
-  growthOutlook: z.string().optional(),
-  skills: z.array(z.string().min(1)).min(1),
-  pathwayConnections: z.array(pathwayConnectionSchema).optional(),
-  relatedCourses: z.array(z.string()).optional(),
-});
+export const createCareerSchema = z
+  .object({
+    slug: z
+      .string()
+      .min(1)
+      .regex(/^[a-z0-9-]+$/, "Slug must be lowercase alphanumeric with hyphens"),
+    title: z.string().min(1).max(200),
+    sector: CareerSectorEnum,
+    entryLevel: EntryLevelEnum,
+    description: z.string().min(1),
+    salaryRange: z
+      .object({
+        min: z.number().int().min(0),
+        max: z.number().int().min(0),
+      })
+      .optional(),
+    keyResponsibilities: z.array(z.string()).optional(),
+    qualifications: z.array(z.string().min(1)).min(1),
+    workingConditions: z.string().optional(),
+    growthOutlook: z.string().optional(),
+    skills: z.array(z.string().min(1)).min(1),
+    pathwayConnections: z.array(pathwayConnectionSchema).optional(),
+    relatedCourses: z.array(z.string()).optional(),
+  })
+  .merge(seoFieldsSchema);
 
 export const updateCareerSchema = createCareerSchema.omit({ slug: true }).partial();
 
@@ -128,38 +138,40 @@ export const careerFiltersSchema = paginationSchema.merge(sortSchema).extend({
 
 // ─── Course schemas ──────────────────────────────────────
 
-export const createCourseSchema = z.object({
-  slug: z
-    .string()
-    .min(1)
-    .regex(/^[a-z0-9-]+$/),
-  title: z.string().min(1).max(300),
-  provider: z.string().min(1),
-  providerType: ProviderTypeEnum,
-  description: z.string().min(1),
-  entryRequirements: z.string().optional(),
-  deliveryFormat: DeliveryFormatEnum,
-  location: z.string().optional(),
-  nfqLevel: z.number().int().min(1).max(10).nullable().optional(),
-  duration: z.string().min(1),
-  cost: z.number().min(0).default(0),
-  costNotes: z.string().optional(),
-  nextStartDate: z
-    .string()
-    .datetime()
-    .optional()
-    .or(
-      z
-        .string()
-        .regex(/^\d{4}-\d{2}-\d{2}$/)
-        .optional(),
-    ),
-  accredited: z.boolean().optional(),
-  certificationAwarded: z.string().optional(),
-  skills: z.array(z.string().min(1)),
-  careerRelevance: z.array(z.string()),
-  tags: z.array(z.string()),
-});
+export const createCourseSchema = z
+  .object({
+    slug: z
+      .string()
+      .min(1)
+      .regex(/^[a-z0-9-]+$/),
+    title: z.string().min(1).max(300),
+    provider: z.string().min(1),
+    providerType: ProviderTypeEnum,
+    description: z.string().min(1),
+    entryRequirements: z.string().optional(),
+    deliveryFormat: DeliveryFormatEnum,
+    location: z.string().optional(),
+    nfqLevel: z.number().int().min(1).max(10).nullable().optional(),
+    duration: z.string().min(1),
+    cost: z.number().min(0).default(0),
+    costNotes: z.string().optional(),
+    nextStartDate: z
+      .string()
+      .datetime()
+      .optional()
+      .or(
+        z
+          .string()
+          .regex(/^\d{4}-\d{2}-\d{2}$/)
+          .optional(),
+      ),
+    accredited: z.boolean().optional(),
+    certificationAwarded: z.string().optional(),
+    skills: z.array(z.string().min(1)),
+    careerRelevance: z.array(z.string()),
+    tags: z.array(z.string()),
+  })
+  .merge(seoFieldsSchema);
 
 export const updateCourseSchema = createCourseSchema.omit({ slug: true }).partial();
 
@@ -177,21 +189,23 @@ export const courseFiltersSchema = paginationSchema.merge(sortSchema).extend({
 
 // ─── Event schemas ───────────────────────────────────────
 
-export const createEventSchema = z.object({
-  slug: z
-    .string()
-    .min(1)
-    .regex(/^[a-z0-9-]+$/),
-  title: z.string().min(1).max(300),
-  type: EventTypeEnum,
-  startDate: z.string().min(1),
-  endDate: z.string().optional(),
-  locationType: LocationTypeEnum,
-  location: z.string().optional(),
-  description: z.string().min(1),
-  capacity: z.number().int().min(1).optional(),
-  image: z.string().url().optional(),
-});
+export const createEventSchema = z
+  .object({
+    slug: z
+      .string()
+      .min(1)
+      .regex(/^[a-z0-9-]+$/),
+    title: z.string().min(1).max(300),
+    type: EventTypeEnum,
+    startDate: z.string().min(1),
+    endDate: z.string().optional(),
+    locationType: LocationTypeEnum,
+    location: z.string().optional(),
+    description: z.string().min(1),
+    capacity: z.number().int().min(1).optional(),
+    image: z.string().url().optional(),
+  })
+  .merge(seoFieldsSchema);
 
 export const updateEventSchema = createEventSchema.omit({ slug: true }).partial();
 
@@ -204,20 +218,22 @@ export const eventFiltersSchema = paginationSchema.merge(sortSchema).extend({
 
 // ─── Research schemas ────────────────────────────────────
 
-export const createResearchSchema = z.object({
-  slug: z
-    .string()
-    .min(1)
-    .regex(/^[a-z0-9-]+$/),
-  title: z.string().min(1).max(300),
-  author: z.string().min(1),
-  organisation: z.string().min(1),
-  publicationDate: z.string().min(1),
-  summary: z.string().min(1),
-  categories: z.array(z.string().min(1)).min(1),
-  isFeatured: z.boolean().optional(),
-  image: z.string().url().optional(),
-});
+export const createResearchSchema = z
+  .object({
+    slug: z
+      .string()
+      .min(1)
+      .regex(/^[a-z0-9-]+$/),
+    title: z.string().min(1).max(300),
+    author: z.string().min(1),
+    organisation: z.string().min(1),
+    publicationDate: z.string().min(1),
+    summary: z.string().min(1),
+    categories: z.array(z.string().min(1)).min(1),
+    isFeatured: z.boolean().optional(),
+    image: z.string().url().optional(),
+  })
+  .merge(seoFieldsSchema);
 
 export const updateResearchSchema = createResearchSchema.omit({ slug: true }).partial();
 
@@ -229,19 +245,21 @@ export const researchFiltersSchema = paginationSchema.merge(sortSchema).extend({
 
 // ─── News schemas ────────────────────────────────────────
 
-export const createNewsSchema = z.object({
-  slug: z
-    .string()
-    .min(1)
-    .regex(/^[a-z0-9-]+$/),
-  title: z.string().min(1).max(300),
-  date: z.string().min(1),
-  excerpt: z.string().min(1),
-  content: z.string().min(1),
-  category: z.string().min(1),
-  author: z.string().min(1),
-  image: z.string().url().optional(),
-});
+export const createNewsSchema = z
+  .object({
+    slug: z
+      .string()
+      .min(1)
+      .regex(/^[a-z0-9-]+$/),
+    title: z.string().min(1).max(300),
+    date: z.string().min(1),
+    excerpt: z.string().min(1),
+    content: z.string().min(1),
+    category: z.string().min(1),
+    author: z.string().min(1),
+    image: z.string().url().optional(),
+  })
+  .merge(seoFieldsSchema);
 
 export const updateNewsSchema = createNewsSchema.omit({ slug: true }).partial();
 

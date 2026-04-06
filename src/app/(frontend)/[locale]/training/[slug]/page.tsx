@@ -23,20 +23,22 @@ export async function generateMetadata({ params }: CourseDetailProps): Promise<M
   const { slug } = await params;
   const course = await getCourseBySlug(slug);
   if (!course) return { title: "Course Not Found" };
-  const desc = course.description.slice(0, 160);
+  const title = course.metaTitle || `${course.title} — Training`;
+  const desc = course.metaDescription || course.description.slice(0, 160);
   return {
-    title: `${course.title} — Training`,
+    title,
     description: desc,
+    ...(course.metaKeywords && { keywords: course.metaKeywords }),
     alternates: { canonical: `/training/${course.slug}` },
     openGraph: {
-      title: `${course.title} — Offshore Wind Training`,
+      title: course.metaTitle || `${course.title} — Offshore Wind Training`,
       description: desc,
       url: `/training/${course.slug}`,
       type: "article",
     },
     twitter: {
       card: "summary_large_image",
-      title: `${course.title} — SOWA`,
+      title: course.metaTitle || `${course.title} — SOWA`,
       description: desc,
     },
   };

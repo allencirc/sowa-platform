@@ -163,6 +163,9 @@ function mapCareer(row: AnyRecord): Career {
     relatedCourses: ((row.relatedCourses as { course: { slug: string } }[]) ?? []).map(
       (c) => c.course.slug,
     ),
+    metaTitle: (row.metaTitle as string) ?? undefined,
+    metaDescription: (row.metaDescription as string) ?? undefined,
+    metaKeywords: (row.metaKeywords as string) ?? undefined,
   };
 }
 
@@ -195,6 +198,9 @@ function mapCourse(row: AnyRecord): Course {
       (c) => c.career.slug,
     ),
     tags: (row.tags as string[]) ?? [],
+    metaTitle: (row.metaTitle as string) ?? undefined,
+    metaDescription: (row.metaDescription as string) ?? undefined,
+    metaKeywords: (row.metaKeywords as string) ?? undefined,
   };
 }
 
@@ -212,6 +218,9 @@ function mapEvent(row: AnyRecord): Event {
     description: row.description as string,
     capacity: (row.capacity as number) ?? undefined,
     image: (row.image as string) ?? undefined,
+    metaTitle: (row.metaTitle as string) ?? undefined,
+    metaDescription: (row.metaDescription as string) ?? undefined,
+    metaKeywords: (row.metaKeywords as string) ?? undefined,
   };
 }
 
@@ -226,6 +235,9 @@ function mapResearch(row: AnyRecord): Research {
     categories: (row.categories as string[]) ?? [],
     isFeatured: (row.isFeatured as boolean) ?? undefined,
     image: (row.image as string) ?? undefined,
+    metaTitle: (row.metaTitle as string) ?? undefined,
+    metaDescription: (row.metaDescription as string) ?? undefined,
+    metaKeywords: (row.metaKeywords as string) ?? undefined,
   };
 }
 
@@ -239,6 +251,9 @@ function mapNews(row: AnyRecord): NewsArticle {
     category: row.category as string,
     author: row.author as string,
     image: (row.image as string) ?? undefined,
+    metaTitle: (row.metaTitle as string) ?? undefined,
+    metaDescription: (row.metaDescription as string) ?? undefined,
+    metaKeywords: (row.metaKeywords as string) ?? undefined,
   };
 }
 
@@ -323,6 +338,9 @@ export async function createCareer(
       qualifications: data.qualifications,
       workingConditions: data.workingConditions ?? null,
       growthOutlook: data.growthOutlook ?? null,
+      metaTitle: data.metaTitle ?? null,
+      metaDescription: data.metaDescription ?? null,
+      metaKeywords: data.metaKeywords ?? null,
       skills: {
         create: data.skills.map((skillSlug) => ({
           skill: { connect: { slug: skillSlug } },
@@ -365,6 +383,9 @@ export async function updateCareer(
       ...(data.growthOutlook !== undefined && {
         growthOutlook: data.growthOutlook ?? null,
       }),
+      ...(data.metaTitle !== undefined && { metaTitle: data.metaTitle ?? null }),
+      ...(data.metaDescription !== undefined && { metaDescription: data.metaDescription ?? null }),
+      ...(data.metaKeywords !== undefined && { metaKeywords: data.metaKeywords ?? null }),
     },
     include: careerInclude,
   });
@@ -480,6 +501,9 @@ export async function createCourse(data: Course): Promise<Course> {
       certificationAwarded: data.certificationAwarded ?? null,
       signupUrl: data.signupUrl ?? null,
       tags: data.tags,
+      metaTitle: data.metaTitle ?? null,
+      metaDescription: data.metaDescription ?? null,
+      metaKeywords: data.metaKeywords ?? null,
       skills: {
         create: data.skills.map((skillSlug) => ({
           skill: { connect: { slug: skillSlug } },
@@ -533,6 +557,9 @@ export async function updateCourse(
         signupUrl: data.signupUrl ?? null,
       }),
       ...(data.tags !== undefined && { tags: data.tags }),
+      ...(data.metaTitle !== undefined && { metaTitle: data.metaTitle ?? null }),
+      ...(data.metaDescription !== undefined && { metaDescription: data.metaDescription ?? null }),
+      ...(data.metaKeywords !== undefined && { metaKeywords: data.metaKeywords ?? null }),
     },
     include: courseInclude,
   });
@@ -582,6 +609,9 @@ export async function createEvent(data: Event): Promise<Event> {
       description: data.description,
       capacity: data.capacity ?? null,
       image: data.image ?? null,
+      metaTitle: data.metaTitle ?? null,
+      metaDescription: data.metaDescription ?? null,
+      metaKeywords: data.metaKeywords ?? null,
     },
   });
   return mapEvent(row as unknown as AnyRecord);
@@ -609,6 +639,9 @@ export async function updateEvent(
       ...(data.description !== undefined && { description: data.description }),
       ...(data.capacity !== undefined && { capacity: data.capacity ?? null }),
       ...(data.image !== undefined && { image: data.image ?? null }),
+      ...(data.metaTitle !== undefined && { metaTitle: data.metaTitle ?? null }),
+      ...(data.metaDescription !== undefined && { metaDescription: data.metaDescription ?? null }),
+      ...(data.metaKeywords !== undefined && { metaKeywords: data.metaKeywords ?? null }),
     },
   });
   return mapEvent(row as unknown as AnyRecord);
@@ -655,6 +688,9 @@ export async function createResearch(data: Research): Promise<Research> {
       categories: data.categories,
       isFeatured: data.isFeatured ?? false,
       image: data.image ?? null,
+      metaTitle: data.metaTitle ?? null,
+      metaDescription: data.metaDescription ?? null,
+      metaKeywords: data.metaKeywords ?? null,
     },
   });
   return mapResearch(row as unknown as AnyRecord);
@@ -679,6 +715,9 @@ export async function updateResearch(
       ...(data.categories !== undefined && { categories: data.categories }),
       ...(data.isFeatured !== undefined && { isFeatured: data.isFeatured }),
       ...(data.image !== undefined && { image: data.image ?? null }),
+      ...(data.metaTitle !== undefined && { metaTitle: data.metaTitle ?? null }),
+      ...(data.metaDescription !== undefined && { metaDescription: data.metaDescription ?? null }),
+      ...(data.metaKeywords !== undefined && { metaKeywords: data.metaKeywords ?? null }),
     },
   });
   return mapResearch(row as unknown as AnyRecord);
@@ -746,6 +785,9 @@ export async function createNews(data: NewsArticle): Promise<NewsArticle> {
       category: data.category,
       author: data.author,
       image: data.image ?? null,
+      metaTitle: data.metaTitle ?? null,
+      metaDescription: data.metaDescription ?? null,
+      metaKeywords: data.metaKeywords ?? null,
     },
   });
   return mapNews(row as unknown as AnyRecord);
@@ -765,6 +807,9 @@ export async function updateNews(
       ...(data.category !== undefined && { category: data.category }),
       ...(data.author !== undefined && { author: data.author }),
       ...(data.image !== undefined && { image: data.image ?? null }),
+      ...(data.metaTitle !== undefined && { metaTitle: data.metaTitle ?? null }),
+      ...(data.metaDescription !== undefined && { metaDescription: data.metaDescription ?? null }),
+      ...(data.metaKeywords !== undefined && { metaKeywords: data.metaKeywords ?? null }),
     },
   });
   return mapNews(row as unknown as AnyRecord);

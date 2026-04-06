@@ -15,6 +15,7 @@ import { Textarea } from "@/components/admin/Textarea";
 import { createEventSchema, EventTypeEnum, LocationTypeEnum } from "@/lib/validations";
 import { adminPost, adminPatch } from "@/hooks/useAdminFetch";
 import { slugify } from "@/lib/utils";
+import { SeoFields } from "@/components/admin/SeoFields";
 import type { Event } from "@/lib/types";
 
 type EventFormData = z.infer<typeof createEventSchema>;
@@ -51,6 +52,9 @@ export function EventForm({ event, mode }: EventFormProps) {
           description: event.description,
           capacity: event.capacity,
           image: event.image ?? "",
+          metaTitle: event.metaTitle ?? "",
+          metaDescription: event.metaDescription ?? "",
+          metaKeywords: event.metaKeywords ?? "",
         }
       : {
           slug: "",
@@ -150,6 +154,15 @@ export function EventForm({ event, mode }: EventFormProps) {
           </FormField>
         </div>
       </div>
+
+      <SeoFields
+        register={register}
+        errors={errors}
+        setValue={setValue}
+        contentTitle={title ?? ""}
+        contentDescription={watch("description") ?? ""}
+        contentType="event"
+      />
 
       <div className="flex items-center justify-between">
         <Link href="/admin/events">

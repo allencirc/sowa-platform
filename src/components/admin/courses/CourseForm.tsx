@@ -17,6 +17,7 @@ import { TagInput } from "@/components/admin/TagInput";
 import { createCourseSchema, ProviderTypeEnum, DeliveryFormatEnum } from "@/lib/validations";
 import { adminPost, adminPatch } from "@/hooks/useAdminFetch";
 import { slugify } from "@/lib/utils";
+import { SeoFields } from "@/components/admin/SeoFields";
 import type { Course, Skill, Career } from "@/lib/types";
 
 type CourseFormData = z.infer<typeof createCourseSchema>;
@@ -67,6 +68,9 @@ export function CourseForm({ course, mode }: CourseFormProps) {
           skills: course.skills,
           careerRelevance: course.careerRelevance,
           tags: course.tags,
+          metaTitle: course.metaTitle ?? "",
+          metaDescription: course.metaDescription ?? "",
+          metaKeywords: course.metaKeywords ?? "",
         }
       : {
           slug: "",
@@ -236,6 +240,15 @@ export function CourseForm({ course, mode }: CourseFormProps) {
           </FormField>
         </div>
       </div>
+
+      <SeoFields
+        register={register}
+        errors={errors}
+        setValue={setValue}
+        contentTitle={title ?? ""}
+        contentDescription={watch("description") ?? ""}
+        contentType="course"
+      />
 
       <div className="flex items-center justify-between">
         <Link href="/admin/courses">

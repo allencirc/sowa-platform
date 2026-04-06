@@ -22,20 +22,22 @@ export async function generateMetadata({ params }: ResearchDetailProps): Promise
   const { slug } = await params;
   const research = await getResearchBySlug(slug);
   if (!research) return { title: "Research Not Found" };
-  const desc = research.summary.slice(0, 160);
+  const title = research.metaTitle || `${research.title} — Research`;
+  const desc = research.metaDescription || research.summary.slice(0, 160);
   return {
-    title: `${research.title} — Research`,
+    title,
     description: desc,
+    ...(research.metaKeywords && { keywords: research.metaKeywords }),
     alternates: { canonical: `/research/${research.slug}` },
     openGraph: {
-      title: `${research.title} — SOWA Research`,
+      title: research.metaTitle || `${research.title} — SOWA Research`,
       description: desc,
       url: `/research/${research.slug}`,
       type: "article",
     },
     twitter: {
       card: "summary_large_image",
-      title: `${research.title} — SOWA`,
+      title: research.metaTitle || `${research.title} — SOWA`,
       description: desc,
     },
   };

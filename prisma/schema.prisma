@@ -151,6 +151,9 @@ model Career {
   status              ContentStatus @default(DRAFT)
   publishAt           DateTime?
   rejectionNote       String?
+  metaTitle           String?
+  metaDescription     String?
+  metaKeywords        String?
 
   skills              CareerSkill[]
   pathwayFrom         PathwayConnection[] @relation("PathwayFrom")
@@ -208,6 +211,9 @@ model Course {
   status               ContentStatus  @default(DRAFT)
   publishAt            DateTime?
   rejectionNote        String?
+  metaTitle            String?
+  metaDescription      String?
+  metaKeywords         String?
   source               ContentSource  @default(MANUAL)
   externalId           String?
 
@@ -256,6 +262,9 @@ model Event {
   status       ContentStatus @default(DRAFT)
   publishAt    DateTime?
   rejectionNote String?
+  metaTitle     String?
+  metaDescription String?
+  metaKeywords  String?
   source       ContentSource @default(MANUAL)
   externalId   String?
 
@@ -280,6 +289,9 @@ model Research {
   status          ContentStatus @default(DRAFT)
   publishAt       DateTime?
   rejectionNote   String?
+  metaTitle       String?
+  metaDescription String?
+  metaKeywords    String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -300,6 +312,9 @@ model NewsArticle {
   status        ContentStatus @default(DRAFT)
   publishAt     DateTime?
   rejectionNote String?
+  metaTitle     String?
+  metaDescription String?
+  metaKeywords  String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
