@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
+import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { CourseForm } from "@/components/admin/courses/CourseForm";
 import { StatusWorkflow } from "@/components/admin/StatusWorkflow";
@@ -60,9 +61,9 @@ export default function EditCoursePage() {
     return (
       <div className="flex h-64 flex-col items-center justify-center gap-2">
         <p className="text-lg font-medium text-text-primary">{error ?? "Course not found"}</p>
-        <a href="/admin/courses" className="text-sm text-accent-dark hover:underline">
+        <Link href="/admin/courses" className="text-sm text-accent-dark hover:underline">
           Back to courses
-        </a>
+        </Link>
       </div>
     );
   }

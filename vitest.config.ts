@@ -12,7 +12,6 @@ export default defineConfig({
   test: {
     environment: "jsdom",
     globals: true,
-    pool: "forks",
     setupFiles: ["./src/__tests__/setup.tsx"],
     include: ["src/**/*.test.{ts,tsx}"],
     exclude: ["node_modules", ".next", "e2e"],

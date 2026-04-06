@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
+import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { CareerForm } from "@/components/admin/careers/CareerForm";
 import { StatusWorkflow } from "@/components/admin/StatusWorkflow";
@@ -69,9 +70,9 @@ export default function EditCareerPage() {
     return (
       <div className="flex h-64 flex-col items-center justify-center gap-2">
         <p className="text-lg font-medium text-text-primary">{error ?? "Career not found"}</p>
-        <a href="/admin/careers" className="text-sm text-accent-dark hover:underline">
+        <Link href="/admin/careers" className="text-sm text-accent-dark hover:underline">
           Back to careers
-        </a>
+        </Link>
       </div>
     );
   }

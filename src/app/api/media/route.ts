@@ -14,11 +14,6 @@ const VARIANTS = [
   { suffix: "thumb", width: 400, height: 225 },
 ] as const;
 
-/** True for formats sharp can process (everything except SVG). */
-function isRaster(mime: string) {
-  return ["image/jpeg", "image/png", "image/gif", "image/webp"].includes(mime);
-}
-
 // ─── GET: list all media ────────────────────────────────────────────────────
 
 export async function GET() {

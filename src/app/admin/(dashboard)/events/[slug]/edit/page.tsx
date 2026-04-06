@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
+import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { EventForm } from "@/components/admin/events/EventForm";
 import { StatusWorkflow } from "@/components/admin/StatusWorkflow";
@@ -60,9 +61,9 @@ export default function EditEventPage() {
     return (
       <div className="flex h-64 flex-col items-center justify-center gap-2">
         <p className="text-lg font-medium text-text-primary">{error ?? "Event not found"}</p>
-        <a href="/admin/events" className="text-sm text-accent-dark hover:underline">
+        <Link href="/admin/events" className="text-sm text-accent-dark hover:underline">
           Back to events
-        </a>
+        </Link>
       </div>
     );
   }

@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
+import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { NewsForm } from "@/components/admin/news/NewsForm";
 import { StatusWorkflow } from "@/components/admin/StatusWorkflow";
@@ -39,6 +40,7 @@ export default function EditNewsPage() {
       .finally(() => setLoading(false));
   }, [slug]);
 
+  // eslint-disable-next-line react-compiler/react-compiler
   useEffect(() => {
     fetchArticle();
   }, [fetchArticle]);
@@ -58,9 +60,9 @@ export default function EditNewsPage() {
     return (
       <div className="flex h-64 flex-col items-center justify-center gap-2">
         <p className="text-lg font-medium text-text-primary">{error ?? "Article not found"}</p>
-        <a href="/admin/news" className="text-sm text-accent-dark hover:underline">
+        <Link href="/admin/news" className="text-sm text-accent-dark hover:underline">
           Back to news
-        </a>
+        </Link>
       </div>
     );
   }

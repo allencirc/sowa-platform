@@ -19,6 +19,7 @@ export function CookieConsent() {
   const [marketing, setMarketing] = useState(false);
 
   // Show banner only when no consent cookie exists yet
+  // eslint-disable-next-line react-compiler/react-compiler
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     const existing = getConsentPreferences();

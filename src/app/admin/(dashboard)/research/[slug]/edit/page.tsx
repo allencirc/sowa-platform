@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
+import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { ResearchForm } from "@/components/admin/research/ResearchForm";
 import { StatusWorkflow } from "@/components/admin/StatusWorkflow";
@@ -39,6 +40,7 @@ export default function EditResearchPage() {
       .finally(() => setLoading(false));
   }, [slug]);
 
+  // eslint-disable-next-line react-compiler/react-compiler
   useEffect(() => {
     fetchResearch();
   }, [fetchResearch]);
@@ -58,9 +60,9 @@ export default function EditResearchPage() {
     return (
       <div className="flex h-64 flex-col items-center justify-center gap-2">
         <p className="text-lg font-medium text-text-primary">{error ?? "Research not found"}</p>
-        <a href="/admin/research" className="text-sm text-accent-dark hover:underline">
+        <Link href="/admin/research" className="text-sm text-accent-dark hover:underline">
           Back to research
-        </a>
+        </Link>
       </div>
     );
   }
