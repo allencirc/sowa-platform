@@ -14,7 +14,11 @@ interface EventDetailProps {
 }
 
 export async function generateStaticParams() {
-  return (await getAllEvents()).map((e) => ({ slug: e.slug }));
+  try {
+    return (await getAllEvents()).map((e) => ({ slug: e.slug }));
+  } catch {
+    return [];
+  }
 }
 
 export async function generateMetadata({ params }: EventDetailProps): Promise<Metadata> {

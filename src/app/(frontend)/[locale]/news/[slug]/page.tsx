@@ -14,7 +14,11 @@ interface NewsDetailProps {
 }
 
 export async function generateStaticParams() {
-  return (await getAllNews()).map((n) => ({ slug: n.slug }));
+  try {
+    return (await getAllNews()).map((n) => ({ slug: n.slug }));
+  } catch {
+    return [];
+  }
 }
 
 export async function generateMetadata({ params }: NewsDetailProps): Promise<Metadata> {

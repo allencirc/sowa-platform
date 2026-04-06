@@ -16,7 +16,11 @@ interface CourseDetailProps {
 }
 
 export async function generateStaticParams() {
-  return (await getAllCourses()).map((c) => ({ slug: c.slug }));
+  try {
+    return (await getAllCourses()).map((c) => ({ slug: c.slug }));
+  } catch {
+    return [];
+  }
 }
 
 export async function generateMetadata({ params }: CourseDetailProps): Promise<Metadata> {

@@ -15,7 +15,11 @@ interface CareerDetailProps {
 }
 
 export async function generateStaticParams() {
-  return (await getAllCareers()).map((c) => ({ slug: c.slug }));
+  try {
+    return (await getAllCareers()).map((c) => ({ slug: c.slug }));
+  } catch {
+    return [];
+  }
 }
 
 export async function generateMetadata({ params }: CareerDetailProps): Promise<Metadata> {

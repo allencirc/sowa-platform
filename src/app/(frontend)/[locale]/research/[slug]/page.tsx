@@ -15,7 +15,11 @@ interface ResearchDetailProps {
 }
 
 export async function generateStaticParams() {
-  return (await getAllResearch()).map((r) => ({ slug: r.slug }));
+  try {
+    return (await getAllResearch()).map((r) => ({ slug: r.slug }));
+  } catch {
+    return [];
+  }
 }
 
 export async function generateMetadata({ params }: ResearchDetailProps): Promise<Metadata> {
