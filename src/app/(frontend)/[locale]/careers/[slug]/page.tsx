@@ -7,7 +7,12 @@ import { Badge, SectorBadge } from "@/components/ui/Badge";
 import { SkillBadge } from "@/components/careers/SkillBadge";
 import { MiniPathway } from "@/components/careers/MiniPathway";
 import { CourseCard } from "@/components/courses/CourseCard";
-import { getCareerBySlug, getCourseBySlug, getSkillsByCareer, getAllCareers } from "@/lib/queries";
+import {
+  getCareerBySlug,
+  getCoursesByCareer,
+  getSkillsByCareer,
+  getAllCareers,
+} from "@/lib/queries";
 import { formatCurrency } from "@/lib/utils";
 
 interface CareerDetailProps {
@@ -15,20 +20,26 @@ interface CareerDetailProps {
 }
 
 export async function generateStaticParams() {
-  return (await getAllCareers()).map((c) => ({ slug: c.slug }));
+  try {
+    return (await getAllCareers()).map((c) => ({ slug: c.slug }));
+  } catch {
+    return [];
+  }
 }
 
 export async function generateMetadata({ params }: CareerDetailProps): Promise<Metadata> {
   const { slug } = await params;
   const career = await getCareerBySlug(slug);
   if (!career) return { title: "Career Not Found" };
-  const desc = career.description.slice(0, 160);
+  const title = career.metaTitle || `${career.title} — Careers`;
+  const desc = career.metaDescription || career.description.slice(0, 160);
   return {
-    title: `${career.title} — Careers`,
+    title,
     description: desc,
+    ...(career.metaKeywords && { keywords: career.metaKeywords }),
     alternates: { canonical: `/careers/${career.slug}` },
     openGraph: {
-      title: `${career.title} — Offshore Wind Career`,
+      title: career.metaTitle || `${career.title} — Offshore Wind Career`,
       description: desc,
       url: `/careers/${career.slug}`,
       type: "article",
@@ -36,7 +47,7 @@ export async function generateMetadata({ params }: CareerDetailProps): Promise<M
     },
     twitter: {
       card: "summary_large_image",
-      title: `${career.title} — SOWA`,
+      title: career.metaTitle || `${career.title} — SOWA`,
       description: desc,
     },
   };
@@ -47,13 +58,10 @@ export default async function CareerDetailPage({ params }: CareerDetailProps) {
   const career = await getCareerBySlug(slug);
   if (!career) notFound();
 
-  const skills = await getSkillsByCareer(career.slug);
-  const relatedCourseResults = await Promise.all(
-    (career.relatedCourses ?? []).map((s) => getCourseBySlug(s)),
-  );
-  const relatedCourses = relatedCourseResults.filter(
-    (c): c is NonNullable<typeof c> => c !== undefined,
-  );
+  const [skills, relatedCourses] = await Promise.all([
+    getSkillsByCareer(career.slug),
+    getCoursesByCareer(career.slug),
+  ]);
 
   return (
     <>

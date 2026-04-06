@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/Badge";
 import { RegisterButton } from "@/components/registration/RegisterButton";
 import { SkillBadge } from "@/components/careers/SkillBadge";
 import { CareerCard } from "@/components/careers/CareerCard";
-import { getCourseBySlug, getAllCourses, getCareerBySlug, getSkillBySlug } from "@/lib/queries";
+import { getCourseBySlug, getAllCourses, getCareersBySlugs, getSkillsBySlugs } from "@/lib/queries";
 import { formatDate, formatCurrency } from "@/lib/utils";
 
 interface CourseDetailProps {
@@ -16,27 +16,33 @@ interface CourseDetailProps {
 }
 
 export async function generateStaticParams() {
-  return (await getAllCourses()).map((c) => ({ slug: c.slug }));
+  try {
+    return (await getAllCourses()).map((c) => ({ slug: c.slug }));
+  } catch {
+    return [];
+  }
 }
 
 export async function generateMetadata({ params }: CourseDetailProps): Promise<Metadata> {
   const { slug } = await params;
   const course = await getCourseBySlug(slug);
   if (!course) return { title: "Course Not Found" };
-  const desc = course.description.slice(0, 160);
+  const title = course.metaTitle || `${course.title} — Training`;
+  const desc = course.metaDescription || course.description.slice(0, 160);
   return {
-    title: `${course.title} — Training`,
+    title,
     description: desc,
+    ...(course.metaKeywords && { keywords: course.metaKeywords }),
     alternates: { canonical: `/training/${course.slug}` },
     openGraph: {
-      title: `${course.title} — Offshore Wind Training`,
+      title: course.metaTitle || `${course.title} — Offshore Wind Training`,
       description: desc,
       url: `/training/${course.slug}`,
       type: "article",
     },
     twitter: {
       card: "summary_large_image",
-      title: `${course.title} — SOWA`,
+      title: course.metaTitle || `${course.title} — SOWA`,
       description: desc,
     },
   };
@@ -54,11 +60,10 @@ export default async function CourseDetailPage({ params }: CourseDetailProps) {
   const course = await getCourseBySlug(slug);
   if (!course) notFound();
 
-  const skillResults = await Promise.all(course.skills.map((s) => getSkillBySlug(s)));
-  const skills = skillResults.filter((s): s is NonNullable<typeof s> => s !== undefined);
-
-  const careerResults = await Promise.all(course.careerRelevance.map((s) => getCareerBySlug(s)));
-  const relatedCareers = careerResults.filter((c): c is NonNullable<typeof c> => c !== undefined);
+  const [skills, relatedCareers] = await Promise.all([
+    getSkillsBySlugs(course.skills),
+    getCareersBySlugs(course.careerRelevance),
+  ]);
 
   const enableRegistration = process.env.ENABLE_COURSE_REGISTRATION === "true";
 

@@ -28,7 +28,6 @@ export async function GET(request: NextRequest) {
   if (parsed.error) return parsed.error;
 
   const { q, page, limit, type } = parsed.data;
-  const query = q.toLowerCase();
 
   try {
     const results: SearchResult[] = [];
@@ -36,80 +35,104 @@ export async function GET(request: NextRequest) {
     // Search across requested types (or all if none specified)
     const searchTypes = type ? [type] : ["career", "course", "event", "research", "news"];
 
+    const insensitive = { mode: "insensitive" as const };
     const promises: Promise<void>[] = [];
 
     if (searchTypes.includes("career")) {
       promises.push(
-        prisma.career.findMany().then((careers) => {
-          for (const career of careers) {
-            const displaySector = sectorDisplay[career.sector] ?? career.sector;
-            if (
-              career.title.toLowerCase().includes(query) ||
-              career.description.toLowerCase().includes(query) ||
-              displaySector.toLowerCase().includes(query)
-            ) {
+        prisma.career
+          .findMany({
+            where: {
+              status: "PUBLISHED" as never,
+              OR: [
+                { title: { contains: q, ...insensitive } },
+                { description: { contains: q, ...insensitive } },
+              ],
+            },
+            select: { slug: true, title: true, description: true },
+          })
+          .then((careers) => {
+            for (const c of careers) {
               results.push({
                 type: "career",
-                slug: career.slug,
-                title: career.title,
-                excerpt: career.description.slice(0, 150) + "...",
+                slug: c.slug,
+                title: c.title,
+                excerpt: c.description.slice(0, 150) + "...",
               });
             }
-          }
-        }),
+          }),
       );
     }
 
     if (searchTypes.includes("course")) {
       promises.push(
-        prisma.course.findMany().then((courses) => {
-          for (const course of courses) {
-            if (
-              course.title.toLowerCase().includes(query) ||
-              course.description.toLowerCase().includes(query) ||
-              course.provider.toLowerCase().includes(query)
-            ) {
+        prisma.course
+          .findMany({
+            where: {
+              status: "PUBLISHED" as never,
+              OR: [
+                { title: { contains: q, ...insensitive } },
+                { description: { contains: q, ...insensitive } },
+                { provider: { contains: q, ...insensitive } },
+              ],
+            },
+            select: { slug: true, title: true, description: true },
+          })
+          .then((courses) => {
+            for (const c of courses) {
               results.push({
                 type: "course",
-                slug: course.slug,
-                title: course.title,
-                excerpt: course.description.slice(0, 150) + "...",
+                slug: c.slug,
+                title: c.title,
+                excerpt: c.description.slice(0, 150) + "...",
               });
             }
-          }
-        }),
+          }),
       );
     }
 
     if (searchTypes.includes("event")) {
       promises.push(
-        prisma.event.findMany().then((events) => {
-          for (const event of events) {
-            if (
-              event.title.toLowerCase().includes(query) ||
-              event.description.toLowerCase().includes(query)
-            ) {
+        prisma.event
+          .findMany({
+            where: {
+              status: "PUBLISHED" as never,
+              OR: [
+                { title: { contains: q, ...insensitive } },
+                { description: { contains: q, ...insensitive } },
+              ],
+            },
+            select: { slug: true, title: true, description: true },
+          })
+          .then((events) => {
+            for (const e of events) {
               results.push({
                 type: "event",
-                slug: event.slug,
-                title: event.title,
-                excerpt: event.description.slice(0, 150) + "...",
+                slug: e.slug,
+                title: e.title,
+                excerpt: e.description.slice(0, 150) + "...",
               });
             }
-          }
-        }),
+          }),
       );
     }
 
     if (searchTypes.includes("research")) {
       promises.push(
-        prisma.research.findMany().then((items) => {
-          for (const r of items) {
-            if (
-              r.title.toLowerCase().includes(query) ||
-              r.summary.toLowerCase().includes(query) ||
-              r.organisation.toLowerCase().includes(query)
-            ) {
+        prisma.research
+          .findMany({
+            where: {
+              status: "PUBLISHED" as never,
+              OR: [
+                { title: { contains: q, ...insensitive } },
+                { summary: { contains: q, ...insensitive } },
+                { organisation: { contains: q, ...insensitive } },
+              ],
+            },
+            select: { slug: true, title: true, summary: true },
+          })
+          .then((items) => {
+            for (const r of items) {
               results.push({
                 type: "research",
                 slug: r.slug,
@@ -117,29 +140,33 @@ export async function GET(request: NextRequest) {
                 excerpt: r.summary.slice(0, 150) + "...",
               });
             }
-          }
-        }),
+          }),
       );
     }
 
     if (searchTypes.includes("news")) {
       promises.push(
-        prisma.newsArticle.findMany().then((articles) => {
-          for (const article of articles) {
-            if (
-              article.title.toLowerCase().includes(query) ||
-              article.excerpt.toLowerCase().includes(query) ||
-              article.content.toLowerCase().includes(query)
-            ) {
+        prisma.newsArticle
+          .findMany({
+            where: {
+              status: "PUBLISHED" as never,
+              OR: [
+                { title: { contains: q, ...insensitive } },
+                { excerpt: { contains: q, ...insensitive } },
+              ],
+            },
+            select: { slug: true, title: true, excerpt: true },
+          })
+          .then((articles) => {
+            for (const a of articles) {
               results.push({
                 type: "news",
-                slug: article.slug,
-                title: article.title,
-                excerpt: article.excerpt.slice(0, 150) + "...",
+                slug: a.slug,
+                title: a.title,
+                excerpt: a.excerpt.slice(0, 150) + "...",
               });
             }
-          }
-        }),
+          }),
       );
     }
 

@@ -14,20 +14,26 @@ interface NewsDetailProps {
 }
 
 export async function generateStaticParams() {
-  return (await getAllNews()).map((n) => ({ slug: n.slug }));
+  try {
+    return (await getAllNews()).map((n) => ({ slug: n.slug }));
+  } catch {
+    return [];
+  }
 }
 
 export async function generateMetadata({ params }: NewsDetailProps): Promise<Metadata> {
   const { slug } = await params;
   const article = await getNewsBySlug(slug);
   if (!article) return { title: "Article Not Found" };
-  const desc = article.excerpt.slice(0, 160);
+  const title = article.metaTitle || `${article.title} — News`;
+  const desc = article.metaDescription || article.excerpt.slice(0, 160);
   return {
-    title: `${article.title} — News`,
+    title,
     description: desc,
+    ...(article.metaKeywords && { keywords: article.metaKeywords }),
     alternates: { canonical: `/news/${article.slug}` },
     openGraph: {
-      title: article.title,
+      title: article.metaTitle || article.title,
       description: desc,
       url: `/news/${article.slug}`,
       type: "article",
@@ -36,7 +42,7 @@ export async function generateMetadata({ params }: NewsDetailProps): Promise<Met
     },
     twitter: {
       card: "summary_large_image",
-      title: `${article.title} — SOWA`,
+      title: article.metaTitle || `${article.title} — SOWA`,
       description: desc,
     },
   };

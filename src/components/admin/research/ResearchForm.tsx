@@ -15,6 +15,7 @@ import { TagInput } from "@/components/admin/TagInput";
 import { createResearchSchema } from "@/lib/validations";
 import { adminPost, adminPatch } from "@/hooks/useAdminFetch";
 import { slugify } from "@/lib/utils";
+import { SeoFields } from "@/components/admin/SeoFields";
 import type { Research } from "@/lib/types";
 
 type ResearchFormData = z.infer<typeof createResearchSchema>;
@@ -47,6 +48,9 @@ export function ResearchForm({ research, mode }: ResearchFormProps) {
           categories: research.categories,
           isFeatured: research.isFeatured ?? false,
           image: research.image ?? "",
+          metaTitle: research.metaTitle ?? "",
+          metaDescription: research.metaDescription ?? "",
+          metaKeywords: research.metaKeywords ?? "",
         }
       : {
           slug: "",
@@ -151,6 +155,15 @@ export function ResearchForm({ research, mode }: ResearchFormProps) {
           </label>
         </div>
       </div>
+
+      <SeoFields
+        register={register}
+        errors={errors}
+        setValue={setValue}
+        contentTitle={title ?? ""}
+        contentDescription={watch("summary") ?? ""}
+        contentType="research"
+      />
 
       <div className="flex items-center justify-between">
         <Link href="/admin/research">

@@ -14,27 +14,33 @@ interface EventDetailProps {
 }
 
 export async function generateStaticParams() {
-  return (await getAllEvents()).map((e) => ({ slug: e.slug }));
+  try {
+    return (await getAllEvents()).map((e) => ({ slug: e.slug }));
+  } catch {
+    return [];
+  }
 }
 
 export async function generateMetadata({ params }: EventDetailProps): Promise<Metadata> {
   const { slug } = await params;
   const event = await getEventBySlug(slug);
   if (!event) return { title: "Event Not Found" };
-  const desc = event.description.slice(0, 160);
+  const title = event.metaTitle || `${event.title} — Events`;
+  const desc = event.metaDescription || event.description.slice(0, 160);
   return {
-    title: `${event.title} — Events`,
+    title,
     description: desc,
+    ...(event.metaKeywords && { keywords: event.metaKeywords }),
     alternates: { canonical: `/events/${event.slug}` },
     openGraph: {
-      title: `${event.title} — SOWA Event`,
+      title: event.metaTitle || `${event.title} — SOWA Event`,
       description: desc,
       url: `/events/${event.slug}`,
       type: "article",
     },
     twitter: {
       card: "summary_large_image",
-      title: `${event.title} — SOWA`,
+      title: event.metaTitle || `${event.title} — SOWA`,
       description: desc,
     },
   };

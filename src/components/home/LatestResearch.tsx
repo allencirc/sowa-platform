@@ -2,14 +2,11 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { ResearchCard } from "@/components/research/ResearchCard";
-import { getAllResearch, getFeaturedResearch } from "@/lib/queries";
+import { getFeaturedResearch, getLatestResearch } from "@/lib/queries";
 
 export async function LatestResearch() {
   const featured = await getFeaturedResearch();
-  const others = (await getAllResearch())
-    .filter((r) => r.slug !== featured?.slug)
-    .sort((a, b) => b.publicationDate.localeCompare(a.publicationDate))
-    .slice(0, 2);
+  const others = (await getLatestResearch(3)).filter((r) => r.slug !== featured?.slug).slice(0, 2);
 
   if (!featured) return null;
 

@@ -15,6 +15,7 @@ import { RichTextEditor } from "@/components/admin/RichTextEditor";
 import { createNewsSchema } from "@/lib/validations";
 import { adminPost, adminPatch } from "@/hooks/useAdminFetch";
 import { slugify } from "@/lib/utils";
+import { SeoFields } from "@/components/admin/SeoFields";
 import type { NewsArticle } from "@/lib/types";
 
 type NewsFormData = z.infer<typeof createNewsSchema>;
@@ -46,6 +47,9 @@ export function NewsForm({ article, mode }: NewsFormProps) {
           category: article.category,
           author: article.author,
           image: article.image ?? "",
+          metaTitle: article.metaTitle ?? "",
+          metaDescription: article.metaDescription ?? "",
+          metaKeywords: article.metaKeywords ?? "",
         }
       : {
           slug: "",
@@ -143,6 +147,15 @@ export function NewsForm({ article, mode }: NewsFormProps) {
           </FormField>
         </div>
       </div>
+
+      <SeoFields
+        register={register}
+        errors={errors}
+        setValue={setValue}
+        contentTitle={title ?? ""}
+        contentDescription={watch("excerpt") ?? ""}
+        contentType="news article"
+      />
 
       <div className="flex items-center justify-between">
         <Link href="/admin/news">

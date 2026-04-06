@@ -1,4 +1,10 @@
-export interface Career {
+export interface SeoFields {
+  metaTitle?: string;
+  metaDescription?: string;
+  metaKeywords?: string;
+}
+
+export interface Career extends SeoFields {
   slug: string;
   title: string;
   sector:
@@ -27,7 +33,7 @@ export interface PathwayConnection {
   timeframe: string;
 }
 
-export interface Course {
+export interface Course extends SeoFields {
   slug: string;
   title: string;
   provider: string;
@@ -49,7 +55,7 @@ export interface Course {
   tags: string[];
 }
 
-export interface Event {
+export interface Event extends SeoFields {
   slug: string;
   title: string;
   type: "Workshop" | "Webinar" | "Conference" | "Networking" | "Training" | "Roadshow";
@@ -62,7 +68,7 @@ export interface Event {
   image?: string;
 }
 
-export interface Research {
+export interface Research extends SeoFields {
   slug: string;
   title: string;
   author: string;
@@ -128,7 +134,7 @@ export interface DiagnosticGap {
   severity: "high" | "medium" | "low";
 }
 
-export interface NewsArticle {
+export interface NewsArticle extends SeoFields {
   slug: string;
   title: string;
   date: string;

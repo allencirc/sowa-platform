@@ -22,6 +22,7 @@ import {
 } from "@/lib/validations";
 import { adminPost, adminPatch } from "@/hooks/useAdminFetch";
 import { slugify } from "@/lib/utils";
+import { SeoFields } from "@/components/admin/SeoFields";
 import type { Career, Skill, Course } from "@/lib/types";
 
 type CareerFormData = z.infer<typeof createCareerSchema>;
@@ -65,6 +66,9 @@ export function CareerForm({ career, mode }: CareerFormProps) {
           growthOutlook: career.growthOutlook ?? "",
           skills: career.skills,
           pathwayConnections: career.pathwayConnections ?? [],
+          metaTitle: career.metaTitle ?? "",
+          metaDescription: career.metaDescription ?? "",
+          metaKeywords: career.metaKeywords ?? "",
           relatedCourses: career.relatedCourses ?? [],
         }
       : {
@@ -318,6 +322,15 @@ export function CareerForm({ career, mode }: CareerFormProps) {
           </div>
         </div>
       </div>
+
+      <SeoFields
+        register={register}
+        errors={errors}
+        setValue={setValue}
+        contentTitle={title ?? ""}
+        contentDescription={watch("description") ?? ""}
+        contentType="career"
+      />
 
       <div className="flex items-center justify-between">
         <Link href="/admin/careers">
