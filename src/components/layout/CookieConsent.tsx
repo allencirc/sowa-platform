@@ -10,6 +10,7 @@ import {
   initAnalytics,
 } from "@/lib/analytics";
 import { loadMarketingPixels } from "@/lib/marketing-pixels";
+import { useNonce } from "@/components/NonceProvider";
 
 type View = "banner" | "preferences" | "hidden";
 
@@ -17,6 +18,7 @@ export function CookieConsent() {
   const [view, setView] = useState<View>("hidden");
   const [analytics, setAnalytics] = useState(false);
   const [marketing, setMarketing] = useState(false);
+  const nonce = useNonce();
 
   // Show banner only when no consent cookie exists yet
   useEffect(() => {
@@ -25,23 +27,26 @@ export function CookieConsent() {
       setView("banner");
     } else {
       // Already consented — boot scripts matching their choices
-      if (existing.analytics) initAnalytics();
-      if (existing.marketing) loadMarketingPixels();
+      if (existing.analytics) initAnalytics(nonce);
+      if (existing.marketing) loadMarketingPixels(nonce);
     }
-  }, []);
+  }, [nonce]);
 
-  const save = useCallback((prefs: Pick<ConsentPreferences, "analytics" | "marketing">) => {
-    const full: ConsentPreferences = {
-      ...prefs,
-      timestamp: new Date().toISOString(),
-    };
-    setConsentPreferences(full);
-    setView("hidden");
+  const save = useCallback(
+    (prefs: Pick<ConsentPreferences, "analytics" | "marketing">) => {
+      const full: ConsentPreferences = {
+        ...prefs,
+        timestamp: new Date().toISOString(),
+      };
+      setConsentPreferences(full);
+      setView("hidden");
 
-    // Boot allowed scripts immediately
-    if (full.analytics) initAnalytics();
-    if (full.marketing) loadMarketingPixels();
-  }, []);
+      // Boot allowed scripts immediately
+      if (full.analytics) initAnalytics(nonce);
+      if (full.marketing) loadMarketingPixels(nonce);
+    },
+    [nonce],
+  );
 
   const acceptAll = () => save({ analytics: true, marketing: true });
   const rejectAll = () => save({ analytics: false, marketing: false });
