@@ -24,13 +24,13 @@ import Link from "next/link";
 
 // ─── Colours per sector ────────────────────────────────────
 const sectorColours: Record<string, { bg: string; border: string; text: string }> = {
-  "Operations & Maintenance": { bg: "#0C2340", border: "#0C2340", text: "#ffffff" },
-  "Marine Operations": { bg: "#1E6091", border: "#1E6091", text: "#ffffff" },
-  Electrical: { bg: "#F59E0B", border: "#F59E0B", text: "#1A1A2E" },
-  "Survey & Design": { bg: "#7C3AED", border: "#7C3AED", text: "#ffffff" },
-  "Health, Safety & Environment": { bg: "#DC2626", border: "#DC2626", text: "#ffffff" },
-  "Policy & Regulation": { bg: "#059669", border: "#059669", text: "#ffffff" },
-  "Project Management": { bg: "#EA580C", border: "#EA580C", text: "#ffffff" },
+  "Operations & Maintenance": { bg: "#0C2340", border: "#0C2340", text: "#FFFFFF" },
+  "Marine Operations": { bg: "#1E6091", border: "#1E6091", text: "#FFFFFF" },
+  Electrical: { bg: "#F59E0B", border: "#F59E0B", text: "#451A03" },
+  "Survey & Design": { bg: "#7C3AED", border: "#7C3AED", text: "#FFFFFF" },
+  "Health, Safety & Environment": { bg: "#DC2626", border: "#DC2626", text: "#FFFFFF" },
+  "Policy & Regulation": { bg: "#059669", border: "#059669", text: "#022C22" },
+  "Project Management": { bg: "#EA580C", border: "#EA580C", text: "#431407" },
 };
 
 const allSectors = Object.keys(sectorColours);
@@ -243,7 +243,7 @@ function PathwayMapInner({ careers }: { careers: Career[] }) {
             className={cn(
               "px-3 py-1.5 rounded-full text-xs font-medium transition-colors border cursor-pointer",
               activeSectors.has(sector)
-                ? "text-white border-transparent"
+                ? "border-transparent"
                 : "bg-white text-text-secondary border-gray-200 hover:border-gray-400",
             )}
             style={
@@ -251,6 +251,7 @@ function PathwayMapInner({ careers }: { careers: Career[] }) {
                 ? {
                     backgroundColor: sectorColours[sector].bg,
                     borderColor: sectorColours[sector].border,
+                    color: sectorColours[sector].text,
                   }
                 : undefined
             }

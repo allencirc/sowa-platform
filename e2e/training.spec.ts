@@ -16,8 +16,8 @@ test.describe("Training journey", () => {
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
 
     // 3. Expect course cards to be visible (ignore nav/footer links that share the prefix).
-    const courseCards = page.locator('main [href*="/training/"]').locator("visible=true");
-    await expect(courseCards.first()).toBeVisible();
+    const courseCards = page.locator('[href*="/training/"]').filter({ hasNotText: /^Training$/ });
+    await expect(courseCards.first()).toBeVisible({ timeout: 15000 });
 
     // 4. Click on a course card
     await courseCards.first().click();

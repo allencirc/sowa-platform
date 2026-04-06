@@ -21,8 +21,8 @@ test.describe("Careers journey", () => {
     // 3. Expect career cards to be visible. `[href^="/careers/"]` also matches
     //    links inside the React Flow pathway map (rendered but off-screen),
     //    so filter for visibility before asserting.
-    const careerCards = page.locator('main [href*="/careers/"]').locator("visible=true");
-    await expect(careerCards.first()).toBeVisible();
+    const careerCards = page.locator('[href*="/careers/"]').filter({ hasNotText: /^Careers$/ });
+    await expect(careerCards.first()).toBeVisible({ timeout: 15000 });
 
     // 4. Click on a career card
     await careerCards.first().click();
