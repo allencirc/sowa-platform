@@ -10,13 +10,7 @@ import { changePasswordAction, type ChangePasswordState } from "./actions";
 function SubmitButton() {
   const { pending } = useFormStatus();
   return (
-    <Button
-      type="submit"
-      variant="primary"
-      size="lg"
-      className="w-full"
-      disabled={pending}
-    >
+    <Button type="submit" variant="primary" size="lg" className="w-full" disabled={pending}>
       {pending ? "Updating..." : "Update password"}
     </Button>
   );
@@ -25,7 +19,7 @@ function SubmitButton() {
 export function ChangePasswordForm() {
   const [state, formAction] = useActionState<ChangePasswordState, FormData>(
     changePasswordAction,
-    {}
+    {},
   );
 
   return (

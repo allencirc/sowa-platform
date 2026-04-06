@@ -1,13 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {
-  RefreshCw,
-  CheckCircle,
-  AlertTriangle,
-  XCircle,
-  Cloud,
-} from "lucide-react";
+import { RefreshCw, CheckCircle, AlertTriangle, XCircle, Cloud } from "lucide-react";
 
 interface SyncStatus {
   configured: boolean;
@@ -74,7 +68,8 @@ export function HubSpotSyncWidget() {
         <div className="flex items-center gap-2 text-sm text-status-warning">
           <AlertTriangle className="h-4 w-4 shrink-0" />
           <span>
-            Not configured. Set <code className="font-mono text-xs bg-gray-100 px-1 rounded">HUBSPOT_API_KEY</code> in
+            Not configured. Set{" "}
+            <code className="font-mono text-xs bg-gray-100 px-1 rounded">HUBSPOT_API_KEY</code> in
             your environment.
           </span>
         </div>
@@ -95,9 +90,7 @@ export function HubSpotSyncWidget() {
           {/* Stats */}
           <div className="grid grid-cols-2 gap-3">
             <div className="rounded-lg bg-gray-50 p-3">
-              <p className="text-2xl font-bold text-text-primary">
-                {status.totalSynced}
-              </p>
+              <p className="text-2xl font-bold text-text-primary">{status.totalSynced}</p>
               <p className="text-xs text-text-muted">Contacts synced</p>
             </div>
             <div className="rounded-lg bg-gray-50 p-3">

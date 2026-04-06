@@ -39,7 +39,7 @@ const schema = z
 
 export async function changePasswordAction(
   _prev: ChangePasswordState,
-  formData: FormData
+  formData: FormData,
 ): Promise<ChangePasswordState> {
   // Defence in depth: proxy blocks mutating /admin traffic in READ_ONLY
   // mode, but Server Actions can bypass proxy matchers (see Next 16 proxy

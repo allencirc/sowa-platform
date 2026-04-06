@@ -32,7 +32,7 @@ export function applyRateLimit(request: NextRequest): NextResponse | null {
           "X-RateLimit-Reset": String(result.resetAt),
           "Retry-After": String(Math.ceil((result.resetAt - Date.now()) / 1000)),
         },
-      }
+      },
     );
   }
 
@@ -44,17 +44,14 @@ export function applyRateLimit(request: NextRequest): NextResponse | null {
  */
 export async function parseBody<T>(
   request: NextRequest,
-  schema: ZodSchema<T>
+  schema: ZodSchema<T>,
 ): Promise<{ data: T; error?: never } | { data?: never; error: NextResponse }> {
   let raw: unknown;
   try {
     raw = await request.json();
   } catch {
     return {
-      error: NextResponse.json(
-        { error: "Invalid JSON body" },
-        { status: 400 }
-      ),
+      error: NextResponse.json({ error: "Invalid JSON body" }, { status: 400 }),
     };
   }
 
@@ -72,7 +69,7 @@ export async function parseBody<T>(
               message: e.message,
             })),
           },
-          { status: 400 }
+          { status: 400 },
         ),
       };
     }
@@ -85,7 +82,7 @@ export async function parseBody<T>(
  */
 export function parseQuery<T>(
   url: URL,
-  schema: ZodSchema<T>
+  schema: ZodSchema<T>,
 ): { data: T; error?: never } | { data?: never; error: NextResponse } {
   const raw: Record<string, string> = {};
   url.searchParams.forEach((value, key) => {
@@ -106,7 +103,7 @@ export function parseQuery<T>(
               message: e.message,
             })),
           },
-          { status: 400 }
+          { status: 400 },
         ),
       };
     }
@@ -117,10 +114,7 @@ export function parseQuery<T>(
 /**
  * Standard error response for caught exceptions.
  */
-export function errorResponse(
-  message: string,
-  status: number = 500
-): NextResponse {
+export function errorResponse(message: string, status: number = 500): NextResponse {
   return NextResponse.json({ error: message }, { status });
 }
 
@@ -131,7 +125,7 @@ export function paginatedResponse<T>(
   data: T[],
   total: number,
   page: number,
-  limit: number
+  limit: number,
 ): NextResponse {
   return NextResponse.json({
     data,

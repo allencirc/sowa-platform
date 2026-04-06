@@ -20,7 +20,7 @@ export function SkillBadge({ skill, className }: SkillBadgeProps) {
       className={cn(
         "inline-flex items-center rounded-full px-3 py-1 text-xs font-medium",
         categoryStyles[skill.category] ?? "bg-gray-100 text-text-secondary",
-        className
+        className,
       )}
     >
       {skill.name}

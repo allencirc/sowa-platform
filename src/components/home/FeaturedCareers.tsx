@@ -12,9 +12,7 @@ export async function FeaturedCareers() {
       <Container>
         <div className="flex items-end justify-between mb-8">
           <div>
-            <h2 className="text-3xl font-bold text-text-primary">
-              Career Pathways
-            </h2>
+            <h2 className="text-3xl font-bold text-text-primary">Career Pathways</h2>
             <p className="mt-2 text-text-secondary">
               Explore roles across Ireland&apos;s offshore wind energy sector.
             </p>

@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "./fixtures";
 
 // WCAG 2.2 AA axe sweeps live in a11y.spec.ts (every public route × desktop + mobile).
 
@@ -9,8 +9,10 @@ test.describe("Homepage", () => {
     // Hero section
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
 
-    // Navigation
-    await expect(page.getByRole("navigation")).toBeVisible();
+    // Header landmark must be present on every breakpoint (the desktop nav
+    // is hidden at mobile widths, so assert the banner/header landmark
+    // instead of the navigation role).
+    await expect(page.getByRole("banner")).toBeVisible();
 
     // Check for key homepage sections
     const body = await page.textContent("body");

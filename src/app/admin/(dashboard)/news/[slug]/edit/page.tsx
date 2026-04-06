@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
+import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { NewsForm } from "@/components/admin/news/NewsForm";
 import { StatusWorkflow } from "@/components/admin/StatusWorkflow";
@@ -39,23 +40,28 @@ export default function EditNewsPage() {
       .finally(() => setLoading(false));
   }, [slug]);
 
-  useEffect(() => { fetchArticle(); }, [fetchArticle]);
+  useEffect(() => {
+    fetchArticle();
+  }, [fetchArticle]);
 
   const handleStatusChange = (newStatus: ContentStatus) => {
     setArticle((prev) =>
-      prev ? { ...prev, status: newStatus, rejectionNote: null, publishAt: null } : prev
+      prev ? { ...prev, status: newStatus, rejectionNote: null, publishAt: null } : prev,
     );
   };
 
   const userRole = (session?.user?.role ?? "VIEWER") as "ADMIN" | "EDITOR" | "VIEWER";
 
-  if (loading) return <div className="flex h-64 items-center justify-center text-text-muted">Loading...</div>;
+  if (loading)
+    return <div className="flex h-64 items-center justify-center text-text-muted">Loading...</div>;
 
   if (error || !article) {
     return (
       <div className="flex h-64 flex-col items-center justify-center gap-2">
         <p className="text-lg font-medium text-text-primary">{error ?? "Article not found"}</p>
-        <a href="/admin/news" className="text-sm text-accent-dark hover:underline">Back to news</a>
+        <Link href="/admin/news" className="text-sm text-accent-dark hover:underline">
+          Back to news
+        </Link>
       </div>
     );
   }
@@ -67,7 +73,9 @@ export default function EditNewsPage() {
         <p className="mt-1 text-sm text-text-secondary">Update this article.</p>
       </div>
       <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
-        <div><NewsForm article={article} mode="edit" /></div>
+        <div>
+          <NewsForm article={article} mode="edit" />
+        </div>
         <div className="space-y-6">
           <StatusWorkflow
             currentStatus={article.status}
@@ -83,7 +91,7 @@ export default function EditNewsPage() {
             contentId={article.id}
             userRole={userRole}
             onRestore={(snapshot) => {
-              setArticle((prev) => prev ? { ...prev, ...snapshot } as NewsWithWorkflow : prev);
+              setArticle((prev) => (prev ? ({ ...prev, ...snapshot } as NewsWithWorkflow) : prev));
               router.refresh();
             }}
           />

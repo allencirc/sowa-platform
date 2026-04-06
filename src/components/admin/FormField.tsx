@@ -28,9 +28,7 @@ export function FormField({
         {label}
         {required && <span className="ml-0.5 text-status-error">*</span>}
       </label>
-      {description && (
-        <p className="text-xs text-text-muted">{description}</p>
-      )}
+      {description && <p className="text-xs text-text-muted">{description}</p>}
       {children}
       {error && <p className="text-sm text-status-error">{error}</p>}
     </div>

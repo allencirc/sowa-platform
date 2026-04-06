@@ -11,10 +11,7 @@ const updateUserSchema = z.object({
   role: z.enum(["ADMIN", "EDITOR", "VIEWER"]).optional(),
 });
 
-export async function PATCH(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function PATCH(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     await requireRole(["ADMIN"]);
 
@@ -25,7 +22,7 @@ export async function PATCH(
     if (!parsed.success) {
       return NextResponse.json(
         { error: "Validation failed", details: parsed.error.flatten() },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -58,7 +55,7 @@ export async function PATCH(
 
 export async function DELETE(
   _request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     await requireRole(["ADMIN"]);

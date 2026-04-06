@@ -14,9 +14,7 @@ export async function UpcomingEvents() {
       <Container>
         <div className="flex items-end justify-between mb-8">
           <div>
-            <h2 className="text-3xl font-bold text-text-primary">
-              What&apos;s On
-            </h2>
+            <h2 className="text-3xl font-bold text-text-primary">What&apos;s On</h2>
             <p className="mt-2 text-text-secondary">
               Events, webinars, and workshops for the OWE community.
             </p>

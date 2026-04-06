@@ -6,41 +6,41 @@
 
 ### Required
 
-| Variable | Description | Example |
-|----------|-------------|---------|
-| `DATABASE_URL` | PostgreSQL connection string | `postgresql://user:pass@host:5432/sowa?schema=public` |
-| `NEXTAUTH_SECRET` | Random string for JWT signing. Generate with `openssl rand -base64 32` | `K7x...long_random_string` |
-| `NEXTAUTH_URL` | Full URL of the deployed site (must match exactly) | `https://sowa.ie` |
+| Variable          | Description                                                            | Example                                               |
+| ----------------- | ---------------------------------------------------------------------- | ----------------------------------------------------- |
+| `DATABASE_URL`    | PostgreSQL connection string                                           | `postgresql://user:pass@host:5432/sowa?schema=public` |
+| `NEXTAUTH_SECRET` | Random string for JWT signing. Generate with `openssl rand -base64 32` | `K7x...long_random_string`                            |
+| `NEXTAUTH_URL`    | Full URL of the deployed site (must match exactly)                     | `https://sowa.ie`                                     |
 
 ### Recommended
 
-| Variable | Description | Default |
-|----------|-------------|---------|
+| Variable   | Description                        | Default       |
+| ---------- | ---------------------------------- | ------------- |
 | `NODE_ENV` | `production` for production builds | `development` |
 
 ### AI Summary (Optional)
 
-| Variable | Description |
-|----------|-------------|
-| `AI_SUMMARY_ENABLED` | Set to `"true"` to enable AI-powered diagnostic summaries |
-| `ANTHROPIC_API_KEY` | Anthropic API key (preferred for AI summaries) |
-| `OPENAI_API_KEY` | OpenAI API key (fallback if Anthropic not set) |
+| Variable                              | Description                                               |
+| ------------------------------------- | --------------------------------------------------------- |
+| `AI_SUMMARY_ENABLED`                  | Set to `"true"` to enable AI-powered diagnostic summaries |
+| `CLAUDE_KEY` (or `ANTHROPIC_API_KEY`) | Anthropic API key (preferred for AI summaries)            |
+| `OPENAI_API_KEY`                      | OpenAI API key (fallback if Anthropic not set)            |
 
 ### HubSpot CRM (Optional)
 
-| Variable | Description |
-|----------|-------------|
-| `HUBSPOT_API_KEY` | HubSpot private app API key. Required to activate CRM sync. |
-| `HUBSPOT_PORTAL_ID` | HubSpot account/portal ID |
-| `HUBSPOT_NEWSLETTER_LIST_ID` | Static list ID for newsletter subscribers |
+| Variable                     | Description                                                 |
+| ---------------------------- | ----------------------------------------------------------- |
+| `HUBSPOT_API_KEY`            | HubSpot private app API key. Required to activate CRM sync. |
+| `HUBSPOT_PORTAL_ID`          | HubSpot account/portal ID                                   |
+| `HUBSPOT_NEWSLETTER_LIST_ID` | Static list ID for newsletter subscribers                   |
 
 ### Analytics and Marketing (Optional, client-side)
 
-| Variable | Description |
-|----------|-------------|
-| `NEXT_PUBLIC_GA_MEASUREMENT_ID` | Google Analytics 4 Measurement ID (e.g. `G-XXXXXXXXXX`) |
-| `NEXT_PUBLIC_META_PIXEL_ID` | Meta (Facebook) Pixel ID |
-| `NEXT_PUBLIC_LINKEDIN_PARTNER_ID` | LinkedIn Insight Tag partner ID |
+| Variable                          | Description                                             |
+| --------------------------------- | ------------------------------------------------------- |
+| `NEXT_PUBLIC_GA_MEASUREMENT_ID`   | Google Analytics 4 Measurement ID (e.g. `G-XXXXXXXXXX`) |
+| `NEXT_PUBLIC_META_PIXEL_ID`       | Meta (Facebook) Pixel ID                                |
+| `NEXT_PUBLIC_LINKEDIN_PARTNER_ID` | LinkedIn Insight Tag partner ID                         |
 
 > **Note:** `NEXT_PUBLIC_` prefixed variables are exposed to the browser. Analytics and marketing pixels only load after the user grants consent via the cookie banner.
 
@@ -86,9 +86,11 @@ npm run dev
 The app is available at `http://localhost:3000`.
 
 **Prisma Studio** (visual database browser):
+
 ```bash
 npx prisma studio
 ```
+
 Opens at `http://localhost:5555`.
 
 ---
@@ -121,6 +123,7 @@ This applies all migrations in `prisma/migrations/` that haven't been applied ye
 ### Creating a New Migration
 
 During development:
+
 ```bash
 # Edit prisma/schema.prisma, then:
 npx prisma migrate dev --name descriptive_name
@@ -130,10 +133,10 @@ This generates a new SQL migration file in `prisma/migrations/`.
 
 ### Migration History
 
-| Migration | Description |
-|-----------|-------------|
-| `20260404112931_init` | Initial schema: all content models, enums, junction tables, users, versions |
-| `20260404115459_add_registrations` | Registration system with status tracking |
+| Migration                           | Description                                                                                                                                                           |
+| ----------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `20260404112931_init`               | Initial schema: all content models, enums, junction tables, users, versions                                                                                           |
+| `20260404115459_add_registrations`  | Registration system with status tracking                                                                                                                              |
 | `20260405120000_add_content_source` | Adds `ContentSource` enum and `source`/`externalId` columns to `courses` and `events` for external feed ingestion (Eventbrite, CareersPortal, FetchCourses, Qualifax) |
 
 ### Checking Migration Status
@@ -151,6 +154,7 @@ npx prisma db seed
 ```
 
 This runs `prisma/seed.ts` which:
+
 1. Clears existing data (in correct dependency order)
 2. Inserts skills, careers, courses, events, research, news, diagnostic questions
 3. Creates junction table entries (career-skill, course-skill, course-career links)
@@ -167,26 +171,27 @@ This runs `prisma/seed.ts` which:
 
 ### Why this stack
 
-| Requirement | How it is met |
-|-------------|---------------|
-| EU-region data residency | Both compute (`cdg1`) and database (`aws-eu-west-3`) are located in Paris, France. No user data leaves the EU. |
+| Requirement              | How it is met                                                                                                                                                                                                                                                    |
+| ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| EU-region data residency | Both compute (`cdg1`) and database (`aws-eu-west-3`) are located in Paris, France. No user data leaves the EU.                                                                                                                                                   |
 | Renewable-energy powered | Vercel's compute and bandwidth run on AWS infrastructure. AWS has been **100% renewable-energy matched since 2023**, seven years ahead of its 2030 commitment. See: https://sustainability.aboutamazon.com/2023-aws-renewable-energy (AWS Sustainability, 2023). |
-| Data-centre efficiency | The `eu-west-3` (Paris) AWS region operates at a reported trailing-twelve-month PUE of ~1.13 and publishes a regional carbon methodology. See: https://sustainability.aboutamazon.com/products-services/the-cloud |
-| Carbon transparency | Vercel publishes emissions and methodology in its Trust Center: https://vercel.com/security and https://vercel.com/legal/dpa. Neon publishes sustainability and region data at: https://neon.tech/docs/introduction/regions |
-| Managed SLAs | Vercel Enterprise: 99.99% uptime SLA. Neon: 99.95% uptime SLA on paid tiers (https://neon.tech/docs/introduction/support). |
-| Irish/EU compliance | Both providers are GDPR-compliant, offer signed DPAs, and list sub-processors publicly. |
+| Data-centre efficiency   | The `eu-west-3` (Paris) AWS region operates at a reported trailing-twelve-month PUE of ~1.13 and publishes a regional carbon methodology. See: https://sustainability.aboutamazon.com/products-services/the-cloud                                                |
+| Carbon transparency      | Vercel publishes emissions and methodology in its Trust Center: https://vercel.com/security and https://vercel.com/legal/dpa. Neon publishes sustainability and region data at: https://neon.tech/docs/introduction/regions                                      |
+| Managed SLAs             | Vercel Enterprise: 99.99% uptime SLA. Neon: 99.95% uptime SLA on paid tiers (https://neon.tech/docs/introduction/support).                                                                                                                                       |
+| Irish/EU compliance      | Both providers are GDPR-compliant, offer signed DPAs, and list sub-processors publicly.                                                                                                                                                                          |
 
 ### Named alternatives (if Vercel is not acceptable)
 
-| Provider | EU Region | Renewable-energy source |
-|----------|-----------|-------------------------|
-| **Scaleway Serverless** | Paris (`fr-par`) | 100% renewable-powered datacentres (DC5 adiabatic cooling, no A/C). https://www.scaleway.com/en/environmental-leadership/ |
-| **OVHcloud Public Cloud** | Gravelines / Strasbourg (FR) | Water-cooled, PUE ~1.09, 100% low-carbon electricity. https://corporate.ovhcloud.com/en/sustainability/ |
-| **Microsoft Azure App Service** | North Europe (Dublin) | 100% renewable-matched since 2025 commitment; Dublin region. https://www.microsoft.com/en-us/sustainability |
+| Provider                        | EU Region                    | Renewable-energy source                                                                                                   |
+| ------------------------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| **Scaleway Serverless**         | Paris (`fr-par`)             | 100% renewable-powered datacentres (DC5 adiabatic cooling, no A/C). https://www.scaleway.com/en/environmental-leadership/ |
+| **OVHcloud Public Cloud**       | Gravelines / Strasbourg (FR) | Water-cooled, PUE ~1.09, 100% low-carbon electricity. https://corporate.ovhcloud.com/en/sustainability/                   |
+| **Microsoft Azure App Service** | North Europe (Dublin)        | 100% renewable-matched since 2025 commitment; Dublin region. https://www.microsoft.com/en-us/sustainability               |
 
 **Decision:** Vercel Paris + Neon Paris is the chosen configuration for this tender. It minimises operational overhead (no Kubernetes, no VM patching), keeps all user data within the EU, and runs on verifiably renewable-matched infrastructure. Scaleway `fr-par` is the fallback if the awarding body requires a French-owned provider.
 
 > **Green host sources quoted in the tender response:**
+>
 > - AWS 100% renewable energy (2023): https://sustainability.aboutamazon.com/2023-aws-renewable-energy
 > - Scaleway environmental leadership: https://www.scaleway.com/en/environmental-leadership/
 > - OVHcloud sustainability report: https://corporate.ovhcloud.com/en/sustainability/
@@ -209,12 +214,14 @@ This runs `prisma/seed.ts` which:
 ### Database Setup
 
 Use a managed PostgreSQL service:
+
 - **Neon** (recommended for Vercel — serverless-friendly)
 - **Supabase**
 - **AWS RDS**
 - **Railway**
 
 After creating the database:
+
 ```bash
 # Run migrations against production database
 DATABASE_URL="postgresql://..." npx prisma migrate deploy
@@ -235,13 +242,13 @@ Vercel automatically rebuilds on push to the main branch. If the deployment incl
 
 ### Vercel Build Settings
 
-| Setting | Value |
-|---------|-------|
-| Framework | Next.js |
-| Build Command | `npx prisma generate && npm run build` |
-| Output Directory | `.next` |
-| Install Command | `npm install` |
-| Node.js Version | 18.x or 20.x |
+| Setting          | Value                                  |
+| ---------------- | -------------------------------------- |
+| Framework        | Next.js                                |
+| Build Command    | `npx prisma generate && npm run build` |
+| Output Directory | `.next`                                |
+| Install Command  | `npm install`                          |
+| Node.js Version  | 18.x or 20.x                           |
 
 ---
 
@@ -335,11 +342,13 @@ Set up a cron job for regular backups:
 ### Application Rollback
 
 **On Vercel:**
+
 1. Go to the Vercel dashboard → Deployments
 2. Find the last known good deployment
 3. Click the three-dot menu → **Promote to Production**
 
 **On self-hosted:**
+
 ```bash
 # If using git tags
 git checkout v1.x.x
@@ -435,12 +444,12 @@ Set up cron jobs for automated operations:
 
 ## Troubleshooting
 
-| Issue | Solution |
-|-------|----------|
-| `prisma generate` fails | Ensure `DATABASE_URL` is set and the database is reachable |
-| Migrations fail | Check the database user has DDL permissions (CREATE TABLE, ALTER, etc.) |
-| Auth redirects loop | Verify `NEXTAUTH_URL` matches the actual deployment URL |
-| 500 errors on API | Check server logs. Most likely a database connection issue. |
-| Rate limiting too strict | Adjust limits in `src/lib/rate-limit.ts` (default: 60 req/min) |
-| Images not loading | Check `next.config.ts` remote image domains. Add your CDN domain if using external storage. |
-| Build fails on Vercel | Ensure `npx prisma generate` runs before `npm run build` in the build command |
+| Issue                    | Solution                                                                                    |
+| ------------------------ | ------------------------------------------------------------------------------------------- |
+| `prisma generate` fails  | Ensure `DATABASE_URL` is set and the database is reachable                                  |
+| Migrations fail          | Check the database user has DDL permissions (CREATE TABLE, ALTER, etc.)                     |
+| Auth redirects loop      | Verify `NEXTAUTH_URL` matches the actual deployment URL                                     |
+| 500 errors on API        | Check server logs. Most likely a database connection issue.                                 |
+| Rate limiting too strict | Adjust limits in `src/lib/rate-limit.ts` (default: 60 req/min)                              |
+| Images not loading       | Check `next.config.ts` remote image domains. Add your CDN domain if using external storage. |
+| Build fails on Vercel    | Ensure `npx prisma generate` runs before `npm run build` in the build command               |

@@ -18,8 +18,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Skills Diagnostic — SOWA",
-    description:
-      "Assess your offshore wind skills in 5 minutes. Get personalised recommendations.",
+    description: "Assess your offshore wind skills in 5 minutes. Get personalised recommendations.",
   },
 };
 
@@ -81,8 +80,7 @@ export default function DiagnosticPage() {
           <div
             className="absolute inset-0 opacity-[0.03]"
             style={{
-              backgroundImage:
-                "radial-gradient(circle, white 1px, transparent 1px)",
+              backgroundImage: "radial-gradient(circle, white 1px, transparent 1px)",
               backgroundSize: "24px 24px",
             }}
           />
@@ -103,9 +101,9 @@ export default function DiagnosticPage() {
             </h1>
 
             <p className="text-lg sm:text-xl text-white/80 mb-10 max-w-2xl mx-auto leading-relaxed">
-              Answer 15 quick questions about your experience and interests.
-              Get a personalised skills profile with career recommendations
-              and targeted training pathways — all in under 5 minutes.
+              Answer 15 quick questions about your experience and interests. Get a personalised
+              skills profile with career recommendations and targeted training pathways — all in
+              under 5 minutes.
             </p>
 
             {/* Feature pills */}
@@ -135,8 +133,8 @@ export default function DiagnosticPage() {
               Choose Your Path
             </h2>
             <p className="text-text-secondary max-w-xl mx-auto">
-              Select the option that best describes you to get started with your
-              personalised assessment.
+              Select the option that best describes you to get started with your personalised
+              assessment.
             </p>
           </div>
 
@@ -158,13 +156,9 @@ export default function DiagnosticPage() {
                   <a.icon className="h-8 w-8" />
                 </div>
 
-                <h3 className="text-xl font-bold text-text-primary mb-3">
-                  {a.title}
-                </h3>
+                <h3 className="text-xl font-bold text-text-primary mb-3">{a.title}</h3>
 
-                <p className="text-sm text-text-secondary mb-6 leading-relaxed">
-                  {a.description}
-                </p>
+                <p className="text-sm text-text-secondary mb-6 leading-relaxed">{a.description}</p>
 
                 <span className="inline-flex items-center gap-2 text-sm font-semibold text-accent-dark group-hover:text-accent-dark transition-colors">
                   Start Assessment

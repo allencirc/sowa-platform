@@ -12,13 +12,7 @@ function SubmitButton() {
   const { pending } = useFormStatus();
 
   return (
-    <Button
-      type="submit"
-      variant="primary"
-      size="lg"
-      className="w-full"
-      disabled={pending}
-    >
+    <Button type="submit" variant="primary" size="lg" className="w-full" disabled={pending}>
       {pending ? "Signing in..." : "Sign In"}
     </Button>
   );
@@ -27,10 +21,7 @@ function SubmitButton() {
 export function LoginForm() {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") || "/admin";
-  const [state, formAction] = useActionState<LoginState, FormData>(
-    loginAction,
-    {}
-  );
+  const [state, formAction] = useActionState<LoginState, FormData>(loginAction, {});
 
   return (
     <form action={formAction} className="flex flex-col gap-5">

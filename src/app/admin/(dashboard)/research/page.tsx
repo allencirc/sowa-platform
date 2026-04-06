@@ -28,7 +28,7 @@ export default function AdminResearchPage() {
 
   const { data, totalPages, loading, refetch } = useAdminFetch<Research & { status?: string }>(
     "/api/research",
-    { page, search, filters }
+    { page, search, filters },
   );
 
   const columns: Column<Research & { status?: string }>[] = [
@@ -56,7 +56,9 @@ export default function AdminResearchPage() {
     {
       key: "publicationDate",
       label: "Published",
-      render: (row) => <span className="text-text-secondary">{formatDate(row.publicationDate)}</span>,
+      render: (row) => (
+        <span className="text-text-secondary">{formatDate(row.publicationDate)}</span>
+      ),
     },
     {
       key: "categories",
@@ -64,9 +66,13 @@ export default function AdminResearchPage() {
       render: (row) => (
         <div className="flex flex-wrap gap-1">
           {row.categories.slice(0, 2).map((c) => (
-            <Badge key={c} variant="default">{c}</Badge>
+            <Badge key={c} variant="default">
+              {c}
+            </Badge>
           ))}
-          {row.categories.length > 2 && <Badge variant="default">+{row.categories.length - 2}</Badge>}
+          {row.categories.length > 2 && (
+            <Badge variant="default">+{row.categories.length - 2}</Badge>
+          )}
         </div>
       ),
     },
@@ -74,7 +80,9 @@ export default function AdminResearchPage() {
       key: "status",
       label: "Status",
       render: (row) => (
-        <StatusBadge status={(row.status as "DRAFT" | "IN_REVIEW" | "PUBLISHED" | "ARCHIVED") ?? "DRAFT"} />
+        <StatusBadge
+          status={(row.status as "DRAFT" | "IN_REVIEW" | "PUBLISHED" | "ARCHIVED") ?? "DRAFT"}
+        />
       ),
     },
     {
@@ -84,9 +92,18 @@ export default function AdminResearchPage() {
       render: (row) => (
         <div className="flex items-center gap-1">
           <Link href={`/admin/research/${row.slug}/edit`}>
-            <Button variant="ghost" size="sm"><Pencil className="h-4 w-4" /></Button>
+            <Button variant="ghost" size="sm">
+              <Pencil className="h-4 w-4" />
+            </Button>
           </Link>
-          <Button variant="ghost" size="sm" onClick={(e) => { e.stopPropagation(); setDeleteSlug(row.slug); }}>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={(e) => {
+              e.stopPropagation();
+              setDeleteSlug(row.slug);
+            }}
+          >
             <Trash2 className="h-4 w-4 text-status-error" />
           </Button>
         </div>
@@ -102,14 +119,24 @@ export default function AdminResearchPage() {
           <p className="mt-1 text-sm text-text-secondary">Manage research papers and reports.</p>
         </div>
         <Link href="/admin/research/new">
-          <Button><Plus className="h-4 w-4" /> Add Research</Button>
+          <Button>
+            <Plus className="h-4 w-4" /> Add Research
+          </Button>
         </Link>
       </div>
 
       <div className="mb-4 flex flex-col gap-3 sm:flex-row">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-text-muted" />
-          <Input placeholder="Search research..." value={search} onChange={(e) => { setSearch(e.target.value); setPage(1); }} className="pl-10" />
+          <Input
+            placeholder="Search research..."
+            value={search}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setPage(1);
+            }}
+            className="pl-10"
+          />
         </div>
         <Select
           options={[
@@ -132,15 +159,28 @@ export default function AdminResearchPage() {
         <div className="flex h-64 items-center justify-center text-text-muted">Loading...</div>
       ) : (
         <>
-          <DataTable columns={columns} data={data} rowKey={(row) => row.slug} onRowClick={(row) => router.push(`/admin/research/${row.slug}/edit`)} emptyMessage="No research found." />
-          <div className="mt-4"><Pagination page={page} totalPages={totalPages} onPageChange={setPage} /></div>
+          <DataTable
+            columns={columns}
+            data={data}
+            rowKey={(row) => row.slug}
+            onRowClick={(row) => router.push(`/admin/research/${row.slug}/edit`)}
+            emptyMessage="No research found."
+          />
+          <div className="mt-4">
+            <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
+          </div>
         </>
       )}
 
       <DeleteDialog
         open={!!deleteSlug}
         onClose={() => setDeleteSlug(null)}
-        onConfirm={async () => { if (deleteSlug) { await adminDelete(`/api/research/${deleteSlug}`); refetch(); } }}
+        onConfirm={async () => {
+          if (deleteSlug) {
+            await adminDelete(`/api/research/${deleteSlug}`);
+            refetch();
+          }
+        }}
         title="Delete Research?"
         description="This will permanently remove this research item."
       />

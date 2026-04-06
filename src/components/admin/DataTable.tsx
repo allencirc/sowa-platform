@@ -43,7 +43,7 @@ export function DataTable<T>({
                 className={cn(
                   "px-4 py-3 text-xs font-semibold uppercase tracking-wider text-text-secondary",
                   col.sortable && onSort && "cursor-pointer select-none hover:text-text-primary",
-                  col.className
+                  col.className,
                 )}
                 onClick={col.sortable && onSort ? () => onSort(col.key) : undefined}
               >
@@ -70,10 +70,7 @@ export function DataTable<T>({
         <tbody className="divide-y divide-gray-100">
           {data.length === 0 ? (
             <tr>
-              <td
-                colSpan={columns.length}
-                className="px-4 py-12 text-center text-text-muted"
-              >
+              <td colSpan={columns.length} className="px-4 py-12 text-center text-text-muted">
                 {emptyMessage}
               </td>
             </tr>
@@ -83,7 +80,7 @@ export function DataTable<T>({
                 key={rowKey(row)}
                 className={cn(
                   "transition-colors hover:bg-gray-50/50",
-                  onRowClick && "cursor-pointer"
+                  onRowClick && "cursor-pointer",
                 )}
                 onClick={onRowClick ? () => onRowClick(row) : undefined}
               >

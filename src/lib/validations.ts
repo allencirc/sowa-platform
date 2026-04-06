@@ -12,13 +12,7 @@ export const CareerSectorEnum = z.enum([
   "Project Management",
 ]);
 
-export const EntryLevelEnum = z.enum([
-  "Apprentice",
-  "Entry",
-  "Mid",
-  "Senior",
-  "Leadership",
-]);
+export const EntryLevelEnum = z.enum(["Apprentice", "Entry", "Mid", "Senior", "Leadership"]);
 
 export const ProviderTypeEnum = z.enum([
   "University",
@@ -29,12 +23,7 @@ export const ProviderTypeEnum = z.enum([
   "Government",
 ]);
 
-export const DeliveryFormatEnum = z.enum([
-  "In-Person",
-  "Online",
-  "Blended",
-  "Self-Paced",
-]);
+export const DeliveryFormatEnum = z.enum(["In-Person", "Online", "Blended", "Self-Paced"]);
 
 export const EventTypeEnum = z.enum([
   "Workshop",
@@ -45,11 +34,7 @@ export const EventTypeEnum = z.enum([
   "Roadshow",
 ]);
 
-export const LocationTypeEnum = z.enum([
-  "Physical",
-  "Virtual",
-  "Hybrid",
-]);
+export const LocationTypeEnum = z.enum(["Physical", "Virtual", "Hybrid"]);
 
 export const SkillCategoryEnum = z.enum([
   "Technical",
@@ -59,34 +44,15 @@ export const SkillCategoryEnum = z.enum([
   "Management",
 ]);
 
-export const PathwayTypeEnum = z.enum([
-  "progression",
-  "lateral",
-  "specialisation",
-]);
+export const PathwayTypeEnum = z.enum(["progression", "lateral", "specialisation"]);
 
-export const DiagnosticQuestionTypeEnum = z.enum([
-  "single_choice",
-  "multiple_choice",
-  "scale",
-]);
+export const DiagnosticQuestionTypeEnum = z.enum(["single_choice", "multiple_choice", "scale"]);
 
 // ─── Content workflow enums ─────────────────────────────
 
-export const ContentStatusEnum = z.enum([
-  "DRAFT",
-  "IN_REVIEW",
-  "PUBLISHED",
-  "ARCHIVED",
-]);
+export const ContentStatusEnum = z.enum(["DRAFT", "IN_REVIEW", "PUBLISHED", "ARCHIVED"]);
 
-export const ContentTypeEnum = z.enum([
-  "CAREER",
-  "COURSE",
-  "EVENT",
-  "RESEARCH",
-  "NEWS",
-]);
+export const ContentTypeEnum = z.enum(["CAREER", "COURSE", "EVENT", "RESEARCH", "NEWS"]);
 
 // ─── Status transition schema ───────────────────────────
 
@@ -129,15 +95,20 @@ export const pathwayConnectionSchema = z.object({
 });
 
 export const createCareerSchema = z.object({
-  slug: z.string().min(1).regex(/^[a-z0-9-]+$/, "Slug must be lowercase alphanumeric with hyphens"),
+  slug: z
+    .string()
+    .min(1)
+    .regex(/^[a-z0-9-]+$/, "Slug must be lowercase alphanumeric with hyphens"),
   title: z.string().min(1).max(200),
   sector: CareerSectorEnum,
   entryLevel: EntryLevelEnum,
   description: z.string().min(1),
-  salaryRange: z.object({
-    min: z.number().int().min(0),
-    max: z.number().int().min(0),
-  }).optional(),
+  salaryRange: z
+    .object({
+      min: z.number().int().min(0),
+      max: z.number().int().min(0),
+    })
+    .optional(),
   keyResponsibilities: z.array(z.string()).optional(),
   qualifications: z.array(z.string().min(1)).min(1),
   workingConditions: z.string().optional(),
@@ -147,9 +118,7 @@ export const createCareerSchema = z.object({
   relatedCourses: z.array(z.string()).optional(),
 });
 
-export const updateCareerSchema = createCareerSchema
-  .omit({ slug: true })
-  .partial();
+export const updateCareerSchema = createCareerSchema.omit({ slug: true }).partial();
 
 export const careerFiltersSchema = paginationSchema.merge(sortSchema).extend({
   sector: CareerSectorEnum.optional(),
@@ -160,7 +129,10 @@ export const careerFiltersSchema = paginationSchema.merge(sortSchema).extend({
 // ─── Course schemas ──────────────────────────────────────
 
 export const createCourseSchema = z.object({
-  slug: z.string().min(1).regex(/^[a-z0-9-]+$/),
+  slug: z
+    .string()
+    .min(1)
+    .regex(/^[a-z0-9-]+$/),
   title: z.string().min(1).max(300),
   provider: z.string().min(1),
   providerType: ProviderTypeEnum,
@@ -172,7 +144,16 @@ export const createCourseSchema = z.object({
   duration: z.string().min(1),
   cost: z.number().min(0).default(0),
   costNotes: z.string().optional(),
-  nextStartDate: z.string().datetime().optional().or(z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional()),
+  nextStartDate: z
+    .string()
+    .datetime()
+    .optional()
+    .or(
+      z
+        .string()
+        .regex(/^\d{4}-\d{2}-\d{2}$/)
+        .optional(),
+    ),
   accredited: z.boolean().optional(),
   certificationAwarded: z.string().optional(),
   skills: z.array(z.string().min(1)),
@@ -180,9 +161,7 @@ export const createCourseSchema = z.object({
   tags: z.array(z.string()),
 });
 
-export const updateCourseSchema = createCourseSchema
-  .omit({ slug: true })
-  .partial();
+export const updateCourseSchema = createCourseSchema.omit({ slug: true }).partial();
 
 export const courseFiltersSchema = paginationSchema.merge(sortSchema).extend({
   topic: z.string().optional(),
@@ -199,7 +178,10 @@ export const courseFiltersSchema = paginationSchema.merge(sortSchema).extend({
 // ─── Event schemas ───────────────────────────────────────
 
 export const createEventSchema = z.object({
-  slug: z.string().min(1).regex(/^[a-z0-9-]+$/),
+  slug: z
+    .string()
+    .min(1)
+    .regex(/^[a-z0-9-]+$/),
   title: z.string().min(1).max(300),
   type: EventTypeEnum,
   startDate: z.string().min(1),
@@ -211,9 +193,7 @@ export const createEventSchema = z.object({
   image: z.string().url().optional(),
 });
 
-export const updateEventSchema = createEventSchema
-  .omit({ slug: true })
-  .partial();
+export const updateEventSchema = createEventSchema.omit({ slug: true }).partial();
 
 export const eventFiltersSchema = paginationSchema.merge(sortSchema).extend({
   type: EventTypeEnum.optional(),
@@ -225,7 +205,10 @@ export const eventFiltersSchema = paginationSchema.merge(sortSchema).extend({
 // ─── Research schemas ────────────────────────────────────
 
 export const createResearchSchema = z.object({
-  slug: z.string().min(1).regex(/^[a-z0-9-]+$/),
+  slug: z
+    .string()
+    .min(1)
+    .regex(/^[a-z0-9-]+$/),
   title: z.string().min(1).max(300),
   author: z.string().min(1),
   organisation: z.string().min(1),
@@ -236,9 +219,7 @@ export const createResearchSchema = z.object({
   image: z.string().url().optional(),
 });
 
-export const updateResearchSchema = createResearchSchema
-  .omit({ slug: true })
-  .partial();
+export const updateResearchSchema = createResearchSchema.omit({ slug: true }).partial();
 
 export const researchFiltersSchema = paginationSchema.merge(sortSchema).extend({
   category: z.string().optional(),
@@ -249,7 +230,10 @@ export const researchFiltersSchema = paginationSchema.merge(sortSchema).extend({
 // ─── News schemas ────────────────────────────────────────
 
 export const createNewsSchema = z.object({
-  slug: z.string().min(1).regex(/^[a-z0-9-]+$/),
+  slug: z
+    .string()
+    .min(1)
+    .regex(/^[a-z0-9-]+$/),
   title: z.string().min(1).max(300),
   date: z.string().min(1),
   excerpt: z.string().min(1),
@@ -259,9 +243,7 @@ export const createNewsSchema = z.object({
   image: z.string().url().optional(),
 });
 
-export const updateNewsSchema = createNewsSchema
-  .omit({ slug: true })
-  .partial();
+export const updateNewsSchema = createNewsSchema.omit({ slug: true }).partial();
 
 export const newsFiltersSchema = paginationSchema.merge(sortSchema).extend({
   category: z.string().optional(),
@@ -271,7 +253,10 @@ export const newsFiltersSchema = paginationSchema.merge(sortSchema).extend({
 // ─── Skill schemas ───────────────────────────────────────
 
 export const createSkillSchema = z.object({
-  slug: z.string().min(1).regex(/^[a-z0-9-]+$/),
+  slug: z
+    .string()
+    .min(1)
+    .regex(/^[a-z0-9-]+$/),
   name: z.string().min(1).max(100),
   category: SkillCategoryEnum,
 });

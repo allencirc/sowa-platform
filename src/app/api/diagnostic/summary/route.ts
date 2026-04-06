@@ -102,13 +102,16 @@ export async function POST(request: NextRequest) {
 
   // Validate required fields
   if (!body.gaps || !body.recommendedCareers || !body.recommendedCourses) {
-    return errorResponse("Missing required fields: gaps, recommendedCareers, recommendedCourses", 400);
+    return errorResponse(
+      "Missing required fields: gaps, recommendedCareers, recommendedCourses",
+      400,
+    );
   }
 
   const userPrompt = buildPrompt(body);
 
   // Try Anthropic API first, fall back to OpenAI
-  const anthropicKey = process.env.ANTHROPIC_API_KEY;
+  const anthropicKey = process.env.CLAUDE_KEY || process.env.ANTHROPIC_API_KEY;
   const openaiKey = process.env.OPENAI_API_KEY;
 
   if (!anthropicKey && !openaiKey) {

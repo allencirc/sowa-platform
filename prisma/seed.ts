@@ -119,6 +119,7 @@ interface CourseJson {
   nextStartDate?: string;
   accredited?: boolean;
   certificationAwarded?: string;
+  signupUrl?: string;
   skills: string[];
   careerRelevance: string[];
   tags: string[];
@@ -234,6 +235,7 @@ async function main() {
         qualifications: career.qualifications,
         workingConditions: career.workingConditions ?? null,
         growthOutlook: career.growthOutlook ?? null,
+        status: "PUBLISHED" as never,
       },
     });
     careerIdMap.set(career.slug, created.id);
@@ -269,9 +271,7 @@ async function main() {
           },
         });
       } else {
-        console.warn(
-          `    ⚠️  Pathway target "${conn.to}" not found for career "${career.slug}"`
-        );
+        console.warn(`    ⚠️  Pathway target "${conn.to}" not found for career "${career.slug}"`);
       }
     }
   }
@@ -296,12 +296,12 @@ async function main() {
         duration: course.duration,
         cost: course.cost,
         costNotes: course.costNotes ?? null,
-        nextStartDate: course.nextStartDate
-          ? new Date(course.nextStartDate)
-          : null,
+        nextStartDate: course.nextStartDate ? new Date(course.nextStartDate) : null,
         accredited: course.accredited ?? false,
         certificationAwarded: course.certificationAwarded ?? null,
+        signupUrl: course.signupUrl ?? null,
         tags: course.tags,
+        status: "PUBLISHED" as never,
       },
     });
     courseIdMap.set(course.slug, created.id);
@@ -351,6 +351,7 @@ async function main() {
         description: event.description,
         capacity: event.capacity ?? null,
         image: event.image ?? null,
+        status: "PUBLISHED" as never,
       },
     });
   }
@@ -370,6 +371,7 @@ async function main() {
         categories: r.categories,
         isFeatured: r.isFeatured ?? false,
         image: r.image ?? null,
+        status: "PUBLISHED" as never,
       },
     });
   }
@@ -388,15 +390,14 @@ async function main() {
         category: n.category,
         author: n.author,
         image: n.image ?? null,
+        status: "PUBLISHED" as never,
       },
     });
   }
 
   // 11. Diagnostic questions
   const diagnosticData = loadJson<DiagnosticJson>("diagnosticQuestions.json");
-  console.log(
-    `  📦 Seeding ${diagnosticData.questions.length} diagnostic questions...`
-  );
+  console.log(`  📦 Seeding ${diagnosticData.questions.length} diagnostic questions...`);
   for (const q of diagnosticData.questions) {
     await prisma.diagnosticQuestion.create({
       data: {

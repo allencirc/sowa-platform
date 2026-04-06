@@ -49,6 +49,18 @@ const nextConfig: NextConfig = {
         source: "/:path*",
         headers: securityHeaders,
       },
+      {
+        // Cache uploaded media assets — filenames include timestamps so they are
+        // effectively immutable.  One-year max-age with immutable directive lets
+        // browsers and CDN edges serve them without revalidation.
+        source: "/uploads/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
     ];
   },
 };

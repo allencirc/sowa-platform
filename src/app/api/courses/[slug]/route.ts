@@ -1,26 +1,29 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import {
-  applyRateLimit,
-  parseBody,
-  errorResponse,
-} from "@/lib/api-utils";
+import { applyRateLimit, parseBody, errorResponse } from "@/lib/api-utils";
 import { updateCourseSchema } from "@/lib/validations";
 import { requireRole } from "@/lib/auth-utils";
 import { createContentVersion } from "@/lib/versions";
 
 const providerTypeToEnum: Record<string, string> = {
-  University: "UNIVERSITY", ETB: "ETB", Private: "PRIVATE",
-  Industry: "INDUSTRY", Skillnet_Network: "SKILLNET_NETWORK", Government: "GOVERNMENT",
+  University: "UNIVERSITY",
+  ETB: "ETB",
+  Private: "PRIVATE",
+  Industry: "INDUSTRY",
+  Skillnet_Network: "SKILLNET_NETWORK",
+  Government: "GOVERNMENT",
 };
 const deliveryFormatToEnum: Record<string, string> = {
-  "In-Person": "IN_PERSON", Online: "ONLINE", Blended: "BLENDED", "Self-Paced": "SELF_PACED",
+  "In-Person": "IN_PERSON",
+  Online: "ONLINE",
+  Blended: "BLENDED",
+  "Self-Paced": "SELF_PACED",
 };
 const providerTypeDisplay: Record<string, string> = Object.fromEntries(
-  Object.entries(providerTypeToEnum).map(([k, v]) => [v, k])
+  Object.entries(providerTypeToEnum).map(([k, v]) => [v, k]),
 );
 const deliveryFormatDisplay: Record<string, string> = Object.fromEntries(
-  Object.entries(deliveryFormatToEnum).map(([k, v]) => [v, k])
+  Object.entries(deliveryFormatToEnum).map(([k, v]) => [v, k]),
 );
 
 const courseInclude = {
@@ -50,12 +53,10 @@ function mapCourse(row: AnyRecord) {
       : undefined,
     accredited: (row.accredited as boolean) ?? undefined,
     certificationAwarded: (row.certificationAwarded as string) ?? undefined,
-    skills: ((row.skills as { skill: { slug: string } }[]) ?? []).map(
-      (s) => s.skill.slug
+    skills: ((row.skills as { skill: { slug: string } }[]) ?? []).map((s) => s.skill.slug),
+    careerRelevance: ((row.careerRelevance as { career: { slug: string } }[]) ?? []).map(
+      (c) => c.career.slug,
     ),
-    careerRelevance: (
-      (row.careerRelevance as { career: { slug: string } }[]) ?? []
-    ).map((c) => c.career.slug),
     tags: (row.tags as string[]) ?? [],
     status: (row.status as string) ?? "DRAFT",
     publishAt: row.publishAt ? (row.publishAt as Date).toISOString() : null,
@@ -63,10 +64,7 @@ function mapCourse(row: AnyRecord) {
   };
 }
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ slug: string }> }
-) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   const rateLimited = applyRateLimit(request);
   if (rateLimited) return rateLimited;
 
@@ -86,10 +84,7 @@ export async function GET(
   }
 }
 
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: Promise<{ slug: string }> }
-) {
+export async function PUT(request: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   const rateLimited = applyRateLimit(request);
   if (rateLimited) return rateLimited;
 
@@ -122,7 +117,8 @@ export async function PUT(
           entryRequirements: data.entryRequirements ?? null,
         }),
         ...(data.deliveryFormat !== undefined && {
-          deliveryFormat: (deliveryFormatToEnum[data.deliveryFormat] ?? data.deliveryFormat) as never,
+          deliveryFormat: (deliveryFormatToEnum[data.deliveryFormat] ??
+            data.deliveryFormat) as never,
         }),
         ...(data.location !== undefined && { location: data.location ?? null }),
         ...(data.nfqLevel !== undefined && { nfqLevel: data.nfqLevel ?? null }),
@@ -163,7 +159,7 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: Promise<{ slug: string }> }
+  { params }: { params: Promise<{ slug: string }> },
 ) {
   const rateLimited = applyRateLimit(request);
   if (rateLimited) return rateLimited;

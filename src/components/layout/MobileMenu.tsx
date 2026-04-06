@@ -30,7 +30,7 @@ export function MobileMenu({ open, onClose, links }: MobileMenuProps) {
     (e: KeyboardEvent) => {
       if (e.key === "Escape" && open) onClose();
     },
-    [open, onClose]
+    [open, onClose],
   );
 
   useEffect(() => {
@@ -44,7 +44,7 @@ export function MobileMenu({ open, onClose, links }: MobileMenuProps) {
       <div
         className={cn(
           "fixed inset-0 bg-black/40 z-40 transition-opacity duration-300 lg:hidden",
-          open ? "opacity-100" : "opacity-0 pointer-events-none"
+          open ? "opacity-100" : "opacity-0 pointer-events-none",
         )}
         onClick={onClose}
         aria-hidden="true"
@@ -55,7 +55,7 @@ export function MobileMenu({ open, onClose, links }: MobileMenuProps) {
         id="mobile-menu"
         className={cn(
           "fixed inset-y-0 right-0 w-80 max-w-full bg-white z-50 shadow-2xl transition-transform duration-300 ease-out lg:hidden",
-          open ? "translate-x-0" : "translate-x-full"
+          open ? "translate-x-0" : "translate-x-full",
         )}
         role="dialog"
         aria-modal="true"
@@ -84,11 +84,11 @@ export function MobileMenu({ open, onClose, links }: MobileMenuProps) {
             </Link>
           ))}
           <div className="mt-4 px-4">
-            <a href="/diagnostic" onClick={onClose} tabIndex={open ? 0 : -1}>
+            <Link href="/diagnostic" onClick={onClose} tabIndex={open ? 0 : -1}>
               <Button className="w-full" tabIndex={-1}>
                 Get Involved
               </Button>
-            </a>
+            </Link>
           </div>
         </nav>
       </div>

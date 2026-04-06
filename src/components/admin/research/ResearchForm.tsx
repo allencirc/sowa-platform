@@ -87,7 +87,8 @@ export function ResearchForm({ research, mode }: ResearchFormProps) {
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
       {error && (
         <div className="flex items-center gap-2 rounded-lg bg-status-error/10 px-4 py-3 text-sm text-status-error">
-          <AlertCircle className="h-4 w-4 shrink-0" />{error}
+          <AlertCircle className="h-4 w-4 shrink-0" />
+          {error}
         </div>
       )}
 
@@ -98,7 +99,11 @@ export function ResearchForm({ research, mode }: ResearchFormProps) {
             <Input {...register("title")} placeholder="e.g. Offshore Wind Skills Gap Analysis" />
           </FormField>
           <FormField label="Slug" required error={errors.slug?.message}>
-            <Input {...register("slug")} readOnly={mode === "edit"} className={mode === "edit" ? "bg-gray-50" : ""} />
+            <Input
+              {...register("slug")}
+              readOnly={mode === "edit"}
+              className={mode === "edit" ? "bg-gray-50" : ""}
+            />
           </FormField>
           <FormField label="Author" required error={errors.author?.message}>
             <Input {...register("author")} placeholder="e.g. Dr. Sarah Murphy" />
@@ -121,7 +126,12 @@ export function ResearchForm({ research, mode }: ResearchFormProps) {
           <Textarea {...register("summary")} placeholder="Summarise the research..." rows={5} />
         </FormField>
         <div className="mt-4">
-          <FormField label="Categories" required error={errors.categories?.message} description="Press Enter to add categories">
+          <FormField
+            label="Categories"
+            required
+            error={errors.categories?.message}
+            description="Press Enter to add categories"
+          >
             <TagInput
               value={watch("categories") ?? []}
               onChange={(val) => setValue("categories", val, { shouldValidate: true })}
@@ -130,14 +140,23 @@ export function ResearchForm({ research, mode }: ResearchFormProps) {
           </FormField>
         </div>
         <div className="mt-4 flex items-center gap-2">
-          <input type="checkbox" id="isFeatured" {...register("isFeatured")} className="h-4 w-4 rounded border-gray-300 text-secondary-dark focus:ring-accent" />
-          <label htmlFor="isFeatured" className="text-sm font-medium text-text-primary">Featured Research</label>
+          <input
+            type="checkbox"
+            id="isFeatured"
+            {...register("isFeatured")}
+            className="h-4 w-4 rounded border-gray-300 text-secondary-dark focus:ring-accent"
+          />
+          <label htmlFor="isFeatured" className="text-sm font-medium text-text-primary">
+            Featured Research
+          </label>
         </div>
       </div>
 
       <div className="flex items-center justify-between">
         <Link href="/admin/research">
-          <Button type="button" variant="ghost"><ArrowLeft className="h-4 w-4" /> Back to Research</Button>
+          <Button type="button" variant="ghost">
+            <ArrowLeft className="h-4 w-4" /> Back to Research
+          </Button>
         </Link>
         <Button type="submit" disabled={isSubmitting}>
           <Save className="h-4 w-4" />

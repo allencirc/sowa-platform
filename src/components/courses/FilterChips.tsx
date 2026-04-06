@@ -16,19 +16,17 @@ export function FilterChips() {
 
   const chips: FilterChip[] = [];
 
-  searchParams.getAll("format").forEach((v) =>
-    chips.push({ key: "format", value: v, label: v })
-  );
+  searchParams.getAll("format").forEach((v) => chips.push({ key: "format", value: v, label: v }));
   searchParams.getAll("tag").forEach((v) =>
     chips.push({
       key: "tag",
       value: v,
       label: v.charAt(0).toUpperCase() + v.slice(1).replace(/-/g, " "),
-    })
+    }),
   );
-  searchParams.getAll("provider").forEach((v) =>
-    chips.push({ key: "provider", value: v, label: v })
-  );
+  searchParams
+    .getAll("provider")
+    .forEach((v) => chips.push({ key: "provider", value: v, label: v }));
   if (searchParams.get("free") === "true") {
     chips.push({ key: "free", value: "true", label: "Free Only" });
   }
@@ -52,7 +50,7 @@ export function FilterChips() {
       }
       router.push(`/training?${params.toString()}`, { scroll: false });
     },
-    [router, searchParams]
+    [router, searchParams],
   );
 
   const clearAll = useCallback(() => {

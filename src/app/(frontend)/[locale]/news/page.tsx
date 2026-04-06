@@ -15,16 +15,14 @@ export const metadata: Metadata = {
   alternates: { canonical: "/news" },
   openGraph: {
     title: "News — Offshore Wind Energy Ireland",
-    description:
-      "Latest news and updates from Ireland's offshore wind energy sector.",
+    description: "Latest news and updates from Ireland's offshore wind energy sector.",
     url: "/news",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
     title: "News — SOWA",
-    description:
-      "Latest news from Ireland's offshore wind energy sector.",
+    description: "Latest news from Ireland's offshore wind energy sector.",
   },
 };
 
@@ -35,9 +33,7 @@ export default async function NewsPage() {
     <>
       <section className="bg-surface py-10 sm:py-14">
         <Container>
-          <h1 className="text-3xl sm:text-4xl font-bold text-text-primary mb-2">
-            News
-          </h1>
+          <h1 className="text-3xl sm:text-4xl font-bold text-text-primary mb-2">News</h1>
           <p className="text-text-secondary max-w-2xl">
             The latest updates from Ireland&apos;s offshore wind energy sector.
           </p>
@@ -67,8 +63,7 @@ export default async function NewsPage() {
                     <div
                       className="absolute inset-0 opacity-10"
                       style={{
-                        backgroundImage:
-                          "radial-gradient(circle, white 1px, transparent 1px)",
+                        backgroundImage: "radial-gradient(circle, white 1px, transparent 1px)",
                         backgroundSize: "16px 16px",
                       }}
                     />
@@ -91,9 +86,7 @@ export default async function NewsPage() {
                     {article.title}
                   </h3>
 
-                  <p className="text-sm text-text-secondary line-clamp-3 mb-4">
-                    {article.excerpt}
-                  </p>
+                  <p className="text-sm text-text-secondary line-clamp-3 mb-4">{article.excerpt}</p>
 
                   <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-accent-dark group-hover:text-accent-dark transition-colors">
                     Read More

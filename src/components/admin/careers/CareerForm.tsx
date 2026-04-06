@@ -100,16 +100,12 @@ export function CareerForm({ career, mode }: CareerFormProps) {
       fetch("/api/courses?limit=100").then((r) => r.json()),
       fetch("/api/careers?limit=100").then((r) => r.json()),
     ]).then(([skillsRes, coursesRes, careersRes]) => {
-      setSkills(
-        (skillsRes.data ?? []).map((s: Skill) => ({ label: s.name, value: s.slug }))
-      );
-      setCourses(
-        (coursesRes.data ?? []).map((c: Course) => ({ label: c.title, value: c.slug }))
-      );
+      setSkills((skillsRes.data ?? []).map((s: Skill) => ({ label: s.name, value: s.slug })));
+      setCourses((coursesRes.data ?? []).map((c: Course) => ({ label: c.title, value: c.slug })));
       setAllCareers(
         (careersRes.data ?? [])
           .filter((c: Career) => c.slug !== career?.slug)
-          .map((c: Career) => ({ label: c.title, value: c.slug }))
+          .map((c: Career) => ({ label: c.title, value: c.slug })),
       );
     });
   }, [career?.slug]);
@@ -146,21 +142,42 @@ export function CareerForm({ career, mode }: CareerFormProps) {
           </FormField>
 
           <FormField label="Slug" htmlFor="slug" required error={errors.slug?.message}>
-            <Input id="slug" {...register("slug")} placeholder="wind-turbine-technician" readOnly={mode === "edit"} className={mode === "edit" ? "bg-gray-50" : ""} />
+            <Input
+              id="slug"
+              {...register("slug")}
+              placeholder="wind-turbine-technician"
+              readOnly={mode === "edit"}
+              className={mode === "edit" ? "bg-gray-50" : ""}
+            />
           </FormField>
 
           <FormField label="Sector" htmlFor="sector" required error={errors.sector?.message}>
             <Select id="sector" options={sectorOptions} {...register("sector")} />
           </FormField>
 
-          <FormField label="Entry Level" htmlFor="entryLevel" required error={errors.entryLevel?.message}>
+          <FormField
+            label="Entry Level"
+            htmlFor="entryLevel"
+            required
+            error={errors.entryLevel?.message}
+          >
             <Select id="entryLevel" options={levelOptions} {...register("entryLevel")} />
           </FormField>
         </div>
 
         <div className="mt-4">
-          <FormField label="Description" htmlFor="description" required error={errors.description?.message}>
-            <Textarea id="description" {...register("description")} placeholder="Describe this career role..." rows={4} />
+          <FormField
+            label="Description"
+            htmlFor="description"
+            required
+            error={errors.description?.message}
+          >
+            <Textarea
+              id="description"
+              {...register("description")}
+              placeholder="Describe this career role..."
+              rows={4}
+            />
           </FormField>
         </div>
       </div>
@@ -169,20 +186,40 @@ export function CareerForm({ career, mode }: CareerFormProps) {
         <h2 className="mb-4 text-lg font-semibold text-text-primary">Salary & Conditions</h2>
         <div className="grid gap-4 sm:grid-cols-2">
           <FormField label="Salary Min (€)" htmlFor="salaryMin">
-            <Input id="salaryMin" type="number" {...register("salaryRange.min", { valueAsNumber: true })} placeholder="30000" />
+            <Input
+              id="salaryMin"
+              type="number"
+              {...register("salaryRange.min", { valueAsNumber: true })}
+              placeholder="30000"
+            />
           </FormField>
           <FormField label="Salary Max (€)" htmlFor="salaryMax">
-            <Input id="salaryMax" type="number" {...register("salaryRange.max", { valueAsNumber: true })} placeholder="55000" />
+            <Input
+              id="salaryMax"
+              type="number"
+              {...register("salaryRange.max", { valueAsNumber: true })}
+              placeholder="55000"
+            />
           </FormField>
         </div>
         <div className="mt-4">
           <FormField label="Working Conditions" htmlFor="workingConditions">
-            <Textarea id="workingConditions" {...register("workingConditions")} placeholder="Describe typical working conditions..." rows={3} />
+            <Textarea
+              id="workingConditions"
+              {...register("workingConditions")}
+              placeholder="Describe typical working conditions..."
+              rows={3}
+            />
           </FormField>
         </div>
         <div className="mt-4">
           <FormField label="Growth Outlook" htmlFor="growthOutlook">
-            <Textarea id="growthOutlook" {...register("growthOutlook")} placeholder="Career growth prospects..." rows={3} />
+            <Textarea
+              id="growthOutlook"
+              {...register("growthOutlook")}
+              placeholder="Career growth prospects..."
+              rows={3}
+            />
           </FormField>
         </div>
       </div>
@@ -190,7 +227,12 @@ export function CareerForm({ career, mode }: CareerFormProps) {
       <div className="rounded-xl bg-surface-card p-6 shadow-sm">
         <h2 className="mb-4 text-lg font-semibold text-text-primary">Qualifications & Skills</h2>
         <div className="space-y-4">
-          <FormField label="Qualifications" required error={errors.qualifications?.message} description="Press Enter to add each qualification">
+          <FormField
+            label="Qualifications"
+            required
+            error={errors.qualifications?.message}
+            description="Press Enter to add each qualification"
+          >
             <TagInput
               value={watch("qualifications") ?? []}
               onChange={(val) => setValue("qualifications", val, { shouldValidate: true })}
@@ -198,7 +240,10 @@ export function CareerForm({ career, mode }: CareerFormProps) {
             />
           </FormField>
 
-          <FormField label="Key Responsibilities" description="Press Enter to add each responsibility">
+          <FormField
+            label="Key Responsibilities"
+            description="Press Enter to add each responsibility"
+          >
             <TagInput
               value={watch("keyResponsibilities") ?? []}
               onChange={(val) => setValue("keyResponsibilities", val)}
@@ -246,7 +291,10 @@ export function CareerForm({ career, mode }: CareerFormProps) {
           )}
           <div className="space-y-3">
             {fields.map((field, index) => (
-              <div key={field.id} className="flex items-start gap-2 rounded-lg border border-gray-200 bg-gray-50/50 p-3">
+              <div
+                key={field.id}
+                className="flex items-start gap-2 rounded-lg border border-gray-200 bg-gray-50/50 p-3"
+              >
                 <div className="grid flex-1 gap-2 sm:grid-cols-3">
                   <Select
                     options={allCareers}

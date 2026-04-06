@@ -10,7 +10,7 @@ describe("NewsletterSignup", () => {
       vi.fn().mockResolvedValue({
         ok: true,
         json: () => Promise.resolve({ success: true }),
-      })
+      }),
     );
   });
   it("renders heading", () => {

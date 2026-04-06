@@ -26,12 +26,7 @@ export function RegisterButton({
 
   return (
     <>
-      <Button
-        variant="secondary"
-        size="lg"
-        className="shadow-lg"
-        onClick={() => setOpen(true)}
-      >
+      <Button variant="secondary" size="lg" className="shadow-lg" onClick={() => setOpen(true)}>
         {buttonLabel}
         <ArrowRight className="h-5 w-5" />
       </Button>

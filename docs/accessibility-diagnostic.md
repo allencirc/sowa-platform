@@ -12,11 +12,11 @@ changes ship alongside the i18n migration.
 
 The three question types each expose the expected ARIA role pattern:
 
-| Question type       | Container role | Item role    | State                |
-| ------------------- | -------------- | ------------ | -------------------- |
-| Single choice       | `radiogroup`   | `radio`      | `aria-checked`       |
-| Multiple choice     | `group`        | `checkbox`   | `aria-checked`       |
-| Scale (1–5 circles) | `radiogroup`   | `radio`      | `aria-checked`       |
+| Question type       | Container role | Item role  | State          |
+| ------------------- | -------------- | ---------- | -------------- |
+| Single choice       | `radiogroup`   | `radio`    | `aria-checked` |
+| Multiple choice     | `group`        | `checkbox` | `aria-checked` |
+| Scale (1–5 circles) | `radiogroup`   | `radio`    | `aria-checked` |
 
 The scale `radiogroup` carries a descriptive `aria-label` of the form
 `Rate from 1 to 5`, and each scale button gets an individual
@@ -29,10 +29,10 @@ class names.
 
 ## Keyboard interaction
 
-| Key               | Action                                         |
-| ----------------- | ---------------------------------------------- |
+| Key                 | Action                                                |
+| ------------------- | ----------------------------------------------------- |
 | `Tab` / `Shift+Tab` | Move focus between the group and other page controls. |
-| `Space` / `Enter` | Select / toggle the currently focused option.  |
+| `Space` / `Enter`   | Select / toggle the currently focused option.         |
 
 ## Focus rings
 

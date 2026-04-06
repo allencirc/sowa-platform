@@ -11,32 +11,13 @@ import { ROLE_FAMILIES } from "./diagnostic-role-weights";
 
 // Maps q8 interest area values to relevant career slugs
 export const interestToCareerMap: Record<string, string[]> = {
-  technical: [
-    "offshore-wind-turbine-technician",
-    "blade-technician",
-    "onshore-wind-technician",
-  ],
-  engineering: [
-    "owe-project-engineer",
-    "electrical-engineer-substations",
-  ],
-  marine: [
-    "marine-coordinator",
-    "offshore-logistics-manager",
-  ],
-  hse: [
-    "hse-advisor-offshore-wind",
-  ],
-  digital: [
-    "offshore-wind-data-analyst",
-  ],
-  management: [
-    "owe-commercial-manager",
-    "offshore-installation-manager",
-  ],
-  policy: [
-    "consenting-and-environmental-specialist",
-  ],
+  technical: ["offshore-wind-turbine-technician", "blade-technician", "onshore-wind-technician"],
+  engineering: ["owe-project-engineer", "electrical-engineer-substations"],
+  marine: ["marine-coordinator", "offshore-logistics-manager"],
+  hse: ["hse-advisor-offshore-wind"],
+  digital: ["offshore-wind-data-analyst"],
+  management: ["owe-commercial-manager", "offshore-installation-manager"],
+  policy: ["consenting-and-environmental-specialist"],
   unsure: [
     "offshore-wind-turbine-technician",
     "onshore-wind-technician",
@@ -56,7 +37,7 @@ export function calculateResults(
     allSkills: Skill[];
     allCareers: Career[];
     allCourses: Course[];
-  }
+  },
 ): DiagnosticResult {
   // When called from client, data must be provided.
   // Fallback: import from JSON for backwards compat during build/seed.
@@ -72,9 +53,13 @@ export function calculateResults(
     allCourses = data.allCourses;
   } else {
     // Synchronous fallback using JSON imports for client/build
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const questionsJson = require("./data/diagnosticQuestions.json");
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const skillsJson = require("./data/skills.json");
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const careersJson = require("./data/careers.json");
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const coursesJson = require("./data/courses.json");
     questions = questionsJson.questions as DiagnosticQuestion[];
     allSkills = skillsJson as Skill[];
@@ -192,10 +177,8 @@ export function calculateResults(
   const topGaps = gaps.slice(0, 3);
 
   // Recommend careers based on q8 interest area + scores
-  const interestArea =
-    typeof answers["q8"] === "string" ? answers["q8"] : "unsure";
-  const relevantCareerSlugs =
-    interestToCareerMap[interestArea] ?? interestToCareerMap["unsure"];
+  const interestArea = typeof answers["q8"] === "string" ? answers["q8"] : "unsure";
+  const relevantCareerSlugs = interestToCareerMap[interestArea] ?? interestToCareerMap["unsure"];
 
   const recommendedCareers = relevantCareerSlugs
     .map((slug) => allCareers.find((c) => c.slug === slug))
@@ -220,9 +203,7 @@ export function calculateResults(
     .filter((c) => c.relevance > 0)
     .sort((a, b) => b.relevance - a.relevance);
 
-  const recommendedCourses = scoredCourses
-    .map((c) => c.course)
-    .slice(0, 5);
+  const recommendedCourses = scoredCourses.map((c) => c.course).slice(0, 5);
 
   const roleFamilyFit = computeRoleFamilyFit(scores, maxPossible, allSkills);
 
@@ -258,7 +239,7 @@ export function calculateResults(
 export function computeRoleFamilyFit(
   scores: Record<string, number>,
   maxPossible: Record<string, number>,
-  allSkills: Skill[]
+  allSkills: Skill[],
 ): RoleFamilyFit[] {
   const skillByName = new Map(allSkills.map((s) => [s.slug, s]));
 
@@ -288,8 +269,7 @@ export function computeRoleFamilyFit(
       });
     }
 
-    const confidence =
-      totalWeight > 0 ? Math.round((weightedSum / totalWeight) * 100) : 0;
+    const confidence = totalWeight > 0 ? Math.round((weightedSum / totalWeight) * 100) : 0;
 
     // Reasoning: pick the top 3 weighted contributions and describe them.
     contributions.sort((a, b) => b.contribution - a.contribution);
@@ -299,16 +279,14 @@ export function computeRoleFamilyFit(
       if (c.pct >= 0.75) {
         reasoning.push(`Strong score on ${c.label} (${Math.round(c.pct * 100)}%)`);
       } else if (c.pct >= 0.5) {
-        reasoning.push(
-          `Solid foundation in ${c.label} (${Math.round(c.pct * 100)}%)`
-        );
+        reasoning.push(`Solid foundation in ${c.label} (${Math.round(c.pct * 100)}%)`);
       } else if (c.pct >= 0.25) {
         reasoning.push(
-          `Emerging strength in ${c.label} (${Math.round(c.pct * 100)}%) — worth building`
+          `Emerging strength in ${c.label} (${Math.round(c.pct * 100)}%) — worth building`,
         );
       } else {
         reasoning.push(
-          `Developing area: ${c.label} (${Math.round(c.pct * 100)}%) — a focused course could unlock this family`
+          `Developing area: ${c.label} (${Math.round(c.pct * 100)}%) — a focused course could unlock this family`,
         );
       }
     }

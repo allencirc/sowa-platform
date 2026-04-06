@@ -13,10 +13,7 @@ interface ResearchListClientProps {
   featured: Research | undefined;
 }
 
-export function ResearchListClient({
-  research,
-  featured,
-}: ResearchListClientProps) {
+export function ResearchListClient({ research, featured }: ResearchListClientProps) {
   const allCategories = useMemo(() => {
     const set = new Set<string>();
     research.forEach((r) => r.categories.forEach((c) => set.add(c)));
@@ -31,9 +28,7 @@ export function ResearchListClient({
   }, [research, activeCategory]);
 
   // Non-featured items (exclude featured from grid if showing all)
-  const gridItems = filtered.filter((r) =>
-    activeCategory ? true : r.slug !== featured?.slug
-  );
+  const gridItems = filtered.filter((r) => (activeCategory ? true : r.slug !== featured?.slug));
 
   return (
     <div>
@@ -64,16 +59,11 @@ export function ResearchListClient({
               <h2 className="text-xl sm:text-2xl font-bold text-white mb-3 group-hover:text-secondary-light transition-colors">
                 {featured.title}
               </h2>
-              <p className="text-sm text-white/70 mb-1">
-                {featured.author}
-              </p>
+              <p className="text-sm text-white/70 mb-1">{featured.author}</p>
               <p className="text-sm text-white/50 mb-4">
-                {featured.organisation} &middot;{" "}
-                {formatDate(featured.publicationDate)}
+                {featured.organisation} &middot; {formatDate(featured.publicationDate)}
               </p>
-              <p className="text-white/80 leading-relaxed mb-6 line-clamp-3">
-                {featured.summary}
-              </p>
+              <p className="text-white/80 leading-relaxed mb-6 line-clamp-3">{featured.summary}</p>
               <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-secondary-dark group-hover:text-secondary-light transition-colors">
                 Read More
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
@@ -91,7 +81,7 @@ export function ResearchListClient({
             "px-4 py-2 rounded-full text-sm font-medium transition-colors cursor-pointer",
             !activeCategory
               ? "bg-primary text-white"
-              : "bg-gray-100 text-text-secondary hover:bg-gray-200"
+              : "bg-gray-100 text-text-secondary hover:bg-gray-200",
           )}
         >
           All
@@ -99,14 +89,12 @@ export function ResearchListClient({
         {allCategories.map((cat) => (
           <button
             key={cat}
-            onClick={() =>
-              setActiveCategory(activeCategory === cat ? null : cat)
-            }
+            onClick={() => setActiveCategory(activeCategory === cat ? null : cat)}
             className={cn(
               "px-4 py-2 rounded-full text-sm font-medium transition-colors cursor-pointer",
               activeCategory === cat
                 ? "bg-primary text-white"
-                : "bg-gray-100 text-text-secondary hover:bg-gray-200"
+                : "bg-gray-100 text-text-secondary hover:bg-gray-200",
             )}
           >
             {cat}
@@ -124,9 +112,7 @@ export function ResearchListClient({
       ) : (
         <div className="text-center py-16">
           <FileText className="h-12 w-12 text-text-muted/40 mx-auto mb-4" />
-          <p className="text-lg text-text-secondary">
-            No publications in this category
-          </p>
+          <p className="text-lg text-text-secondary">No publications in this category</p>
         </div>
       )}
     </div>

@@ -203,6 +203,7 @@ model Course {
   nextStartDate        DateTime?
   accredited           Boolean        @default(false)
   certificationAwarded String?
+  signupUrl            String?
   tags                 String[]
   status               ContentStatus  @default(DRAFT)
   publishAt            DateTime?

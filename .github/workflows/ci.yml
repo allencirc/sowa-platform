@@ -1,0 +1,125 @@
+name: CI
+
+# Required status checks for branch protection on `main`.
+# Every job here should be listed as a required check in GitHub
+# Settings → Branches → Branch protection rule.
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  NODE_VERSION: "22"
+  # Prisma needs a DATABASE_URL at generate/build time. Use a dummy
+  # value — no real DB is touched in CI by these jobs.
+  DATABASE_URL: "postgresql://ci:ci@localhost:5432/ci?schema=public"
+  NEXTAUTH_SECRET: "ci-placeholder-not-a-real-secret"
+  NEXTAUTH_URL: "http://localhost:3000"
+  SKIP_ENV_VALIDATION: "true"
+
+jobs:
+  install:
+    name: Install & cache
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+      - name: Generate Prisma client
+        run: npx prisma generate
+
+  type-check:
+    name: TypeScript
+    needs: install
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+      - run: npm ci --no-audit --no-fund
+      - run: npx prisma generate
+      - name: tsc --noEmit
+        run: npx tsc --noEmit
+
+  lint:
+    name: ESLint
+    needs: install
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+      - run: npm ci --no-audit --no-fund
+      - run: npx prisma generate
+      - run: npm run lint
+
+  format:
+    name: Prettier
+    needs: install
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+      - run: npm ci --no-audit --no-fund
+      - name: prettier --check
+        run: npx prettier --check .
+
+  test:
+    name: Unit tests (Vitest)
+    needs: install
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+      - run: npm ci --no-audit --no-fund
+      - run: npx prisma generate
+      - name: Run Vitest
+        run: npm test -- --reporter=default
+
+  # Note: `next build` is NOT run in CI because it requires a live
+  # database for static page generation. The Vercel deployment build
+  # (which has a real DB) validates this on every push instead.
+
+  prisma-migrate-check:
+    name: Prisma migration drift
+    needs: install
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: "npm"
+      - run: npm ci --no-audit --no-fund
+      - name: Verify schema matches migrations
+        run: npx prisma validate

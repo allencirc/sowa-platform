@@ -148,7 +148,7 @@ export function buildShareUrl(
   origin: string,
   localePrefix: string,
   answers: AnswerSet,
-  tab: ResultsTab = "gaps"
+  tab: ResultsTab = "gaps",
 ): string {
   const encoded = encodeAnswers(answers);
   const cleanOrigin = origin.replace(/\/$/, "");

@@ -43,18 +43,14 @@ export function GapCard({ gap, rank }: GapCardProps) {
     <div
       className={cn(
         "bg-white rounded-xl border p-5 sm:p-6 transition-all duration-200 hover:shadow-md",
-        config.border
+        config.border,
       )}
     >
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center gap-3">
-          <span className="text-2xl font-bold text-text-muted/40">
-            #{rank}
-          </span>
+          <span className="text-2xl font-bold text-text-muted/40">#{rank}</span>
           <div>
-            <h4 className="font-bold text-text-primary text-base">
-              {gap.skill.name}
-            </h4>
+            <h4 className="font-bold text-text-primary text-base">{gap.skill.name}</h4>
             <span className="text-xs text-text-muted">{gap.skill.category}</span>
           </div>
         </div>
@@ -62,7 +58,7 @@ export function GapCard({ gap, rank }: GapCardProps) {
           className={cn(
             "inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full",
             config.bg,
-            config.colour
+            config.colour,
           )}
         >
           <Icon className="h-3.5 w-3.5" />
@@ -74,15 +70,13 @@ export function GapCard({ gap, rank }: GapCardProps) {
       <div className="space-y-1.5">
         <div className="flex items-center justify-between text-sm">
           <span className="text-text-secondary">Your score</span>
-          <span className="font-semibold text-text-primary">
-            {pct}%
-          </span>
+          <span className="font-semibold text-text-primary">{pct}%</span>
         </div>
         <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
           <div
             className={cn(
               "h-full rounded-full transition-all duration-700 ease-out",
-              config.barColour
+              config.barColour,
             )}
             style={{ width: `${pct}%` }}
           />

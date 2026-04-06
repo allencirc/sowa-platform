@@ -141,7 +141,8 @@ function mapCareer(row: AnyRecord): Career {
     slug: row.slug as string,
     title: row.title as string,
     sector: sectorDisplay[row.sector as string] ?? (row.sector as Career["sector"]),
-    entryLevel: entryLevelDisplay[row.entryLevel as string] ?? (row.entryLevel as Career["entryLevel"]),
+    entryLevel:
+      entryLevelDisplay[row.entryLevel as string] ?? (row.entryLevel as Career["entryLevel"]),
     description: row.description as string,
     salaryRange:
       row.salaryMin != null && row.salaryMax != null
@@ -151,9 +152,7 @@ function mapCareer(row: AnyRecord): Career {
     qualifications: (row.qualifications as string[]) ?? [],
     workingConditions: (row.workingConditions as string) ?? undefined,
     growthOutlook: (row.growthOutlook as string) ?? undefined,
-    skills: ((row.skills as { skill: { slug: string } }[]) ?? []).map(
-      (s) => s.skill.slug
-    ),
+    skills: ((row.skills as { skill: { slug: string } }[]) ?? []).map((s) => s.skill.slug),
     pathwayConnections: (
       (row.pathwayFrom as { to: { slug: string }; type: string; timeframe: string }[]) ?? []
     ).map((p) => ({
@@ -161,9 +160,9 @@ function mapCareer(row: AnyRecord): Career {
       type: (pathwayTypeDisplay[p.type] ?? p.type) as "progression" | "lateral" | "specialisation",
       timeframe: p.timeframe,
     })),
-    relatedCourses: (
-      (row.relatedCourses as { course: { slug: string } }[]) ?? []
-    ).map((c) => c.course.slug),
+    relatedCourses: ((row.relatedCourses as { course: { slug: string } }[]) ?? []).map(
+      (c) => c.course.slug,
+    ),
   };
 }
 
@@ -172,10 +171,14 @@ function mapCourse(row: AnyRecord): Course {
     slug: row.slug as string,
     title: row.title as string,
     provider: row.provider as string,
-    providerType: providerTypeDisplay[row.providerType as string] ?? (row.providerType as Course["providerType"]),
+    providerType:
+      providerTypeDisplay[row.providerType as string] ??
+      (row.providerType as Course["providerType"]),
     description: row.description as string,
     entryRequirements: (row.entryRequirements as string) ?? undefined,
-    deliveryFormat: deliveryFormatDisplay[row.deliveryFormat as string] ?? (row.deliveryFormat as Course["deliveryFormat"]),
+    deliveryFormat:
+      deliveryFormatDisplay[row.deliveryFormat as string] ??
+      (row.deliveryFormat as Course["deliveryFormat"]),
     location: (row.location as string) ?? undefined,
     nfqLevel: (row.nfqLevel as number | null) ?? undefined,
     duration: row.duration as string,
@@ -185,14 +188,12 @@ function mapCourse(row: AnyRecord): Course {
       ? (row.nextStartDate as Date).toISOString().split("T")[0]
       : undefined,
     accredited: (row.accredited as boolean) ?? undefined,
-    certificationAwarded:
-      (row.certificationAwarded as string) ?? undefined,
-    skills: ((row.skills as { skill: { slug: string } }[]) ?? []).map(
-      (s) => s.skill.slug
+    certificationAwarded: (row.certificationAwarded as string) ?? undefined,
+    signupUrl: (row.signupUrl as string) ?? undefined,
+    skills: ((row.skills as { skill: { slug: string } }[]) ?? []).map((s) => s.skill.slug),
+    careerRelevance: ((row.careerRelevance as { career: { slug: string } }[]) ?? []).map(
+      (c) => c.career.slug,
     ),
-    careerRelevance: (
-      (row.careerRelevance as { career: { slug: string } }[]) ?? []
-    ).map((c) => c.career.slug),
     tags: (row.tags as string[]) ?? [],
   };
 }
@@ -203,10 +204,10 @@ function mapEvent(row: AnyRecord): Event {
     title: row.title as string,
     type: eventTypeDisplay[row.type as string] ?? (row.type as Event["type"]),
     startDate: (row.startDate as Date).toISOString(),
-    endDate: row.endDate
-      ? (row.endDate as Date).toISOString()
-      : undefined,
-    locationType: locationTypeDisplay[row.locationType as string] ?? (row.locationType as Event["locationType"]),
+    endDate: row.endDate ? (row.endDate as Date).toISOString() : undefined,
+    locationType:
+      locationTypeDisplay[row.locationType as string] ??
+      (row.locationType as Event["locationType"]),
     location: (row.location as string) ?? undefined,
     description: row.description as string,
     capacity: (row.capacity as number) ?? undefined,
@@ -257,10 +258,8 @@ function mapDiagnosticQuestion(row: AnyRecord): DiagnosticQuestion {
     options: (row.options as DiagnosticQuestion["options"]) ?? undefined,
     scaleMin: (row.scaleMin as number) ?? undefined,
     scaleMax: (row.scaleMax as number) ?? undefined,
-    scaleLabels:
-      (row.scaleLabels as Record<string, string>) ?? undefined,
-    scoreImpact:
-      (row.scoreImpact as Record<string, number>) ?? undefined,
+    scaleLabels: (row.scaleLabels as Record<string, string>) ?? undefined,
+    scoreImpact: (row.scoreImpact as Record<string, number>) ?? undefined,
   };
 }
 
@@ -287,9 +286,7 @@ export async function getAllCareers(): Promise<Career[]> {
   return rows.map((r) => mapCareer(r as unknown as AnyRecord));
 }
 
-export async function getCareerBySlug(
-  slug: string
-): Promise<Career | undefined> {
+export async function getCareerBySlug(slug: string): Promise<Career | undefined> {
   const row = await prisma.career.findFirst({
     where: { slug, status: "PUBLISHED" as never },
     include: careerInclude,
@@ -297,9 +294,7 @@ export async function getCareerBySlug(
   return row ? mapCareer(row as unknown as AnyRecord) : undefined;
 }
 
-export async function getCareersBySector(
-  sector: Career["sector"]
-): Promise<Career[]> {
+export async function getCareersBySector(sector: Career["sector"]): Promise<Career[]> {
   const rows = await prisma.career.findMany({
     where: { sector: (sectorToEnum[sector] ?? sector) as never, status: "PUBLISHED" as never },
     include: careerInclude,
@@ -313,7 +308,7 @@ export async function createCareer(
   data: Omit<Career, "pathwayConnections" | "relatedCourses"> & {
     pathwayConnections?: Career["pathwayConnections"];
     relatedCourses?: string[];
-  }
+  },
 ): Promise<Career> {
   const row = await prisma.career.create({
     data: {
@@ -341,13 +336,15 @@ export async function createCareer(
 
 export async function updateCareer(
   slug: string,
-  data: Partial<Omit<Career, "slug" | "pathwayConnections" | "relatedCourses">>
+  data: Partial<Omit<Career, "slug" | "pathwayConnections" | "relatedCourses">>,
 ): Promise<Career> {
   const row = await prisma.career.update({
     where: { slug },
     data: {
       ...(data.title !== undefined && { title: data.title }),
-      ...(data.sector !== undefined && { sector: (sectorToEnum[data.sector] ?? data.sector) as never }),
+      ...(data.sector !== undefined && {
+        sector: (sectorToEnum[data.sector] ?? data.sector) as never,
+      }),
       ...(data.entryLevel !== undefined && {
         entryLevel: (entryLevelToEnum[data.entryLevel] ?? data.entryLevel) as never,
       }),
@@ -388,9 +385,7 @@ export async function getAllCourses(): Promise<Course[]> {
   return rows.map((r) => mapCourse(r as unknown as AnyRecord));
 }
 
-export async function getCourseBySlug(
-  slug: string
-): Promise<Course | undefined> {
+export async function getCourseBySlug(slug: string): Promise<Course | undefined> {
   const row = await prisma.course.findFirst({
     where: { slug, status: "PUBLISHED" as never },
     include: courseInclude,
@@ -398,9 +393,7 @@ export async function getCourseBySlug(
   return row ? mapCourse(row as unknown as AnyRecord) : undefined;
 }
 
-export async function getCoursesByCareer(
-  careerSlug: string
-): Promise<Course[]> {
+export async function getCoursesByCareer(careerSlug: string): Promise<Course[]> {
   const rows = await prisma.course.findMany({
     where: {
       status: "PUBLISHED" as never,
@@ -413,9 +406,7 @@ export async function getCoursesByCareer(
   return rows.map((r) => mapCourse(r as unknown as AnyRecord));
 }
 
-export async function getFilteredCourses(
-  filters: CourseFilters
-): Promise<Course[]> {
+export async function getFilteredCourses(filters: CourseFilters): Promise<Course[]> {
   // Build where clause dynamically
   const where: Record<string, unknown> = {};
 
@@ -454,8 +445,8 @@ export async function getFilteredCourses(
       (c) =>
         c.tags.some((t: string) => t.toLowerCase().includes(topic)) ||
         c.skills.some((s: { skill: { slug: string } }) =>
-          s.skill.slug.toLowerCase().includes(topic)
-        )
+          s.skill.slug.toLowerCase().includes(topic),
+        ),
     );
   }
 
@@ -484,11 +475,10 @@ export async function createCourse(data: Course): Promise<Course> {
       duration: data.duration,
       cost: data.cost,
       costNotes: data.costNotes ?? null,
-      nextStartDate: data.nextStartDate
-        ? new Date(data.nextStartDate)
-        : null,
+      nextStartDate: data.nextStartDate ? new Date(data.nextStartDate) : null,
       accredited: data.accredited ?? false,
       certificationAwarded: data.certificationAwarded ?? null,
+      signupUrl: data.signupUrl ?? null,
       tags: data.tags,
       skills: {
         create: data.skills.map((skillSlug) => ({
@@ -508,7 +498,7 @@ export async function createCourse(data: Course): Promise<Course> {
 
 export async function updateCourse(
   slug: string,
-  data: Partial<Omit<Course, "slug">>
+  data: Partial<Omit<Course, "slug">>,
 ): Promise<Course> {
   const row = await prisma.course.update({
     where: { slug },
@@ -533,13 +523,14 @@ export async function updateCourse(
         costNotes: data.costNotes ?? null,
       }),
       ...(data.nextStartDate !== undefined && {
-        nextStartDate: data.nextStartDate
-          ? new Date(data.nextStartDate)
-          : null,
+        nextStartDate: data.nextStartDate ? new Date(data.nextStartDate) : null,
       }),
       ...(data.accredited !== undefined && { accredited: data.accredited }),
       ...(data.certificationAwarded !== undefined && {
         certificationAwarded: data.certificationAwarded ?? null,
+      }),
+      ...(data.signupUrl !== undefined && {
+        signupUrl: data.signupUrl ?? null,
       }),
       ...(data.tags !== undefined && { tags: data.tags }),
     },
@@ -561,9 +552,7 @@ export async function getAllEvents(): Promise<Event[]> {
   return rows.map((r) => mapEvent(r as unknown as AnyRecord));
 }
 
-export async function getEventBySlug(
-  slug: string
-): Promise<Event | undefined> {
+export async function getEventBySlug(slug: string): Promise<Event | undefined> {
   const row = await prisma.event.findFirst({
     where: { slug, status: "PUBLISHED" as never },
   });
@@ -600,7 +589,7 @@ export async function createEvent(data: Event): Promise<Event> {
 
 export async function updateEvent(
   slug: string,
-  data: Partial<Omit<Event, "slug">>
+  data: Partial<Omit<Event, "slug">>,
 ): Promise<Event> {
   const row = await prisma.event.update({
     where: { slug },
@@ -638,9 +627,7 @@ export async function getAllResearch(): Promise<Research[]> {
   return rows.map((r) => mapResearch(r as unknown as AnyRecord));
 }
 
-export async function getResearchBySlug(
-  slug: string
-): Promise<Research | undefined> {
+export async function getResearchBySlug(slug: string): Promise<Research | undefined> {
   const row = await prisma.research.findFirst({
     where: { slug, status: "PUBLISHED" as never },
   });
@@ -675,7 +662,7 @@ export async function createResearch(data: Research): Promise<Research> {
 
 export async function updateResearch(
   slug: string,
-  data: Partial<Omit<Research, "slug">>
+  data: Partial<Omit<Research, "slug">>,
 ): Promise<Research> {
   const row = await prisma.research.update({
     where: { slug },
@@ -708,16 +695,12 @@ export async function getAllSkills(): Promise<Skill[]> {
   return rows.map((r) => mapSkill(r as unknown as AnyRecord));
 }
 
-export async function getSkillBySlug(
-  slug: string
-): Promise<Skill | undefined> {
+export async function getSkillBySlug(slug: string): Promise<Skill | undefined> {
   const row = await prisma.skill.findUnique({ where: { slug } });
   return row ? mapSkill(row as unknown as AnyRecord) : undefined;
 }
 
-export async function getSkillsByCareer(
-  careerSlug: string
-): Promise<Skill[]> {
+export async function getSkillsByCareer(careerSlug: string): Promise<Skill[]> {
   const rows = await prisma.skill.findMany({
     where: {
       careers: { some: { career: { slug: careerSlug } } },
@@ -730,9 +713,7 @@ export async function getSkillsByCareer(
 
 export async function getDiagnosticQuestions(): Promise<DiagnosticQuestion[]> {
   const rows = await prisma.diagnosticQuestion.findMany();
-  return rows.map((r) =>
-    mapDiagnosticQuestion(r as unknown as AnyRecord)
-  );
+  return rows.map((r) => mapDiagnosticQuestion(r as unknown as AnyRecord));
 }
 
 // ─── News ─────────────────────────────────────────────────
@@ -745,9 +726,7 @@ export async function getAllNews(): Promise<NewsArticle[]> {
   return rows.map((r) => mapNews(r as unknown as AnyRecord));
 }
 
-export async function getNewsBySlug(
-  slug: string
-): Promise<NewsArticle | undefined> {
+export async function getNewsBySlug(slug: string): Promise<NewsArticle | undefined> {
   const row = await prisma.newsArticle.findFirst({
     where: { slug, status: "PUBLISHED" as never },
   });
@@ -774,7 +753,7 @@ export async function createNews(data: NewsArticle): Promise<NewsArticle> {
 
 export async function updateNews(
   slug: string,
-  data: Partial<Omit<NewsArticle, "slug">>
+  data: Partial<Omit<NewsArticle, "slug">>,
 ): Promise<NewsArticle> {
   const row = await prisma.newsArticle.update({
     where: { slug },
@@ -845,10 +824,7 @@ export async function globalSearch(query: string): Promise<SearchResult[]> {
   }
 
   for (const event of events) {
-    if (
-      event.title.toLowerCase().includes(q) ||
-      event.description.toLowerCase().includes(q)
-    ) {
+    if (event.title.toLowerCase().includes(q) || event.description.toLowerCase().includes(q)) {
       results.push({
         type: "event",
         slug: event.slug,

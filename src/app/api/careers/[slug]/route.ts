@@ -1,10 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import {
-  applyRateLimit,
-  parseBody,
-  errorResponse,
-} from "@/lib/api-utils";
+import { applyRateLimit, parseBody, errorResponse } from "@/lib/api-utils";
 import { updateCareerSchema } from "@/lib/validations";
 import { requireRole } from "@/lib/auth-utils";
 import { createContentVersion } from "@/lib/versions";
@@ -26,10 +22,10 @@ const entryLevelToEnum: Record<string, string> = {
   Leadership: "LEADERSHIP",
 };
 const sectorDisplay: Record<string, string> = Object.fromEntries(
-  Object.entries(sectorToEnum).map(([k, v]) => [v, k])
+  Object.entries(sectorToEnum).map(([k, v]) => [v, k]),
 );
 const entryLevelDisplay: Record<string, string> = Object.fromEntries(
-  Object.entries(entryLevelToEnum).map(([k, v]) => [v, k])
+  Object.entries(entryLevelToEnum).map(([k, v]) => [v, k]),
 );
 const pathwayTypeDisplay: Record<string, string> = {
   PROGRESSION: "progression",
@@ -64,9 +60,7 @@ function mapCareer(row: AnyRecord) {
     status: (row.status as string) ?? "DRAFT",
     publishAt: row.publishAt ? (row.publishAt as Date).toISOString() : null,
     rejectionNote: (row.rejectionNote as string) ?? null,
-    skills: ((row.skills as { skill: { slug: string } }[]) ?? []).map(
-      (s) => s.skill.slug
-    ),
+    skills: ((row.skills as { skill: { slug: string } }[]) ?? []).map((s) => s.skill.slug),
     pathwayConnections: (
       (row.pathwayFrom as { to: { slug: string }; type: string; timeframe: string }[]) ?? []
     ).map((p) => ({
@@ -74,16 +68,13 @@ function mapCareer(row: AnyRecord) {
       type: pathwayTypeDisplay[p.type] ?? p.type,
       timeframe: p.timeframe,
     })),
-    relatedCourses: (
-      (row.relatedCourses as { course: { slug: string } }[]) ?? []
-    ).map((c) => c.course.slug),
+    relatedCourses: ((row.relatedCourses as { course: { slug: string } }[]) ?? []).map(
+      (c) => c.course.slug,
+    ),
   };
 }
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ slug: string }> }
-) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   const rateLimited = applyRateLimit(request);
   if (rateLimited) return rateLimited;
 
@@ -106,10 +97,7 @@ export async function GET(
   }
 }
 
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: Promise<{ slug: string }> }
-) {
+export async function PUT(request: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   const rateLimited = applyRateLimit(request);
   if (rateLimited) return rateLimited;
 
@@ -190,7 +178,7 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: Promise<{ slug: string }> }
+  { params }: { params: Promise<{ slug: string }> },
 ) {
   const rateLimited = applyRateLimit(request);
   if (rateLimited) return rateLimited;

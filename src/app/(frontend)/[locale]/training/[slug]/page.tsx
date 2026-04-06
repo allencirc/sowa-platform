@@ -1,27 +1,14 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
-import {
-  Clock,
-  MapPin,
-  Calendar,
-  Award,
-  Building2,
-  CreditCard,
-  CheckCircle2,
-} from "lucide-react";
+import { Clock, MapPin, Calendar, Award, Building2, CreditCard, CheckCircle2 } from "lucide-react";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
 import { Container } from "@/components/ui/Container";
 import { Badge } from "@/components/ui/Badge";
 import { RegisterButton } from "@/components/registration/RegisterButton";
 import { SkillBadge } from "@/components/careers/SkillBadge";
 import { CareerCard } from "@/components/careers/CareerCard";
-import {
-  getCourseBySlug,
-  getAllCourses,
-  getCareerBySlug,
-  getSkillBySlug,
-} from "@/lib/queries";
+import { getCourseBySlug, getAllCourses, getCareerBySlug, getSkillBySlug } from "@/lib/queries";
 import { formatDate, formatCurrency } from "@/lib/utils";
 
 interface CourseDetailProps {
@@ -32,9 +19,7 @@ export async function generateStaticParams() {
   return (await getAllCourses()).map((c) => ({ slug: c.slug }));
 }
 
-export async function generateMetadata({
-  params,
-}: CourseDetailProps): Promise<Metadata> {
+export async function generateMetadata({ params }: CourseDetailProps): Promise<Metadata> {
   const { slug } = await params;
   const course = await getCourseBySlug(slug);
   if (!course) return { title: "Course Not Found" };
@@ -69,19 +54,11 @@ export default async function CourseDetailPage({ params }: CourseDetailProps) {
   const course = await getCourseBySlug(slug);
   if (!course) notFound();
 
-  const skillResults = await Promise.all(
-    course.skills.map((s) => getSkillBySlug(s))
-  );
-  const skills = skillResults.filter(
-    (s): s is NonNullable<typeof s> => s !== undefined
-  );
+  const skillResults = await Promise.all(course.skills.map((s) => getSkillBySlug(s)));
+  const skills = skillResults.filter((s): s is NonNullable<typeof s> => s !== undefined);
 
-  const careerResults = await Promise.all(
-    course.careerRelevance.map((s) => getCareerBySlug(s))
-  );
-  const relatedCareers = careerResults.filter(
-    (c): c is NonNullable<typeof c> => c !== undefined
-  );
+  const careerResults = await Promise.all(course.careerRelevance.map((s) => getCareerBySlug(s)));
+  const relatedCareers = careerResults.filter((c): c is NonNullable<typeof c> => c !== undefined);
 
   const enableRegistration = process.env.ENABLE_COURSE_REGISTRATION === "true";
 
@@ -94,19 +71,14 @@ export default async function CourseDetailPage({ params }: CourseDetailProps) {
     {
       icon: CreditCard,
       label: "Cost",
-      value:
-        course.cost === 0
-          ? "Free"
-          : formatCurrency(course.cost),
+      value: course.cost === 0 ? "Free" : formatCurrency(course.cost),
       note: course.costNotes,
       highlight: course.cost === 0,
     },
     {
       icon: Calendar,
       label: "Next Start",
-      value: course.nextStartDate
-        ? formatDate(course.nextStartDate)
-        : "Contact provider",
+      value: course.nextStartDate ? formatDate(course.nextStartDate) : "Contact provider",
     },
     {
       icon: MapPin,
@@ -148,21 +120,15 @@ export default async function CourseDetailPage({ params }: CourseDetailProps) {
                   Accredited
                 </Badge>
               )}
-              {course.nfqLevel && (
-                <Badge variant="primary">NFQ Level {course.nfqLevel}</Badge>
-              )}
-              {course.cost === 0 && (
-                <Badge variant="success">Free</Badge>
-              )}
+              {course.nfqLevel && <Badge variant="primary">NFQ Level {course.nfqLevel}</Badge>}
+              {course.cost === 0 && <Badge variant="success">Free</Badge>}
             </div>
 
             <h1 className="text-3xl sm:text-4xl font-bold text-text-primary mb-3">
               {course.title}
             </h1>
 
-            <p className="text-lg text-text-secondary">
-              {course.provider}
-            </p>
+            <p className="text-lg text-text-secondary">{course.provider}</p>
           </div>
         </Container>
       </section>
@@ -181,16 +147,12 @@ export default async function CourseDetailPage({ params }: CourseDetailProps) {
                 </div>
                 <p
                   className={`text-base font-semibold ${
-                    item.highlight
-                      ? "text-secondary-dark"
-                      : "text-text-primary"
+                    item.highlight ? "text-secondary-dark" : "text-text-primary"
                   }`}
                 >
                   {item.value}
                 </p>
-                {item.note && (
-                  <p className="text-xs text-secondary-dark mt-0.5">{item.note}</p>
-                )}
+                {item.note && <p className="text-xs text-secondary-dark mt-0.5">{item.note}</p>}
               </div>
             ))}
           </div>
@@ -203,23 +165,15 @@ export default async function CourseDetailPage({ params }: CourseDetailProps) {
           <div className="max-w-3xl space-y-12">
             {/* About */}
             <div>
-              <h2 className="text-xl font-bold text-text-primary mb-3">
-                About This Course
-              </h2>
-              <p className="text-text-secondary leading-relaxed">
-                {course.description}
-              </p>
+              <h2 className="text-xl font-bold text-text-primary mb-3">About This Course</h2>
+              <p className="text-text-secondary leading-relaxed">{course.description}</p>
             </div>
 
             {/* Entry Requirements */}
             {course.entryRequirements && (
               <div>
-                <h2 className="text-xl font-bold text-text-primary mb-3">
-                  Entry Requirements
-                </h2>
-                <p className="text-text-secondary leading-relaxed">
-                  {course.entryRequirements}
-                </p>
+                <h2 className="text-xl font-bold text-text-primary mb-3">Entry Requirements</h2>
+                <p className="text-text-secondary leading-relaxed">{course.entryRequirements}</p>
               </div>
             )}
 
@@ -240,12 +194,9 @@ export default async function CourseDetailPage({ params }: CourseDetailProps) {
             {/* CTA */}
             {enableRegistration && (
               <div className="bg-gradient-to-r from-primary to-primary-light rounded-xl p-6 sm:p-8 text-center">
-                <h3 className="text-xl font-bold text-white mb-2">
-                  Interested in this course?
-                </h3>
+                <h3 className="text-xl font-bold text-white mb-2">Interested in this course?</h3>
                 <p className="text-white/80 mb-5 text-sm">
-                  Register your interest and we&apos;ll connect you with the
-                  training provider.
+                  Register your interest and we&apos;ll connect you with the training provider.
                 </p>
                 <RegisterButton
                   type="COURSE"
@@ -263,9 +214,7 @@ export default async function CourseDetailPage({ params }: CourseDetailProps) {
       {relatedCareers.length > 0 && (
         <section className="py-12 sm:py-16 bg-surface">
           <Container>
-            <h2 className="text-2xl font-bold text-text-primary mb-6">
-              Related Careers
-            </h2>
+            <h2 className="text-2xl font-bold text-text-primary mb-6">Related Careers</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
               {relatedCareers.map((career) => (
                 <CareerCard key={career.slug} career={career} />

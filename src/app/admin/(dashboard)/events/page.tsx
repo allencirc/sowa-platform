@@ -40,7 +40,7 @@ export default function AdminEventsPage() {
 
   const { data, totalPages, loading, refetch } = useAdminFetch<Event & { status?: string }>(
     "/api/events",
-    { page, search, filters }
+    { page, search, filters },
   );
 
   const columns: Column<Event & { status?: string }>[] = [
@@ -65,7 +65,15 @@ export default function AdminEventsPage() {
       label: "Location",
       render: (row) => (
         <div>
-          <Badge variant={row.locationType === "Virtual" ? "info" : row.locationType === "Hybrid" ? "warning" : "default"}>
+          <Badge
+            variant={
+              row.locationType === "Virtual"
+                ? "info"
+                : row.locationType === "Hybrid"
+                  ? "warning"
+                  : "default"
+            }
+          >
             {row.locationType}
           </Badge>
           {row.location && <p className="mt-1 text-xs text-text-muted">{row.location}</p>}
@@ -81,7 +89,9 @@ export default function AdminEventsPage() {
       key: "status",
       label: "Status",
       render: (row) => (
-        <StatusBadge status={(row.status as "DRAFT" | "IN_REVIEW" | "PUBLISHED" | "ARCHIVED") ?? "DRAFT"} />
+        <StatusBadge
+          status={(row.status as "DRAFT" | "IN_REVIEW" | "PUBLISHED" | "ARCHIVED") ?? "DRAFT"}
+        />
       ),
     },
     {
@@ -91,9 +101,18 @@ export default function AdminEventsPage() {
       render: (row) => (
         <div className="flex items-center gap-1">
           <Link href={`/admin/events/${row.slug}/edit`}>
-            <Button variant="ghost" size="sm"><Pencil className="h-4 w-4" /></Button>
+            <Button variant="ghost" size="sm">
+              <Pencil className="h-4 w-4" />
+            </Button>
           </Link>
-          <Button variant="ghost" size="sm" onClick={(e) => { e.stopPropagation(); setDeleteSlug(row.slug); }}>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={(e) => {
+              e.stopPropagation();
+              setDeleteSlug(row.slug);
+            }}
+          >
             <Trash2 className="h-4 w-4 text-status-error" />
           </Button>
         </div>
@@ -106,19 +125,39 @@ export default function AdminEventsPage() {
       <div className="mb-6 flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-text-primary">Events</h1>
-          <p className="mt-1 text-sm text-text-secondary">Manage events, workshops, and webinars.</p>
+          <p className="mt-1 text-sm text-text-secondary">
+            Manage events, workshops, and webinars.
+          </p>
         </div>
         <Link href="/admin/events/new">
-          <Button><Plus className="h-4 w-4" /> Add Event</Button>
+          <Button>
+            <Plus className="h-4 w-4" /> Add Event
+          </Button>
         </Link>
       </div>
 
       <div className="mb-4 flex flex-col gap-3 sm:flex-row">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-text-muted" />
-          <Input placeholder="Search events..." value={search} onChange={(e) => { setSearch(e.target.value); setPage(1); }} className="pl-10" />
+          <Input
+            placeholder="Search events..."
+            value={search}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setPage(1);
+            }}
+            className="pl-10"
+          />
         </div>
-        <Select options={typeOptions} value={type} onChange={(e) => { setType(e.target.value); setPage(1); }} className="w-full sm:w-48" />
+        <Select
+          options={typeOptions}
+          value={type}
+          onChange={(e) => {
+            setType(e.target.value);
+            setPage(1);
+          }}
+          className="w-full sm:w-48"
+        />
         <Select
           options={[
             { label: "All Statuses", value: "" },
@@ -140,15 +179,28 @@ export default function AdminEventsPage() {
         <div className="flex h-64 items-center justify-center text-text-muted">Loading...</div>
       ) : (
         <>
-          <DataTable columns={columns} data={data} rowKey={(row) => row.slug} onRowClick={(row) => router.push(`/admin/events/${row.slug}/edit`)} emptyMessage="No events found." />
-          <div className="mt-4"><Pagination page={page} totalPages={totalPages} onPageChange={setPage} /></div>
+          <DataTable
+            columns={columns}
+            data={data}
+            rowKey={(row) => row.slug}
+            onRowClick={(row) => router.push(`/admin/events/${row.slug}/edit`)}
+            emptyMessage="No events found."
+          />
+          <div className="mt-4">
+            <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
+          </div>
         </>
       )}
 
       <DeleteDialog
         open={!!deleteSlug}
         onClose={() => setDeleteSlug(null)}
-        onConfirm={async () => { if (deleteSlug) { await adminDelete(`/api/events/${deleteSlug}`); refetch(); } }}
+        onConfirm={async () => {
+          if (deleteSlug) {
+            await adminDelete(`/api/events/${deleteSlug}`);
+            refetch();
+          }
+        }}
         title="Delete Event?"
         description="This will permanently remove this event."
       />

@@ -26,7 +26,7 @@ const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
         />
       </div>
     );
-  }
+  },
 );
 
 SearchInput.displayName = "SearchInput";

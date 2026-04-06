@@ -14,13 +14,7 @@ import {
   type AnswerSet,
   type ResultsTab,
 } from "@/lib/diagnostic-share";
-import type {
-  Career,
-  Course,
-  DiagnosticQuestion,
-  DiagnosticResult,
-  Skill,
-} from "@/lib/types";
+import type { Career, Course, DiagnosticQuestion, DiagnosticResult, Skill } from "@/lib/types";
 
 interface ResultsClientProps {
   questions: DiagnosticQuestion[];
@@ -134,18 +128,8 @@ export default function ResultsClient({
   );
 }
 
-function EmptyState({
-  title,
-  body,
-  locale,
-}: {
-  title: string;
-  body: string;
-  locale: string;
-}) {
-  const href = locale
-    ? `/${locale}/diagnostic/assessment`
-    : "/diagnostic/assessment";
+function EmptyState({ title, body, locale }: { title: string; body: string; locale: string }) {
+  const href = locale ? `/${locale}/diagnostic/assessment` : "/diagnostic/assessment";
   return (
     <section className="py-20 sm:py-28 bg-surface min-h-[60vh]">
       <Container>
@@ -153,9 +137,7 @@ function EmptyState({
           <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-accent/10 mb-5">
             <AlertCircle className="h-7 w-7 text-accent-dark" aria-hidden="true" />
           </div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-text-primary mb-3">
-            {title}
-          </h1>
+          <h1 className="text-2xl sm:text-3xl font-bold text-text-primary mb-3">{title}</h1>
           <p className="text-text-secondary mb-8">{body}</p>
           <Link href={href}>
             <Button variant="primary" size="lg">

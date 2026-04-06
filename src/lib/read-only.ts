@@ -54,7 +54,7 @@ export function readOnlyResponse(): NextResponse {
         "Retry-After": "300",
         "Cache-Control": "no-store",
       },
-    }
+    },
   );
 }
 

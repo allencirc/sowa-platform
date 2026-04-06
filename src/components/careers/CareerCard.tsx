@@ -26,16 +26,11 @@ export function CareerCard({ career, className }: CareerCardProps) {
       href={`/careers/${career.slug}`}
       className={cn(
         "group block bg-surface-card rounded-xl border border-gray-100 overflow-hidden transition-all duration-200 hover:shadow-lg hover:shadow-primary/5 hover:-translate-y-0.5",
-        className
+        className,
       )}
     >
       {/* Sector colour bar */}
-      <div
-        className={cn(
-          "h-1.5",
-          sectorColorMap[career.sector] ?? "bg-gray-300"
-        )}
-      />
+      <div className={cn("h-1.5", sectorColorMap[career.sector] ?? "bg-gray-300")} />
 
       <div className="p-5">
         <div className="flex flex-wrap gap-2 mb-3">
@@ -47,14 +42,11 @@ export function CareerCard({ career, className }: CareerCardProps) {
           {career.title}
         </h3>
 
-        <p className="text-sm text-text-secondary line-clamp-2 mb-4">
-          {career.description}
-        </p>
+        <p className="text-sm text-text-secondary line-clamp-2 mb-4">{career.description}</p>
 
         {career.salaryRange && (
           <p className="text-sm font-medium text-text-primary mb-4">
-            {formatCurrency(career.salaryRange.min)} –{" "}
-            {formatCurrency(career.salaryRange.max)}
+            {formatCurrency(career.salaryRange.min)} – {formatCurrency(career.salaryRange.max)}
           </p>
         )}
 

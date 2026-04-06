@@ -47,8 +47,7 @@ export const ROLE_FAMILIES: RoleFamilyDefinition[] = [
   {
     key: "technician",
     label: "Technician pathway",
-    tagline:
-      "Hands-on turbine maintenance, installation, and blade repair roles.",
+    tagline: "Hands-on turbine maintenance, installation, and blade repair roles.",
     interestArea: "technical",
     skillWeights: {
       // Defining skills — a technician lives and dies by these.
@@ -66,8 +65,7 @@ export const ROLE_FAMILIES: RoleFamilyDefinition[] = [
   {
     key: "engineer",
     label: "Engineering pathway",
-    tagline:
-      "Design, analysis, and engineering leadership in wind farm development.",
+    tagline: "Design, analysis, and engineering leadership in wind farm development.",
     interestArea: "engineering",
     skillWeights: {
       "technical-foundation": 3,
@@ -82,8 +80,7 @@ export const ROLE_FAMILIES: RoleFamilyDefinition[] = [
   {
     key: "marine_ops",
     label: "Marine operations",
-    tagline:
-      "Vessel coordination, offshore logistics, and port-side execution.",
+    tagline: "Vessel coordination, offshore logistics, and port-side execution.",
     interestArea: "marine",
     skillWeights: {
       "marine-operations": 3,
@@ -97,8 +94,7 @@ export const ROLE_FAMILIES: RoleFamilyDefinition[] = [
   {
     key: "hse",
     label: "Health, safety & environment",
-    tagline:
-      "Protecting people and compliance on site, vessel, and blade.",
+    tagline: "Protecting people and compliance on site, vessel, and blade.",
     interestArea: "hse",
     skillWeights: {
       "safety-management": 3,
@@ -112,8 +108,7 @@ export const ROLE_FAMILIES: RoleFamilyDefinition[] = [
   {
     key: "project_commercial",
     label: "Project & commercial management",
-    tagline:
-      "Programme delivery, commercial negotiation, and stakeholder management.",
+    tagline: "Programme delivery, commercial negotiation, and stakeholder management.",
     interestArea: "management",
     skillWeights: {
       "project-management": 3,
@@ -126,8 +121,7 @@ export const ROLE_FAMILIES: RoleFamilyDefinition[] = [
   {
     key: "data_digital",
     label: "Data & digital",
-    tagline:
-      "SCADA analytics, performance data, and digital twin tooling.",
+    tagline: "SCADA analytics, performance data, and digital twin tooling.",
     interestArea: "digital",
     skillWeights: {
       "data-analysis": 3,
@@ -140,11 +134,10 @@ export const ROLE_FAMILIES: RoleFamilyDefinition[] = [
   },
 ];
 
-export const ROLE_FAMILY_BY_KEY: Record<RoleFamilyKey, RoleFamilyDefinition> =
-  ROLE_FAMILIES.reduce(
-    (acc, f) => {
-      acc[f.key] = f;
-      return acc;
-    },
-    {} as Record<RoleFamilyKey, RoleFamilyDefinition>
-  );
+export const ROLE_FAMILY_BY_KEY: Record<RoleFamilyKey, RoleFamilyDefinition> = ROLE_FAMILIES.reduce(
+  (acc, f) => {
+    acc[f.key] = f;
+    return acc;
+  },
+  {} as Record<RoleFamilyKey, RoleFamilyDefinition>,
+);

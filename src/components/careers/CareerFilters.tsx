@@ -5,23 +5,20 @@ import { cn } from "@/lib/utils";
 import { CareerCard } from "./CareerCard";
 import type { Career } from "@/lib/types";
 
-const sectorColours: Record<string, string> = {
-  "Operations & Maintenance": "#0C2340",
-  "Marine Operations": "#1E6091",
-  Electrical: "#F59E0B",
-  "Survey & Design": "#7C3AED",
-  "Health, Safety & Environment": "#DC2626",
-  "Policy & Regulation": "#059669",
-  "Project Management": "#EA580C",
+const sectorColours: Record<string, { bg: string; text: string }> = {
+  "Operations & Maintenance": { bg: "#0C2340", text: "#FFFFFF" },
+  "Marine Operations": { bg: "#1E6091", text: "#FFFFFF" },
+  Electrical: { bg: "#F59E0B", text: "#451A03" },
+  "Survey & Design": { bg: "#7C3AED", text: "#FFFFFF" },
+  "Health, Safety & Environment": { bg: "#DC2626", text: "#FFFFFF" },
+  "Policy & Regulation": { bg: "#047857", text: "#FFFFFF" },
+  "Project Management": { bg: "#C2410C", text: "#FFFFFF" },
 };
 
 export function CareerFilters({ careers }: { careers: Career[] }) {
   const [activeSectors, setActiveSectors] = useState<Set<string>>(new Set());
 
-  const sectors = useMemo(
-    () => Array.from(new Set(careers.map((c) => c.sector))),
-    [careers]
-  );
+  const sectors = useMemo(() => Array.from(new Set(careers.map((c) => c.sector))), [careers]);
 
   const toggleSector = (sector: string) => {
     setActiveSectors((prev) => {
@@ -33,11 +30,8 @@ export function CareerFilters({ careers }: { careers: Career[] }) {
   };
 
   const filtered = useMemo(
-    () =>
-      activeSectors.size === 0
-        ? careers
-        : careers.filter((c) => activeSectors.has(c.sector)),
-    [careers, activeSectors]
+    () => (activeSectors.size === 0 ? careers : careers.filter((c) => activeSectors.has(c.sector))),
+    [careers, activeSectors],
   );
 
   return (
@@ -59,7 +53,7 @@ export function CareerFilters({ careers }: { careers: Career[] }) {
             "px-3 py-1.5 rounded-full text-xs font-medium transition-colors border cursor-pointer",
             activeSectors.size === 0
               ? "bg-primary text-white border-primary"
-              : "bg-white text-text-secondary border-gray-200 hover:border-primary"
+              : "bg-white text-text-secondary border-gray-200 hover:border-primary",
           )}
         >
           All Sectors
@@ -71,14 +65,15 @@ export function CareerFilters({ careers }: { careers: Career[] }) {
             className={cn(
               "px-3 py-1.5 rounded-full text-xs font-medium transition-colors border cursor-pointer",
               activeSectors.has(sector)
-                ? "text-white border-transparent"
-                : "bg-white text-text-secondary border-gray-200 hover:border-gray-400"
+                ? "border-transparent"
+                : "bg-white text-text-secondary border-gray-200 hover:border-gray-400",
             )}
             style={
               activeSectors.has(sector)
                 ? {
-                    backgroundColor: sectorColours[sector],
-                    borderColor: sectorColours[sector],
+                    backgroundColor: sectorColours[sector]?.bg,
+                    borderColor: sectorColours[sector]?.bg,
+                    color: sectorColours[sector]?.text,
                   }
                 : undefined
             }

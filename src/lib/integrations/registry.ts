@@ -35,7 +35,5 @@ export function getAdapter(source: SourceId): ContentSourceAdapter | undefined {
 
 /** List all registered adapters. Stable order for logging and admin UI. */
 export function listAdapters(): ContentSourceAdapter[] {
-  return Object.values(adapters).filter(
-    (a): a is ContentSourceAdapter => a !== undefined,
-  );
+  return Object.values(adapters).filter((a): a is ContentSourceAdapter => a !== undefined);
 }

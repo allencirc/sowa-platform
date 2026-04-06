@@ -10,12 +10,13 @@ All endpoints return JSON. Authenticated endpoints require a valid NextAuth JWT 
 
 All list endpoints accept:
 
-| Param | Type | Default | Description |
-|-------|------|---------|-------------|
-| `page` | number | 1 | Page number (1-indexed) |
-| `limit` | number | 20 | Items per page (max 100) |
+| Param   | Type   | Default | Description              |
+| ------- | ------ | ------- | ------------------------ |
+| `page`  | number | 1       | Page number (1-indexed)  |
+| `limit` | number | 20      | Items per page (max 100) |
 
 Response shape:
+
 ```json
 {
   "data": [...],
@@ -50,24 +51,24 @@ Headers:
 }
 ```
 
-| Code | Meaning |
-|------|---------|
-| 400 | Validation error or bad request |
-| 401 | Not authenticated |
-| 403 | Insufficient permissions |
-| 404 | Resource not found |
-| 409 | Conflict (duplicate slug, capacity full) |
-| 429 | Rate limit exceeded |
-| 500 | Internal server error |
+| Code | Meaning                                  |
+| ---- | ---------------------------------------- |
+| 400  | Validation error or bad request          |
+| 401  | Not authenticated                        |
+| 403  | Insufficient permissions                 |
+| 404  | Resource not found                       |
+| 409  | Conflict (duplicate slug, capacity full) |
+| 429  | Rate limit exceeded                      |
+| 500  | Internal server error                    |
 
 ### Authentication Levels
 
-| Level | Description |
-|-------|-------------|
-| Public | No auth required |
-| Auth | Any authenticated user |
+| Level        | Description                   |
+| ------------ | ----------------------------- |
+| Public       | No auth required              |
+| Auth         | Any authenticated user        |
 | ADMIN/EDITOR | Requires ADMIN or EDITOR role |
-| ADMIN | Requires ADMIN role |
+| ADMIN        | Requires ADMIN role           |
 
 ---
 
@@ -79,14 +80,14 @@ List all careers with optional filtering.
 
 **Auth:** Public
 
-| Query Param | Type | Description |
-|-------------|------|-------------|
-| `sector` | string | Filter by CareerSector enum value |
-| `entryLevel` | string | Filter by EntryLevel enum value |
-| `search` | string | Search title and description |
-| `status` | string | Filter by content status |
-| `sortBy` | string | `title`, `sector`, `entryLevel`, `createdAt`, `updatedAt` |
-| `order` | string | `asc` or `desc` |
+| Query Param  | Type   | Description                                               |
+| ------------ | ------ | --------------------------------------------------------- |
+| `sector`     | string | Filter by CareerSector enum value                         |
+| `entryLevel` | string | Filter by EntryLevel enum value                           |
+| `search`     | string | Search title and description                              |
+| `status`     | string | Filter by content status                                  |
+| `sortBy`     | string | `title`, `sector`, `entryLevel`, `createdAt`, `updatedAt` |
+| `order`      | string | `asc` or `desc`                                           |
 
 ```bash
 curl 'http://localhost:3000/api/careers?sector=MARINE_OPERATIONS&page=1&limit=10'
@@ -168,20 +169,20 @@ List courses with advanced filtering.
 
 **Auth:** Public
 
-| Query Param | Type | Description |
-|-------------|------|-------------|
-| `topic` | string | Filter by tag/category keyword |
-| `format` | string | DeliveryFormat enum (`IN_PERSON`, `ONLINE`, `BLENDED`, `SELF_PACED`) |
-| `costMax` | number | Maximum cost in EUR |
-| `freeOnly` | boolean | Only show free courses (cost = 0) |
-| `provider` | string | Filter by provider name |
-| `providerType` | string | ProviderType enum value |
-| `startingSoon` | boolean | Courses starting within 90 days |
-| `nfqLevel` | number | Filter by NFQ level |
-| `search` | string | Search title and description |
-| `status` | string | Content status filter |
-| `sortBy` | string | `title`, `cost`, `nfqLevel`, `nextStartDate`, `createdAt` |
-| `order` | string | `asc` or `desc` |
+| Query Param    | Type    | Description                                                          |
+| -------------- | ------- | -------------------------------------------------------------------- |
+| `topic`        | string  | Filter by tag/category keyword                                       |
+| `format`       | string  | DeliveryFormat enum (`IN_PERSON`, `ONLINE`, `BLENDED`, `SELF_PACED`) |
+| `costMax`      | number  | Maximum cost in EUR                                                  |
+| `freeOnly`     | boolean | Only show free courses (cost = 0)                                    |
+| `provider`     | string  | Filter by provider name                                              |
+| `providerType` | string  | ProviderType enum value                                              |
+| `startingSoon` | boolean | Courses starting within 90 days                                      |
+| `nfqLevel`     | number  | Filter by NFQ level                                                  |
+| `search`       | string  | Search title and description                                         |
+| `status`       | string  | Content status filter                                                |
+| `sortBy`       | string  | `title`, `cost`, `nfqLevel`, `nextStartDate`, `createdAt`            |
+| `order`        | string  | `asc` or `desc`                                                      |
 
 ```bash
 curl 'http://localhost:3000/api/courses?format=ONLINE&freeOnly=true&sortBy=nextStartDate&order=asc'
@@ -254,13 +255,13 @@ curl -X DELETE http://localhost:3000/api/courses/gwo-bst \
 
 ### GET /api/events
 
-| Query Param | Type | Description |
-|-------------|------|-------------|
-| `type` | string | EventType enum |
-| `locationType` | string | `PHYSICAL`, `VIRTUAL`, `HYBRID` |
-| `upcoming` | boolean | Only future events |
-| `search` | string | Search title and description |
-| `sortBy` | string | `title`, `startDate`, `type`, `createdAt` |
+| Query Param    | Type    | Description                               |
+| -------------- | ------- | ----------------------------------------- |
+| `type`         | string  | EventType enum                            |
+| `locationType` | string  | `PHYSICAL`, `VIRTUAL`, `HYBRID`           |
+| `upcoming`     | boolean | Only future events                        |
+| `search`       | string  | Search title and description              |
+| `sortBy`       | string  | `title`, `startDate`, `type`, `createdAt` |
 
 ```bash
 curl 'http://localhost:3000/api/events?upcoming=true&type=CONFERENCE'
@@ -331,11 +332,11 @@ curl -X DELETE http://localhost:3000/api/events/owe-skills-summit-2026 \
 
 ### GET /api/news
 
-| Query Param | Type | Description |
-|-------------|------|-------------|
-| `category` | string | Filter by news category |
-| `search` | string | Search title and content |
-| `sortBy` | string | `title`, `date`, `category`, `createdAt` |
+| Query Param | Type   | Description                              |
+| ----------- | ------ | ---------------------------------------- |
+| `category`  | string | Filter by news category                  |
+| `search`    | string | Search title and content                 |
+| `sortBy`    | string | `title`, `date`, `category`, `createdAt` |
 
 ### POST /api/news
 
@@ -366,12 +367,12 @@ Same patterns as Careers.
 
 ### GET /api/research
 
-| Query Param | Type | Description |
-|-------------|------|-------------|
-| `category` | string | Filter by research category |
-| `featured` | boolean | Only featured items |
-| `search` | string | Search title and summary |
-| `sortBy` | string | `title`, `publicationDate`, `author`, `createdAt` |
+| Query Param | Type    | Description                                       |
+| ----------- | ------- | ------------------------------------------------- |
+| `category`  | string  | Filter by research category                       |
+| `featured`  | boolean | Only featured items                               |
+| `search`    | string  | Search title and summary                          |
+| `sortBy`    | string  | `title`, `publicationDate`, `author`, `createdAt` |
 
 ### POST /api/research
 
@@ -412,6 +413,7 @@ curl http://localhost:3000/api/diagnostic/questions
 ```
 
 **Response:**
+
 ```json
 {
   "data": [
@@ -446,12 +448,12 @@ If `contact` is provided with `consent: true`, the top 3 skill gaps and recommen
 
 **Request fields:**
 
-| Field | Type | Required | Notes |
-|---|---|---|---|
-| `answers` | `Record<string, string \| string[]>` | yes | Keyed by question id |
-| `contact.email` | string (email) | no | Required if `contact` is present |
-| `contact.name` | string | no | Required if `contact` is present |
-| `contact.consent` | `true` (literal) | no | Must be `true`; omit `contact` entirely otherwise |
+| Field             | Type                                 | Required | Notes                                             |
+| ----------------- | ------------------------------------ | -------- | ------------------------------------------------- |
+| `answers`         | `Record<string, string \| string[]>` | yes      | Keyed by question id                              |
+| `contact.email`   | string (email)                       | no       | Required if `contact` is present                  |
+| `contact.name`    | string                               | no       | Required if `contact` is present                  |
+| `contact.consent` | `true` (literal)                     | no       | Must be `true`; omit `contact` entirely otherwise |
 
 ```bash
 # Minimal — anonymous
@@ -479,6 +481,7 @@ curl -X POST http://localhost:3000/api/diagnostic/results \
 ```
 
 **Response:**
+
 ```json
 {
   "scores": { "safety-at-heights": 7, "electrical-systems": 4 },
@@ -522,6 +525,7 @@ curl -X POST http://localhost:3000/api/registrations \
 ```
 
 **Validation:**
+
 - EVENT registrations check capacity against active (non-cancelled) registrations
 - `gdprConsent` must be `true`
 
@@ -533,16 +537,16 @@ List registrations with filtering.
 
 **Auth:** ADMIN / EDITOR / VIEWER
 
-| Query Param | Type | Description |
-|-------------|------|-------------|
-| `type` | string | `EVENT` or `COURSE` |
-| `contentId` | string | Filter by specific event/course |
-| `status` | string | `PENDING`, `CONFIRMED`, `CANCELLED` |
-| `dateFrom` | string | ISO date |
-| `dateTo` | string | ISO date |
-| `search` | string | Search name and email |
-| `sortBy` | string | Default `createdAt` |
-| `order` | string | Default `desc` |
+| Query Param | Type   | Description                         |
+| ----------- | ------ | ----------------------------------- |
+| `type`      | string | `EVENT` or `COURSE`                 |
+| `contentId` | string | Filter by specific event/course     |
+| `status`    | string | `PENDING`, `CONFIRMED`, `CANCELLED` |
+| `dateFrom`  | string | ISO date                            |
+| `dateTo`    | string | ISO date                            |
+| `search`    | string | Search name and email               |
+| `sortBy`    | string | Default `createdAt`                 |
+| `order`     | string | Default `desc`                      |
 
 ```bash
 curl 'http://localhost:3000/api/admin/registrations?type=EVENT&status=PENDING' \
@@ -627,11 +631,11 @@ Password is hashed with bcrypt before storage.
 
 **Auth:** Public
 
-| Query Param | Type | Description |
-|-------------|------|-------------|
-| `category` | string | SkillCategory enum |
-| `search` | string | Search name |
-| `sortBy` | string | `name`, `category`, `createdAt` |
+| Query Param | Type   | Description                     |
+| ----------- | ------ | ------------------------------- |
+| `category`  | string | SkillCategory enum              |
+| `search`    | string | Search name                     |
+| `sortBy`    | string | `name`, `category`, `createdAt` |
 
 ### POST /api/skills
 
@@ -658,18 +662,19 @@ Global search across all published content types.
 
 **Auth:** Public
 
-| Query Param | Type | Description |
-|-------------|------|-------------|
-| `q` | string | **Required.** Search query |
-| `type` | string | Optional. `career`, `course`, `event`, `research`, `news` |
-| `page` | number | Default 1 |
-| `limit` | number | Default 20 |
+| Query Param | Type   | Description                                               |
+| ----------- | ------ | --------------------------------------------------------- |
+| `q`         | string | **Required.** Search query                                |
+| `type`      | string | Optional. `career`, `course`, `event`, `research`, `news` |
+| `page`      | number | Default 1                                                 |
+| `limit`     | number | Default 20                                                |
 
 ```bash
 curl 'http://localhost:3000/api/search?q=safety+training&type=course'
 ```
 
 **Response:**
+
 ```json
 {
   "data": [
@@ -702,6 +707,7 @@ curl -X POST http://localhost:3000/api/content-status \
 ```
 
 For scheduled publishing:
+
 ```bash
 curl -X POST http://localhost:3000/api/content-status \
   -H 'Content-Type: application/json' \
@@ -736,10 +742,10 @@ List version history for a piece of content.
 
 **Auth:** Any authenticated user
 
-| Query Param | Type | Description |
-|-------------|------|-------------|
+| Query Param   | Type   | Description                                     |
+| ------------- | ------ | ----------------------------------------------- |
 | `contentType` | string | `CAREER`, `COURSE`, `EVENT`, `RESEARCH`, `NEWS` |
-| `contentId` | string | The record ID |
+| `contentId`   | string | The record ID                                   |
 
 ```bash
 curl 'http://localhost:3000/api/versions?contentType=CAREER&contentId=clx1abc123' \
@@ -769,6 +775,7 @@ curl -X POST http://localhost:3000/api/media \
 ```
 
 **Constraints:**
+
 - Allowed types: JPEG, PNG, GIF, WebP, SVG
 - Max size: 5 MB
 - Filename sanitised and timestamped
@@ -806,10 +813,10 @@ curl -X POST http://localhost:3000/api/newsletter \
   }'
 ```
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `email` | string | Yes | Valid email address |
-| `topics` | string[] | No | Interest topics (defaults to []) |
+| Field    | Type     | Required | Description                      |
+| -------- | -------- | -------- | -------------------------------- |
+| `email`  | string   | Yes      | Valid email address              |
+| `topics` | string[] | No       | Interest topics (defaults to []) |
 
 **Response:** `201 { message, email, topics }`
 

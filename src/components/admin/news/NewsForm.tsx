@@ -85,7 +85,8 @@ export function NewsForm({ article, mode }: NewsFormProps) {
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
       {error && (
         <div className="flex items-center gap-2 rounded-lg bg-status-error/10 px-4 py-3 text-sm text-status-error">
-          <AlertCircle className="h-4 w-4 shrink-0" />{error}
+          <AlertCircle className="h-4 w-4 shrink-0" />
+          {error}
         </div>
       )}
 
@@ -96,7 +97,11 @@ export function NewsForm({ article, mode }: NewsFormProps) {
             <Input {...register("title")} placeholder="e.g. SOWA Launches New Training Programme" />
           </FormField>
           <FormField label="Slug" required error={errors.slug?.message}>
-            <Input {...register("slug")} readOnly={mode === "edit"} className={mode === "edit" ? "bg-gray-50" : ""} />
+            <Input
+              {...register("slug")}
+              readOnly={mode === "edit"}
+              className={mode === "edit" ? "bg-gray-50" : ""}
+            />
           </FormField>
           <FormField label="Author" required error={errors.author?.message}>
             <Input {...register("author")} placeholder="e.g. SOWA Team" />
@@ -116,8 +121,17 @@ export function NewsForm({ article, mode }: NewsFormProps) {
       <div className="rounded-xl bg-surface-card p-6 shadow-sm">
         <h2 className="mb-4 text-lg font-semibold text-text-primary">Content</h2>
         <div className="space-y-4">
-          <FormField label="Excerpt" required error={errors.excerpt?.message} description="Short summary shown in listings">
-            <Textarea {...register("excerpt")} placeholder="Brief summary of the article..." rows={3} />
+          <FormField
+            label="Excerpt"
+            required
+            error={errors.excerpt?.message}
+            description="Short summary shown in listings"
+          >
+            <Textarea
+              {...register("excerpt")}
+              placeholder="Brief summary of the article..."
+              rows={3}
+            />
           </FormField>
           <FormField label="Content" required error={errors.content?.message}>
             <RichTextEditor
@@ -132,7 +146,9 @@ export function NewsForm({ article, mode }: NewsFormProps) {
 
       <div className="flex items-center justify-between">
         <Link href="/admin/news">
-          <Button type="button" variant="ghost"><ArrowLeft className="h-4 w-4" /> Back to News</Button>
+          <Button type="button" variant="ghost">
+            <ArrowLeft className="h-4 w-4" /> Back to News
+          </Button>
         </Link>
         <Button type="submit" disabled={isSubmitting}>
           <Save className="h-4 w-4" />

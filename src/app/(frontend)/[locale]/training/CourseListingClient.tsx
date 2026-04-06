@@ -52,9 +52,7 @@ export function CourseListingClient({ courses }: CourseListingClientProps) {
 
     // Tag filter
     if (activeTags.length > 0) {
-      result = result.filter((c) =>
-        activeTags.some((tag) => c.tags.includes(tag))
-      );
+      result = result.filter((c) => activeTags.some((tag) => c.tags.includes(tag)));
     }
 
     // Free only
@@ -98,26 +96,17 @@ export function CourseListingClient({ courses }: CourseListingClientProps) {
   return (
     <div className="flex flex-col lg:flex-row gap-8">
       {/* Desktop sidebar */}
-      <FilterPanel
-        courses={courses}
-        className="hidden lg:block w-64 shrink-0"
-      />
+      <FilterPanel courses={courses} className="hidden lg:block w-64 shrink-0" />
 
       {/* Main content */}
       <div className="flex-1 min-w-0">
         {/* Toolbar */}
         <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
           <div className="flex items-center gap-4">
-            <FilterDrawer
-              courses={courses}
-              activeFilterCount={activeFilterCount}
-            />
+            <FilterDrawer courses={courses} activeFilterCount={activeFilterCount} />
             <p className="text-sm text-text-secondary" aria-live="polite">
-              Showing{" "}
-              <span className="font-semibold text-text-primary">
-                {filtered.length}
-              </span>{" "}
-              of {courses.length} courses
+              Showing <span className="font-semibold text-text-primary">{filtered.length}</span> of{" "}
+              {courses.length} courses
             </p>
           </div>
 
@@ -138,9 +127,7 @@ export function CourseListingClient({ courses }: CourseListingClientProps) {
           </div>
         ) : (
           <div className="text-center py-16">
-            <p className="text-lg text-text-secondary mb-2">
-              No courses match your filters
-            </p>
+            <p className="text-lg text-text-secondary mb-2">No courses match your filters</p>
             <p className="text-sm text-text-muted">
               Try adjusting or clearing your filters to see more results.
             </p>

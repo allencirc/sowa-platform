@@ -90,6 +90,7 @@ The approach (Next.js built-in vs `next-intl`) is documented in
    grep -rn "\[TODO\]" messages/
    ```
 3. Consume it in a Server Component:
+
    ```tsx
    import { getDictionary } from "@/lib/i18n";
 
@@ -99,8 +100,10 @@ The approach (Next.js built-in vs `next-intl`) is documented in
      return <h1>{dict.hero.title}</h1>;
    }
    ```
+
    For interpolation (`{year}`, `{current}`, etc.) use the `format()`
    helper:
+
    ```ts
    import { format } from "@/lib/i18n";
    format(dict.footer.copyright, { year: new Date().getFullYear() });
@@ -124,7 +127,7 @@ The approach (Next.js built-in vs `next-intl`) is documented in
 
 ### Linking between localised pages
 
-Server components can build hrefs as ``` `/${locale}/careers` ```. For
+Server components can build hrefs as `` `/${locale}/careers` ``. For
 cases where you already have a path and just need to ensure it carries a
 locale, use the `localeHref` helper from `@/lib/i18n`. Hard-coded links
 like `/careers` still work because the proxy will redirect, but explicit

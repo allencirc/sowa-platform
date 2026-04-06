@@ -36,7 +36,9 @@ export async function MiniPathway({ career }: MiniPathwayProps) {
       career: allCareers.find((c) => c.slug === conn.to),
       connection: conn,
     }))
-    .filter((c): c is { career: Career; connection: typeof c.connection } => c.career !== undefined);
+    .filter(
+      (c): c is { career: Career; connection: typeof c.connection } => c.career !== undefined,
+    );
 
   if (incomingConnections.length === 0 && outgoingConnections.length === 0) {
     return null;
@@ -57,12 +59,10 @@ export async function MiniPathway({ career }: MiniPathwayProps) {
                   href={`/careers/${from.slug}`}
                   className={cn(
                     "flex-1 block p-3 rounded-lg border-l-4 bg-surface-card border border-gray-100 hover:shadow-md transition-shadow",
-                    sectorColours[from.sector] ?? "border-gray-300"
+                    sectorColours[from.sector] ?? "border-gray-300",
                   )}
                 >
-                  <div className="text-sm font-semibold text-text-primary">
-                    {from.title}
-                  </div>
+                  <div className="text-sm font-semibold text-text-primary">{from.title}</div>
                   <div className="text-xs text-text-muted">{from.sector}</div>
                 </Link>
                 <div className="shrink-0 flex flex-col items-center gap-0.5">
@@ -86,11 +86,13 @@ export async function MiniPathway({ career }: MiniPathwayProps) {
         <div
           className={cn(
             "px-5 py-3 rounded-xl border-2 bg-surface-card shadow-sm text-center",
-            sectorColours[career.sector] ?? "border-gray-300"
+            sectorColours[career.sector] ?? "border-gray-300",
           )}
         >
           <div className="text-base font-bold text-text-primary">{career.title}</div>
-          <div className="text-xs text-text-muted">{career.entryLevel} &middot; {career.sector}</div>
+          <div className="text-xs text-text-muted">
+            {career.entryLevel} &middot; {career.sector}
+          </div>
         </div>
       </div>
 
@@ -117,12 +119,10 @@ export async function MiniPathway({ career }: MiniPathwayProps) {
                   href={`/careers/${to.slug}`}
                   className={cn(
                     "flex-1 block p-3 rounded-lg border-l-4 bg-surface-card border border-gray-100 hover:shadow-md transition-shadow",
-                    sectorColours[to.sector] ?? "border-gray-300"
+                    sectorColours[to.sector] ?? "border-gray-300",
                   )}
                 >
-                  <div className="text-sm font-semibold text-text-primary">
-                    {to.title}
-                  </div>
+                  <div className="text-sm font-semibold text-text-primary">{to.title}</div>
                   <div className="text-xs text-text-muted">{to.sector}</div>
                 </Link>
               </div>

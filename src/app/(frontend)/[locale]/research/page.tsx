@@ -18,8 +18,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Research & Publications — SOWA",
-    description:
-      "Research and publications on Ireland's offshore wind workforce.",
+    description: "Research and publications on Ireland's offshore wind workforce.",
   },
 };
 
@@ -35,8 +34,8 @@ export default async function ResearchPage() {
             Research &amp; Publications
           </h1>
           <p className="text-text-secondary max-w-2xl">
-            Key reports, workforce studies, and policy documents shaping
-            Ireland&apos;s offshore wind energy sector.
+            Key reports, workforce studies, and policy documents shaping Ireland&apos;s offshore
+            wind energy sector.
           </p>
         </Container>
       </section>

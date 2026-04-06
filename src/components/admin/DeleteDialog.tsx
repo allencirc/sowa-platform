@@ -13,13 +13,7 @@ interface DeleteDialogProps {
   description?: string;
 }
 
-export function DeleteDialog({
-  open,
-  onClose,
-  onConfirm,
-  title,
-  description,
-}: DeleteDialogProps) {
+export function DeleteDialog({ open, onClose, onConfirm, title, description }: DeleteDialogProps) {
   const [loading, setLoading] = useState(false);
 
   const handleConfirm = async () => {
@@ -39,9 +33,7 @@ export function DeleteDialog({
           <AlertTriangle className="h-6 w-6 text-status-error" />
         </div>
         <h3 className="text-lg font-semibold text-text-primary">{title}</h3>
-        {description && (
-          <p className="mt-2 text-sm text-text-secondary">{description}</p>
-        )}
+        {description && <p className="mt-2 text-sm text-text-secondary">{description}</p>}
         <div className="mt-6 flex w-full gap-3">
           <Button
             variant="outline"

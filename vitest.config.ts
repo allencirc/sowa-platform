@@ -7,6 +7,9 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+      // `server-only` throws at import time outside Next.js server
+      // context. Stub it as an empty module for unit tests.
+      "server-only": path.resolve(__dirname, "./src/__tests__/stubs/server-only.ts"),
     },
   },
   test: {
@@ -19,11 +22,7 @@ export default defineConfig({
       provider: "v8",
       reporter: ["text", "text-summary", "lcov", "html"],
       include: ["src/lib/**", "src/components/**", "src/app/api/**"],
-      exclude: [
-        "src/**/*.test.{ts,tsx}",
-        "src/__tests__/**",
-        "src/lib/data/**",
-      ],
+      exclude: ["src/**/*.test.{ts,tsx}", "src/__tests__/**", "src/lib/data/**"],
     },
   },
 });

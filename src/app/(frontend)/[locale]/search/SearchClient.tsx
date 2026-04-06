@@ -38,7 +38,9 @@ export function SearchClient() {
       .then((data: SearchResult[]) => {
         if (!cancelled) setResults(data);
       });
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [query]);
 
   // Group results by type
@@ -57,24 +59,30 @@ export function SearchClient() {
       e.preventDefault();
       router.push(`/search?q=${encodeURIComponent(query)}`, { scroll: false });
     },
-    [query, router]
+    [query, router],
   );
 
   return (
     <>
       <section className="bg-surface py-10 sm:py-14">
         <Container>
-          <h1 className="text-3xl sm:text-4xl font-bold text-text-primary mb-6">
-            Search
-          </h1>
+          <h1 className="text-3xl sm:text-4xl font-bold text-text-primary mb-6">Search</h1>
 
           {/* Search input */}
-          <form onSubmit={handleSubmit} className="max-w-2xl" role="search" aria-label="Site search">
+          <form
+            onSubmit={handleSubmit}
+            className="max-w-2xl"
+            role="search"
+            aria-label="Site search"
+          >
             <label htmlFor="global-search" className="sr-only">
               Search the site
             </label>
             <div className="relative">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-text-muted" aria-hidden="true" />
+              <Search
+                className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-text-muted"
+                aria-hidden="true"
+              />
               <input
                 id="global-search"
                 type="search"
@@ -111,10 +119,7 @@ export function SearchClient() {
           ) : (
             <div>
               <p className="text-sm text-text-secondary mb-8">
-                Found{" "}
-                <span className="font-semibold text-text-primary">
-                  {results.length}
-                </span>{" "}
+                Found <span className="font-semibold text-text-primary">{results.length}</span>{" "}
                 result{results.length !== 1 && "s"} for &ldquo;{query}&rdquo;
               </p>
 

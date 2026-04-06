@@ -1,9 +1,4 @@
-import {
-  getDiagnosticQuestions,
-  getAllSkills,
-  getAllCareers,
-  getAllCourses,
-} from "@/lib/queries";
+import { getDiagnosticQuestions, getAllSkills, getAllCareers, getAllCourses } from "@/lib/queries";
 import AssessmentClient from "./AssessmentClient";
 
 export default async function AssessmentPage() {

@@ -22,7 +22,7 @@ export function CourseCard({ course, className }: CourseCardProps) {
       href={`/training/${course.slug}`}
       className={cn(
         "group block bg-surface-card rounded-xl border border-gray-100 overflow-hidden transition-all duration-200 hover:shadow-lg hover:shadow-primary/5 hover:-translate-y-0.5",
-        className
+        className,
       )}
     >
       <div className="p-5">
@@ -30,21 +30,15 @@ export function CourseCard({ course, className }: CourseCardProps) {
           <Badge variant={formatBadgeMap[course.deliveryFormat] ?? "default"}>
             {course.deliveryFormat}
           </Badge>
-          {course.cost === 0 && (
-            <Badge variant="success">Free</Badge>
-          )}
-          {course.nfqLevel && (
-            <Badge variant="primary">NFQ Level {course.nfqLevel}</Badge>
-          )}
+          {course.cost === 0 && <Badge variant="success">Free</Badge>}
+          {course.nfqLevel && <Badge variant="primary">NFQ Level {course.nfqLevel}</Badge>}
         </div>
 
         <h3 className="text-lg font-semibold text-text-primary mb-1 group-hover:text-primary transition-colors line-clamp-2">
           {course.title}
         </h3>
 
-        <p className="text-sm text-text-secondary mb-4">
-          {course.provider}
-        </p>
+        <p className="text-sm text-text-secondary mb-4">{course.provider}</p>
 
         <div className="space-y-1.5 text-sm text-text-secondary">
           {course.nextStartDate && (
@@ -70,9 +64,7 @@ export function CourseCard({ course, className }: CourseCardProps) {
             {formatCurrency(course.cost)}
           </span>
           {course.costNotes && (
-            <span className="text-xs text-secondary-dark font-medium">
-              {course.costNotes}
-            </span>
+            <span className="text-xs text-secondary-dark font-medium">{course.costNotes}</span>
           )}
         </div>
       </div>

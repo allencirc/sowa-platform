@@ -111,9 +111,7 @@ describe("createCareerSchema", () => {
       keyResponsibilities: ["Task 1", "Task 2"],
       workingConditions: "Offshore",
       growthOutlook: "Strong",
-      pathwayConnections: [
-        { to: "senior-career", type: "progression", timeframe: "3-5 years" },
-      ],
+      pathwayConnections: [{ to: "senior-career", type: "progression", timeframe: "3-5 years" }],
       relatedCourses: ["course-1"],
     });
     expect(result.success).toBe(true);
@@ -125,27 +123,25 @@ describe("createCareerSchema", () => {
   });
 
   it("rejects invalid slug format", () => {
-    expect(
-      createCareerSchema.safeParse({ ...validCareer, slug: "Has Spaces!" }).success
-    ).toBe(false);
+    expect(createCareerSchema.safeParse({ ...validCareer, slug: "Has Spaces!" }).success).toBe(
+      false,
+    );
   });
 
   it("rejects empty qualifications array", () => {
-    expect(
-      createCareerSchema.safeParse({ ...validCareer, qualifications: [] }).success
-    ).toBe(false);
+    expect(createCareerSchema.safeParse({ ...validCareer, qualifications: [] }).success).toBe(
+      false,
+    );
   });
 
   it("rejects empty skills array", () => {
-    expect(
-      createCareerSchema.safeParse({ ...validCareer, skills: [] }).success
-    ).toBe(false);
+    expect(createCareerSchema.safeParse({ ...validCareer, skills: [] }).success).toBe(false);
   });
 
   it("rejects invalid sector", () => {
-    expect(
-      createCareerSchema.safeParse({ ...validCareer, sector: "InvalidSector" }).success
-    ).toBe(false);
+    expect(createCareerSchema.safeParse({ ...validCareer, sector: "InvalidSector" }).success).toBe(
+      false,
+    );
   });
 
   it("rejects negative salary", () => {
@@ -153,7 +149,7 @@ describe("createCareerSchema", () => {
       createCareerSchema.safeParse({
         ...validCareer,
         salaryRange: { min: -1000, max: 50000 },
-      }).success
+      }).success,
     ).toBe(false);
   });
 });
@@ -168,9 +164,7 @@ describe("updateCareerSchema", () => {
   });
 
   it("rejects invalid sector in partial update", () => {
-    expect(
-      updateCareerSchema.safeParse({ sector: "InvalidSector" }).success
-    ).toBe(false);
+    expect(updateCareerSchema.safeParse({ sector: "InvalidSector" }).success).toBe(false);
   });
 });
 
@@ -196,30 +190,20 @@ describe("createCourseSchema", () => {
   });
 
   it("accepts course with cost 0 (free)", () => {
-    expect(
-      createCourseSchema.safeParse({ ...validCourse, cost: 0 }).success
-    ).toBe(true);
+    expect(createCourseSchema.safeParse({ ...validCourse, cost: 0 }).success).toBe(true);
   });
 
   it("accepts NFQ level in valid range", () => {
-    expect(
-      createCourseSchema.safeParse({ ...validCourse, nfqLevel: 7 }).success
-    ).toBe(true);
+    expect(createCourseSchema.safeParse({ ...validCourse, nfqLevel: 7 }).success).toBe(true);
   });
 
   it("rejects NFQ level out of range", () => {
-    expect(
-      createCourseSchema.safeParse({ ...validCourse, nfqLevel: 0 }).success
-    ).toBe(false);
-    expect(
-      createCourseSchema.safeParse({ ...validCourse, nfqLevel: 11 }).success
-    ).toBe(false);
+    expect(createCourseSchema.safeParse({ ...validCourse, nfqLevel: 0 }).success).toBe(false);
+    expect(createCourseSchema.safeParse({ ...validCourse, nfqLevel: 11 }).success).toBe(false);
   });
 
   it("rejects negative cost", () => {
-    expect(
-      createCourseSchema.safeParse({ ...validCourse, cost: -100 }).success
-    ).toBe(false);
+    expect(createCourseSchema.safeParse({ ...validCourse, cost: -100 }).success).toBe(false);
   });
 
   it("accepts ISO date format for nextStartDate", () => {
@@ -227,13 +211,13 @@ describe("createCourseSchema", () => {
       createCourseSchema.safeParse({
         ...validCourse,
         nextStartDate: "2025-09-01",
-      }).success
+      }).success,
     ).toBe(true);
   });
 
   it("rejects invalid providerType", () => {
     expect(
-      createCourseSchema.safeParse({ ...validCourse, providerType: "FakeProvider" }).success
+      createCourseSchema.safeParse({ ...validCourse, providerType: "FakeProvider" }).success,
     ).toBe(false);
   });
 });
@@ -261,20 +245,16 @@ describe("createEventSchema", () => {
         endDate: "2025-10-01T17:00:00Z",
         location: "Dublin, Ireland",
         capacity: 50,
-      }).success
+      }).success,
     ).toBe(true);
   });
 
   it("rejects invalid event type", () => {
-    expect(
-      createEventSchema.safeParse({ ...validEvent, type: "Party" }).success
-    ).toBe(false);
+    expect(createEventSchema.safeParse({ ...validEvent, type: "Party" }).success).toBe(false);
   });
 
   it("rejects capacity of 0", () => {
-    expect(
-      createEventSchema.safeParse({ ...validEvent, capacity: 0 }).success
-    ).toBe(false);
+    expect(createEventSchema.safeParse({ ...validEvent, capacity: 0 }).success).toBe(false);
   });
 });
 
@@ -296,9 +276,9 @@ describe("createResearchSchema", () => {
   });
 
   it("rejects empty categories", () => {
-    expect(
-      createResearchSchema.safeParse({ ...validResearch, categories: [] }).success
-    ).toBe(false);
+    expect(createResearchSchema.safeParse({ ...validResearch, categories: [] }).success).toBe(
+      false,
+    );
   });
 
   it("rejects invalid image URL", () => {
@@ -306,7 +286,7 @@ describe("createResearchSchema", () => {
       createResearchSchema.safeParse({
         ...validResearch,
         image: "not-a-url",
-      }).success
+      }).success,
     ).toBe(false);
   });
 });
@@ -338,7 +318,7 @@ describe("createNewsSchema", () => {
       createNewsSchema.safeParse({
         ...validNews,
         image: "https://example.com/image.jpg",
-      }).success
+      }).success,
     ).toBe(true);
   });
 });
@@ -352,7 +332,7 @@ describe("createSkillSchema", () => {
         slug: "test-skill",
         name: "Test Skill",
         category: "Technical",
-      }).success
+      }).success,
     ).toBe(true);
   });
 
@@ -362,7 +342,7 @@ describe("createSkillSchema", () => {
         slug: "test-skill",
         name: "Test Skill",
         category: "Cooking",
-      }).success
+      }).success,
     ).toBe(false);
   });
 
@@ -372,7 +352,7 @@ describe("createSkillSchema", () => {
         slug: "test-skill",
         name: "A".repeat(101),
         category: "Technical",
-      }).success
+      }).success,
     ).toBe(false);
   });
 });
@@ -393,21 +373,21 @@ describe("createRegistrationSchema", () => {
   });
 
   it("rejects without GDPR consent", () => {
-    expect(
-      createRegistrationSchema.safeParse({ ...validReg, gdprConsent: false }).success
-    ).toBe(false);
+    expect(createRegistrationSchema.safeParse({ ...validReg, gdprConsent: false }).success).toBe(
+      false,
+    );
   });
 
   it("rejects invalid email", () => {
-    expect(
-      createRegistrationSchema.safeParse({ ...validReg, email: "not-email" }).success
-    ).toBe(false);
+    expect(createRegistrationSchema.safeParse({ ...validReg, email: "not-email" }).success).toBe(
+      false,
+    );
   });
 
   it("rejects invalid registration type", () => {
-    expect(
-      createRegistrationSchema.safeParse({ ...validReg, type: "WEBINAR" }).success
-    ).toBe(false);
+    expect(createRegistrationSchema.safeParse({ ...validReg, type: "WEBINAR" }).success).toBe(
+      false,
+    );
   });
 
   it("rejects additionalNotes exceeding 1000 chars", () => {
@@ -415,7 +395,7 @@ describe("createRegistrationSchema", () => {
       createRegistrationSchema.safeParse({
         ...validReg,
         additionalNotes: "A".repeat(1001),
-      }).success
+      }).success,
     ).toBe(false);
   });
 
@@ -428,7 +408,7 @@ describe("createRegistrationSchema", () => {
         role: "Engineer",
         dietaryRequirements: "Vegetarian",
         additionalNotes: "Looking forward to it.",
-      }).success
+      }).success,
     ).toBe(true);
   });
 });
@@ -440,7 +420,7 @@ describe("diagnosticAnswersSchema", () => {
     expect(
       diagnosticAnswersSchema.safeParse({
         answers: { q1: "3", q2: "gwo" },
-      }).success
+      }).success,
     ).toBe(true);
   });
 
@@ -448,7 +428,7 @@ describe("diagnosticAnswersSchema", () => {
     expect(
       diagnosticAnswersSchema.safeParse({
         answers: { q3: ["scada", "gis"] },
-      }).success
+      }).success,
     ).toBe(true);
   });
 
@@ -456,7 +436,7 @@ describe("diagnosticAnswersSchema", () => {
     expect(
       diagnosticAnswersSchema.safeParse({
         answers: { q1: "3", q3: ["scada"] },
-      }).success
+      }).success,
     ).toBe(true);
   });
 
@@ -473,9 +453,7 @@ describe("searchSchema", () => {
   });
 
   it("accepts search with type filter", () => {
-    expect(
-      searchSchema.safeParse({ q: "wind", type: "career" }).success
-    ).toBe(true);
+    expect(searchSchema.safeParse({ q: "wind", type: "career" }).success).toBe(true);
   });
 
   it("rejects empty query", () => {
@@ -483,9 +461,7 @@ describe("searchSchema", () => {
   });
 
   it("rejects invalid type filter", () => {
-    expect(
-      searchSchema.safeParse({ q: "wind", type: "invalid" }).success
-    ).toBe(false);
+    expect(searchSchema.safeParse({ q: "wind", type: "invalid" }).success).toBe(false);
   });
 });
 
@@ -521,15 +497,11 @@ describe("courseFiltersSchema", () => {
   });
 
   it("accepts valid format filter", () => {
-    expect(
-      courseFiltersSchema.safeParse({ format: "Online" }).success
-    ).toBe(true);
+    expect(courseFiltersSchema.safeParse({ format: "Online" }).success).toBe(true);
   });
 
   it("rejects invalid format", () => {
-    expect(
-      courseFiltersSchema.safeParse({ format: "Invalid" }).success
-    ).toBe(false);
+    expect(courseFiltersSchema.safeParse({ format: "Invalid" }).success).toBe(false);
   });
 
   it("coerces freeOnly from string", () => {
@@ -538,9 +510,7 @@ describe("courseFiltersSchema", () => {
   });
 
   it("accepts NFQ level", () => {
-    expect(
-      courseFiltersSchema.safeParse({ nfqLevel: "7" }).success
-    ).toBe(true);
+    expect(courseFiltersSchema.safeParse({ nfqLevel: "7" }).success).toBe(true);
   });
 });
 
@@ -548,9 +518,7 @@ describe("courseFiltersSchema", () => {
 
 describe("statusTransitionSchema", () => {
   it("accepts valid status transition", () => {
-    expect(
-      statusTransitionSchema.safeParse({ status: "PUBLISHED" }).success
-    ).toBe(true);
+    expect(statusTransitionSchema.safeParse({ status: "PUBLISHED" }).success).toBe(true);
   });
 
   it("accepts status with publishAt", () => {
@@ -558,13 +526,11 @@ describe("statusTransitionSchema", () => {
       statusTransitionSchema.safeParse({
         status: "PUBLISHED",
         publishAt: "2025-10-01T09:00:00Z",
-      }).success
+      }).success,
     ).toBe(true);
   });
 
   it("rejects invalid status", () => {
-    expect(
-      statusTransitionSchema.safeParse({ status: "DELETED" }).success
-    ).toBe(false);
+    expect(statusTransitionSchema.safeParse({ status: "DELETED" }).success).toBe(false);
   });
 });

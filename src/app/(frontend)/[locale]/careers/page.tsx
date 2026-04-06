@@ -19,8 +19,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Career Pathways — SOWA",
-    description:
-      "Explore 12 career pathways across Ireland's offshore wind energy sector.",
+    description: "Explore 12 career pathways across Ireland's offshore wind energy sector.",
   },
 };
 
@@ -37,8 +36,8 @@ export default async function CareersPage() {
               Career Pathways
             </h1>
             <p className="text-text-secondary max-w-2xl">
-              Explore how careers connect across the offshore wind sector — from
-              entry-level roles to senior leadership. Click any role to learn more.
+              Explore how careers connect across the offshore wind sector — from entry-level roles
+              to senior leadership. Click any role to learn more.
             </p>
           </div>
           <PathwayMap careers={careers} />

@@ -30,7 +30,7 @@ export function Modal({ open, onClose, title, children, className }: ModalProps)
       <div
         className={cn(
           "relative z-10 max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-xl bg-white p-6 shadow-xl",
-          className
+          className,
         )}
       >
         {title && (

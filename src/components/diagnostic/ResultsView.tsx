@@ -1,15 +1,7 @@
 "use client";
 
 import { useState, useMemo, useEffect, useCallback } from "react";
-import {
-  Trophy,
-  TrendingDown,
-  Check,
-  Copy,
-  Mail,
-  Target,
-  BarChart3,
-} from "lucide-react";
+import { Trophy, TrendingDown, Check, Copy, Mail, Target, BarChart3 } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { ResultsChart } from "@/components/diagnostic/ResultsChart";
@@ -66,12 +58,11 @@ export function ResultsView({
       setTab(next);
       onTabChange?.(next);
     },
-    [onTabChange]
+    [onTabChange],
   );
 
   const handleCopyLink = useCallback(async () => {
-    const origin =
-      typeof window !== "undefined" ? window.location.origin : "";
+    const origin = typeof window !== "undefined" ? window.location.origin : "";
     const url = buildShareUrl(origin, localePrefix, answers, tab);
     try {
       if (typeof navigator !== "undefined" && navigator.clipboard) {
@@ -100,7 +91,7 @@ export function ResultsView({
     const url = buildShareUrl(window.location.origin, localePrefix, answers, tab);
     const subject = encodeURIComponent("My SOWA offshore wind skills profile");
     const body = encodeURIComponent(
-      `Hi,\n\nI just completed the SOWA offshore wind skills assessment. Here's my profile — I'd love your thoughts:\n\n${url}\n\nThanks`
+      `Hi,\n\nI just completed the SOWA offshore wind skills assessment. Here's my profile — I'd love your thoughts:\n\n${url}\n\nThanks`,
     );
     return `mailto:?subject=${subject}&body=${body}`;
   }, [answers, localePrefix, tab]);
@@ -115,8 +106,7 @@ export function ResultsView({
           <div
             className="absolute inset-0 opacity-[0.03]"
             style={{
-              backgroundImage:
-                "radial-gradient(circle, white 1px, transparent 1px)",
+              backgroundImage: "radial-gradient(circle, white 1px, transparent 1px)",
               backgroundSize: "24px 24px",
             }}
           />
@@ -169,9 +159,7 @@ export function ResultsView({
                   {overallPct}%
                 </span>
               </div>
-              <span className="text-sm font-medium text-white/70">
-                Overall Score
-              </span>
+              <span className="text-sm font-medium text-white/70">Overall Score</span>
             </div>
 
             {/* Share actions */}
@@ -252,8 +240,7 @@ export function ResultsView({
                   Skills Breakdown
                 </h2>
                 <p className="text-text-secondary text-center mb-8">
-                  Your scores across skill categories compared to the industry
-                  benchmark
+                  Your scores across skill categories compared to the industry benchmark
                 </p>
                 <div className="bg-surface rounded-2xl p-6 sm:p-8">
                   <ResultsChart result={result} allSkills={allSkills} />
@@ -268,15 +255,10 @@ export function ResultsView({
                 <div className="max-w-3xl mx-auto">
                   <div className="flex items-center gap-3 mb-8">
                     <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-status-error/10">
-                      <TrendingDown
-                        className="h-5 w-5 text-status-error"
-                        aria-hidden="true"
-                      />
+                      <TrendingDown className="h-5 w-5 text-status-error" aria-hidden="true" />
                     </div>
                     <div>
-                      <h2 className="text-2xl font-bold text-text-primary">
-                        Top Skill Gaps
-                      </h2>
+                      <h2 className="text-2xl font-bold text-text-primary">Top Skill Gaps</h2>
                       <p className="text-sm text-text-secondary">
                         Areas where targeted training would have the most impact
                       </p>
@@ -298,11 +280,7 @@ export function ResultsView({
             </Container>
           </section>
 
-          <AISummary
-            result={result}
-            answers={answers}
-            overallScorePercent={overallPct}
-          />
+          <AISummary result={result} answers={answers} overallScorePercent={overallPct} />
         </div>
       )}
 

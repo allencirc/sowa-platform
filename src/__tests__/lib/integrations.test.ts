@@ -6,9 +6,7 @@ function isAdapter(value: unknown): value is ContentSourceAdapter {
   if (!value || typeof value !== "object") return false;
   const a = value as Record<string, unknown>;
   return (
-    typeof a.source === "string" &&
-    typeof a.name === "string" &&
-    typeof a.fetch === "function"
+    typeof a.source === "string" && typeof a.name === "string" && typeof a.fetch === "function"
   );
 }
 

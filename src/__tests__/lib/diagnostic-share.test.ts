@@ -124,10 +124,7 @@ describe("diagnostic-share", () => {
     });
 
     it("returns incompatible_version for old schema version", () => {
-      const bogusPayload = Buffer.from(
-        JSON.stringify({ v: 999, a: { q1: "x" } }),
-        "utf8"
-      )
+      const bogusPayload = Buffer.from(JSON.stringify({ v: 999, a: { q1: "x" } }), "utf8")
         .toString("base64")
         .replace(/\+/g, "-")
         .replace(/\//g, "_")
@@ -141,10 +138,7 @@ describe("diagnostic-share", () => {
     });
 
     it("returns malformed when version is missing", () => {
-      const payload = Buffer.from(
-        JSON.stringify({ a: { q1: "x" } }),
-        "utf8"
-      )
+      const payload = Buffer.from(JSON.stringify({ a: { q1: "x" } }), "utf8")
         .toString("base64")
         .replace(/\+/g, "-")
         .replace(/\//g, "_")
@@ -155,10 +149,7 @@ describe("diagnostic-share", () => {
     });
 
     it("returns malformed when answers is not an object", () => {
-      const payload = Buffer.from(
-        JSON.stringify({ v: SCHEMA_VERSION, a: "not-an-object" }),
-        "utf8"
-      )
+      const payload = Buffer.from(JSON.stringify({ v: SCHEMA_VERSION, a: "not-an-object" }), "utf8")
         .toString("base64")
         .replace(/\+/g, "-")
         .replace(/\//g, "_")
@@ -175,10 +166,10 @@ describe("diagnostic-share", () => {
         "https://sowa.ie",
         "en",
         { q1: "adjacent", q8: "engineering" },
-        "roles"
+        "roles",
       );
       expect(url).toMatch(
-        /^https:\/\/sowa\.ie\/en\/diagnostic\/assessment\/results\?a=[A-Za-z0-9_-]+&tab=roles$/
+        /^https:\/\/sowa\.ie\/en\/diagnostic\/assessment\/results\?a=[A-Za-z0-9_-]+&tab=roles$/,
       );
     });
 

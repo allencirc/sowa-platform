@@ -16,11 +16,11 @@ If you cannot log in, contact the system administrator to reset your credentials
 
 ### User Roles
 
-| Role | Can Do |
-|------|--------|
-| **Admin** | Everything: create/edit/publish/delete content, manage users, export data, view registrations |
-| **Editor** | Create and edit content, submit for review, view registrations |
-| **Viewer** | View content and registrations (read-only) |
+| Role       | Can Do                                                                                        |
+| ---------- | --------------------------------------------------------------------------------------------- |
+| **Admin**  | Everything: create/edit/publish/delete content, manage users, export data, view registrations |
+| **Editor** | Create and edit content, submit for review, view registrations                                |
+| **Viewer** | View content and registrations (read-only)                                                    |
 
 ### Dashboard
 
@@ -43,12 +43,12 @@ All content types (Careers, Courses, Events, News, Research) follow the same wor
 
 ### Content Statuses
 
-| Status | Meaning |
-|--------|---------|
-| **Draft** | Work in progress. Not visible on the public site. |
-| **In Review** | Submitted for approval. Still not public. |
-| **Published** | Live on the public site. |
-| **Archived** | Removed from the public site but preserved in the system. |
+| Status        | Meaning                                                   |
+| ------------- | --------------------------------------------------------- |
+| **Draft**     | Work in progress. Not visible on the public site.         |
+| **In Review** | Submitted for approval. Still not public.                 |
+| **Published** | Live on the public site.                                  |
+| **Archived**  | Removed from the public site but preserved in the system. |
 
 ### Creating New Content
 
@@ -72,12 +72,14 @@ A version snapshot is automatically created each time you save, preserving the p
 ### Publishing Content
 
 **If you are an Editor:**
+
 1. Edit the content until it is ready
 2. Click **Submit for Review**
 3. The status changes to "In Review"
 4. An Admin must approve and publish
 
 **If you are an Admin:**
+
 1. You can publish directly: click **Publish**
 2. Or schedule publication: set a future date in the **Publish At** field and save
 3. To reject content back to draft: click **Reject** and add a rejection note explaining what needs to change
@@ -105,6 +107,7 @@ A version snapshot is automatically created each time you save, preserving the p
 Each career represents a job role in the offshore wind sector.
 
 **Required fields:**
+
 - **Slug** — URL identifier (e.g. `wind-turbine-technician`). Auto-generated from title, but can be customised. Cannot be changed after creation.
 - **Title** — Job title (e.g. "Wind Turbine Technician")
 - **Sector** — Choose from: Operations & Maintenance, Marine Operations, Survey & Design, Health/Safety/Environment, Electrical, Policy & Regulation, Project Management
@@ -112,6 +115,7 @@ Each career represents a job role in the offshore wind sector.
 - **Description** — Full description of the role
 
 **Optional fields:**
+
 - **Salary Range** — Minimum and maximum in EUR
 - **Key Responsibilities** — Add individual responsibilities as list items
 - **Qualifications** — Required qualifications as list items
@@ -126,6 +130,7 @@ Each career represents a job role in the offshore wind sector.
 Each course represents a training programme from an education or industry provider.
 
 **Required fields:**
+
 - **Slug**, **Title**, **Description**
 - **Provider** — Organisation name (e.g. "University College Cork")
 - **Provider Type** — University, ETB, Private, Industry, Skillnet Network, Government
@@ -133,6 +138,7 @@ Each course represents a training programme from an education or industry provid
 - **Duration** — Free text (e.g. "5 days", "1 academic year")
 
 **Optional fields:**
+
 - **Location** — Venue or "Online"
 - **NFQ Level** — National Framework of Qualifications level (1-10)
 - **Cost** — In EUR. Enter 0 for free courses
@@ -148,12 +154,14 @@ Each course represents a training programme from an education or industry provid
 ### Events
 
 **Required fields:**
+
 - **Slug**, **Title**, **Description**
 - **Type** — Workshop, Webinar, Conference, Networking, Training, Roadshow
 - **Start Date** — Date and time picker
 - **Location Type** — Physical, Virtual, Hybrid
 
 **Optional fields:**
+
 - **End Date** — For multi-day events
 - **Location** — Venue name or virtual link
 - **Capacity** — Maximum number of registrations. Leave blank for unlimited.
@@ -162,6 +170,7 @@ Each course represents a training programme from an education or industry provid
 ### News Articles
 
 **Required fields:**
+
 - **Slug**, **Title**
 - **Date** — Publication date
 - **Excerpt** — Short summary shown on listing cards (1-2 sentences)
@@ -170,11 +179,13 @@ Each course represents a training programme from an education or industry provid
 - **Author** — Author name
 
 **Optional fields:**
+
 - **Image** — Hero image for the article
 
 ### Research
 
 **Required fields:**
+
 - **Slug**, **Title**
 - **Author**, **Organisation**
 - **Publication Date**
@@ -182,6 +193,7 @@ Each course represents a training programme from an education or industry provid
 - **Categories** — Add one or more categories
 
 **Optional fields:**
+
 - **Featured** — Toggle to show this item in the featured research section on the homepage
 - **Image** — Cover image
 
@@ -197,6 +209,7 @@ Each course represents a training programme from an education or industry provid
 4. The image uploads and appears in the media library
 
 **Constraints:**
+
 - Accepted formats: JPEG, PNG, GIF, WebP, SVG
 - Maximum file size: 5 MB
 - Files are renamed with a timestamp to prevent conflicts
@@ -245,7 +258,7 @@ When editing content, use the image URL from the media library in the image fiel
 
 ## Managing Users
 
-*Admin only*
+_Admin only_
 
 ### Creating a User
 
@@ -304,6 +317,7 @@ The platform includes Vercel Speed Insights for monitoring Core Web Vitals (page
 ### Google Analytics
 
 If a GA4 Measurement ID is configured (`NEXT_PUBLIC_GA_MEASUREMENT_ID`), the platform tracks custom events including:
+
 - Career and course page views
 - Diagnostic assessment starts and completions
 - Search queries and result counts

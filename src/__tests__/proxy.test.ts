@@ -48,9 +48,7 @@ describe("proxy READ_ONLY enforcement", () => {
   it("blocks POST /api/* with a 503 when READ_ONLY is on", async () => {
     process.env.READ_ONLY = "true";
     const proxy = await importProxy();
-    const res = await proxy(
-      makeRequest("https://example.com/api/careers", "POST")
-    );
+    const res = await proxy(makeRequest("https://example.com/api/careers", "POST"));
     expect(res?.status).toBe(503);
     expect(res?.headers.get("Retry-After")).toBe("300");
     const body = await res?.json();
@@ -60,18 +58,14 @@ describe("proxy READ_ONLY enforcement", () => {
   it("blocks DELETE /admin/* with a 503 when READ_ONLY is on", async () => {
     process.env.READ_ONLY = "true";
     const proxy = await importProxy();
-    const res = await proxy(
-      makeRequest("https://example.com/admin/careers/some-slug", "DELETE")
-    );
+    const res = await proxy(makeRequest("https://example.com/admin/careers/some-slug", "DELETE"));
     expect(res?.status).toBe(503);
   });
 
   it("still serves GET /admin/* readers when READ_ONLY is on", async () => {
     process.env.READ_ONLY = "true";
     const proxy = await importProxy();
-    const res = await proxy(
-      makeRequest("https://example.com/admin", "GET")
-    );
+    const res = await proxy(makeRequest("https://example.com/admin", "GET"));
     // No 503 — request either falls through (NextResponse.next) or is
     // redirected to login. Either way the kill switch did not trigger.
     expect(res?.status).not.toBe(503);
@@ -81,7 +75,7 @@ describe("proxy READ_ONLY enforcement", () => {
     process.env.READ_ONLY = "true";
     const proxy = await importProxy();
     const res = await proxy(
-      makeRequest("https://example.com/api/auth/callback/credentials", "POST")
+      makeRequest("https://example.com/api/auth/callback/credentials", "POST"),
     );
     expect(res?.status).not.toBe(503);
   });
@@ -89,9 +83,7 @@ describe("proxy READ_ONLY enforcement", () => {
   it("exempts the /admin/login server action from READ_ONLY", async () => {
     process.env.READ_ONLY = "true";
     const proxy = await importProxy();
-    const res = await proxy(
-      makeRequest("https://example.com/admin/login", "POST")
-    );
+    const res = await proxy(makeRequest("https://example.com/admin/login", "POST"));
     expect(res?.status).not.toBe(503);
   });
 });

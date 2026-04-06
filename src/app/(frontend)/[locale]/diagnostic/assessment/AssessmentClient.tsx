@@ -1,13 +1,6 @@
 "use client";
 
-import {
-  useState,
-  useCallback,
-  useEffect,
-  useRef,
-  useMemo,
-  useLayoutEffect,
-} from "react";
+import { useState, useCallback, useEffect, useRef, useMemo, useLayoutEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { ArrowLeft, ArrowRight, Sparkles } from "lucide-react";
 import { Container } from "@/components/ui/Container";
@@ -17,14 +10,8 @@ import { QuestionStep } from "@/components/diagnostic/QuestionStep";
 import { ResultsView } from "@/components/diagnostic/ResultsView";
 import { calculateResults } from "@/lib/diagnostic";
 import { encodeAnswers, type ResultsTab } from "@/lib/diagnostic-share";
-import { trackDiagnosticCompleted } from "@/lib/analytics";
-import type {
-  Career,
-  Course,
-  DiagnosticQuestion,
-  DiagnosticResult,
-  Skill,
-} from "@/lib/types";
+import { trackDiagnosticComplete } from "@/lib/analytics";
+import type { Career, Course, DiagnosticQuestion, DiagnosticResult, Skill } from "@/lib/types";
 
 interface AssessmentClientProps {
   questions: DiagnosticQuestion[];
@@ -44,9 +31,7 @@ const AUTO_ADVANCE_DELAY_MS = 400;
  */
 function detectDefaultAutoAdvance(): boolean {
   if (typeof window === "undefined") return true;
-  const reduceMotion = window.matchMedia?.(
-    "(prefers-reduced-motion: reduce)"
-  ).matches;
+  const reduceMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
   if (reduceMotion) return false;
   return true;
 }
@@ -63,9 +48,7 @@ export default function AssessmentClient({
   const totalQuestions = questions.length;
 
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [answers, setAnswers] = useState<Record<string, string | string[]>>(
-    {}
-  );
+  const [answers, setAnswers] = useState<Record<string, string | string[]>>({});
   const [showResults, setShowResults] = useState(false);
   const [result, setResult] = useState<DiagnosticResult | null>(null);
   const [isCalculating, setIsCalculating] = useState(false);
@@ -96,15 +79,11 @@ export default function AssessmentClient({
   }, []);
 
   const currentQuestion = questions[currentIndex];
-  const currentAnswer = currentQuestion
-    ? answers[currentQuestion.id]
-    : undefined;
+  const currentAnswer = currentQuestion ? answers[currentQuestion.id] : undefined;
 
   const hasAnswer =
     currentAnswer !== undefined &&
-    (Array.isArray(currentAnswer)
-      ? currentAnswer.length > 0
-      : currentAnswer !== "");
+    (Array.isArray(currentAnswer) ? currentAnswer.length > 0 : currentAnswer !== "");
 
   const isLastQuestion = currentIndex === totalQuestions - 1;
 
@@ -113,7 +92,7 @@ export default function AssessmentClient({
       if (!currentQuestion) return;
       setAnswers((prev) => ({ ...prev, [currentQuestion.id]: value }));
     },
-    [currentQuestion]
+    [currentQuestion],
   );
 
   const completeAssessment = useCallback(
@@ -129,7 +108,7 @@ export default function AssessmentClient({
         setResult(res);
         setIsCalculating(false);
         setShowResults(true);
-        trackDiagnosticCompleted({
+        trackDiagnosticComplete({
           top_gaps: res.gaps
             .slice(0, 3)
             .map((g) => g.skill.slug)
@@ -152,7 +131,7 @@ export default function AssessmentClient({
         }
       }, 1500);
     },
-    [questions, allSkills, allCareers, allCourses, locale]
+    [questions, allSkills, allCareers, allCourses, locale],
   );
 
   const handleNext = useCallback(() => {
@@ -203,13 +182,7 @@ export default function AssessmentClient({
       setCurrentIndex((prev) => prev + 1);
     }, AUTO_ADVANCE_DELAY_MS);
     return () => clearTimeout(timer);
-  }, [
-    autoAdvance,
-    currentAnswer,
-    currentQuestion?.type,
-    hasAnswer,
-    isLastQuestion,
-  ]);
+  }, [autoAdvance, currentAnswer, currentQuestion?.type, hasAnswer, isLastQuestion]);
 
   // Move focus to the new question's heading on change, and announce
   // via the live region so screen reader users always know which
@@ -222,13 +195,7 @@ export default function AssessmentClient({
         currentIndex + 1
       } of ${totalQuestions}. ${currentQuestion?.text ?? ""}`;
     }
-  }, [
-    currentIndex,
-    showResults,
-    isCalculating,
-    currentQuestion?.text,
-    totalQuestions,
-  ]);
+  }, [currentIndex, showResults, isCalculating, currentQuestion?.text, totalQuestions]);
 
   // Arrow-key navigation within an option group for single_choice
   // questions. The browser default keyboard behaviour for a group of
@@ -240,22 +207,18 @@ export default function AssessmentClient({
       if (currentQuestion?.type !== "single_choice") return;
       const buttons = Array.from(
         optionsContainerRef.current?.querySelectorAll<HTMLButtonElement>(
-          'button[data-option="true"]'
-        ) ?? []
+          'button[data-option="true"]',
+        ) ?? [],
       );
       if (buttons.length === 0) return;
-      const activeIndex = buttons.findIndex(
-        (b) => b === document.activeElement
-      );
+      const activeIndex = buttons.findIndex((b) => b === document.activeElement);
       if (e.key === "ArrowDown" || e.key === "ArrowRight") {
         e.preventDefault();
-        const next =
-          buttons[(activeIndex + 1 + buttons.length) % buttons.length];
+        const next = buttons[(activeIndex + 1 + buttons.length) % buttons.length];
         next?.focus();
       } else if (e.key === "ArrowUp" || e.key === "ArrowLeft") {
         e.preventDefault();
-        const prev =
-          buttons[(activeIndex - 1 + buttons.length) % buttons.length];
+        const prev = buttons[(activeIndex - 1 + buttons.length) % buttons.length];
         prev?.focus();
       } else if (e.key === "Home") {
         e.preventDefault();
@@ -265,12 +228,12 @@ export default function AssessmentClient({
         buttons[buttons.length - 1]?.focus();
       }
     },
-    [currentQuestion?.type]
+    [currentQuestion?.type],
   );
 
   const progressPct = useMemo(
     () => Math.round(((currentIndex + 1) / totalQuestions) * 100),
-    [currentIndex, totalQuestions]
+    [currentIndex, totalQuestions],
   );
 
   if (isCalculating) {
@@ -284,12 +247,8 @@ export default function AssessmentClient({
               aria-hidden="true"
             />
           </div>
-          <h2 className="text-2xl font-bold text-white mb-2">
-            Analysing Your Skills
-          </h2>
-          <p className="text-white/60">
-            Building your personalised profile...
-          </p>
+          <h2 className="text-2xl font-bold text-white mb-2">Analysing Your Skills</h2>
+          <p className="text-white/60">Building your personalised profile...</p>
         </div>
       </div>
     );
@@ -342,9 +301,8 @@ export default function AssessmentClient({
               Auto-advance questions
             </label>
             <span id="auto-advance-help" className="sr-only">
-              When enabled, the next question loads automatically 400
-              milliseconds after you pick an answer. Turn off to advance
-              manually with the Next button.
+              When enabled, the next question loads automatically 400 milliseconds after you pick an
+              answer. Turn off to advance manually with the Next button.
             </span>
           </div>
 
@@ -388,9 +346,7 @@ export default function AssessmentClient({
               Back
             </Button>
 
-            {(currentQuestion?.type !== "single_choice" ||
-              !autoAdvance ||
-              isLastQuestion) && (
+            {(currentQuestion?.type !== "single_choice" || !autoAdvance || isLastQuestion) && (
               <Button
                 variant={isLastQuestion ? "secondary" : "primary"}
                 onClick={handleNext}

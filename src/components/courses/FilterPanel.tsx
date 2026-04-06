@@ -36,12 +36,7 @@ export function FilterPanel({ courses, className }: FilterPanelProps) {
     return Array.from(providerSet).sort();
   }, [courses]);
 
-  const allFormats: Course["deliveryFormat"][] = [
-    "In-Person",
-    "Online",
-    "Blended",
-    "Self-Paced",
-  ];
+  const allFormats: Course["deliveryFormat"][] = ["In-Person", "Online", "Blended", "Self-Paced"];
 
   const updateParams = useCallback(
     (key: string, value: string, checked: boolean) => {
@@ -55,7 +50,7 @@ export function FilterPanel({ courses, className }: FilterPanelProps) {
       }
       router.push(`/training?${params.toString()}`, { scroll: false });
     },
-    [router, searchParams]
+    [router, searchParams],
   );
 
   const toggleBool = useCallback(
@@ -68,7 +63,7 @@ export function FilterPanel({ courses, className }: FilterPanelProps) {
       }
       router.push(`/training?${params.toString()}`, { scroll: false });
     },
-    [router, searchParams]
+    [router, searchParams],
   );
 
   const clearAll = useCallback(() => {
@@ -178,13 +173,7 @@ export function FilterPanel({ courses, className }: FilterPanelProps) {
   );
 }
 
-function FilterSection({
-  title,
-  children,
-}: {
-  title: string;
-  children: React.ReactNode;
-}) {
+function FilterSection({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div className="border-t border-gray-100 pt-5">
       <h3 className="text-sm font-semibold text-text-primary mb-3">{title}</h3>

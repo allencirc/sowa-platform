@@ -14,7 +14,11 @@
   { "slug": "engineering-design", "name": "Engineering Design", "category": "Technical" },
   { "slug": "regulatory-compliance", "name": "Regulatory Compliance", "category": "Regulatory" },
   { "slug": "technical-documentation", "name": "Technical Documentation", "category": "Technical" },
-  { "slug": "environmental-assessment", "name": "Environmental Assessment", "category": "Regulatory" },
+  {
+    "slug": "environmental-assessment",
+    "name": "Environmental Assessment",
+    "category": "Regulatory"
+  },
   { "slug": "stakeholder-management", "name": "Stakeholder Management", "category": "Management" },
   { "slug": "data-analysis", "name": "Data Analysis", "category": "Digital" },
   { "slug": "scada-systems", "name": "SCADA Systems", "category": "Digital" },

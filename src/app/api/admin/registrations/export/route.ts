@@ -89,7 +89,7 @@ export async function GET(request: NextRequest) {
         r.createdAt.toISOString(),
       ]
         .map(escapeCSV)
-        .join(",")
+        .join(","),
     );
 
     const csv = [headers.join(","), ...rows].join("\n");

@@ -5,6 +5,8 @@ import StarterKit from "@tiptap/starter-kit";
 import Link from "@tiptap/extension-link";
 import Placeholder from "@tiptap/extension-placeholder";
 import { cn } from "@/lib/utils";
+import { SafeEmbed } from "@/components/admin/extensions/SafeEmbed";
+import { parseEmbedUrl, EMBED_PROVIDER_LABELS } from "@/lib/safe-embed";
 import {
   Bold,
   Italic,
@@ -16,6 +18,7 @@ import {
   Undo,
   Redo,
   Quote,
+  Video,
 } from "lucide-react";
 
 interface RichTextEditorProps {
@@ -38,8 +41,10 @@ export function RichTextEditor({
       StarterKit,
       Link.configure({ openOnClick: false }),
       Placeholder.configure({ placeholder }),
+      SafeEmbed,
     ],
     content,
+    immediatelyRender: false,
     onUpdate: ({ editor }) => {
       onChange?.(editor.getHTML());
     },
@@ -66,7 +71,7 @@ export function RichTextEditor({
         "rounded p-1.5 transition-colors",
         active
           ? "bg-primary/10 text-primary"
-          : "text-text-secondary hover:bg-gray-100 hover:text-text-primary"
+          : "text-text-secondary hover:bg-gray-100 hover:text-text-primary",
       )}
     >
       {children}
@@ -80,12 +85,24 @@ export function RichTextEditor({
     }
   };
 
+  const addEmbed = () => {
+    const providers = Object.values(EMBED_PROVIDER_LABELS).join(", ");
+    const url = window.prompt(`Paste a ${providers} URL to embed:`);
+    if (!url) return;
+    const parsed = parseEmbedUrl(url);
+    if (!parsed) {
+      window.alert(`That URL isn't on the embed allowlist. Allowed providers: ${providers}.`);
+      return;
+    }
+    editor.chain().focus().insertSafeEmbed(url).run();
+  };
+
   return (
     <div
       className={cn(
         "rounded-lg border border-gray-200 bg-white overflow-hidden",
         error && "border-status-error",
-        className
+        className,
       )}
     >
       <div className="flex flex-wrap items-center gap-0.5 border-b border-gray-200 bg-gray-50/50 px-2 py-1.5">
@@ -105,18 +122,14 @@ export function RichTextEditor({
         </ToolbarButton>
         <div className="mx-1 h-5 w-px bg-gray-200" />
         <ToolbarButton
-          onClick={() =>
-            editor.chain().focus().toggleHeading({ level: 2 }).run()
-          }
+          onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
           active={editor.isActive("heading", { level: 2 })}
           title="Heading 2"
         >
           <Heading2 className="h-4 w-4" />
         </ToolbarButton>
         <ToolbarButton
-          onClick={() =>
-            editor.chain().focus().toggleHeading({ level: 3 }).run()
-          }
+          onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
           active={editor.isActive("heading", { level: 3 })}
           title="Heading 3"
         >
@@ -148,17 +161,18 @@ export function RichTextEditor({
         <ToolbarButton onClick={addLink} active={editor.isActive("link")} title="Link">
           <LinkIcon className="h-4 w-4" />
         </ToolbarButton>
-        <div className="mx-1 h-5 w-px bg-gray-200" />
         <ToolbarButton
-          onClick={() => editor.chain().focus().undo().run()}
-          title="Undo"
+          onClick={addEmbed}
+          active={editor.isActive("safeEmbed")}
+          title="Embed video or social post"
         >
+          <Video className="h-4 w-4" />
+        </ToolbarButton>
+        <div className="mx-1 h-5 w-px bg-gray-200" />
+        <ToolbarButton onClick={() => editor.chain().focus().undo().run()} title="Undo">
           <Undo className="h-4 w-4" />
         </ToolbarButton>
-        <ToolbarButton
-          onClick={() => editor.chain().focus().redo().run()}
-          title="Redo"
-        >
+        <ToolbarButton onClick={() => editor.chain().focus().redo().run()} title="Redo">
           <Redo className="h-4 w-4" />
         </ToolbarButton>
       </div>

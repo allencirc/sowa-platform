@@ -135,11 +135,7 @@ export const STATUS_TRANSITIONS: Record<string, Record<string, string[]>> = {
 /**
  * Check if a status transition is valid for the given role.
  */
-export function isValidTransition(
-  currentStatus: string,
-  newStatus: string,
-  role: string
-): boolean {
+export function isValidTransition(currentStatus: string, newStatus: string, role: string): boolean {
   const transitions = STATUS_TRANSITIONS[role]?.[currentStatus];
   if (!transitions) return false;
   return transitions.includes(newStatus);

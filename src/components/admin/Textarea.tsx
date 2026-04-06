@@ -17,12 +17,12 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
           "focus:border-accent focus:ring-2 focus:ring-accent/20 focus:outline-none",
           "min-h-[100px] resize-y",
           error && "border-status-error focus:border-status-error focus:ring-status-error/20",
-          className
+          className,
         )}
         {...props}
       />
     );
-  }
+  },
 );
 
 Textarea.displayName = "Textarea";

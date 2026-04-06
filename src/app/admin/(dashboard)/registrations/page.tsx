@@ -31,9 +31,7 @@ export default async function AdminRegistrationsPage() {
         </div>
         <div>
           <h1 className="text-2xl font-bold text-text-primary">Registrations</h1>
-          <p className="text-sm text-text-secondary">
-            Manage event and course registrations
-          </p>
+          <p className="text-sm text-text-secondary">Manage event and course registrations</p>
         </div>
       </div>
 

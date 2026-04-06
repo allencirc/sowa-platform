@@ -1,16 +1,11 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Wind } from "lucide-react";
-import { Button } from "@/components/ui/Button";
+import { buttonClassName } from "@/components/ui/Button";
 
 function TurbineSVG({ className }: { className?: string }) {
   return (
-    <svg
-      viewBox="0 0 100 200"
-      fill="none"
-      className={className}
-      aria-hidden="true"
-    >
+    <svg viewBox="0 0 100 200" fill="none" className={className} aria-hidden="true">
       {/* Tower */}
       <rect x="47" y="60" width="6" height="140" fill="currentColor" opacity="0.15" rx="1" />
       {/* Nacelle */}
@@ -62,30 +57,27 @@ export function HeroSection() {
           </div>
 
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.1]">
-            Your Career in{" "}
-            <span className="text-secondary">Offshore Wind</span>{" "}
-            Starts Here
+            Your Career in <span className="text-secondary">Offshore Wind</span> Starts Here
           </h1>
 
           <p className="mt-6 text-lg sm:text-xl text-white/75 leading-relaxed max-w-xl">
-            Discover pathways, training, and opportunities in Ireland&apos;s
-            fastest-growing energy sector.
+            Discover pathways, training, and opportunities in Ireland&apos;s fastest-growing energy
+            sector.
           </p>
 
           <div className="mt-10 flex flex-wrap gap-4">
-            <Link href="/careers">
-              <Button size="lg" variant="secondary">
-                Explore Careers
-              </Button>
+            <Link href="/careers" className={buttonClassName("secondary", "lg")}>
+              Explore Careers
             </Link>
-            <Link href="/diagnostic">
-              <Button
-                size="lg"
-                variant="outline"
-                className="border-white/60 text-white hover:bg-white hover:text-primary"
-              >
-                Take Skills Assessment
-              </Button>
+            <Link
+              href="/diagnostic"
+              className={buttonClassName(
+                "outline",
+                "lg",
+                "border-white/60 text-white hover:bg-white hover:text-primary",
+              )}
+            >
+              Take Skills Assessment
             </Link>
           </div>
         </div>

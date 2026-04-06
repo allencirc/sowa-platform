@@ -18,8 +18,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Events & Workshops — SOWA",
-    description:
-      "Conferences, webinars, and workshops for Ireland's offshore wind sector.",
+    description: "Conferences, webinars, and workshops for Ireland's offshore wind sector.",
   },
 };
 
@@ -34,8 +33,8 @@ export default async function EventsPage() {
             Events &amp; Workshops
           </h1>
           <p className="text-text-secondary max-w-2xl">
-            Join our conferences, webinars, workshops, and roadshows to connect
-            with the offshore wind energy community.
+            Join our conferences, webinars, workshops, and roadshows to connect with the offshore
+            wind energy community.
           </p>
         </Container>
       </section>

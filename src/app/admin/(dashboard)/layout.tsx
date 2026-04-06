@@ -2,11 +2,7 @@ import { auth } from "@/lib/auth";
 import { AdminShell } from "@/components/admin/AdminShell";
 import { ReadOnlyBanner } from "@/components/admin/ReadOnlyBanner";
 
-export default async function DashboardLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const session = await auth();
 
   // Proxy handles the redirect — if we get here without a session, just show nothing

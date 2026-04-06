@@ -14,11 +14,7 @@ import { FormField } from "@/components/admin/FormField";
 import { Textarea } from "@/components/admin/Textarea";
 import { MultiSelect } from "@/components/admin/MultiSelect";
 import { TagInput } from "@/components/admin/TagInput";
-import {
-  createCourseSchema,
-  ProviderTypeEnum,
-  DeliveryFormatEnum,
-} from "@/lib/validations";
+import { createCourseSchema, ProviderTypeEnum, DeliveryFormatEnum } from "@/lib/validations";
 import { adminPost, adminPatch } from "@/hooks/useAdminFetch";
 import { slugify } from "@/lib/utils";
 import type { Course, Skill, Career } from "@/lib/types";
@@ -30,7 +26,10 @@ interface CourseFormProps {
   mode: "create" | "edit";
 }
 
-const providerTypeOptions = ProviderTypeEnum.options.map((p) => ({ label: p.replace("_", " "), value: p }));
+const providerTypeOptions = ProviderTypeEnum.options.map((p) => ({
+  label: p.replace("_", " "),
+  value: p,
+}));
 const formatOptions = DeliveryFormatEnum.options.map((f) => ({ label: f, value: f }));
 
 export function CourseForm({ course, mode }: CourseFormProps) {
@@ -46,6 +45,7 @@ export function CourseForm({ course, mode }: CourseFormProps) {
     setValue,
     formState: { errors, isSubmitting },
   } = useForm<CourseFormData>({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     resolver: zodResolver(createCourseSchema) as any,
     defaultValues: course
       ? {
@@ -120,7 +120,8 @@ export function CourseForm({ course, mode }: CourseFormProps) {
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
       {error && (
         <div className="flex items-center gap-2 rounded-lg bg-status-error/10 px-4 py-3 text-sm text-status-error">
-          <AlertCircle className="h-4 w-4 shrink-0" />{error}
+          <AlertCircle className="h-4 w-4 shrink-0" />
+          {error}
         </div>
       )}
 
@@ -131,7 +132,11 @@ export function CourseForm({ course, mode }: CourseFormProps) {
             <Input {...register("title")} placeholder="e.g. GWO Basic Safety Training" />
           </FormField>
           <FormField label="Slug" required error={errors.slug?.message}>
-            <Input {...register("slug")} readOnly={mode === "edit"} className={mode === "edit" ? "bg-gray-50" : ""} />
+            <Input
+              {...register("slug")}
+              readOnly={mode === "edit"}
+              className={mode === "edit" ? "bg-gray-50" : ""}
+            />
           </FormField>
           <FormField label="Provider" required error={errors.provider?.message}>
             <Input {...register("provider")} placeholder="e.g. Atlantic Technological University" />
@@ -166,7 +171,13 @@ export function CourseForm({ course, mode }: CourseFormProps) {
             <Input {...register("costNotes")} placeholder="e.g. Fully funded by Skillnet" />
           </FormField>
           <FormField label="NFQ Level">
-            <Input type="number" min={1} max={10} {...register("nfqLevel", { valueAsNumber: true })} placeholder="1-10" />
+            <Input
+              type="number"
+              min={1}
+              max={10}
+              {...register("nfqLevel", { valueAsNumber: true })}
+              placeholder="1-10"
+            />
           </FormField>
           <FormField label="Next Start Date">
             <Input type="date" {...register("nextStartDate")} />
@@ -176,12 +187,23 @@ export function CourseForm({ course, mode }: CourseFormProps) {
           </FormField>
         </div>
         <div className="mt-4 flex items-center gap-2">
-          <input type="checkbox" id="accredited" {...register("accredited")} className="h-4 w-4 rounded border-gray-300 text-secondary-dark focus:ring-accent" />
-          <label htmlFor="accredited" className="text-sm font-medium text-text-primary">Accredited Programme</label>
+          <input
+            type="checkbox"
+            id="accredited"
+            {...register("accredited")}
+            className="h-4 w-4 rounded border-gray-300 text-secondary-dark focus:ring-accent"
+          />
+          <label htmlFor="accredited" className="text-sm font-medium text-text-primary">
+            Accredited Programme
+          </label>
         </div>
         <div className="mt-4">
           <FormField label="Entry Requirements">
-            <Textarea {...register("entryRequirements")} placeholder="Prerequisites for this course..." rows={3} />
+            <Textarea
+              {...register("entryRequirements")}
+              placeholder="Prerequisites for this course..."
+              rows={3}
+            />
           </FormField>
         </div>
       </div>
@@ -190,20 +212,36 @@ export function CourseForm({ course, mode }: CourseFormProps) {
         <h2 className="mb-4 text-lg font-semibold text-text-primary">Skills & Relevance</h2>
         <div className="space-y-4">
           <FormField label="Skills">
-            <MultiSelect options={skills} value={watch("skills") ?? []} onChange={(val) => setValue("skills", val)} placeholder="Select skills..." />
+            <MultiSelect
+              options={skills}
+              value={watch("skills") ?? []}
+              onChange={(val) => setValue("skills", val)}
+              placeholder="Select skills..."
+            />
           </FormField>
           <FormField label="Career Relevance">
-            <MultiSelect options={careers} value={watch("careerRelevance") ?? []} onChange={(val) => setValue("careerRelevance", val)} placeholder="Select related careers..." />
+            <MultiSelect
+              options={careers}
+              value={watch("careerRelevance") ?? []}
+              onChange={(val) => setValue("careerRelevance", val)}
+              placeholder="Select related careers..."
+            />
           </FormField>
           <FormField label="Tags" description="Press Enter to add tags">
-            <TagInput value={watch("tags") ?? []} onChange={(val) => setValue("tags", val)} placeholder="e.g. safety, offshore, GWO" />
+            <TagInput
+              value={watch("tags") ?? []}
+              onChange={(val) => setValue("tags", val)}
+              placeholder="e.g. safety, offshore, GWO"
+            />
           </FormField>
         </div>
       </div>
 
       <div className="flex items-center justify-between">
         <Link href="/admin/courses">
-          <Button type="button" variant="ghost"><ArrowLeft className="h-4 w-4" /> Back to Courses</Button>
+          <Button type="button" variant="ghost">
+            <ArrowLeft className="h-4 w-4" /> Back to Courses
+          </Button>
         </Link>
         <Button type="submit" disabled={isSubmitting}>
           <Save className="h-4 w-4" />

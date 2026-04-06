@@ -110,10 +110,30 @@ export default async function AdminDashboardPage() {
     ]);
 
   const recentItems: RecentItem[] = [
-    ...recentCareers.map((c) => ({ type: "career", title: c.title, slug: c.slug, date: c.updatedAt })),
-    ...recentCourses.map((c) => ({ type: "course", title: c.title, slug: c.slug, date: c.updatedAt })),
-    ...recentEvents.map((e) => ({ type: "event", title: e.title, slug: e.slug, date: e.updatedAt })),
-    ...recentResearch.map((r) => ({ type: "research", title: r.title, slug: r.slug, date: r.updatedAt })),
+    ...recentCareers.map((c) => ({
+      type: "career",
+      title: c.title,
+      slug: c.slug,
+      date: c.updatedAt,
+    })),
+    ...recentCourses.map((c) => ({
+      type: "course",
+      title: c.title,
+      slug: c.slug,
+      date: c.updatedAt,
+    })),
+    ...recentEvents.map((e) => ({
+      type: "event",
+      title: e.title,
+      slug: e.slug,
+      date: e.updatedAt,
+    })),
+    ...recentResearch.map((r) => ({
+      type: "research",
+      title: r.title,
+      slug: r.slug,
+      date: r.updatedAt,
+    })),
     ...recentNews.map((n) => ({ type: "news", title: n.title, slug: n.slug, date: n.updatedAt })),
   ]
     .sort((a, b) => b.date.getTime() - a.date.getTime())
@@ -188,41 +208,39 @@ export default async function AdminDashboardPage() {
         {/* Quick Actions + HubSpot */}
         <div className="space-y-6">
           <div className="rounded-xl bg-surface-card p-6 shadow-sm">
-          <h2 className="mb-4 text-lg font-semibold text-text-primary">
-            Quick Actions
-          </h2>
-          <div className="flex flex-col gap-2">
-            <Link href="/admin/careers/new">
-              <Button variant="outline" size="sm" className="w-full justify-start">
-                <Plus className="h-4 w-4" />
-                Add Career Profile
-              </Button>
-            </Link>
-            <Link href="/admin/courses/new">
-              <Button variant="outline" size="sm" className="w-full justify-start">
-                <Plus className="h-4 w-4" />
-                Add Course
-              </Button>
-            </Link>
-            <Link href="/admin/events/new">
-              <Button variant="outline" size="sm" className="w-full justify-start">
-                <Plus className="h-4 w-4" />
-                Add Event
-              </Button>
-            </Link>
-            <Link href="/admin/research/new">
-              <Button variant="outline" size="sm" className="w-full justify-start">
-                <Plus className="h-4 w-4" />
-                Add Research
-              </Button>
-            </Link>
-            <Link href="/admin/news/new">
-              <Button variant="outline" size="sm" className="w-full justify-start">
-                <Plus className="h-4 w-4" />
-                Add News Article
-              </Button>
-            </Link>
-          </div>
+            <h2 className="mb-4 text-lg font-semibold text-text-primary">Quick Actions</h2>
+            <div className="flex flex-col gap-2">
+              <Link href="/admin/careers/new">
+                <Button variant="outline" size="sm" className="w-full justify-start">
+                  <Plus className="h-4 w-4" />
+                  Add Career Profile
+                </Button>
+              </Link>
+              <Link href="/admin/courses/new">
+                <Button variant="outline" size="sm" className="w-full justify-start">
+                  <Plus className="h-4 w-4" />
+                  Add Course
+                </Button>
+              </Link>
+              <Link href="/admin/events/new">
+                <Button variant="outline" size="sm" className="w-full justify-start">
+                  <Plus className="h-4 w-4" />
+                  Add Event
+                </Button>
+              </Link>
+              <Link href="/admin/research/new">
+                <Button variant="outline" size="sm" className="w-full justify-start">
+                  <Plus className="h-4 w-4" />
+                  Add Research
+                </Button>
+              </Link>
+              <Link href="/admin/news/new">
+                <Button variant="outline" size="sm" className="w-full justify-start">
+                  <Plus className="h-4 w-4" />
+                  Add News Article
+                </Button>
+              </Link>
+            </div>
           </div>
 
           <HubSpotSyncWidget />

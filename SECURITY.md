@@ -19,16 +19,16 @@ Please include:
 
 ## Response Commitments
 
-| Stage | Target |
-|-------|--------|
-| Acknowledgement of receipt | **Within 2 working days** |
-| Initial triage and severity assessment | **Within 5 working days** |
-| Status update cadence during investigation | **Weekly** |
-| Fix target — Critical (CVSS ≥ 9.0) | **24 hours** |
-| Fix target — High (CVSS 7.0–8.9) | **72 hours** |
-| Fix target — Medium (CVSS 4.0–6.9) | **30 days** |
-| Fix target — Low (CVSS < 4.0) | **Next scheduled release** |
-| Public disclosure | Coordinated with the reporter, **no earlier than 30 days** after a fix is deployed, unless the reporter requests otherwise |
+| Stage                                      | Target                                                                                                                     |
+| ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------- |
+| Acknowledgement of receipt                 | **Within 2 working days**                                                                                                  |
+| Initial triage and severity assessment     | **Within 5 working days**                                                                                                  |
+| Status update cadence during investigation | **Weekly**                                                                                                                 |
+| Fix target — Critical (CVSS ≥ 9.0)         | **24 hours**                                                                                                               |
+| Fix target — High (CVSS 7.0–8.9)           | **72 hours**                                                                                                               |
+| Fix target — Medium (CVSS 4.0–6.9)         | **30 days**                                                                                                                |
+| Fix target — Low (CVSS < 4.0)              | **Next scheduled release**                                                                                                 |
+| Public disclosure                          | Coordinated with the reporter, **no earlier than 30 days** after a fix is deployed, unless the reporter requests otherwise |
 
 ## Safe Harbour
 

@@ -1,12 +1,7 @@
 import { NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireRole, AuthError } from "@/lib/auth-utils";
-import {
-  applyRateLimit,
-  parseQuery,
-  paginatedResponse,
-  errorResponse,
-} from "@/lib/api-utils";
+import { applyRateLimit, parseQuery, paginatedResponse, errorResponse } from "@/lib/api-utils";
 import { registrationFiltersSchema } from "@/lib/validations";
 import type { Prisma } from "@/generated/prisma/client";
 

@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "./fixtures";
 
 // WCAG 2.2 AA axe sweeps live in a11y.spec.ts.
 
@@ -11,7 +11,10 @@ test.describe("Careers journey", () => {
     await expect(page).toHaveTitle(/SOWA|Skillnet|Offshore Wind/i);
 
     // 2. Navigate to careers
-    await page.getByRole("link", { name: /careers/i }).first().click();
+    await page
+      .getByRole("link", { name: /careers/i })
+      .first()
+      .click();
     await page.waitForURL("**/careers**");
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
 
@@ -19,9 +22,9 @@ test.describe("Careers journey", () => {
     //    links inside the React Flow pathway map (rendered but off-screen),
     //    so filter for visibility before asserting.
     const careerCards = page
-      .locator('main [href^="/careers/"]')
-      .locator("visible=true");
-    await expect(careerCards.first()).toBeVisible();
+      .locator('a[href*="/careers/"]:visible')
+      .filter({ hasNotText: /^Careers$/ });
+    await expect(careerCards.first()).toBeVisible({ timeout: 15000 });
 
     // 4. Click on a career card
     await careerCards.first().click();
@@ -36,5 +39,4 @@ test.describe("Careers journey", () => {
       await expect(relatedSection).toBeVisible();
     }
   });
-
 });

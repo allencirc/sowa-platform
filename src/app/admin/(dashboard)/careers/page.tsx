@@ -40,7 +40,7 @@ export default function AdminCareersPage() {
 
   const { data, totalPages, loading, refetch } = useAdminFetch<Career & { status?: string }>(
     "/api/careers",
-    { page, search, filters }
+    { page, search, filters },
   );
 
   const columns: Column<Career & { status?: string }>[] = [
@@ -48,9 +48,7 @@ export default function AdminCareersPage() {
       key: "title",
       label: "Title",
       sortable: true,
-      render: (row) => (
-        <span className="font-medium text-text-primary">{row.title}</span>
-      ),
+      render: (row) => <span className="font-medium text-text-primary">{row.title}</span>,
     },
     {
       key: "sector",
@@ -66,15 +64,15 @@ export default function AdminCareersPage() {
       key: "status",
       label: "Status",
       render: (row) => (
-        <StatusBadge status={(row.status as "DRAFT" | "IN_REVIEW" | "PUBLISHED" | "ARCHIVED") ?? "DRAFT"} />
+        <StatusBadge
+          status={(row.status as "DRAFT" | "IN_REVIEW" | "PUBLISHED" | "ARCHIVED") ?? "DRAFT"}
+        />
       ),
     },
     {
       key: "skills",
       label: "Skills",
-      render: (row) => (
-        <span className="text-text-secondary">{row.skills.length}</span>
-      ),
+      render: (row) => <span className="text-text-secondary">{row.skills.length}</span>,
     },
     {
       key: "actions",
@@ -158,9 +156,7 @@ export default function AdminCareersPage() {
       </div>
 
       {loading ? (
-        <div className="flex h-64 items-center justify-center text-text-muted">
-          Loading...
-        </div>
+        <div className="flex h-64 items-center justify-center text-text-muted">Loading...</div>
       ) : (
         <>
           <DataTable

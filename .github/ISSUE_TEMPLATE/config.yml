@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/skillnet-owe/sowa-platform/security/advisories/new
+    about: >-
+      Please do NOT open a public issue for security problems. Report via
+      GitHub private vulnerability reporting, or email security@sowa.ie as
+      described in SECURITY.md.

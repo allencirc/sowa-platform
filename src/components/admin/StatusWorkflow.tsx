@@ -115,7 +115,8 @@ export function StatusWorkflow({
           slug,
           newStatus,
           rejectionNote: newStatus === "DRAFT" && currentStatus === "IN_REVIEW" ? rejectNote : null,
-          publishAt: newStatus === "PUBLISHED" && scheduleDate ? new Date(scheduleDate).toISOString() : null,
+          publishAt:
+            newStatus === "PUBLISHED" && scheduleDate ? new Date(scheduleDate).toISOString() : null,
           changeNote: `Status: ${currentStatus} → ${newStatus}`,
         }),
       });
@@ -171,22 +172,15 @@ export function StatusWorkflow({
 
   return (
     <div className="rounded-xl bg-surface-card p-6 shadow-sm">
-      <h2 className="mb-4 text-lg font-semibold text-text-primary">
-        Publishing Status
-      </h2>
+      <h2 className="mb-4 text-lg font-semibold text-text-primary">Publishing Status</h2>
 
       {/* Current status display */}
       <div
-        className={cn(
-          "mb-4 flex items-center gap-3 rounded-lg border px-4 py-3",
-          config.bgColor
-        )}
+        className={cn("mb-4 flex items-center gap-3 rounded-lg border px-4 py-3", config.bgColor)}
       >
         <Icon className={cn("h-5 w-5", config.color)} />
         <div>
-          <p className={cn("text-sm font-semibold", config.color)}>
-            {config.label}
-          </p>
+          <p className={cn("text-sm font-semibold", config.color)}>{config.label}</p>
           {publishAt && (
             <p className="mt-0.5 flex items-center gap-1 text-xs text-text-secondary">
               <Clock className="h-3 w-3" />
@@ -206,43 +200,39 @@ export function StatusWorkflow({
 
       {/* Status flow visualization */}
       <div className="mb-4 flex items-center justify-between gap-1 rounded-lg bg-gray-50 px-3 py-2">
-        {(["DRAFT", "IN_REVIEW", "PUBLISHED"] as ContentStatus[]).map(
-          (status, i) => {
-            const stepConfig = STATUS_CONFIG[status];
-            const StepIcon = stepConfig.icon;
-            const isActive = currentStatus === status;
-            const isPast =
-              (["DRAFT", "IN_REVIEW", "PUBLISHED"] as ContentStatus[]).indexOf(
-                currentStatus
-              ) > i;
+        {(["DRAFT", "IN_REVIEW", "PUBLISHED"] as ContentStatus[]).map((status, i) => {
+          const stepConfig = STATUS_CONFIG[status];
+          const StepIcon = stepConfig.icon;
+          const isActive = currentStatus === status;
+          const isPast =
+            (["DRAFT", "IN_REVIEW", "PUBLISHED"] as ContentStatus[]).indexOf(currentStatus) > i;
 
-            return (
-              <div key={status} className="flex items-center gap-1">
-                {i > 0 && (
-                  <ArrowRight
-                    className={cn(
-                      "h-3.5 w-3.5 shrink-0",
-                      isPast ? "text-secondary-dark" : "text-gray-300"
-                    )}
-                  />
-                )}
-                <div
+          return (
+            <div key={status} className="flex items-center gap-1">
+              {i > 0 && (
+                <ArrowRight
                   className={cn(
-                    "flex items-center gap-1.5 rounded px-2 py-1 text-xs font-medium",
-                    isActive
-                      ? stepConfig.bgColor + " " + stepConfig.color
-                      : isPast
-                        ? "text-secondary-dark"
-                        : "text-gray-400"
+                    "h-3.5 w-3.5 shrink-0",
+                    isPast ? "text-secondary-dark" : "text-gray-300",
                   )}
-                >
-                  <StepIcon className="h-3.5 w-3.5" />
-                  <span className="hidden sm:inline">{stepConfig.label}</span>
-                </div>
+                />
+              )}
+              <div
+                className={cn(
+                  "flex items-center gap-1.5 rounded px-2 py-1 text-xs font-medium",
+                  isActive
+                    ? stepConfig.bgColor + " " + stepConfig.color
+                    : isPast
+                      ? "text-secondary-dark"
+                      : "text-gray-400",
+                )}
+              >
+                <StepIcon className="h-3.5 w-3.5" />
+                <span className="hidden sm:inline">{stepConfig.label}</span>
               </div>
-            );
-          }
-        )}
+            </div>
+          );
+        })}
       </div>
 
       {/* Error message */}
@@ -291,9 +281,7 @@ export function StatusWorkflow({
       {/* Schedule publishing */}
       {showSchedule && (
         <div className="mb-4 space-y-2">
-          <label className="text-sm font-medium text-text-primary">
-            Schedule Publish Date
-          </label>
+          <label className="text-sm font-medium text-text-primary">Schedule Publish Date</label>
           <input
             type="datetime-local"
             value={scheduleDate}
@@ -344,17 +332,12 @@ export function StatusWorkflow({
           })}
 
           {/* Schedule button for admins when content can be published */}
-          {userRole === "ADMIN" &&
-            availableTransitions.includes("PUBLISHED") && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setShowSchedule(true)}
-              >
-                <Clock className="h-3.5 w-3.5" />
-                Schedule
-              </Button>
-            )}
+          {userRole === "ADMIN" && availableTransitions.includes("PUBLISHED") && (
+            <Button variant="ghost" size="sm" onClick={() => setShowSchedule(true)}>
+              <Clock className="h-3.5 w-3.5" />
+              Schedule
+            </Button>
+          )}
         </div>
       )}
 

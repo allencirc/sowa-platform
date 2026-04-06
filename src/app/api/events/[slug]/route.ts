@@ -6,17 +6,23 @@ import { requireRole } from "@/lib/auth-utils";
 import { createContentVersion } from "@/lib/versions";
 
 const eventTypeToEnum: Record<string, string> = {
-  Workshop: "WORKSHOP", Webinar: "WEBINAR", Conference: "CONFERENCE",
-  Networking: "NETWORKING", Training: "TRAINING", Roadshow: "ROADSHOW",
+  Workshop: "WORKSHOP",
+  Webinar: "WEBINAR",
+  Conference: "CONFERENCE",
+  Networking: "NETWORKING",
+  Training: "TRAINING",
+  Roadshow: "ROADSHOW",
 };
 const locationTypeToEnum: Record<string, string> = {
-  Physical: "PHYSICAL", Virtual: "VIRTUAL", Hybrid: "HYBRID",
+  Physical: "PHYSICAL",
+  Virtual: "VIRTUAL",
+  Hybrid: "HYBRID",
 };
 const eventTypeDisplay: Record<string, string> = Object.fromEntries(
-  Object.entries(eventTypeToEnum).map(([k, v]) => [v, k])
+  Object.entries(eventTypeToEnum).map(([k, v]) => [v, k]),
 );
 const locationTypeDisplay: Record<string, string> = Object.fromEntries(
-  Object.entries(locationTypeToEnum).map(([k, v]) => [v, k])
+  Object.entries(locationTypeToEnum).map(([k, v]) => [v, k]),
 );
 
 type AnyRecord = Record<string, unknown>;
@@ -40,10 +46,7 @@ function mapEvent(row: AnyRecord) {
   };
 }
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ slug: string }> }
-) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   const rateLimited = applyRateLimit(request);
   if (rateLimited) return rateLimited;
 
@@ -59,15 +62,16 @@ export async function GET(
   }
 }
 
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: Promise<{ slug: string }> }
-) {
+export async function PUT(request: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   const rateLimited = applyRateLimit(request);
   if (rateLimited) return rateLimited;
 
   let user;
-  try { user = await requireRole(["ADMIN", "EDITOR"]); } catch { return errorResponse("Unauthorized", 401); }
+  try {
+    user = await requireRole(["ADMIN", "EDITOR"]);
+  } catch {
+    return errorResponse("Unauthorized", 401);
+  }
 
   const { slug } = await params;
 
@@ -122,7 +126,7 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: Promise<{ slug: string }> }
+  { params }: { params: Promise<{ slug: string }> },
 ) {
   const rateLimited = applyRateLimit(request);
   if (rateLimited) return rateLimited;

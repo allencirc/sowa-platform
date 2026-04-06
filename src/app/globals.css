@@ -5,53 +5,53 @@
      src/app/layout.tsx) first, then system fallbacks that cover Cyrillic
      (Segoe UI on Windows, Helvetica Neue / SF on Apple, Roboto/Noto on
      Android) in case Inter fails to load. See docs/adr/0001-i18n.md. */
-  --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system,
-    "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans",
-    "Noto Sans Cyrillic", sans-serif;
+  --font-sans:
+    "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial,
+    "Noto Sans", "Noto Sans Cyrillic", sans-serif;
 
   /* Primary — Deep ocean blue */
-  --color-primary: #0C2340;
-  --color-primary-light: #1A3A5C;
+  --color-primary: #0c2340;
+  --color-primary-light: #1a3a5c;
   --color-primary-dark: #081828;
 
   /* Secondary — Teal/wind green.
      `-dark` is the AA-safe text variant (6.4:1 on white); brand bg stays #00A878. */
-  --color-secondary: #00A878;
-  --color-secondary-light: #00C98E;
-  --color-secondary-dark: #006B4A;
+  --color-secondary: #00a878;
+  --color-secondary-light: #00c98e;
+  --color-secondary-dark: #006b4a;
 
   /* Accent — Sky blue. `-dark` is AA-safe (5.9:1 on white). */
-  --color-accent: #4A90D9;
-  --color-accent-light: #6BA8E8;
-  --color-accent-dark: #2564A8;
+  --color-accent: #4a90d9;
+  --color-accent-light: #6ba8e8;
+  --color-accent-dark: #2564a8;
 
   /* Surface */
-  --color-surface: #F7F9FC;
-  --color-surface-card: #FFFFFF;
-  --color-surface-dark: #0C2340;
+  --color-surface: #f7f9fc;
+  --color-surface-card: #ffffff;
+  --color-surface-dark: #0c2340;
 
   /* Text. Secondary bumped from gray-500 to gray-600 (#4B5563) so muted
      body text hits 7.5:1 on white instead of 4.26:1 (below AA). Muted
      bumped from gray-400 (2.85:1) to slate-500 (#64748B, 4.6:1). */
-  --color-text-primary: #1A1A2E;
-  --color-text-secondary: #4B5563;
-  --color-text-inverse: #FFFFFF;
-  --color-text-muted: #64748B;
+  --color-text-primary: #1a1a2e;
+  --color-text-secondary: #4b5563;
+  --color-text-inverse: #ffffff;
+  --color-text-muted: #64748b;
 
   /* Status */
-  --color-status-warning: #F59E0B;
-  --color-status-error: #DC2626;
-  --color-status-success: #00A878;
-  --color-status-info: #4A90D9;
+  --color-status-warning: #f59e0b;
+  --color-status-error: #dc2626;
+  --color-status-success: #00a878;
+  --color-status-info: #4a90d9;
 
   /* Sector colours */
-  --color-sector-operations: #0C2340;
-  --color-sector-marine: #1E6091;
-  --color-sector-electrical: #F59E0B;
-  --color-sector-survey-design: #7C3AED;
-  --color-sector-hse: #DC2626;
+  --color-sector-operations: #0c2340;
+  --color-sector-marine: #1e6091;
+  --color-sector-electrical: #f59e0b;
+  --color-sector-survey-design: #7c3aed;
+  --color-sector-hse: #dc2626;
   --color-sector-policy: #059669;
-  --color-sector-project-management: #EA580C;
+  --color-sector-project-management: #ea580c;
 }
 
 html {
@@ -87,7 +87,12 @@ body {
    soft hyphens using the UA's hyphenation dictionary for the active
    `lang`, which is why it's important that `<html lang>` is set to the
    active locale (see src/app/layout.tsx and src/proxy.ts). */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   overflow-wrap: break-word;
   hyphens: auto;
 }

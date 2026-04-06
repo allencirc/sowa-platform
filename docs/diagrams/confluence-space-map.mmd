@@ -1,0 +1,72 @@
+%%{init: {'theme':'base','themeVariables':{
+  'fontFamily':'Inter, Helvetica, Arial, sans-serif',
+  'fontSize':'14px',
+  'primaryColor':'#F7F9FC',
+  'primaryTextColor':'#0C2340',
+  'primaryBorderColor':'#0C2340',
+  'lineColor':'#0C2340',
+  'clusterBkg':'#F7F9FC',
+  'clusterBorder':'#0C2340'
+}}}%%
+flowchart TD
+  %% ─────────── Space root ───────────
+  ROOT["Skillnet Offshore Wind Academy<br/>Knowledge Base"]:::root
+
+  %% ─────────── Operational branch ───────────
+  subgraph OPS["For the Skillnet team — operational audience"]
+    direction TB
+    ADMIN["Admin User Guide"]:::ops
+    CONTENT["Content-type guides<br/>(Careers · Courses · Events<br/>News · Research)"]:::ops
+    PUBLISH["Publishing workflow<br/>& version history"]:::ops
+    USERS["User & role management"]:::ops
+    MEDIA["Media library<br/>& asset management"]:::ops
+    REGS["Registrations<br/>& CSV export"]:::ops
+    DIAG["Diagnostic tool —<br/>reporting & interpretation"]:::ops
+    TRAINING["Training materials<br/>& refresher guides"]:::ops
+    A11Y["Accessibility<br/>Diagnostic Notes"]:::ops
+    HOSTING["Hosting &<br/>Environmental Posture"]:::ops
+  end
+
+  %% ─────────── Technical branch ───────────
+  subgraph TECH["Technical documentation — engineering audience"]
+    direction TB
+    ARCH["System Architecture"]:::tech
+    API["API Reference<br/>(generated from OpenAPI)"]:::tech
+    DB["Database Schema<br/>(generated from Prisma)"]:::tech
+    DEPLOY["Deployment Guide"]:::tech
+    SEC["Security Documentation"]:::tech
+    DR["Disaster Recovery Plan"]:::tech
+    ADR["Architecture Decision Records"]:::tech
+    ADR1["ADR 0001:<br/>Internationalisation"]:::adr
+  end
+
+  %% ─────────── Connections ───────────
+  ROOT --> OPS
+  ROOT --> TECH
+
+  ADMIN --- CONTENT
+  CONTENT --- PUBLISH
+  PUBLISH --- USERS
+  USERS --- MEDIA
+  MEDIA --- REGS
+  REGS --- DIAG
+  DIAG --- TRAINING
+  TRAINING --- A11Y
+  A11Y --- HOSTING
+
+  ARCH --- API
+  API --- DB
+  DB --- DEPLOY
+  DEPLOY --- SEC
+  SEC --- DR
+  DR --- ADR
+  ADR --> ADR1
+
+  %% ─────────── Styles (SOWA palette) ───────────
+  classDef root   fill:#0C2340,stroke:#081828,stroke-width:2px,color:#FFFFFF;
+  classDef ops    fill:#E6F4EF,stroke:#00A878,stroke-width:1.5px,color:#0C2340;
+  classDef tech   fill:#DCEBFA,stroke:#4A90D9,stroke-width:1.5px,color:#0C2340;
+  classDef adr    fill:#FFFFFF,stroke:#4A90D9,stroke-width:1.2px,color:#0C2340,stroke-dasharray: 4 3;
+
+  style OPS  fill:#F0FBF7,stroke:#00A878,stroke-width:2px
+  style TECH fill:#EAF1FA,stroke:#4A90D9,stroke-width:2px
