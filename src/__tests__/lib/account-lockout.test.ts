@@ -64,8 +64,9 @@ beforeEach(async () => {
   // Re-import auth.ts to get a fresh authorize function
   await import("@/lib/auth");
 
-  const NextAuth = (await import("next-auth")).default as unknown as Record<string, unknown>;
-  authorize = (NextAuth as unknown as Record<string, { __getAuthorize: () => typeof authorize }>).__getAuthorize();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const NextAuth = (await import("next-auth")).default as any;
+  authorize = NextAuth.__getAuthorize();
 
   // Clear mock call history
   prismaMock.user.findUnique.mockReset();

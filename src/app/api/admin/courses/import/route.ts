@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import Papa from "papaparse";
-import * as XLSX from "xlsx";
+import ExcelJS from "exceljs";
 import { ZodError, type ZodIssue } from "zod";
 import { prisma } from "@/lib/prisma";
 import { applyRateLimit, errorResponse } from "@/lib/api-utils";
@@ -119,12 +119,34 @@ function parseCsv(text: string): RawRow[] {
   return (result.data ?? []).filter((r) => Object.keys(r).length > 0);
 }
 
-function parseXlsx(buffer: ArrayBuffer): RawRow[] {
-  const wb = XLSX.read(buffer, { type: "array" });
-  const sheetName = wb.SheetNames[0];
-  if (!sheetName) return [];
-  const sheet = wb.Sheets[sheetName];
-  return XLSX.utils.sheet_to_json<RawRow>(sheet, { defval: "", raw: false });
+async function parseXlsx(buffer: ArrayBuffer): Promise<RawRow[]> {
+  const workbook = new ExcelJS.Workbook();
+  await workbook.xlsx.load(new Uint8Array(buffer) as never);
+  const sheet = workbook.worksheets[0];
+  if (!sheet || sheet.rowCount === 0) return [];
+
+  const headerRow = sheet.getRow(1);
+  const headers: string[] = [];
+  headerRow.eachCell({ includeEmpty: true }, (cell, colNumber) => {
+    headers[colNumber] = String(cell.value ?? "").trim();
+  });
+
+  const rows: RawRow[] = [];
+  for (let r = 2; r <= sheet.rowCount; r++) {
+    const row = sheet.getRow(r);
+    const obj: RawRow = {};
+    let hasValue = false;
+    row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
+      const key = headers[colNumber];
+      if (key) {
+        const val = cell.value;
+        obj[key] = val === null || val === undefined ? "" : String(val);
+        if (obj[key] !== "") hasValue = true;
+      }
+    });
+    if (hasValue) rows.push(obj);
+  }
+  return rows;
 }
 
 export async function POST(request: NextRequest) {
@@ -165,7 +187,7 @@ export async function POST(request: NextRequest) {
     if (isCsv) {
       rows = parseCsv(await file.text());
     } else if (isXlsx) {
-      rows = parseXlsx(await file.arrayBuffer());
+      rows = await parseXlsx(await file.arrayBuffer());
     } else {
       return errorResponse("Unsupported file type. Upload a .csv or .xlsx file.", 400);
     }
