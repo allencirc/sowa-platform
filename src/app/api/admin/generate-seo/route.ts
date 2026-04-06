@@ -84,7 +84,10 @@ export async function POST(request: NextRequest) {
 
 function parseSeoResponse(raw: string): SeoResult {
   // Strip markdown code fences if present
-  const cleaned = raw.replace(/```json?\s*/g, "").replace(/```\s*/g, "").trim();
+  const cleaned = raw
+    .replace(/```json?\s*/g, "")
+    .replace(/```\s*/g, "")
+    .trim();
   const parsed = JSON.parse(cleaned);
 
   return {

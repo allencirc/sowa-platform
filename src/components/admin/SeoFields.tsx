@@ -103,9 +103,7 @@ export function SeoFields({
               )}
               {generating ? "Generating..." : "Generate SEO"}
             </button>
-            {genError && (
-              <span className="text-sm text-status-error">{genError}</span>
-            )}
+            {genError && <span className="text-sm text-status-error">{genError}</span>}
           </div>
 
           <FormField
