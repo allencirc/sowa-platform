@@ -29,8 +29,8 @@ const sectorColours: Record<string, { bg: string; border: string; text: string }
   Electrical: { bg: "#F59E0B", border: "#F59E0B", text: "#451A03" },
   "Survey & Design": { bg: "#7C3AED", border: "#7C3AED", text: "#FFFFFF" },
   "Health, Safety & Environment": { bg: "#DC2626", border: "#DC2626", text: "#FFFFFF" },
-  "Policy & Regulation": { bg: "#059669", border: "#059669", text: "#022C22" },
-  "Project Management": { bg: "#EA580C", border: "#EA580C", text: "#431407" },
+  "Policy & Regulation": { bg: "#047857", border: "#047857", text: "#FFFFFF" },
+  "Project Management": { bg: "#C2410C", border: "#C2410C", text: "#FFFFFF" },
 };
 
 const allSectors = Object.keys(sectorColours);

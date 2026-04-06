@@ -235,6 +235,7 @@ async function main() {
         qualifications: career.qualifications,
         workingConditions: career.workingConditions ?? null,
         growthOutlook: career.growthOutlook ?? null,
+        status: "PUBLISHED" as never,
       },
     });
     careerIdMap.set(career.slug, created.id);
@@ -300,6 +301,7 @@ async function main() {
         certificationAwarded: course.certificationAwarded ?? null,
         signupUrl: course.signupUrl ?? null,
         tags: course.tags,
+        status: "PUBLISHED" as never,
       },
     });
     courseIdMap.set(course.slug, created.id);
@@ -349,6 +351,7 @@ async function main() {
         description: event.description,
         capacity: event.capacity ?? null,
         image: event.image ?? null,
+        status: "PUBLISHED" as never,
       },
     });
   }
@@ -368,6 +371,7 @@ async function main() {
         categories: r.categories,
         isFeatured: r.isFeatured ?? false,
         image: r.image ?? null,
+        status: "PUBLISHED" as never,
       },
     });
   }
@@ -386,6 +390,7 @@ async function main() {
         category: n.category,
         author: n.author,
         image: n.image ?? null,
+        status: "PUBLISHED" as never,
       },
     });
   }

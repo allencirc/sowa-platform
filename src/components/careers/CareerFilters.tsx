@@ -11,8 +11,8 @@ const sectorColours: Record<string, { bg: string; text: string }> = {
   Electrical: { bg: "#F59E0B", text: "#451A03" },
   "Survey & Design": { bg: "#7C3AED", text: "#FFFFFF" },
   "Health, Safety & Environment": { bg: "#DC2626", text: "#FFFFFF" },
-  "Policy & Regulation": { bg: "#059669", text: "#022C22" },
-  "Project Management": { bg: "#EA580C", text: "#431407" },
+  "Policy & Regulation": { bg: "#047857", text: "#FFFFFF" },
+  "Project Management": { bg: "#C2410C", text: "#FFFFFF" },
 };
 
 export function CareerFilters({ careers }: { careers: Career[] }) {
