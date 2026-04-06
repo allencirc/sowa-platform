@@ -53,7 +53,7 @@ export async function GET() {
   return NextResponse.json(body, {
     status: databaseOk ? 200 : 503,
     headers: {
-      "Cache-Control": "no-store, max-age=0",
+      "Cache-Control": "public, max-age=30, s-maxage=30",
       "X-Health-Check-Duration-Ms": String(Date.now() - startedAt),
     },
   });

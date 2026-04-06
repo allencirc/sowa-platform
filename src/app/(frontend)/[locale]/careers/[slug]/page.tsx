@@ -7,7 +7,12 @@ import { Badge, SectorBadge } from "@/components/ui/Badge";
 import { SkillBadge } from "@/components/careers/SkillBadge";
 import { MiniPathway } from "@/components/careers/MiniPathway";
 import { CourseCard } from "@/components/courses/CourseCard";
-import { getCareerBySlug, getCourseBySlug, getSkillsByCareer, getAllCareers } from "@/lib/queries";
+import {
+  getCareerBySlug,
+  getCoursesByCareer,
+  getSkillsByCareer,
+  getAllCareers,
+} from "@/lib/queries";
 import { formatCurrency } from "@/lib/utils";
 
 interface CareerDetailProps {
@@ -53,13 +58,10 @@ export default async function CareerDetailPage({ params }: CareerDetailProps) {
   const career = await getCareerBySlug(slug);
   if (!career) notFound();
 
-  const skills = await getSkillsByCareer(career.slug);
-  const relatedCourseResults = await Promise.all(
-    (career.relatedCourses ?? []).map((s) => getCourseBySlug(s)),
-  );
-  const relatedCourses = relatedCourseResults.filter(
-    (c): c is NonNullable<typeof c> => c !== undefined,
-  );
+  const [skills, relatedCourses] = await Promise.all([
+    getSkillsByCareer(career.slug),
+    getCoursesByCareer(career.slug),
+  ]);
 
   return (
     <>

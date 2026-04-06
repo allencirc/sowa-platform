@@ -667,6 +667,15 @@ export async function getResearchBySlug(slug: string): Promise<Research | undefi
   return row ? mapResearch(row as unknown as AnyRecord) : undefined;
 }
 
+export async function getLatestResearch(count: number): Promise<Research[]> {
+  const rows = await prisma.research.findMany({
+    where: { status: "PUBLISHED" as never },
+    orderBy: { publicationDate: "desc" },
+    take: count,
+  });
+  return rows.map((r) => mapResearch(r as unknown as AnyRecord));
+}
+
 export async function getFeaturedResearch(): Promise<Research | undefined> {
   const row = await prisma.research.findFirst({
     where: { isFeatured: true, status: "PUBLISHED" as never },
@@ -737,6 +746,21 @@ export async function getAllSkills(): Promise<Skill[]> {
 export async function getSkillBySlug(slug: string): Promise<Skill | undefined> {
   const row = await prisma.skill.findUnique({ where: { slug } });
   return row ? mapSkill(row as unknown as AnyRecord) : undefined;
+}
+
+export async function getSkillsBySlugs(slugs: string[]): Promise<Skill[]> {
+  if (slugs.length === 0) return [];
+  const rows = await prisma.skill.findMany({ where: { slug: { in: slugs } } });
+  return rows.map((r) => mapSkill(r as unknown as AnyRecord));
+}
+
+export async function getCareersBySlugs(slugs: string[]): Promise<Career[]> {
+  if (slugs.length === 0) return [];
+  const rows = await prisma.career.findMany({
+    where: { slug: { in: slugs }, status: "PUBLISHED" as never },
+    include: careerInclude,
+  });
+  return rows.map((r) => mapCareer(r as unknown as AnyRecord));
 }
 
 export async function getSkillsByCareer(careerSlug: string): Promise<Skill[]> {

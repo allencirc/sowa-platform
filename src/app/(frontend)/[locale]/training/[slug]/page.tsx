@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/Badge";
 import { RegisterButton } from "@/components/registration/RegisterButton";
 import { SkillBadge } from "@/components/careers/SkillBadge";
 import { CareerCard } from "@/components/careers/CareerCard";
-import { getCourseBySlug, getAllCourses, getCareerBySlug, getSkillBySlug } from "@/lib/queries";
+import { getCourseBySlug, getAllCourses, getCareersBySlugs, getSkillsBySlugs } from "@/lib/queries";
 import { formatDate, formatCurrency } from "@/lib/utils";
 
 interface CourseDetailProps {
@@ -60,11 +60,10 @@ export default async function CourseDetailPage({ params }: CourseDetailProps) {
   const course = await getCourseBySlug(slug);
   if (!course) notFound();
 
-  const skillResults = await Promise.all(course.skills.map((s) => getSkillBySlug(s)));
-  const skills = skillResults.filter((s): s is NonNullable<typeof s> => s !== undefined);
-
-  const careerResults = await Promise.all(course.careerRelevance.map((s) => getCareerBySlug(s)));
-  const relatedCareers = careerResults.filter((c): c is NonNullable<typeof c> => c !== undefined);
+  const [skills, relatedCareers] = await Promise.all([
+    getSkillsBySlugs(course.skills),
+    getCareersBySlugs(course.careerRelevance),
+  ]);
 
   const enableRegistration = process.env.ENABLE_COURSE_REGISTRATION === "true";
 
