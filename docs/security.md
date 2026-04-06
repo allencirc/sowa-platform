@@ -230,15 +230,15 @@ A scan that surfaces a CVSS ≥ 9.0 advisory triggers the **24-hour emergency pa
 
 ## Secrets Handling
 
-| Principle                       | Implementation                                                                                                                                        |
-| ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Secrets never in source control | `.env*` in `.gitignore`; pre-commit hook scans for common secret patterns; GitHub secret scanning enabled on the repo                                 |
-| Single source of truth          | Production secrets live in Vercel's encrypted environment variable store; a mirror copy is held in the platform owner's password manager for recovery |
-| Scope minimisation              | Each third-party key (HubSpot, Anthropic, OpenAI) is a dedicated API key limited to the endpoints the platform actually calls                         |
-| Rotation                        | 12-month calendar rotation; immediate rotation on personnel change or suspected compromise                                                            |
-| Access control                  | Vercel env var access limited to the Skillnet platform owner and one nominated technical delivery partner; changes logged by Vercel                   |
-| No secrets in browser           | All `NEXT_PUBLIC_` variables are treated as public and never used for authenticated calls                                                             |
-| Build-time injection            | Secrets are injected at build time via Vercel; they are not baked into the client bundle                                                              |
+| Principle                       | Implementation                                                                                                                                                                                |
+| ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Secrets never in source control | `.env*` in `.gitignore`; pre-commit hook scans for common secret patterns; GitHub secret scanning enabled on the repo                                                                         |
+| Single source of truth          | Production secrets live in Vercel's encrypted environment variable store; a mirror copy is held in the platform owner's password manager for recovery                                         |
+| Scope minimisation              | Each third-party key (HubSpot, Anthropic, OpenAI) is a dedicated API key limited to the endpoints the platform actually calls                                                                 |
+| Rotation                        | 12-month calendar rotation; immediate rotation on personnel change or suspected compromise. JWT signing secret is rotated every 6 months per the [rotation runbook](jwt-rotation-runbook.md). |
+| Access control                  | Vercel env var access limited to the Skillnet platform owner and one nominated technical delivery partner; changes logged by Vercel                                                           |
+| No secrets in browser           | All `NEXT_PUBLIC_` variables are treated as public and never used for authenticated calls                                                                                                     |
+| Build-time injection            | Secrets are injected at build time via Vercel; they are not baked into the client bundle                                                                                                      |
 
 ---
 
@@ -325,7 +325,6 @@ If deployed on Vercel, add a `vercel.json`:
 | No audit log for auth events                                 | Login/logout not tracked                                               | Add auth event logging                                                                            |
 | CSP allows `'unsafe-inline'` / `'unsafe-eval'` on script-src | Relaxation kept for React Flow runtime and Next.js inline critical CSS | Tighten with per-request nonces before production; base policy is in place (`next.config.ts`)     |
 | HSTS relies on the hosting provider for HTTPS termination    | TLS is enforced at the Vercel edge                                     | HSTS header now present in `next.config.ts`; verify domain is in the HSTS preload list at go-live |
-| JWT secret management                                        | Single secret in env var                                               | Consider key rotation strategy                                                                    |
 
 ---
 
