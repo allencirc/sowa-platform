@@ -115,6 +115,20 @@ In-memory rate limiter (`src/lib/rate-limit.ts`):
   enforces a 12-character minimum, requires the current password, and forces a
   re-login on success so the old JWT cannot be reused.
 
+### Account Lockout
+
+Brute-force login attempts are mitigated by an automatic account lockout policy:
+
+| Setting              | Value                                                                 |
+| -------------------- | --------------------------------------------------------------------- |
+| Threshold            | **5** consecutive failed login attempts                               |
+| Lockout duration     | **15 minutes** from the final failed attempt                          |
+| Reset on success     | Counter and lock are cleared on any successful login                  |
+| Configuration        | `src/lib/account-lockout.ts` (`MAX_FAILED_ATTEMPTS`, `LOCKOUT_DURATION_MS`) |
+| Database fields      | `User.failedLoginAttempts` (Int), `User.lockedUntil` (DateTime?)      |
+
+When a locked account attempts to authenticate — even with the correct password — the credentials provider returns an error message ("Account temporarily locked. Try again later.") and does not evaluate the password. Once the lockout window expires the next successful login resets the counter to zero.
+
 ---
 
 ## GDPR Compliance Features
@@ -308,7 +322,6 @@ If deployed on Vercel, add a `vercel.json`:
 | In-memory rate limiting                                      | Resets on restart, not shared across instances                         | Migrate to Redis                                                                                  |
 | Local file storage                                           | Not scalable, no CDN, lost on redeploy                                 | Migrate to S3/R2/Vercel Blob                                                                      |
 | Default admin password                                       | Known credential in seed data                                          | Force password change on first login                                                              |
-| No account lockout                                           | Unlimited login attempts (rate-limited only)                           | Add account lockout after N failures                                                              |
 | No audit log for auth events                                 | Login/logout not tracked                                               | Add auth event logging                                                                            |
 | CSP allows `'unsafe-inline'` / `'unsafe-eval'` on script-src | Relaxation kept for React Flow runtime and Next.js inline critical CSS | Tighten with per-request nonces before production; base policy is in place (`next.config.ts`)     |
 | HSTS relies on the hosting provider for HTTPS termination    | TLS is enforced at the Vercel edge                                     | HSTS header now present in `next.config.ts`; verify domain is in the HSTS preload list at go-live |

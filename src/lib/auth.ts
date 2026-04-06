@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import type { UserRole } from "@/generated/prisma/client";
 import type {} from "@/lib/auth.types";
+import { MAX_FAILED_ATTEMPTS, LOCKOUT_DURATION_MS } from "@/lib/account-lockout";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   trustHost: true,
@@ -22,9 +23,35 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
         if (!user?.passwordHash) return null;
 
+        // Check if account is currently locked
+        if (user.lockedUntil && user.lockedUntil > new Date()) {
+          throw new Error("Account temporarily locked. Try again later.");
+        }
+
         const valid = await bcrypt.compare(credentials.password as string, user.passwordHash);
 
-        if (!valid) return null;
+        if (!valid) {
+          // Increment failed attempts; lock if threshold reached
+          const attempts = user.failedLoginAttempts + 1;
+          await prisma.user.update({
+            where: { id: user.id },
+            data: {
+              failedLoginAttempts: attempts,
+              ...(attempts >= MAX_FAILED_ATTEMPTS
+                ? { lockedUntil: new Date(Date.now() + LOCKOUT_DURATION_MS) }
+                : {}),
+            },
+          });
+          return null;
+        }
+
+        // Successful login — reset lockout state
+        if (user.failedLoginAttempts > 0 || user.lockedUntil) {
+          await prisma.user.update({
+            where: { id: user.id },
+            data: { failedLoginAttempts: 0, lockedUntil: null },
+          });
+        }
 
         return {
           id: user.id,
