@@ -71,7 +71,7 @@ const interestLabels: Record<string, string> = {
 function buildRequestBody(
   result: DiagnosticResult,
   answers: Record<string, string | string[]>,
-  overallScorePercent: number
+  overallScorePercent: number,
 ): SummaryRequestBody {
   const q1 = typeof answers.q1 === "string" ? answers.q1 : undefined;
   const q4 = typeof answers.q4 === "string" ? answers.q4 : undefined;
@@ -79,9 +79,9 @@ function buildRequestBody(
 
   return {
     background: {
-      currentSituation: q1 ? situationLabels[q1] ?? q1 : undefined,
-      experienceLevel: q4 ? qualificationLabels[q4] ?? q4 : undefined,
-      interestArea: q8 ? interestLabels[q8] ?? q8 : undefined,
+      currentSituation: q1 ? (situationLabels[q1] ?? q1) : undefined,
+      experienceLevel: q4 ? (qualificationLabels[q4] ?? q4) : undefined,
+      interestArea: q8 ? (interestLabels[q8] ?? q8) : undefined,
     },
     gaps: result.gaps.slice(0, 3).map((g) => ({
       skillName: g.skill.name,
@@ -197,16 +197,16 @@ export function AISummary({ result, answers, overallScorePercent }: AISummaryPro
             <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-accent/10 mb-4">
               <Sparkles className="h-6 w-6 text-accent-dark" />
             </div>
-            <h3 className="text-xl font-bold text-text-primary mb-2">
-              AI Career Guidance
-            </h3>
+            <h3 className="text-xl font-bold text-text-primary mb-2">AI Career Guidance</h3>
             <p className="text-text-secondary mb-4 max-w-md mx-auto">
-              Generate a personalised career summary using AI? Your assessment
-              data will be processed securely and not stored.
+              Generate a personalised career summary using AI? Your assessment data will be
+              processed securely and not stored.
             </p>
             <div className="flex items-center justify-center gap-2 text-xs text-text-muted mb-6">
               <ShieldCheck className="h-4 w-4" />
-              <span>No personal information is shared — only your assessment answers and results</span>
+              <span>
+                No personal information is shared — only your assessment answers and results
+              </span>
             </div>
             <Button variant="primary" onClick={handleOptIn}>
               <Sparkles className="h-4 w-4" />
@@ -229,9 +229,7 @@ export function AISummary({ result, answers, overallScorePercent }: AISummaryPro
                 <Sparkles className="h-5 w-5 text-accent-dark animate-pulse" />
               </div>
               <div>
-                <h3 className="text-lg font-bold text-text-primary">
-                  AI Career Guidance
-                </h3>
+                <h3 className="text-lg font-bold text-text-primary">AI Career Guidance</h3>
                 <p className="text-sm text-text-secondary">
                   Generating your personalised summary...
                 </p>
@@ -265,12 +263,8 @@ export function AISummary({ result, answers, overallScorePercent }: AISummaryPro
                   <Sparkles className="h-5 w-5 text-accent-dark" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-text-primary">
-                    AI Career Guidance
-                  </h3>
-                  <p className="text-xs text-text-muted">
-                    Personalised summary powered by AI
-                  </p>
+                  <h3 className="text-lg font-bold text-text-primary">AI Career Guidance</h3>
+                  <p className="text-xs text-text-muted">Personalised summary powered by AI</p>
                 </div>
               </div>
               {canRegenerate && (
@@ -281,9 +275,7 @@ export function AISummary({ result, answers, overallScorePercent }: AISummaryPro
                   disabled={loading}
                   className="shrink-0"
                 >
-                  <RefreshCw
-                    className={`h-4 w-4 ${loading ? "animate-spin" : ""}`}
-                  />
+                  <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
                   {loading ? "Regenerating..." : "Regenerate"}
                 </Button>
               )}

@@ -54,7 +54,9 @@ function makeCareerRow(overrides: Record<string, unknown> = {}) {
     status: "PUBLISHED",
     createdAt: new Date(),
     updatedAt: new Date(),
-    skills: [{ skill: { slug: "mechanical-systems", name: "Mechanical Systems", category: "TECHNICAL" } }],
+    skills: [
+      { skill: { slug: "mechanical-systems", name: "Mechanical Systems", category: "TECHNICAL" } },
+    ],
     pathwayFrom: [],
     relatedCourses: [],
     ...overrides,
@@ -89,7 +91,7 @@ describe("GET /api/careers", () => {
     const { applyRateLimit } = await import("@/lib/api-utils");
     const { NextResponse } = await import("next/server");
     (applyRateLimit as ReturnType<typeof vi.fn>).mockReturnValueOnce(
-      NextResponse.json({ error: "Rate limited" }, { status: 429 })
+      NextResponse.json({ error: "Rate limited" }, { status: 429 }),
     );
 
     const GET = await importGET();

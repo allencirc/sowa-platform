@@ -22,9 +22,7 @@ import {
 // ── Helpers ──────────────────────────────────────────────
 
 function setConsentCookie(prefs: ConsentPreferences) {
-  document.cookie = `sowa_consent=${encodeURIComponent(
-    JSON.stringify(prefs)
-  )}; path=/`;
+  document.cookie = `sowa_consent=${encodeURIComponent(JSON.stringify(prefs))}; path=/`;
 }
 
 function clearCookies() {
@@ -104,7 +102,7 @@ describe("Analytics tracking", () => {
   beforeEach(() => {
     clearCookies();
     gtagSpy = vi.fn();
-    window.gtag = gtagSpy;
+    window.gtag = gtagSpy as any;
     window.dataLayer = [];
   });
 

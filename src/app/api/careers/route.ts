@@ -31,10 +31,10 @@ const entryLevelToEnum: Record<string, string> = {
 };
 
 const sectorDisplay: Record<string, string> = Object.fromEntries(
-  Object.entries(sectorToEnum).map(([k, v]) => [v, k])
+  Object.entries(sectorToEnum).map(([k, v]) => [v, k]),
 );
 const entryLevelDisplay: Record<string, string> = Object.fromEntries(
-  Object.entries(entryLevelToEnum).map(([k, v]) => [v, k])
+  Object.entries(entryLevelToEnum).map(([k, v]) => [v, k]),
 );
 const pathwayTypeDisplay: Record<string, string> = {
   PROGRESSION: "progression",
@@ -69,9 +69,7 @@ function mapCareer(row: AnyRecord) {
     status: (row.status as string) ?? "DRAFT",
     publishAt: row.publishAt ? (row.publishAt as Date).toISOString() : null,
     rejectionNote: (row.rejectionNote as string) ?? null,
-    skills: ((row.skills as { skill: { slug: string } }[]) ?? []).map(
-      (s) => s.skill.slug
-    ),
+    skills: ((row.skills as { skill: { slug: string } }[]) ?? []).map((s) => s.skill.slug),
     pathwayConnections: (
       (row.pathwayFrom as { to: { slug: string }; type: string; timeframe: string }[]) ?? []
     ).map((p) => ({
@@ -79,9 +77,9 @@ function mapCareer(row: AnyRecord) {
       type: pathwayTypeDisplay[p.type] ?? p.type,
       timeframe: p.timeframe,
     })),
-    relatedCourses: (
-      (row.relatedCourses as { course: { slug: string } }[]) ?? []
-    ).map((c) => c.course.slug),
+    relatedCourses: ((row.relatedCourses as { course: { slug: string } }[]) ?? []).map(
+      (c) => c.course.slug,
+    ),
   };
 }
 
@@ -118,9 +116,7 @@ export async function GET(request: NextRequest) {
     }
 
     const orderBy: Record<string, string> =
-      sortBy && SORTABLE_FIELDS.includes(sortBy)
-        ? { [sortBy]: order }
-        : { title: "asc" };
+      sortBy && SORTABLE_FIELDS.includes(sortBy) ? { [sortBy]: order } : { title: "asc" };
 
     const [rows, total] = await Promise.all([
       prisma.career.findMany({

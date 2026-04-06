@@ -118,13 +118,8 @@ async function getAccessToken(cfg: Ga4Config): Promise<string> {
     iat,
     exp,
   };
-  const signingInput = `${base64url(JSON.stringify(header))}.${base64url(
-    JSON.stringify(payload),
-  )}`;
-  const signature = crypto
-    .createSign("RSA-SHA256")
-    .update(signingInput)
-    .sign(cfg.privateKey);
+  const signingInput = `${base64url(JSON.stringify(header))}.${base64url(JSON.stringify(payload))}`;
+  const signature = crypto.createSign("RSA-SHA256").update(signingInput).sign(cfg.privateKey);
   const jwt = `${signingInput}.${base64url(signature)}`;
 
   const res = await fetch("https://oauth2.googleapis.com/token", {
@@ -138,9 +133,7 @@ async function getAccessToken(cfg: Ga4Config): Promise<string> {
   });
 
   if (!res.ok) {
-    throw new Error(
-      `GA4 token exchange failed: ${res.status} ${await res.text()}`,
-    );
+    throw new Error(`GA4 token exchange failed: ${res.status} ${await res.text()}`);
   }
   const json = (await res.json()) as { access_token: string; expires_in: number };
   cachedToken = {
@@ -177,10 +170,7 @@ interface RunReportResponse {
   rowCount?: number;
 }
 
-async function runReport(
-  cfg: Ga4Config,
-  body: RunReportRequest,
-): Promise<RunReportResponse> {
+async function runReport(cfg: Ga4Config, body: RunReportRequest): Promise<RunReportResponse> {
   const token = await getAccessToken(cfg);
   const res = await fetch(
     `https://analyticsdata.googleapis.com/v1beta/${cfg.propertyId}:runReport`,
@@ -197,9 +187,7 @@ async function runReport(
     },
   );
   if (!res.ok) {
-    throw new Error(
-      `GA4 runReport failed: ${res.status} ${await res.text()}`,
-    );
+    throw new Error(`GA4 runReport failed: ${res.status} ${await res.text()}`);
   }
   return (await res.json()) as RunReportResponse;
 }
@@ -247,9 +235,7 @@ export type Ga4ReportResult =
  * Pull the admin-analytics overview in a single call batch. Designed for the
  * `/admin/analytics` page: sessions + top content + custom event counts.
  */
-export async function fetchGa4Overview(
-  days = 28,
-): Promise<Ga4ReportResult> {
+export async function fetchGa4Overview(days = 28): Promise<Ga4ReportResult> {
   const cfg = getGa4Config();
   if (!cfg.configured) {
     return {

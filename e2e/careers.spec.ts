@@ -11,16 +11,17 @@ test.describe("Careers journey", () => {
     await expect(page).toHaveTitle(/SOWA|Skillnet|Offshore Wind/i);
 
     // 2. Navigate to careers
-    await page.getByRole("link", { name: /careers/i }).first().click();
+    await page
+      .getByRole("link", { name: /careers/i })
+      .first()
+      .click();
     await page.waitForURL("**/careers**");
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
 
     // 3. Expect career cards to be visible. `[href^="/careers/"]` also matches
     //    links inside the React Flow pathway map (rendered but off-screen),
     //    so filter for visibility before asserting.
-    const careerCards = page
-      .locator('main [href^="/careers/"]')
-      .locator("visible=true");
+    const careerCards = page.locator('main [href^="/careers/"]').locator("visible=true");
     await expect(careerCards.first()).toBeVisible();
 
     // 4. Click on a career card
@@ -36,5 +37,4 @@ test.describe("Careers journey", () => {
       await expect(relatedSection).toBeVisible();
     }
   });
-
 });

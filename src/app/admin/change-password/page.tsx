@@ -26,8 +26,8 @@ export default async function ChangePasswordPage() {
             </h1>
             {forced && (
               <p className="mt-2 text-sm text-text-secondary">
-                This account is still using the seeded default password. Choose
-                a new password of at least 12 characters before continuing.
+                This account is still using the seeded default password. Choose a new password of at
+                least 12 characters before continuing.
               </p>
             )}
           </div>

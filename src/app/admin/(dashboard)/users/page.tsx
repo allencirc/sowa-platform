@@ -182,7 +182,12 @@ export default function AdminUsersPage() {
       {loading ? (
         <div className="flex h-64 items-center justify-center text-text-muted">Loading...</div>
       ) : (
-        <DataTable columns={columns} data={users} rowKey={(row) => row.id} emptyMessage="No users found." />
+        <DataTable
+          columns={columns}
+          data={users}
+          rowKey={(row) => row.id}
+          emptyMessage="No users found."
+        />
       )}
 
       {/* Create/Edit User Modal */}
@@ -193,22 +198,50 @@ export default function AdminUsersPage() {
       >
         <div className="space-y-4">
           {error && (
-            <p className="rounded-lg bg-status-error/10 px-3 py-2 text-sm text-status-error">{error}</p>
+            <p className="rounded-lg bg-status-error/10 px-3 py-2 text-sm text-status-error">
+              {error}
+            </p>
           )}
           <FormField label="Name" required>
-            <Input value={formName} onChange={(e) => setFormName(e.target.value)} placeholder="Full name" />
+            <Input
+              value={formName}
+              onChange={(e) => setFormName(e.target.value)}
+              placeholder="Full name"
+            />
           </FormField>
           <FormField label="Email" required>
-            <Input type="email" value={formEmail} onChange={(e) => setFormEmail(e.target.value)} placeholder="email@example.com" />
+            <Input
+              type="email"
+              value={formEmail}
+              onChange={(e) => setFormEmail(e.target.value)}
+              placeholder="email@example.com"
+            />
           </FormField>
-          <FormField label={editUser ? "New Password (leave blank to keep)" : "Password"} required={!editUser}>
-            <Input type="password" value={formPassword} onChange={(e) => setFormPassword(e.target.value)} placeholder={editUser ? "••••••••" : "Min 8 characters"} />
+          <FormField
+            label={editUser ? "New Password (leave blank to keep)" : "Password"}
+            required={!editUser}
+          >
+            <Input
+              type="password"
+              value={formPassword}
+              onChange={(e) => setFormPassword(e.target.value)}
+              placeholder={editUser ? "••••••••" : "Min 8 characters"}
+            />
           </FormField>
           <FormField label="Role" required>
-            <Select options={roleOptions} value={formRole} onChange={(e) => setFormRole(e.target.value)} />
+            <Select
+              options={roleOptions}
+              value={formRole}
+              onChange={(e) => setFormRole(e.target.value)}
+            />
           </FormField>
           <div className="flex gap-3 pt-2">
-            <Button variant="outline" className="flex-1" onClick={() => setModalOpen(false)} disabled={saving}>
+            <Button
+              variant="outline"
+              className="flex-1"
+              onClick={() => setModalOpen(false)}
+              disabled={saving}
+            >
               Cancel
             </Button>
             <Button className="flex-1" onClick={handleSave} disabled={saving}>

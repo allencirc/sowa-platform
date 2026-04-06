@@ -12,17 +12,23 @@ import { requireRole } from "@/lib/auth-utils";
 import { createContentVersion } from "@/lib/versions";
 
 const eventTypeToEnum: Record<string, string> = {
-  Workshop: "WORKSHOP", Webinar: "WEBINAR", Conference: "CONFERENCE",
-  Networking: "NETWORKING", Training: "TRAINING", Roadshow: "ROADSHOW",
+  Workshop: "WORKSHOP",
+  Webinar: "WEBINAR",
+  Conference: "CONFERENCE",
+  Networking: "NETWORKING",
+  Training: "TRAINING",
+  Roadshow: "ROADSHOW",
 };
 const locationTypeToEnum: Record<string, string> = {
-  Physical: "PHYSICAL", Virtual: "VIRTUAL", Hybrid: "HYBRID",
+  Physical: "PHYSICAL",
+  Virtual: "VIRTUAL",
+  Hybrid: "HYBRID",
 };
 const eventTypeDisplay: Record<string, string> = Object.fromEntries(
-  Object.entries(eventTypeToEnum).map(([k, v]) => [v, k])
+  Object.entries(eventTypeToEnum).map(([k, v]) => [v, k]),
 );
 const locationTypeDisplay: Record<string, string> = Object.fromEntries(
-  Object.entries(locationTypeToEnum).map(([k, v]) => [v, k])
+  Object.entries(locationTypeToEnum).map(([k, v]) => [v, k]),
 );
 
 type AnyRecord = Record<string, unknown>;
@@ -62,7 +68,9 @@ export async function GET(request: NextRequest) {
 
     const url = new URL(request.url);
     const statusFilter = url.searchParams.get("status");
-    if (statusFilter) { where.status = statusFilter; }
+    if (statusFilter) {
+      where.status = statusFilter;
+    }
 
     if (type) {
       where.type = (eventTypeToEnum[type] ?? type) as never;
@@ -81,9 +89,7 @@ export async function GET(request: NextRequest) {
     }
 
     const orderBy: Record<string, string> =
-      sortBy && SORTABLE_FIELDS.includes(sortBy)
-        ? { [sortBy]: order }
-        : { startDate: "asc" };
+      sortBy && SORTABLE_FIELDS.includes(sortBy) ? { [sortBy]: order } : { startDate: "asc" };
 
     const [rows, total] = await Promise.all([
       prisma.event.findMany({
@@ -108,7 +114,11 @@ export async function POST(request: NextRequest) {
   if (rateLimited) return rateLimited;
 
   let user;
-  try { user = await requireRole(["ADMIN", "EDITOR"]); } catch { return errorResponse("Unauthorized", 401); }
+  try {
+    user = await requireRole(["ADMIN", "EDITOR"]);
+  } catch {
+    return errorResponse("Unauthorized", 401);
+  }
 
   const parsed = await parseBody(request, createEventSchema);
   if (parsed.error) return parsed.error;

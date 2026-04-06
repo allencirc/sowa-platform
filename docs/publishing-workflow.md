@@ -8,12 +8,12 @@ This guide explains how content moves through the publishing lifecycle on the SO
 
 Every piece of content (Careers, Courses, Events, News, Research) moves through four possible statuses:
 
-| Status | Meaning | Visible to Public | Who Can Create | Who Can Publish |
-|--------|---------|-------------------|-----------------|-----------------|
-| **Draft** | Work in progress. The creator is still editing. | No | Editors, Admins | Editors (submit for review); Admins (publish directly) |
-| **In Review** | Waiting for approval. An Editor has submitted it, and an Admin must review and approve/reject. | No | — | Admins only |
-| **Published** | Live on the public website. Visible to all visitors. | Yes | — | Admins only |
-| **Archived** | Removed from public view but preserved in the system for reference or future reuse. | No | — | Admins only |
+| Status        | Meaning                                                                                        | Visible to Public | Who Can Create  | Who Can Publish                                        |
+| ------------- | ---------------------------------------------------------------------------------------------- | ----------------- | --------------- | ------------------------------------------------------ |
+| **Draft**     | Work in progress. The creator is still editing.                                                | No                | Editors, Admins | Editors (submit for review); Admins (publish directly) |
+| **In Review** | Waiting for approval. An Editor has submitted it, and an Admin must review and approve/reject. | No                | —               | Admins only                                            |
+| **Published** | Live on the public website. Visible to all visitors.                                           | Yes               | —               | Admins only                                            |
+| **Archived**  | Removed from public view but preserved in the system for reference or future reuse.            | No                | —               | Admins only                                            |
 
 ---
 
@@ -24,6 +24,7 @@ Every piece of content (Careers, Courses, Events, News, Research) moves through 
 Editors can create and edit content, but cannot directly publish. Instead, they submit content for review.
 
 **Workflow:**
+
 1. Create a new content item (Careers, Courses, Events, etc.) by clicking **Create New** in the relevant section
 2. Fill in the required and optional fields
 3. Click **Save as Draft** to save your work
@@ -33,6 +34,7 @@ Editors can create and edit content, but cannot directly publish. Instead, they 
 7. An Admin will review, provide feedback via the rejection note field, or approve and publish
 
 **Key Points:**
+
 - You cannot publish content directly; an Admin must approve it
 - You can continue editing content that is "In Review" — just click **Save** and the changes are preserved
 - If an Admin rejects your content, you will see a rejection note explaining what needs to be changed. Make the requested edits and resubmit
@@ -40,6 +42,7 @@ Editors can create and edit content, but cannot directly publish. Instead, they 
 ### For Admins
 
 Admins have full control over the publishing workflow. They can:
+
 - Create content directly
 - Edit content
 - Publish immediately (without review)
@@ -48,11 +51,13 @@ Admins have full control over the publishing workflow. They can:
 - Archive or delete content
 
 **Workflow for Direct Publishing:**
+
 1. Create or edit a content item
 2. When ready, click **Publish** to publish immediately
 3. The status changes to "Published" and the content is live on the public site
 
 **Workflow for Scheduled Publishing:**
+
 1. Create or edit content
 2. Instead of clicking "Publish" immediately, set a **Publish At** date and time in the form
 3. Click **Save**
@@ -60,6 +65,7 @@ Admins have full control over the publishing workflow. They can:
 5. At the scheduled date/time, the system automatically publishes the content
 
 **Workflow for Rejecting Editor Submissions:**
+
 1. Review the submitted content (status "In Review")
 2. If changes are needed, click **Reject**
 3. Enter a rejection note explaining what needs to be changed
@@ -73,6 +79,7 @@ Admins have full control over the publishing workflow. They can:
 Scheduled publishing allows Admins to queue content for publication at a specific future date and time without manual intervention on that date.
 
 **To Schedule Publication:**
+
 1. Open the content item for editing
 2. Find the **Publish At** field (usually at the bottom of the form)
 3. Click the date and time picker
@@ -82,12 +89,14 @@ Scheduled publishing allows Admins to queue content for publication at a specifi
 7. At the scheduled moment, the system automatically publishes the content and changes the status to "Published"
 
 **Use Cases:**
+
 - **Embargo timing:** Publish news at the same time as a press release
 - **Event visibility:** Publish an event one month before the start date to give registrants time to plan
 - **Course launches:** Publish a new course offering on a specific date when marketing campaigns launch
 - **Planned announcements:** Queue multiple announcements to release on a schedule
 
 **Tips:**
+
 - Always double-check the date and time before saving. The timezone defaults to Irish time (UTC+0 or UTC+1 depending on daylight saving).
 - If you need to cancel a scheduled publication, open the content, clear the **Publish At** field, and save. The status reverts to "Draft".
 - For important publications, set a reminder in your calendar to verify the content published correctly at the scheduled time.
@@ -105,6 +114,7 @@ Every time you save a content item, the system automatically creates a version s
 3. You will see a list of all versions, sorted chronologically (newest first)
 
 Each version entry shows:
+
 - **Version number** (e.g., Version 5, Version 1)
 - **Author** — Who made the change
 - **Timestamp** — When the change was saved
@@ -115,6 +125,7 @@ Each version entry shows:
 A change note is an optional but highly recommended text field you can fill in when saving important edits. Change notes help other editors understand the rationale for changes.
 
 **To add a change note:**
+
 1. Make your edits to the content
 2. Find the **Change Note** field (usually near the Save button)
 3. Enter a brief explanation, e.g. "Updated salary range based on Q1 2026 market survey", "Fixed typo in role description", "Added new related courses"
@@ -122,6 +133,7 @@ A change note is an optional but highly recommended text field you can fill in w
 5. The change note is recorded alongside the version snapshot
 
 **Best Practices for Change Notes:**
+
 - Be specific about what changed and why (e.g. "Updated" or "Fixed typo" is less useful than "Updated salary range from €45–65k to €50–70k based on latest industry survey")
 - Include the source of information if relevant (e.g. "Based on feedback from Q1 stakeholder interview")
 - Use change notes when making significant content updates, corrections, or revisions
@@ -132,6 +144,7 @@ A change note is an optional but highly recommended text field you can fill in w
 The platform includes a diff viewer that highlights what changed between two versions.
 
 **To compare versions:**
+
 1. Open the Version History panel
 2. Select two versions (usually by clicking checkboxes or selecting from a dropdown)
 3. Click **Compare** or **View Diff**
@@ -146,6 +159,7 @@ The platform includes a diff viewer that highlights what changed between two ver
 If you need to revert to a previous version of content (e.g. an update introduced an error, or you want to recover deleted text), you can restore that version.
 
 **To restore a previous version:**
+
 1. Open the Version History panel
 2. Find the version you want to restore (consider comparing it first to the current version)
 3. Click **Restore** or **Revert to This Version**
@@ -155,6 +169,7 @@ If you need to revert to a previous version of content (e.g. an update introduce
 7. A new version snapshot is created for the restore action
 
 **Important Notes:**
+
 - Restoring a version creates a new version entry (it does not delete the versions in between). The full history is preserved.
 - After restoring, you may want to add a change note explaining why you reverted (e.g. "Reverted to version 3 due to error introduced in version 4")
 - If you restore the wrong version, you can restore again to a different version
@@ -212,20 +227,20 @@ For very old content with hundreds of edits, the platform may limit the displaye
 
 ## Permissions Matrix: Statuses and Actions
 
-| Action | Editor | Admin |
-|--------|--------|-------|
-| Create content | ✓ | ✓ |
-| Edit Draft content | ✓ | ✓ |
-| Save Draft | ✓ | ✓ |
-| Submit for Review | ✓ | — |
-| Reject content | — | ✓ |
-| Publish (immediate) | — | ✓ |
-| Schedule publication | — | ✓ |
-| Archive | — | ✓ |
-| Delete | — | ✓ |
-| View Version History | ✓ | ✓ |
-| Compare versions | ✓ | ✓ |
-| Restore previous version | — | ✓ |
+| Action                   | Editor | Admin |
+| ------------------------ | ------ | ----- |
+| Create content           | ✓      | ✓     |
+| Edit Draft content       | ✓      | ✓     |
+| Save Draft               | ✓      | ✓     |
+| Submit for Review        | ✓      | —     |
+| Reject content           | —      | ✓     |
+| Publish (immediate)      | —      | ✓     |
+| Schedule publication     | —      | ✓     |
+| Archive                  | —      | ✓     |
+| Delete                   | —      | ✓     |
+| View Version History     | ✓      | ✓     |
+| Compare versions         | ✓      | ✓     |
+| Restore previous version | —      | ✓     |
 
 ---
 

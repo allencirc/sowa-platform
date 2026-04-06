@@ -18,9 +18,7 @@ const mockEvent: Event = {
 describe("EventCard", () => {
   it("renders event title", () => {
     render(<EventCard event={mockEvent} />);
-    expect(
-      screen.getByText("Ireland Offshore Wind Conference 2025")
-    ).toBeInTheDocument();
+    expect(screen.getByText("Ireland Offshore Wind Conference 2025")).toBeInTheDocument();
   });
 
   it("renders event type badge", () => {
@@ -40,9 +38,7 @@ describe("EventCard", () => {
 
   it("renders event description", () => {
     render(<EventCard event={mockEvent} />);
-    expect(
-      screen.getByText("The premier Irish offshore wind event.")
-    ).toBeInTheDocument();
+    expect(screen.getByText("The premier Irish offshore wind event.")).toBeInTheDocument();
   });
 
   it("links to event detail page", () => {
@@ -52,12 +48,8 @@ describe("EventCard", () => {
   });
 
   it("does not render location when not provided", () => {
-    render(
-      <EventCard event={{ ...mockEvent, location: undefined }} />
-    );
-    expect(
-      screen.queryByText("Convention Centre Dublin")
-    ).not.toBeInTheDocument();
+    render(<EventCard event={{ ...mockEvent, location: undefined }} />);
+    expect(screen.queryByText("Convention Centre Dublin")).not.toBeInTheDocument();
   });
 
   it("renders formatted date", () => {

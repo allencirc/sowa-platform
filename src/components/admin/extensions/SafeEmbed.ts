@@ -133,10 +133,7 @@ export const SafeEmbed = Node.create({
   },
 });
 
-function toAttrs(
-  parsed: ParsedEmbed,
-  title?: string,
-): SafeEmbedAttributes {
+function toAttrs(parsed: ParsedEmbed, title?: string): SafeEmbedAttributes {
   return {
     provider: parsed.provider,
     url: parsed.url,

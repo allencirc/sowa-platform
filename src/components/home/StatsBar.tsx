@@ -53,7 +53,7 @@ function StatItem({ value, label, suffix }: { value: number; label: string; suff
           observer.disconnect();
         }
       },
-      { threshold: 0.3 }
+      { threshold: 0.3 },
     );
 
     observer.observe(el);
@@ -77,12 +77,7 @@ export function StatsBar() {
       <Container>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
           {stats.map((stat) => (
-            <StatItem
-              key={stat.label}
-              value={stat.value}
-              label={stat.label}
-              suffix={stat.suffix}
-            />
+            <StatItem key={stat.label} value={stat.value} label={stat.label} suffix={stat.suffix} />
           ))}
         </div>
       </Container>

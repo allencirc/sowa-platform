@@ -48,7 +48,7 @@ export function TagInput({
         "flex min-h-[42px] flex-wrap items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3 py-1.5 transition-colors",
         "focus-within:border-accent focus-within:ring-2 focus-within:ring-accent/20",
         error && "border-status-error",
-        className
+        className,
       )}
     >
       {value.map((tag, i) => (

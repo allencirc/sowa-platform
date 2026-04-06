@@ -23,13 +23,7 @@ export function QuestionStep({ question, answer, onAnswer }: QuestionStepProps) 
 
   if (question.type === "multiple_choice") {
     const selected = Array.isArray(answer) ? answer : [];
-    return (
-      <MultipleChoice
-        question={question}
-        selected={selected}
-        onSelect={onAnswer}
-      />
-    );
+    return <MultipleChoice question={question} selected={selected} onSelect={onAnswer} />;
   }
 
   if (question.type === "scale") {
@@ -80,7 +74,7 @@ function SingleChoice({
               "focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-dark focus-visible:ring-offset-2",
               isSelected
                 ? "border-secondary bg-secondary/5 shadow-sm shadow-secondary/10"
-                : "border-gray-100 bg-white"
+                : "border-gray-100 bg-white",
             )}
           >
             <div className="flex items-center gap-4">
@@ -88,20 +82,16 @@ function SingleChoice({
               <div
                 className={cn(
                   "flex-shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors",
-                  isSelected
-                    ? "border-secondary bg-secondary"
-                    : "border-gray-300"
+                  isSelected ? "border-secondary bg-secondary" : "border-gray-300",
                 )}
                 aria-hidden="true"
               >
-                {isSelected && (
-                  <div className="w-2 h-2 rounded-full bg-white" />
-                )}
+                {isSelected && <div className="w-2 h-2 rounded-full bg-white" />}
               </div>
               <span
                 className={cn(
                   "text-base font-medium transition-colors",
-                  isSelected ? "text-text-primary" : "text-text-secondary"
+                  isSelected ? "text-text-primary" : "text-text-secondary",
                 )}
               >
                 {opt.label}
@@ -164,7 +154,7 @@ function MultipleChoice({
               "focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-dark focus-visible:ring-offset-2",
               isSelected
                 ? "border-secondary bg-secondary/5 shadow-sm shadow-secondary/10"
-                : "border-gray-100 bg-white"
+                : "border-gray-100 bg-white",
             )}
           >
             <div className="flex items-center gap-4">
@@ -172,19 +162,15 @@ function MultipleChoice({
               <div
                 className={cn(
                   "flex-shrink-0 w-6 h-6 rounded-md border-2 flex items-center justify-center transition-colors",
-                  isSelected
-                    ? "border-secondary bg-secondary"
-                    : "border-gray-300"
+                  isSelected ? "border-secondary bg-secondary" : "border-gray-300",
                 )}
               >
-                {isSelected && (
-                  <Check className="h-4 w-4 text-white" strokeWidth={3} />
-                )}
+                {isSelected && <Check className="h-4 w-4 text-white" strokeWidth={3} />}
               </div>
               <span
                 className={cn(
                   "text-base font-medium transition-colors",
-                  isSelected ? "text-text-primary" : "text-text-secondary"
+                  isSelected ? "text-text-primary" : "text-text-secondary",
                 )}
               >
                 {opt.label}
@@ -210,9 +196,7 @@ function ScaleQuestion({
 }) {
   const min = question.scaleMin ?? 1;
   const max = question.scaleMax ?? 5;
-  const values = Array.from({ length: max - min + 1 }, (_, i) =>
-    String(min + i)
-  );
+  const values = Array.from({ length: max - min + 1 }, (_, i) => String(min + i));
 
   return (
     <div>
@@ -230,11 +214,7 @@ function ScaleQuestion({
               type="button"
               role="radio"
               aria-checked={isSelected}
-              aria-label={
-                question.scaleLabels?.[v]
-                  ? `${v} — ${question.scaleLabels[v]}`
-                  : `${v}`
-              }
+              aria-label={question.scaleLabels?.[v] ? `${v} — ${question.scaleLabels[v]}` : `${v}`}
               data-option="true"
               onClick={() => onSelect(v)}
               onKeyDown={(e) => {
@@ -249,7 +229,7 @@ function ScaleQuestion({
                 "focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-dark focus-visible:ring-offset-2",
                 isSelected
                   ? "border-secondary bg-secondary text-primary shadow-lg shadow-secondary/20 scale-110 motion-reduce:scale-100"
-                  : "border-gray-200 bg-white text-text-secondary"
+                  : "border-gray-200 bg-white text-text-secondary",
               )}
             >
               {v}
@@ -262,10 +242,7 @@ function ScaleQuestion({
       {question.scaleLabels && (
         <div className="flex justify-between px-2">
           {Object.entries(question.scaleLabels).map(([key, label]) => (
-            <span
-              key={key}
-              className="text-xs sm:text-sm text-text-muted font-medium"
-            >
+            <span key={key} className="text-xs sm:text-sm text-text-muted font-medium">
               {label}
             </span>
           ))}

@@ -65,12 +65,8 @@ export async function proxy(request: NextRequest) {
   // run the recovery playbook. `/api/auth/*` is NextAuth (JWT strategy, so
   // no DB writes on sign-in) and `/admin/login` carries the sign-in server
   // action. The admin password-rotation action enforces READ_ONLY itself.
-  const isAuthEndpoint =
-    pathname.startsWith("/api/auth/") || pathname === "/admin/login";
-  if (
-    !isAuthEndpoint &&
-    (pathname.startsWith("/api") || pathname.startsWith("/admin"))
-  ) {
+  const isAuthEndpoint = pathname.startsWith("/api/auth/") || pathname === "/admin/login";
+  if (!isAuthEndpoint && (pathname.startsWith("/api") || pathname.startsWith("/admin"))) {
     const readOnly = applyReadOnly(request);
     if (readOnly) return readOnly;
   }
@@ -85,9 +81,7 @@ export async function proxy(request: NextRequest) {
 
   // Already logged in — skip the login page
   if (pathname === "/admin/login" && session?.user) {
-    const target = session.user.mustChangePassword
-      ? CHANGE_PASSWORD_PATH
-      : "/admin";
+    const target = session.user.mustChangePassword ? CHANGE_PASSWORD_PATH : "/admin";
     return NextResponse.redirect(new URL(target, request.url));
   }
 

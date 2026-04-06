@@ -37,8 +37,7 @@ const websiteJsonLd = {
     "@type": "SearchAction",
     target: {
       "@type": "EntryPoint",
-      urlTemplate:
-        "https://sowa.skillnetireland.ie/search?q={search_term_string}",
+      urlTemplate: "https://sowa.skillnetireland.ie/search?q={search_term_string}",
     },
     "query-input": "required name=search_term_string",
   },
@@ -75,7 +74,9 @@ export default async function FrontendLayout({
         }}
       />
       <Header locale={locale} dict={dict} />
-      <main id="main-content" className="flex-1">{children}</main>
+      <main id="main-content" className="flex-1">
+        {children}
+      </main>
       <Footer locale={locale} dict={dict} />
     </>
   );

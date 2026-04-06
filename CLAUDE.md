@@ -203,109 +203,114 @@ sowa-platform/
 // When building components, import types from '@/lib/types'
 
 interface Career {
-  slug: string
-  title: string
-  sector: 'Operations & Maintenance' | 'Marine Operations' | 'Survey & Design' |
-          'Health, Safety & Environment' | 'Electrical' | 'Policy & Regulation' |
-          'Project Management'
-  entryLevel: 'Apprentice' | 'Entry' | 'Mid' | 'Senior' | 'Leadership'
-  description: string
-  salaryRange?: { min: number; max: number }
-  keyResponsibilities?: string[]
-  qualifications: string[]
-  workingConditions?: string
-  growthOutlook?: string
-  skills: string[]           // skill slugs
-  pathwayConnections: PathwayConnection[]
-  relatedCourses: string[]   // course slugs
+  slug: string;
+  title: string;
+  sector:
+    | "Operations & Maintenance"
+    | "Marine Operations"
+    | "Survey & Design"
+    | "Health, Safety & Environment"
+    | "Electrical"
+    | "Policy & Regulation"
+    | "Project Management";
+  entryLevel: "Apprentice" | "Entry" | "Mid" | "Senior" | "Leadership";
+  description: string;
+  salaryRange?: { min: number; max: number };
+  keyResponsibilities?: string[];
+  qualifications: string[];
+  workingConditions?: string;
+  growthOutlook?: string;
+  skills: string[]; // skill slugs
+  pathwayConnections: PathwayConnection[];
+  relatedCourses: string[]; // course slugs
 }
 
 interface PathwayConnection {
-  to: string                 // career slug
-  type: 'progression' | 'lateral' | 'specialisation'
-  timeframe: string
+  to: string; // career slug
+  type: "progression" | "lateral" | "specialisation";
+  timeframe: string;
 }
 
 interface Course {
-  slug: string
-  title: string
-  provider: string
-  providerType: 'University' | 'ETB' | 'Private' | 'Industry' | 'Skillnet_Network' | 'Government'
-  description: string
-  entryRequirements?: string
-  deliveryFormat: 'In-Person' | 'Online' | 'Blended' | 'Self-Paced'
-  location?: string
-  nfqLevel?: number | null
-  duration: string
-  cost: number               // 0 = free
-  costNotes?: string
-  nextStartDate?: string     // ISO date
-  accredited?: boolean
-  certificationAwarded?: string
-  skills: string[]           // skill slugs
-  careerRelevance: string[]  // career slugs
-  tags: string[]
+  slug: string;
+  title: string;
+  provider: string;
+  providerType: "University" | "ETB" | "Private" | "Industry" | "Skillnet_Network" | "Government";
+  description: string;
+  entryRequirements?: string;
+  deliveryFormat: "In-Person" | "Online" | "Blended" | "Self-Paced";
+  location?: string;
+  nfqLevel?: number | null;
+  duration: string;
+  cost: number; // 0 = free
+  costNotes?: string;
+  nextStartDate?: string; // ISO date
+  accredited?: boolean;
+  certificationAwarded?: string;
+  skills: string[]; // skill slugs
+  careerRelevance: string[]; // career slugs
+  tags: string[];
 }
 
 interface Event {
-  slug: string
-  title: string
-  type: 'Workshop' | 'Webinar' | 'Conference' | 'Networking' | 'Training' | 'Roadshow'
-  startDate: string          // ISO datetime
-  endDate?: string
-  locationType: 'Physical' | 'Virtual' | 'Hybrid'
-  location?: string
-  description: string
-  capacity?: number
+  slug: string;
+  title: string;
+  type: "Workshop" | "Webinar" | "Conference" | "Networking" | "Training" | "Roadshow";
+  startDate: string; // ISO datetime
+  endDate?: string;
+  locationType: "Physical" | "Virtual" | "Hybrid";
+  location?: string;
+  description: string;
+  capacity?: number;
 }
 
 interface Research {
-  slug: string
-  title: string
-  author: string
-  organisation: string
-  publicationDate: string    // ISO date
-  summary: string
-  categories: string[]
-  isFeatured?: boolean
+  slug: string;
+  title: string;
+  author: string;
+  organisation: string;
+  publicationDate: string; // ISO date
+  summary: string;
+  categories: string[];
+  isFeatured?: boolean;
 }
 
 interface Skill {
-  slug: string
-  name: string
-  category: 'Technical' | 'Safety' | 'Regulatory' | 'Digital' | 'Management'
+  slug: string;
+  name: string;
+  category: "Technical" | "Safety" | "Regulatory" | "Digital" | "Management";
 }
 
 interface DiagnosticQuestion {
-  id: string
-  text: string
-  type: 'single_choice' | 'multiple_choice' | 'scale'
-  options?: DiagnosticOption[]
-  scaleMin?: number
-  scaleMax?: number
-  scaleLabels?: Record<string, string>
-  scoreImpact?: Record<string, number>
+  id: string;
+  text: string;
+  type: "single_choice" | "multiple_choice" | "scale";
+  options?: DiagnosticOption[];
+  scaleMin?: number;
+  scaleMax?: number;
+  scaleLabels?: Record<string, string>;
+  scoreImpact?: Record<string, number>;
 }
 
 interface DiagnosticOption {
-  label: string
-  value: string
-  scoreImpact?: Record<string, number>
+  label: string;
+  value: string;
+  scoreImpact?: Record<string, number>;
 }
 
 interface DiagnosticResult {
-  scores: Record<string, number>       // skill slug → score
-  maxPossible: Record<string, number>  // skill slug → max possible score
-  gaps: DiagnosticGap[]
-  recommendedCareers: Career[]
-  recommendedCourses: Course[]
+  scores: Record<string, number>; // skill slug → score
+  maxPossible: Record<string, number>; // skill slug → max possible score
+  gaps: DiagnosticGap[];
+  recommendedCareers: Career[];
+  recommendedCourses: Course[];
 }
 
 interface DiagnosticGap {
-  skill: Skill
-  score: number
-  maxScore: number
-  severity: 'high' | 'medium' | 'low'
+  skill: Skill;
+  score: number;
+  maxScore: number;
+  severity: "high" | "medium" | "low";
 }
 ```
 
@@ -314,6 +319,7 @@ interface DiagnosticGap {
 ## PAGE LAYOUTS
 
 ### Homepage (top to bottom)
+
 1. **Hero:** Full-width, dark overlay on gradient/image. H1: "Your Career in Offshore Wind Starts Here". Subtitle. Two CTAs: "Explore Careers" (primary), "Take Skills Assessment" (outline).
 2. **Audience cards:** 4-column grid. "Explore Careers", "Find Training", "Enterprise Support", "Get Involved". Icon, title, 1-line desc, arrow.
 3. **Featured careers:** H2 + horizontal scroll of 4 CareerCards.
@@ -327,33 +333,41 @@ interface DiagnosticGap {
 11. **Footer.**
 
 ### Career Listing (/careers)
+
 - Full-width React Flow pathway map at top
 - Sector filter buttons below map
 - Grid of CareerCards below filters
 
 ### Career Detail (/careers/[slug])
+
 - Breadcrumb → Hero (title, sector, level, salary) → Description → Key Responsibilities → Skills badges → Qualifications → Working Conditions → Growth Outlook → Related Courses (CourseCards) → Mini pathway ("Where This Leads" / "How to Get Here")
 
 ### Course Directory (/training)
+
 - Sidebar filters (desktop) / filter drawer (mobile): Topic, Format, NFQ Level, Provider, Cost, Starting Soon
 - Course card grid, sort dropdown, active filter chips, result count
 - URL updates with filter state
 
 ### Course Detail (/training/[slug])
+
 - Breadcrumb → Title + badges → Key info grid (Duration, Cost, Date, Location, Cert) → Description → Entry Requirements → Skills gained → Related Careers → CTA
 
 ### Diagnostic (/diagnostic + /diagnostic/assessment)
+
 - Landing: explanation + audience buttons
 - Assessment: one question at a time, progress bar, styled answer cards
 - Results: radar chart, top 3 gaps, recommended careers, recommended courses, action buttons
 
 ### Events (/events)
+
 - List view, event cards with type/location badges, upcoming/past toggle
 
 ### Research (/research)
+
 - Featured hero item + filterable grid
 
 ### Search (/search?q=)
+
 - Results grouped by content type with badges
 
 ---
@@ -414,6 +428,7 @@ record is `prisma/schema.prisma`. Legacy JSON fixtures may remain in `src/lib/da
 are no longer the source of truth — update the seed script and run a migration instead.
 
 The seeded dataset includes:
+
 - 12 careers across 7 sectors with pathway connections
 - 15 courses from various Irish providers (including 2 free Skillnet-funded)
 - 6 events (conferences, webinars, workshops, roadshows)

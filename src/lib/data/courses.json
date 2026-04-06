@@ -15,7 +15,11 @@
     "accredited": true,
     "certificationAwarded": "GWO BST Certificate (valid 2 years)",
     "skills": ["safety-protocols", "working-at-height", "marine-operations"],
-    "careerRelevance": ["offshore-wind-turbine-technician", "blade-technician", "marine-coordinator"],
+    "careerRelevance": [
+      "offshore-wind-turbine-technician",
+      "blade-technician",
+      "marine-coordinator"
+    ],
     "tags": ["safety", "certification", "entry-level", "offshore"]
   },
   {
@@ -158,7 +162,11 @@
     "costNotes": "Fully funded by Skillnet Ireland",
     "nextStartDate": "2026-05-05",
     "skills": [],
-    "careerRelevance": ["offshore-wind-turbine-technician", "onshore-wind-technician", "offshore-wind-data-analyst"],
+    "careerRelevance": [
+      "offshore-wind-turbine-technician",
+      "onshore-wind-technician",
+      "offshore-wind-data-analyst"
+    ],
     "tags": ["introductory", "free", "skillnet-funded", "online"]
   },
   {
@@ -172,7 +180,12 @@
     "duration": "6 weeks",
     "cost": 1900,
     "nextStartDate": "2026-08-18",
-    "skills": ["safety-management", "risk-assessment", "regulatory-compliance", "incident-investigation"],
+    "skills": [
+      "safety-management",
+      "risk-assessment",
+      "regulatory-compliance",
+      "incident-investigation"
+    ],
     "careerRelevance": ["hse-advisor-offshore-wind"],
     "tags": ["safety", "management", "mid-level"]
   },
@@ -235,7 +248,11 @@
     "accredited": true,
     "certificationAwarded": "BOSIET Certificate (valid 4 years)",
     "skills": ["safety-protocols", "marine-operations"],
-    "careerRelevance": ["offshore-wind-turbine-technician", "marine-coordinator", "offshore-installation-manager"],
+    "careerRelevance": [
+      "offshore-wind-turbine-technician",
+      "marine-coordinator",
+      "offshore-installation-manager"
+    ],
     "tags": ["safety", "mandatory", "offshore", "certification"]
   }
 ]

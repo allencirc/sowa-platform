@@ -10,21 +10,14 @@ interface CardProps {
   onClick?: () => void;
 }
 
-export function Card({
-  children,
-  className,
-  hover = true,
-  image,
-  badges,
-  onClick,
-}: CardProps) {
+export function Card({ children, className, hover = true, image, badges, onClick }: CardProps) {
   return (
     <div
       className={cn(
         "bg-surface-card rounded-xl border border-gray-100 overflow-hidden",
         hover && "transition-shadow duration-200 hover:shadow-lg hover:shadow-primary/5",
         onClick && "cursor-pointer",
-        className
+        className,
       )}
       onClick={onClick}
       role={onClick ? "button" : undefined}
@@ -41,9 +34,7 @@ export function Card({
       }
     >
       {image && <div className="relative">{image}</div>}
-      {badges && (
-        <div className="flex flex-wrap gap-2 px-5 pt-4">{badges}</div>
-      )}
+      {badges && <div className="flex flex-wrap gap-2 px-5 pt-4">{badges}</div>}
       <div className="p-5">{children}</div>
     </div>
   );

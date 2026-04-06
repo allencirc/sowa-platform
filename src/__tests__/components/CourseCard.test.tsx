@@ -60,9 +60,7 @@ describe("CourseCard", () => {
   });
 
   it("does not render location when not provided", () => {
-    render(
-      <CourseCard course={{ ...mockCourse, location: undefined }} />
-    );
+    render(<CourseCard course={{ ...mockCourse, location: undefined }} />);
     expect(screen.queryByText("Cork, Ireland")).not.toBeInTheDocument();
   });
 
@@ -78,9 +76,7 @@ describe("CourseCard", () => {
   });
 
   it("renders NFQ level badge when provided", () => {
-    render(
-      <CourseCard course={{ ...mockCourse, nfqLevel: 7 }} />
-    );
+    render(<CourseCard course={{ ...mockCourse, nfqLevel: 7 }} />);
     expect(screen.getByText("NFQ Level 7")).toBeInTheDocument();
   });
 });

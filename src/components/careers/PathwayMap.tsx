@@ -74,7 +74,7 @@ function CareerNode({ data }: NodeProps<Node<CareerNodeData>>) {
     if (!hovered) return;
     // Walk up to the .react-flow__node wrapper that React Flow creates
     const nodeEl = document.querySelector(
-      `.react-flow__node[data-id="${career.slug}"]`
+      `.react-flow__node[data-id="${career.slug}"]`,
     ) as HTMLElement | null;
     if (nodeEl) {
       nodeEl.style.zIndex = "1000";
@@ -90,10 +90,26 @@ function CareerNode({ data }: NodeProps<Node<CareerNodeData>>) {
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
-      <Handle type="target" position={Position.Top} className="!bg-transparent !border-0 !w-3 !h-3" />
-      <Handle type="source" position={Position.Bottom} className="!bg-transparent !border-0 !w-3 !h-3" />
-      <Handle type="target" position={Position.Left} className="!bg-transparent !border-0 !w-3 !h-3" />
-      <Handle type="source" position={Position.Right} className="!bg-transparent !border-0 !w-3 !h-3" />
+      <Handle
+        type="target"
+        position={Position.Top}
+        className="!bg-transparent !border-0 !w-3 !h-3"
+      />
+      <Handle
+        type="source"
+        position={Position.Bottom}
+        className="!bg-transparent !border-0 !w-3 !h-3"
+      />
+      <Handle
+        type="target"
+        position={Position.Left}
+        className="!bg-transparent !border-0 !w-3 !h-3"
+      />
+      <Handle
+        type="source"
+        position={Position.Right}
+        className="!bg-transparent !border-0 !w-3 !h-3"
+      />
 
       <div
         className="rounded-lg px-4 py-3 shadow-md cursor-pointer transition-transform hover:scale-105 min-w-[200px] max-w-[240px]"
@@ -110,12 +126,8 @@ function CareerNode({ data }: NodeProps<Node<CareerNodeData>>) {
       {/* Tooltip */}
       {hovered && (
         <div className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 w-72 bg-white rounded-xl shadow-xl border border-gray-200 p-4 pointer-events-none">
-          <h4 className="text-sm font-bold text-text-primary mb-1">
-            {career.title}
-          </h4>
-          <p className="text-xs text-text-secondary mb-2 line-clamp-3">
-            {career.description}
-          </p>
+          <h4 className="text-sm font-bold text-text-primary mb-1">{career.title}</h4>
+          <p className="text-xs text-text-secondary mb-2 line-clamp-3">{career.description}</p>
           {career.salaryRange && (
             <p className="text-xs font-semibold text-secondary-dark">
               {formatCurrency(career.salaryRange.min)} – {formatCurrency(career.salaryRange.max)}
@@ -154,12 +166,12 @@ function PathwayMapInner({ careers }: { careers: Career[] }) {
 
   const filteredCareers = useMemo(
     () => careers.filter((c) => activeSectors.has(c.sector)),
-    [careers, activeSectors]
+    [careers, activeSectors],
   );
 
   const filteredSlugs = useMemo(
     () => new Set(filteredCareers.map((c) => c.slug)),
-    [filteredCareers]
+    [filteredCareers],
   );
 
   const nodes: Node<CareerNodeData>[] = useMemo(
@@ -173,7 +185,7 @@ function PathwayMapInner({ careers }: { careers: Career[] }) {
           colours: sectorColours[career.sector] ?? sectorColours["Operations & Maintenance"],
         },
       })),
-    [filteredCareers]
+    [filteredCareers],
   );
 
   const edges: Edge[] = useMemo(() => {
@@ -206,7 +218,7 @@ function PathwayMapInner({ careers }: { careers: Career[] }) {
     (_: React.MouseEvent, node: Node) => {
       router.push(`/careers/${node.id}`);
     },
-    [router]
+    [router],
   );
 
   return (
@@ -219,7 +231,7 @@ function PathwayMapInner({ careers }: { careers: Career[] }) {
             "px-3 py-1.5 rounded-full text-xs font-medium transition-colors border cursor-pointer",
             activeSectors.size === allSectors.length
               ? "bg-primary text-white border-primary"
-              : "bg-white text-text-secondary border-gray-200 hover:border-primary"
+              : "bg-white text-text-secondary border-gray-200 hover:border-primary",
           )}
         >
           All Sectors
@@ -232,11 +244,14 @@ function PathwayMapInner({ careers }: { careers: Career[] }) {
               "px-3 py-1.5 rounded-full text-xs font-medium transition-colors border cursor-pointer",
               activeSectors.has(sector)
                 ? "text-white border-transparent"
-                : "bg-white text-text-secondary border-gray-200 hover:border-gray-400"
+                : "bg-white text-text-secondary border-gray-200 hover:border-gray-400",
             )}
             style={
               activeSectors.has(sector)
-                ? { backgroundColor: sectorColours[sector].bg, borderColor: sectorColours[sector].border }
+                ? {
+                    backgroundColor: sectorColours[sector].bg,
+                    borderColor: sectorColours[sector].border,
+                  }
                 : undefined
             }
           >
@@ -327,7 +342,8 @@ function MobileFallback({ careers }: { careers: Career[] }) {
                     </div>
                     {career.salaryRange && (
                       <p className="text-xs text-text-muted">
-                        {formatCurrency(career.salaryRange.min)} – {formatCurrency(career.salaryRange.max)}
+                        {formatCurrency(career.salaryRange.min)} –{" "}
+                        {formatCurrency(career.salaryRange.max)}
                       </p>
                     )}
                     {career.pathwayConnections.length > 0 && (

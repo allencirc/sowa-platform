@@ -13,10 +13,7 @@ interface CheckboxProps {
 
 export function Checkbox({ id, label, checked = false, onChange, className }: CheckboxProps) {
   return (
-    <label
-      htmlFor={id}
-      className={cn("flex items-center gap-3 cursor-pointer group", className)}
-    >
+    <label htmlFor={id} className={cn("flex items-center gap-3 cursor-pointer group", className)}>
       <div className="relative">
         <input
           type="checkbox"
@@ -29,12 +26,10 @@ export function Checkbox({ id, label, checked = false, onChange, className }: Ch
           className={cn(
             "h-5 w-5 rounded border-2 border-gray-300 transition-colors duration-150",
             "peer-checked:bg-secondary peer-checked:border-secondary",
-            "peer-focus-visible:ring-2 peer-focus-visible:ring-accent/20 peer-focus-visible:ring-offset-2"
+            "peer-focus-visible:ring-2 peer-focus-visible:ring-accent/20 peer-focus-visible:ring-offset-2",
           )}
         >
-          {checked && (
-            <Check className="h-full w-full text-white p-0.5" strokeWidth={3} />
-          )}
+          {checked && <Check className="h-full w-full text-white p-0.5" strokeWidth={3} />}
         </div>
       </div>
       <span className="text-sm text-text-primary group-hover:text-text-secondary transition-colors">

@@ -18,7 +18,7 @@ const skillCategoryToEnum: Record<string, string> = {
   Management: "MANAGEMENT",
 };
 const skillCategoryDisplay: Record<string, string> = Object.fromEntries(
-  Object.entries(skillCategoryToEnum).map(([k, v]) => [v, k])
+  Object.entries(skillCategoryToEnum).map(([k, v]) => [v, k]),
 );
 
 type AnyRecord = Record<string, unknown>;
@@ -53,9 +53,7 @@ export async function GET(request: NextRequest) {
     }
 
     const orderBy: Record<string, string> =
-      sortBy && SORTABLE_FIELDS.includes(sortBy)
-        ? { [sortBy]: order }
-        : { name: "asc" };
+      sortBy && SORTABLE_FIELDS.includes(sortBy) ? { [sortBy]: order } : { name: "asc" };
 
     const [rows, total] = await Promise.all([
       prisma.skill.findMany({

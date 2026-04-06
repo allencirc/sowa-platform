@@ -7,7 +7,7 @@ import type { UserRole } from "@/generated/prisma/client";
 
 export function withRole<P extends object>(
   WrappedComponent: ComponentType<P>,
-  allowedRoles: UserRole[]
+  allowedRoles: UserRole[],
 ) {
   function RoleGuard(props: P) {
     const { user, isLoading, isAuthenticated } = useCurrentUser();

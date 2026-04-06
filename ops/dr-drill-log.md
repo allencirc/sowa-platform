@@ -5,13 +5,13 @@ Referenced by `docs/disaster-recovery.md` §5.
 
 Drills required:
 
-| Drill | Cadence | Automated? |
-|-------|---------|------------|
-| PITR of a single record | Quarterly | Manual |
-| Full dump restore into scratch Neon project | Every 6 months | Manual |
-| Application rollback on Vercel | Quarterly | Manual |
-| Regional failover tabletop | Annually | Manual |
-| Backup-restore verification | Weekly | Automated — `.github/workflows/restore-drill.yml` |
+| Drill                                       | Cadence        | Automated?                                        |
+| ------------------------------------------- | -------------- | ------------------------------------------------- |
+| PITR of a single record                     | Quarterly      | Manual                                            |
+| Full dump restore into scratch Neon project | Every 6 months | Manual                                            |
+| Application rollback on Vercel              | Quarterly      | Manual                                            |
+| Regional failover tabletop                  | Annually       | Manual                                            |
+| Backup-restore verification                 | Weekly         | Automated — `.github/workflows/restore-drill.yml` |
 
 Automated weekly drill runs are recorded in GitHub Actions run history; only exceptions, manual drills, and follow-up actions are captured below.
 
@@ -19,9 +19,9 @@ Automated weekly drill runs are recorded in GitHub Actions run history; only exc
 
 ## Log
 
-| Date | Drill type | Operator | Outcome | Duration | Remediation / Notes |
-|------|------------|----------|---------|----------|---------------------|
-| _(pending — first production drill scheduled for the week after environment cutover)_ | | | | | |
+| Date                                                                                  | Drill type | Operator | Outcome | Duration | Remediation / Notes |
+| ------------------------------------------------------------------------------------- | ---------- | -------- | ------- | -------- | ------------------- |
+| _(pending — first production drill scheduled for the week after environment cutover)_ |            |          |         |          |                     |
 
 ---
 

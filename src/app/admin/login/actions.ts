@@ -7,10 +7,7 @@ export interface LoginState {
   error?: string;
 }
 
-export async function loginAction(
-  _prevState: LoginState,
-  formData: FormData
-): Promise<LoginState> {
+export async function loginAction(_prevState: LoginState, formData: FormData): Promise<LoginState> {
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
   const callbackUrl = (formData.get("callbackUrl") as string) || "/admin";

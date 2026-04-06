@@ -10,14 +10,14 @@ requirement in Appendix 1, paragraphs 313–323 of the tender.
 
 The tender explicitly names these sources as candidates for integration:
 
-| Source             | Kind   | Status   |
-| ------------------ | ------ | -------- |
-| Eventbrite         | EVENT  | stub     |
-| careersportal.ie   | COURSE | reserved |
-| Fetchcourses.ie    | COURSE | reserved |
-| Qualifax.ie        | COURSE | reserved |
-| Bespoke platforms  | either | reserved |
-| `MANUAL`           | either | live     |
+| Source            | Kind   | Status   |
+| ----------------- | ------ | -------- |
+| Eventbrite        | EVENT  | stub     |
+| careersportal.ie  | COURSE | reserved |
+| Fetchcourses.ie   | COURSE | reserved |
+| Qualifax.ie       | COURSE | reserved |
+| Bespoke platforms | either | reserved |
+| `MANUAL`          | either | live     |
 
 "Stub" means the adapter exists and implements the interface but returns
 an empty array. "Reserved" means the `SourceId` is allocated but no adapter

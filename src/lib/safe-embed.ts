@@ -37,9 +37,7 @@ function normaliseHostname(hostname: string): string {
 
 function isHostAllowed(hostname: string): boolean {
   const host = normaliseHostname(hostname);
-  return ALLOWED_EMBED_HOSTS.some(
-    (allowed) => host === allowed || host.endsWith("." + allowed),
-  );
+  return ALLOWED_EMBED_HOSTS.some((allowed) => host === allowed || host.endsWith("." + allowed));
 }
 
 function safeUrl(input: string): URL | null {
@@ -110,9 +108,7 @@ function parseTwitter(u: URL): ParsedEmbed | null {
     provider: "twitter",
     url: u.toString(),
     id,
-    embedUrl: `https://platform.twitter.com/embed/Tweet.html?id=${encodeURIComponent(
-      id,
-    )}`,
+    embedUrl: `https://platform.twitter.com/embed/Tweet.html?id=${encodeURIComponent(id)}`,
   };
 }
 
@@ -129,9 +125,7 @@ function parseLinkedIn(u: URL): ParsedEmbed | null {
     provider: "linkedin",
     url: u.toString(),
     id,
-    embedUrl: `https://www.linkedin.com/embed/feed/update/${encodeURIComponent(
-      id,
-    )}`,
+    embedUrl: `https://www.linkedin.com/embed/feed/update/${encodeURIComponent(id)}`,
   };
 }
 
@@ -144,13 +138,7 @@ export function parseEmbedUrl(input: string): ParsedEmbed | null {
   if (!u) return null;
   if (!isHostAllowed(u.hostname)) return null;
 
-  return (
-    parseYouTube(u) ||
-    parseVimeo(u) ||
-    parseTwitter(u) ||
-    parseLinkedIn(u) ||
-    null
-  );
+  return parseYouTube(u) || parseVimeo(u) || parseTwitter(u) || parseLinkedIn(u) || null;
 }
 
 /**

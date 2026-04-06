@@ -17,12 +17,7 @@
  * enum in prisma/schema.prisma so adapter output can be upserted by
  * (source, externalId).
  */
-export type SourceId =
-  | "EVENTBRITE"
-  | "CAREERSPORTAL"
-  | "FETCHCOURSES"
-  | "QUALIFAX"
-  | "MANUAL";
+export type SourceId = "EVENTBRITE" | "CAREERSPORTAL" | "FETCHCOURSES" | "QUALIFAX" | "MANUAL";
 
 /**
  * The content kinds an adapter may produce. Courses and events are the

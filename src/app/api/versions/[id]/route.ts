@@ -3,10 +3,7 @@ import { applyRateLimit, errorResponse } from "@/lib/api-utils";
 import { requireAuth } from "@/lib/auth-utils";
 import { getContentVersion } from "@/lib/versions";
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const rateLimited = applyRateLimit(request);
   if (rateLimited) return rateLimited;
 

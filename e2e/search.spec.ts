@@ -3,9 +3,7 @@ import { test, expect } from "./fixtures";
 // WCAG 2.2 AA axe sweeps live in a11y.spec.ts.
 
 test.describe("Search journey", () => {
-  test("Search → enter query → view results across all types", async ({
-    page,
-  }) => {
+  test("Search → enter query → view results across all types", async ({ page }) => {
     await page.goto("/");
 
     // Find and click search icon/button in header. Exact match on the
@@ -20,9 +18,7 @@ test.describe("Search journey", () => {
     }
 
     // Type search query
-    const searchInput = page.getByRole("searchbox").or(
-      page.getByPlaceholder(/search/i)
-    );
+    const searchInput = page.getByRole("searchbox").or(page.getByPlaceholder(/search/i));
 
     if (await searchInput.isVisible()) {
       await searchInput.fill("wind");
@@ -37,5 +33,4 @@ test.describe("Search journey", () => {
       expect(body?.toLowerCase()).toContain("wind");
     }
   });
-
 });

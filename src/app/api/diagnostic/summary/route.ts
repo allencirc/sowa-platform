@@ -102,7 +102,10 @@ export async function POST(request: NextRequest) {
 
   // Validate required fields
   if (!body.gaps || !body.recommendedCareers || !body.recommendedCourses) {
-    return errorResponse("Missing required fields: gaps, recommendedCareers, recommendedCourses", 400);
+    return errorResponse(
+      "Missing required fields: gaps, recommendedCareers, recommendedCourses",
+      400,
+    );
   }
 
   const userPrompt = buildPrompt(body);

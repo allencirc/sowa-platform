@@ -1,11 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { calculateResults } from "@/lib/diagnostic";
-import type {
-  Career,
-  Course,
-  DiagnosticQuestion,
-  Skill,
-} from "@/lib/types";
+import type { Career, Course, DiagnosticQuestion, Skill } from "@/lib/types";
 
 // ── Minimal test fixtures ────────────────────────────────
 
@@ -193,10 +188,7 @@ describe("calculateResults", () => {
   });
 
   it("calculates multiple_choice scores correctly", () => {
-    const result = calculateResults(
-      { q3: ["scada", "gis"], q8: "digital" },
-      testData
-    );
+    const result = calculateResults({ q3: ["scada", "gis"], q8: "digital" }, testData);
 
     // scada: 2 + gis: 2 = 4
     expect(result.scores["data-analysis"]).toBe(4);
@@ -205,10 +197,7 @@ describe("calculateResults", () => {
   });
 
   it("handles selecting only one option in multiple_choice", () => {
-    const result = calculateResults(
-      { q3: ["scada"], q8: "digital" },
-      testData
-    );
+    const result = calculateResults({ q3: ["scada"], q8: "digital" }, testData);
 
     expect(result.scores["data-analysis"]).toBe(2);
     expect(result.maxPossible["data-analysis"]).toBe(4);
@@ -218,15 +207,11 @@ describe("calculateResults", () => {
     // Low score → high severity
     const result = calculateResults(
       { q1: "1", q2: "none", q3: ["none"], q8: "technical" },
-      testData
+      testData,
     );
 
-    const mechanicalGap = result.gaps.find(
-      (g) => g.skill.slug === "mechanical-systems"
-    );
-    const safetyGap = result.gaps.find(
-      (g) => g.skill.slug === "safety-management"
-    );
+    const mechanicalGap = result.gaps.find((g) => g.skill.slug === "mechanical-systems");
+    const safetyGap = result.gaps.find((g) => g.skill.slug === "safety-management");
 
     // mechanical: 1/5 = 0.2 < 0.33 → high
     expect(mechanicalGap?.severity).toBe("high");
@@ -238,9 +223,7 @@ describe("calculateResults", () => {
     // q1: 2/5 = 0.4 → medium
     const result = calculateResults({ q1: "2", q8: "technical" }, testData);
 
-    const gap = result.gaps.find(
-      (g) => g.skill.slug === "mechanical-systems"
-    );
+    const gap = result.gaps.find((g) => g.skill.slug === "mechanical-systems");
     expect(gap?.severity).toBe("medium");
   });
 
@@ -248,21 +231,18 @@ describe("calculateResults", () => {
     // q1: 4/5 = 0.8 → low
     const result = calculateResults({ q1: "4", q8: "technical" }, testData);
 
-    const gap = result.gaps.find(
-      (g) => g.skill.slug === "mechanical-systems"
-    );
+    const gap = result.gaps.find((g) => g.skill.slug === "mechanical-systems");
     expect(gap?.severity).toBe("low");
   });
 
   it("sorts gaps by percentage ascending (worst gaps first)", () => {
     const result = calculateResults(
       { q1: "4", q2: "none", q3: ["scada"], q8: "technical" },
-      testData
+      testData,
     );
 
     for (let i = 1; i < result.gaps.length; i++) {
-      const prevPct =
-        result.gaps[i - 1].score / result.gaps[i - 1].maxScore;
+      const prevPct = result.gaps[i - 1].score / result.gaps[i - 1].maxScore;
       const currPct = result.gaps[i].score / result.gaps[i].maxScore;
       expect(prevPct).toBeLessThanOrEqual(currPct);
     }
@@ -270,41 +250,36 @@ describe("calculateResults", () => {
 
   it("recommends careers based on q8 interest area", () => {
     const techResult = calculateResults({ q8: "technical" }, testData);
-    expect(techResult.recommendedCareers.some(
-      (c) => c.slug === "offshore-wind-turbine-technician"
-    )).toBe(true);
+    expect(
+      techResult.recommendedCareers.some((c) => c.slug === "offshore-wind-turbine-technician"),
+    ).toBe(true);
 
     const digitalResult = calculateResults({ q8: "digital" }, testData);
-    expect(digitalResult.recommendedCareers.some(
-      (c) => c.slug === "offshore-wind-data-analyst"
-    )).toBe(true);
+    expect(
+      digitalResult.recommendedCareers.some((c) => c.slug === "offshore-wind-data-analyst"),
+    ).toBe(true);
 
     const mgmtResult = calculateResults({ q8: "management" }, testData);
-    expect(mgmtResult.recommendedCareers.some(
-      (c) => c.slug === "owe-commercial-manager"
-    )).toBe(true);
+    expect(mgmtResult.recommendedCareers.some((c) => c.slug === "owe-commercial-manager")).toBe(
+      true,
+    );
   });
 
   it("falls back to 'unsure' when q8 is missing", () => {
     const result = calculateResults({}, testData);
 
     // "unsure" maps to technician, onshore-tech, data-analyst
-    expect(result.recommendedCareers.some(
-      (c) => c.slug === "offshore-wind-turbine-technician"
-    )).toBe(true);
+    expect(
+      result.recommendedCareers.some((c) => c.slug === "offshore-wind-turbine-technician"),
+    ).toBe(true);
   });
 
   it("recommends courses that address gaps", () => {
     // Create big gap in safety → should recommend GWO course
-    const result = calculateResults(
-      { q1: "5", q2: "none", q8: "technical" },
-      testData
-    );
+    const result = calculateResults({ q1: "5", q2: "none", q8: "technical" }, testData);
 
     // GWO course targets safety-management and is free (bonus relevance)
-    const gwoCourse = result.recommendedCourses.find(
-      (c) => c.slug === "gwo-basic-safety"
-    );
+    const gwoCourse = result.recommendedCourses.find((c) => c.slug === "gwo-basic-safety");
     expect(gwoCourse).toBeDefined();
   });
 
@@ -312,13 +287,11 @@ describe("calculateResults", () => {
     // Free course (GWO) should rank higher than paid when both address gaps
     const result = calculateResults(
       { q1: "1", q2: "none", q3: ["none"], q8: "technical" },
-      testData
+      testData,
     );
 
     if (result.recommendedCourses.length >= 2) {
-      const gwoIndex = result.recommendedCourses.findIndex(
-        (c) => c.slug === "gwo-basic-safety"
-      );
+      const gwoIndex = result.recommendedCourses.findIndex((c) => c.slug === "gwo-basic-safety");
       // GWO should appear in recommendations since it's free + addresses gap
       expect(gwoIndex).toBeGreaterThanOrEqual(0);
     }
@@ -332,7 +305,7 @@ describe("calculateResults", () => {
   it("limits recommended courses to max 5", () => {
     const result = calculateResults(
       { q1: "1", q2: "none", q3: ["none"], q8: "technical" },
-      testData
+      testData,
     );
     expect(result.recommendedCourses.length).toBeLessThanOrEqual(5);
   });
@@ -345,7 +318,7 @@ describe("calculateResults", () => {
         q3: ["scada", "gis"],
         q8: "technical",
       },
-      testData
+      testData,
     );
 
     expect(result.scores["mechanical-systems"]).toBe(3);

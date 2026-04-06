@@ -18,9 +18,7 @@ export async function LatestResearch() {
       <Container>
         <div className="flex items-end justify-between mb-8">
           <div>
-            <h2 className="text-3xl font-bold text-text-primary">
-              Latest Research
-            </h2>
+            <h2 className="text-3xl font-bold text-text-primary">Latest Research</h2>
             <p className="mt-2 text-text-secondary">
               Policy, workforce data, and industry insights.
             </p>

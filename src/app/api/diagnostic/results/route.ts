@@ -17,25 +17,42 @@ const sectorDisplay: Record<string, string> = {
   PROJECT_MANAGEMENT: "Project Management",
 };
 const entryLevelDisplay: Record<string, string> = {
-  APPRENTICE: "Apprentice", ENTRY: "Entry", MID: "Mid",
-  SENIOR: "Senior", LEADERSHIP: "Leadership",
+  APPRENTICE: "Apprentice",
+  ENTRY: "Entry",
+  MID: "Mid",
+  SENIOR: "Senior",
+  LEADERSHIP: "Leadership",
 };
 const providerTypeDisplay: Record<string, string> = {
-  UNIVERSITY: "University", ETB: "ETB", PRIVATE: "Private",
-  INDUSTRY: "Industry", SKILLNET_NETWORK: "Skillnet_Network", GOVERNMENT: "Government",
+  UNIVERSITY: "University",
+  ETB: "ETB",
+  PRIVATE: "Private",
+  INDUSTRY: "Industry",
+  SKILLNET_NETWORK: "Skillnet_Network",
+  GOVERNMENT: "Government",
 };
 const deliveryFormatDisplay: Record<string, string> = {
-  IN_PERSON: "In-Person", ONLINE: "Online", BLENDED: "Blended", SELF_PACED: "Self-Paced",
+  IN_PERSON: "In-Person",
+  ONLINE: "Online",
+  BLENDED: "Blended",
+  SELF_PACED: "Self-Paced",
 };
 const skillCategoryDisplay: Record<string, string> = {
-  TECHNICAL: "Technical", SAFETY: "Safety", REGULATORY: "Regulatory",
-  DIGITAL: "Digital", MANAGEMENT: "Management",
+  TECHNICAL: "Technical",
+  SAFETY: "Safety",
+  REGULATORY: "Regulatory",
+  DIGITAL: "Digital",
+  MANAGEMENT: "Management",
 };
 const pathwayTypeDisplay: Record<string, string> = {
-  PROGRESSION: "progression", LATERAL: "lateral", SPECIALISATION: "specialisation",
+  PROGRESSION: "progression",
+  LATERAL: "lateral",
+  SPECIALISATION: "specialisation",
 };
 const diagnosticTypeDisplay: Record<string, string> = {
-  SINGLE_CHOICE: "single_choice", MULTIPLE_CHOICE: "multiple_choice", SCALE: "scale",
+  SINGLE_CHOICE: "single_choice",
+  MULTIPLE_CHOICE: "multiple_choice",
+  SCALE: "scale",
 };
 
 type AnyRecord = Record<string, unknown>;
@@ -56,22 +73,28 @@ function mapCareer(row: AnyRecord): Career {
     slug: row.slug as string,
     title: row.title as string,
     sector: (sectorDisplay[row.sector as string] ?? row.sector) as Career["sector"],
-    entryLevel: (entryLevelDisplay[row.entryLevel as string] ?? row.entryLevel) as Career["entryLevel"],
+    entryLevel: (entryLevelDisplay[row.entryLevel as string] ??
+      row.entryLevel) as Career["entryLevel"],
     description: row.description as string,
-    salaryRange: row.salaryMin != null && row.salaryMax != null
-      ? { min: row.salaryMin as number, max: row.salaryMax as number } : undefined,
+    salaryRange:
+      row.salaryMin != null && row.salaryMax != null
+        ? { min: row.salaryMin as number, max: row.salaryMax as number }
+        : undefined,
     keyResponsibilities: (row.keyResponsibilities as string[]) ?? [],
     qualifications: (row.qualifications as string[]) ?? [],
     workingConditions: (row.workingConditions as string) ?? undefined,
     growthOutlook: (row.growthOutlook as string) ?? undefined,
     skills: ((row.skills as { skill: { slug: string } }[]) ?? []).map((s) => s.skill.slug),
-    pathwayConnections: ((row.pathwayFrom as { to: { slug: string }; type: string; timeframe: string }[]) ?? [])
-      .map((p) => ({
-        to: p.to.slug,
-        type: (pathwayTypeDisplay[p.type] ?? p.type) as "progression" | "lateral" | "specialisation",
-        timeframe: p.timeframe,
-      })),
-    relatedCourses: ((row.relatedCourses as { course: { slug: string } }[]) ?? []).map((c) => c.course.slug),
+    pathwayConnections: (
+      (row.pathwayFrom as { to: { slug: string }; type: string; timeframe: string }[]) ?? []
+    ).map((p) => ({
+      to: p.to.slug,
+      type: (pathwayTypeDisplay[p.type] ?? p.type) as "progression" | "lateral" | "specialisation",
+      timeframe: p.timeframe,
+    })),
+    relatedCourses: ((row.relatedCourses as { course: { slug: string } }[]) ?? []).map(
+      (c) => c.course.slug,
+    ),
   };
 }
 
@@ -80,20 +103,26 @@ function mapCourse(row: AnyRecord): Course {
     slug: row.slug as string,
     title: row.title as string,
     provider: row.provider as string,
-    providerType: (providerTypeDisplay[row.providerType as string] ?? row.providerType) as Course["providerType"],
+    providerType: (providerTypeDisplay[row.providerType as string] ??
+      row.providerType) as Course["providerType"],
     description: row.description as string,
     entryRequirements: (row.entryRequirements as string) ?? undefined,
-    deliveryFormat: (deliveryFormatDisplay[row.deliveryFormat as string] ?? row.deliveryFormat) as Course["deliveryFormat"],
+    deliveryFormat: (deliveryFormatDisplay[row.deliveryFormat as string] ??
+      row.deliveryFormat) as Course["deliveryFormat"],
     location: (row.location as string) ?? undefined,
     nfqLevel: (row.nfqLevel as number | null) ?? undefined,
     duration: row.duration as string,
     cost: row.cost as number,
     costNotes: (row.costNotes as string) ?? undefined,
-    nextStartDate: row.nextStartDate ? (row.nextStartDate as Date).toISOString().split("T")[0] : undefined,
+    nextStartDate: row.nextStartDate
+      ? (row.nextStartDate as Date).toISOString().split("T")[0]
+      : undefined,
     accredited: (row.accredited as boolean) ?? undefined,
     certificationAwarded: (row.certificationAwarded as string) ?? undefined,
     skills: ((row.skills as { skill: { slug: string } }[]) ?? []).map((s) => s.skill.slug),
-    careerRelevance: ((row.careerRelevance as { career: { slug: string } }[]) ?? []).map((c) => c.career.slug),
+    careerRelevance: ((row.careerRelevance as { career: { slug: string } }[]) ?? []).map(
+      (c) => c.career.slug,
+    ),
     tags: (row.tags as string[]) ?? [],
   };
 }

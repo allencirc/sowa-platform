@@ -46,14 +46,14 @@ export default function EditCareerPage() {
   const handleStatusChange = (newStatus: ContentStatus) => {
     // Update local state immediately — avoids a fragile re-fetch
     setCareer((prev) =>
-      prev ? { ...prev, status: newStatus, rejectionNote: null, publishAt: null } : prev
+      prev ? { ...prev, status: newStatus, rejectionNote: null, publishAt: null } : prev,
     );
   };
 
   const handleRestore = (snapshot: Record<string, unknown>) => {
     // Navigate to edit with restored data applied
     // For now, reload and the user can manually save
-    setCareer((prev) => prev ? { ...prev, ...snapshot } as CareerWithWorkflow : prev);
+    setCareer((prev) => (prev ? ({ ...prev, ...snapshot } as CareerWithWorkflow) : prev));
     router.refresh();
   };
 
@@ -61,18 +61,14 @@ export default function EditCareerPage() {
 
   if (loading) {
     return (
-      <div className="flex h-64 items-center justify-center text-text-muted">
-        Loading career...
-      </div>
+      <div className="flex h-64 items-center justify-center text-text-muted">Loading career...</div>
     );
   }
 
   if (error || !career) {
     return (
       <div className="flex h-64 flex-col items-center justify-center gap-2">
-        <p className="text-lg font-medium text-text-primary">
-          {error ?? "Career not found"}
-        </p>
+        <p className="text-lg font-medium text-text-primary">{error ?? "Career not found"}</p>
         <a href="/admin/careers" className="text-sm text-accent-dark hover:underline">
           Back to careers
         </a>
@@ -84,9 +80,7 @@ export default function EditCareerPage() {
     <div>
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-text-primary">Edit: {career.title}</h1>
-        <p className="mt-1 text-sm text-text-secondary">
-          Update this career profile.
-        </p>
+        <p className="mt-1 text-sm text-text-secondary">Update this career profile.</p>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[1fr_320px]">

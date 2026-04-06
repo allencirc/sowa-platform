@@ -114,9 +114,7 @@ interface AdminSidebarProps {
 export function AdminSidebar({ user, mobileOpen, onMobileClose }: AdminSidebarProps) {
   const pathname = usePathname();
 
-  const filteredItems = navItems.filter((item) =>
-    item.roles.includes(user.role)
-  );
+  const filteredItems = navItems.filter((item) => item.roles.includes(user.role));
 
   // Lock body scroll while the mobile drawer is open, and close on Escape.
   useEffect(() => {
@@ -139,7 +137,7 @@ export function AdminSidebar({ user, mobileOpen, onMobileClose }: AdminSidebarPr
       <div
         className={cn(
           "fixed inset-0 z-40 bg-black/40 transition-opacity duration-300 lg:hidden",
-          mobileOpen ? "opacity-100" : "pointer-events-none opacity-0"
+          mobileOpen ? "opacity-100" : "pointer-events-none opacity-0",
         )}
         onClick={onMobileClose}
         aria-hidden="true"
@@ -150,7 +148,11 @@ export function AdminSidebar({ user, mobileOpen, onMobileClose }: AdminSidebarPr
         role="dialog"
         aria-modal={mobileOpen ? "true" : undefined}
         aria-label="Admin navigation"
-        aria-hidden={!mobileOpen && typeof window !== "undefined" && window.innerWidth < 1024 ? true : undefined}
+        aria-hidden={
+          !mobileOpen && typeof window !== "undefined" && window.innerWidth < 1024
+            ? true
+            : undefined
+        }
         className={cn(
           // Base: full-height column, deep ocean background
           "flex h-screen w-64 shrink-0 flex-col bg-primary text-text-inverse",
@@ -158,7 +160,7 @@ export function AdminSidebar({ user, mobileOpen, onMobileClose }: AdminSidebarPr
           "lg:static lg:translate-x-0",
           // Mobile: fixed drawer that slides in from the left
           "fixed inset-y-0 left-0 z-50 shadow-2xl transition-transform duration-300 ease-out",
-          mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
+          mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0",
         )}
       >
         {/* Logo + mobile close */}
@@ -188,9 +190,7 @@ export function AdminSidebar({ user, mobileOpen, onMobileClose }: AdminSidebarPr
           <ul className="flex flex-col gap-1">
             {filteredItems.map((item) => {
               const isActive =
-                item.href === "/admin"
-                  ? pathname === "/admin"
-                  : pathname.startsWith(item.href);
+                item.href === "/admin" ? pathname === "/admin" : pathname.startsWith(item.href);
               const Icon = item.icon;
 
               return (
@@ -202,7 +202,7 @@ export function AdminSidebar({ user, mobileOpen, onMobileClose }: AdminSidebarPr
                       "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
                       isActive
                         ? "bg-primary-light text-white"
-                        : "text-white/70 hover:bg-primary-light hover:text-white"
+                        : "text-white/70 hover:bg-primary-light hover:text-white",
                     )}
                   >
                     <Icon className="h-5 w-5 shrink-0" />

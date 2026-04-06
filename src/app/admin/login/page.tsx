@@ -18,9 +18,7 @@ export default function AdminLoginPage() {
               <Wind className="h-7 w-7 text-text-inverse" />
             </div>
             <h1 className="text-2xl font-bold text-primary">SOWA Admin</h1>
-            <p className="mt-1 text-sm text-text-secondary">
-              Skillnet Offshore Wind Academy
-            </p>
+            <p className="mt-1 text-sm text-text-secondary">Skillnet Offshore Wind Academy</p>
           </div>
 
           <Suspense>

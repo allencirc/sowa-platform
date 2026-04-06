@@ -89,7 +89,8 @@ export function EventForm({ event, mode }: EventFormProps) {
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
       {error && (
         <div className="flex items-center gap-2 rounded-lg bg-status-error/10 px-4 py-3 text-sm text-status-error">
-          <AlertCircle className="h-4 w-4 shrink-0" />{error}
+          <AlertCircle className="h-4 w-4 shrink-0" />
+          {error}
         </div>
       )}
 
@@ -100,13 +101,22 @@ export function EventForm({ event, mode }: EventFormProps) {
             <Input {...register("title")} placeholder="e.g. OWE Skills Summit 2025" />
           </FormField>
           <FormField label="Slug" required error={errors.slug?.message}>
-            <Input {...register("slug")} readOnly={mode === "edit"} className={mode === "edit" ? "bg-gray-50" : ""} />
+            <Input
+              {...register("slug")}
+              readOnly={mode === "edit"}
+              className={mode === "edit" ? "bg-gray-50" : ""}
+            />
           </FormField>
           <FormField label="Event Type" required error={errors.type?.message}>
             <Select options={eventTypeOptions} {...register("type")} />
           </FormField>
           <FormField label="Capacity">
-            <Input type="number" min={1} {...register("capacity", { valueAsNumber: true })} placeholder="e.g. 200" />
+            <Input
+              type="number"
+              min={1}
+              {...register("capacity", { valueAsNumber: true })}
+              placeholder="e.g. 200"
+            />
           </FormField>
         </div>
       </div>
@@ -143,7 +153,9 @@ export function EventForm({ event, mode }: EventFormProps) {
 
       <div className="flex items-center justify-between">
         <Link href="/admin/events">
-          <Button type="button" variant="ghost"><ArrowLeft className="h-4 w-4" /> Back to Events</Button>
+          <Button type="button" variant="ghost">
+            <ArrowLeft className="h-4 w-4" /> Back to Events
+          </Button>
         </Link>
         <Button type="submit" disabled={isSubmitting}>
           <Save className="h-4 w-4" />

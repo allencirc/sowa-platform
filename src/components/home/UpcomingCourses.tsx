@@ -15,9 +15,7 @@ export async function UpcomingCourses() {
       <Container>
         <div className="flex items-end justify-between mb-8">
           <div>
-            <h2 className="text-3xl font-bold text-text-primary">
-              Start Your Training
-            </h2>
+            <h2 className="text-3xl font-bold text-text-primary">Start Your Training</h2>
             <p className="mt-2 text-text-secondary">
               Upcoming courses from accredited Irish providers.
             </p>

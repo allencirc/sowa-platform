@@ -75,9 +75,7 @@ export function LanguageSwitcher({
         aria-expanded={open}
       >
         <Globe className="h-5 w-5" />
-        <span className="text-xs font-semibold uppercase hidden sm:inline">
-          {currentLocale}
-        </span>
+        <span className="text-xs font-semibold uppercase hidden sm:inline">{currentLocale}</span>
       </button>
 
       {open && (

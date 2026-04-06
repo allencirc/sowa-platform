@@ -8,21 +8,23 @@ This guide is for platform Admins responsible for managing user accounts and ass
 
 The SOWA platform has three user roles, each with distinct permissions. Choose the right role based on the person's responsibilities and the level of access they need.
 
-| Role | Purpose | Can Create Content | Can Publish | Can Manage Users | Can Export Data | Can Delete |
-|------|---------|-------------------|-------------|------------------|-----------------|-----------|
-| **Admin** | Full platform access. Manage content, users, and data. | ✓ | ✓ | ✓ | ✓ | ✓ |
-| **Editor** | Create and edit content. Submit for review. | ✓ | Submit only | ✗ | ✗ | ✗ |
-| **Viewer** | Read-only access. View content and registrations but cannot edit. | ✗ | ✗ | ✗ | ✗ | ✗ |
+| Role       | Purpose                                                           | Can Create Content | Can Publish | Can Manage Users | Can Export Data | Can Delete |
+| ---------- | ----------------------------------------------------------------- | ------------------ | ----------- | ---------------- | --------------- | ---------- |
+| **Admin**  | Full platform access. Manage content, users, and data.            | ✓                  | ✓           | ✓                | ✓               | ✓          |
+| **Editor** | Create and edit content. Submit for review.                       | ✓                  | Submit only | ✗                | ✗               | ✗          |
+| **Viewer** | Read-only access. View content and registrations but cannot edit. | ✗                  | ✗           | ✗                | ✗               | ✗          |
 
 ### Admin Role
 
 **Use Admin when:**
+
 - The person is responsible for final approval and publishing of content
 - The person needs to manage other users (create, edit, delete accounts)
 - The person needs to export registration data or generate reports
 - The person oversees the overall platform strategy and quality control
 
 **Responsibilities:**
+
 - Review content submitted by Editors for quality and accuracy
 - Publish or reject content
 - Manage user accounts
@@ -31,6 +33,7 @@ The SOWA platform has three user roles, each with distinct permissions. Choose t
 - Archive or delete content when necessary
 
 **Permissions:**
+
 - Create, edit, publish, and delete content without review
 - Schedule content for future publication
 - Access user management (create, edit, delete users)
@@ -43,17 +46,20 @@ The SOWA platform has three user roles, each with distinct permissions. Choose t
 ### Editor Role
 
 **Use Editor when:**
+
 - The person creates and maintains content but does not have final approval authority
 - The person should not have access to user management or sensitive data
 - The person is a domain expert (e.g. career advisor, course researcher) contributing specific content
 
 **Responsibilities:**
+
 - Research and write career, course, event, news, and research content
 - Maintain content accuracy and relevance
 - Format content according to platform standards
 - Submit content for Admin review
 
 **Permissions:**
+
 - Create and edit content (all types)
 - Save content as Draft
 - Submit content for review
@@ -62,6 +68,7 @@ The SOWA platform has three user roles, each with distinct permissions. Choose t
 - View registrations (read-only) for their own content
 
 **Limitations:**
+
 - Cannot publish content directly (must submit for review)
 - Cannot view or manage users
 - Cannot export registration data
@@ -73,21 +80,25 @@ The SOWA platform has three user roles, each with distinct permissions. Choose t
 ### Viewer Role
 
 **Use Viewer when:**
+
 - The person needs visibility into content and registrations but should not make any changes
 - The person is a stakeholder who wants to monitor the platform without edit access
 - The person is external (e.g. partner organisation) who should only see data, not modify it
 
 **Responsibilities:**
+
 - Monitor published content
 - Review registrations for events and courses they care about
 - Provide feedback to Admins or Editors on content accuracy
 
 **Permissions:**
+
 - View all published content
 - View registrations (read-only)
 - View version history (read-only)
 
 **Limitations:**
+
 - Cannot create or edit any content
 - Cannot publish content
 - Cannot manage users
@@ -103,6 +114,7 @@ The SOWA platform has three user roles, each with distinct permissions. Choose t
 Only Admins can create user accounts.
 
 **Steps:**
+
 1. Go to **Users** in the sidebar
 2. Click **Create User** (top right)
 3. Fill in the form:
@@ -113,6 +125,7 @@ Only Admins can create user accounts.
 4. Click **Create**
 
 **After Creating:**
+
 - Send the new user their email address and temporary password via a secure channel (e.g. encrypted email, in-person, phone)
 - Advise them to change their password immediately after first login
 - Share this documentation with them (provide links to the admin guide and relevant role guides)
@@ -132,6 +145,7 @@ Only Admins can create user accounts.
 Only Admins can edit user accounts.
 
 **To edit a user:**
+
 1. Go to **Users** in the sidebar
 2. Find the user in the list (use the search bar if needed)
 3. Click **Edit**
@@ -143,6 +157,7 @@ Only Admins can edit user accounts.
 5. Click **Save**
 
 **Considerations:**
+
 - Changing a user's email address does not log them out of the current session; they will use the new email for future logins
 - Changing a user's role takes effect immediately; they will see different navigation and permissions on next page load
 - If you change a user's password without their knowledge, inform them of the new temporary password and advise them to change it immediately
@@ -155,6 +170,7 @@ Only Admins can edit user accounts.
 Only Admins can delete user accounts.
 
 **To delete a user:**
+
 1. Go to **Users** in the sidebar
 2. Find the user
 3. Click **Delete**
@@ -163,11 +179,13 @@ Only Admins can delete user accounts.
 
 **Important Limitation:**
 You cannot delete a user if they have created content versions (version snapshots). This is a safety measure to preserve the integrity of version history. If you see this error:
+
 - Archive or delete the content they created first (which removes their version entries)
 - Or reassign the content to another user (if the system supports it; otherwise, you must delete or archive the content)
 - Then attempt to delete the user again
 
 **When to Delete:**
+
 - The person has left the organisation
 - A temporary or test account is no longer needed
 - An account was created by mistake
@@ -183,6 +201,7 @@ Follow this checklist when bringing a new Skillnet staff member onto the platfor
 ### 1. Determine the Role (Admin, Editor, or Viewer)
 
 Ask yourself:
+
 - Does this person need to publish content, manage users, and export data? → **Admin**
 - Does this person create or edit content? → **Editor**
 - Does this person only need to view content and registrations? → **Viewer**
@@ -196,38 +215,45 @@ Ask yourself:
 ### 3. Provide Documentation
 
 **For all roles:**
+
 - Admin User Guide (overview of the platform)
 - This user-role-management guide (for context on permissions)
 
 **For Editors:**
+
 - Content-Type Guides (detailed field explanations for each content type)
 - Publishing Workflow guide (how to submit for review)
 - Media Library guide (how to upload and use images)
 
 **For Admins:**
+
 - All documentation listed above
 - Publishing Workflow guide (how to publish, reject, and schedule)
 - Registrations & CSV Export guide (how to manage registrations)
 - Diagnostic Tool guide (if they will oversee the self-assessment tool)
 
 **For Viewers:**
+
 - Admin User Guide (overview only)
 - A brief orientation on how to view content and registrations
 
 ### 4. Walk Through Key Workflows
 
 **For Editors:**
+
 - Show them how to create a new piece of content (e.g. Career, Course, or Event)
 - Demonstrate how to submit for review
 - Show them how to use the media library
 
 **For Admins:**
+
 - Show them the dashboard and navigation
 - Demonstrate publishing a piece of content
 - Show them how to manage users
 - Demonstrate exporting registration data
 
 **For Viewers:**
+
 - Show them where to find content
 - Show them how to filter and search registrations
 
@@ -240,6 +266,7 @@ Ask yourself:
 ### 6. First Content Task
 
 For Editors and Admins, assign a small first task to familiarise them with the workflow:
+
 - "Create a new Career listing for [specific role]"
 - "Create an Event for [upcoming event]"
 - "Publish the News article about [announcement]"
@@ -257,6 +284,7 @@ The SOWA platform uses secure password storage. Users can manage their own passw
 Users can change their password themselves (this feature may be available in Account Settings; check with your Admin if unsure).
 
 **Best Practices:**
+
 - Change your password regularly (every 3–6 months)
 - Use a strong password: at least 8 characters, including letters, numbers, and special characters
 - Do not share your password with colleagues
@@ -275,6 +303,7 @@ If a user forgets their password or if you need to reset it (e.g. for security r
 6. Instruct them to change the password immediately after logging in
 
 **Password Reset Best Practices:**
+
 - Never email passwords in plain text
 - Use a secure channel (phone, encrypted message, or in-person)
 - Inform the user that the password is temporary and must be changed
@@ -283,6 +312,7 @@ If a user forgets their password or if you need to reset it (e.g. for security r
 ### Password Policy
 
 The platform enforces the following password requirements:
+
 - Minimum 8 characters
 - At least one letter and one number (recommended)
 - Special characters allowed (recommended)
@@ -293,38 +323,38 @@ Encourage all users to use passwords that are strong and not used elsewhere.
 
 ## Troubleshooting User Issues
 
-| Issue | Solution |
-|-------|----------|
-| User cannot log in | Check that the email address is correct. Ask if they are using the right password. If they forgot the password, reset it (see above). Verify their account has not been disabled. |
-| User role changed but permissions haven't updated | Have them log out and log back in. Browser cache may require a refresh. If persists, contact the system administrator. |
-| "Cannot delete user" error | The user has created content versions. Archive or delete the content first, then retry. |
-| New user did not receive onboarding email | Onboarding may be manual. Share the admin guide and relevant documentation via your usual channels. |
-| User accidentally created a duplicate account | Create the duplicate account as an Admin and delete it, or contact the system administrator if you cannot delete it. |
-| User's email needs to change | Edit the user and update the email field. Inform them of the new email address to use for login. |
+| Issue                                             | Solution                                                                                                                                                                          |
+| ------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| User cannot log in                                | Check that the email address is correct. Ask if they are using the right password. If they forgot the password, reset it (see above). Verify their account has not been disabled. |
+| User role changed but permissions haven't updated | Have them log out and log back in. Browser cache may require a refresh. If persists, contact the system administrator.                                                            |
+| "Cannot delete user" error                        | The user has created content versions. Archive or delete the content first, then retry.                                                                                           |
+| New user did not receive onboarding email         | Onboarding may be manual. Share the admin guide and relevant documentation via your usual channels.                                                                               |
+| User accidentally created a duplicate account     | Create the duplicate account as an Admin and delete it, or contact the system administrator if you cannot delete it.                                                              |
+| User's email needs to change                      | Edit the user and update the email field. Inform them of the new email address to use for login.                                                                                  |
 
 ---
 
 ## Permissions Summary Table
 
-| Task | Admin | Editor | Viewer |
-|------|-------|--------|--------|
-| Create content | ✓ | ✓ | ✗ |
-| Edit own content | ✓ | ✓ | ✗ |
-| Edit others' content | ✓ | ✗ | ✗ |
-| Publish directly | ✓ | ✗ | ✗ |
-| Submit for review | ✓ | ✓ | ✗ |
-| Reject content | ✓ | ✗ | ✗ |
-| View registrations | ✓ | ✓ | ✓ |
-| Export registrations | ✓ | ✗ | ✗ |
-| Confirm/cancel registrations | ✓ | ✗ | ✗ |
-| View version history | ✓ | ✓ | ✓ |
-| Restore versions | ✓ | ✗ | ✗ |
-| Create users | ✓ | ✗ | ✗ |
-| Edit users | ✓ | ✗ | ✗ |
-| Delete users | ✓ | ✗ | ✗ |
-| Upload media | ✓ | ✓ | ✗ |
-| Delete media | ✓ | ✓ | ✗ |
-| Access analytics | ✓ | ✗ | ✗ |
+| Task                         | Admin | Editor | Viewer |
+| ---------------------------- | ----- | ------ | ------ |
+| Create content               | ✓     | ✓      | ✗      |
+| Edit own content             | ✓     | ✓      | ✗      |
+| Edit others' content         | ✓     | ✗      | ✗      |
+| Publish directly             | ✓     | ✗      | ✗      |
+| Submit for review            | ✓     | ✓      | ✗      |
+| Reject content               | ✓     | ✗      | ✗      |
+| View registrations           | ✓     | ✓      | ✓      |
+| Export registrations         | ✓     | ✗      | ✗      |
+| Confirm/cancel registrations | ✓     | ✗      | ✗      |
+| View version history         | ✓     | ✓      | ✓      |
+| Restore versions             | ✓     | ✗      | ✗      |
+| Create users                 | ✓     | ✗      | ✗      |
+| Edit users                   | ✓     | ✗      | ✗      |
+| Delete users                 | ✓     | ✗      | ✗      |
+| Upload media                 | ✓     | ✓      | ✗      |
+| Delete media                 | ✓     | ✓      | ✗      |
+| Access analytics             | ✓     | ✗      | ✗      |
 
 ---
 

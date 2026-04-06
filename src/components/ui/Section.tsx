@@ -23,7 +23,7 @@ export function Section({
       className={cn(
         "py-16 sm:py-20",
         dark ? "bg-surface-dark text-text-inverse" : "bg-surface",
-        className
+        className,
       )}
     >
       <Container className={containerClassName}>{children}</Container>

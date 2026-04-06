@@ -9,13 +9,7 @@ import { MobileMenu } from "./MobileMenu";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import type { Dictionary, Locale } from "@/lib/i18n";
 
-export function Header({
-  locale,
-  dict,
-}: {
-  locale: Locale;
-  dict: Dictionary;
-}) {
+export function Header({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const navLinks = [
@@ -36,9 +30,7 @@ export function Header({
             <Link href={`/${locale}`} className="flex items-center gap-2 shrink-0">
               <Wind className="h-8 w-8 text-secondary-dark" />
               <div className="flex flex-col leading-tight">
-                <span className="text-lg font-bold text-primary tracking-tight">
-                  SOWA
-                </span>
+                <span className="text-lg font-bold text-primary tracking-tight">SOWA</span>
                 <span className="text-[10px] text-text-secondary leading-none hidden sm:block">
                   {dict.nav.siteTagline}
                 </span>
@@ -46,10 +38,7 @@ export function Header({
             </Link>
 
             {/* Desktop nav */}
-            <nav
-              className="hidden lg:flex items-center gap-1"
-              aria-label={dict.nav.mainNavigation}
-            >
+            <nav className="hidden lg:flex items-center gap-1" aria-label={dict.nav.mainNavigation}>
               {navLinks.map((link) => (
                 <Link
                   key={link.href}
@@ -71,10 +60,7 @@ export function Header({
                 <Search className="h-5 w-5" />
               </Link>
 
-              <LanguageSwitcher
-                currentLocale={locale}
-                label={dict.nav.languageSwitcher}
-              />
+              <LanguageSwitcher currentLocale={locale} label={dict.nav.languageSwitcher} />
 
               <Link href={`/${locale}/diagnostic`} className="hidden sm:inline-flex">
                 <Button size="sm">{dict.nav.getInvolved}</Button>
@@ -97,11 +83,7 @@ export function Header({
 
       {/* Mobile menu — rendered outside <header> because the header's backdrop-blur
           creates a containing block that would trap fixed-position descendants. */}
-      <MobileMenu
-        open={mobileOpen}
-        onClose={() => setMobileOpen(false)}
-        links={navLinks}
-      />
+      <MobileMenu open={mobileOpen} onClose={() => setMobileOpen(false)} links={navLinks} />
     </>
   );
 }

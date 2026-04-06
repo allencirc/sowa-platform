@@ -13,16 +13,30 @@
       "Complete detailed maintenance reports and update digital logs",
       "Participate in emergency response procedures"
     ],
-    "qualifications": ["GWO Basic Safety Training", "Electrical/Mechanical trade qualification", "EirGrid Grid Code compliance"],
+    "qualifications": [
+      "GWO Basic Safety Training",
+      "Electrical/Mechanical trade qualification",
+      "EirGrid Grid Code compliance"
+    ],
     "workingConditions": "Primarily offshore. Rotational shifts (typically 2 weeks on, 2 weeks off). Must be comfortable working at height and in marine environments.",
     "growthOutlook": "High demand — Ireland's offshore wind pipeline requires an estimated 4,000+ technicians by 2030.",
-    "skills": ["electrical-systems", "mechanical-maintenance", "safety-protocols", "working-at-height", "marine-operations"],
+    "skills": [
+      "electrical-systems",
+      "mechanical-maintenance",
+      "safety-protocols",
+      "working-at-height",
+      "marine-operations"
+    ],
     "pathwayConnections": [
       { "to": "senior-wind-turbine-technician", "type": "progression", "timeframe": "3-5 years" },
       { "to": "offshore-installation-manager", "type": "progression", "timeframe": "5-8 years" },
       { "to": "onshore-wind-technician", "type": "lateral", "timeframe": "Immediate" }
     ],
-    "relatedCourses": ["gwo-basic-safety", "offshore-turbine-maintenance-cert", "electrical-systems-owe"]
+    "relatedCourses": [
+      "gwo-basic-safety",
+      "offshore-turbine-maintenance-cert",
+      "electrical-systems-owe"
+    ]
   },
   {
     "slug": "offshore-installation-manager",
@@ -31,9 +45,19 @@
     "entryLevel": "Senior",
     "description": "Overall responsibility for safety, operations, and personnel management on an offshore wind installation. The OIM is the senior authority on-site and coordinates all maintenance, emergency, and logistics operations.",
     "salaryRange": { "min": 75000, "max": 110000 },
-    "qualifications": ["BOSIET/FOET certification", "OIM certification", "10+ years offshore experience"],
+    "qualifications": [
+      "BOSIET/FOET certification",
+      "OIM certification",
+      "10+ years offshore experience"
+    ],
     "growthOutlook": "Critical role — limited supply of qualified OIMs creates strong demand.",
-    "skills": ["leadership", "safety-management", "marine-operations", "emergency-response", "project-management"],
+    "skills": [
+      "leadership",
+      "safety-management",
+      "marine-operations",
+      "emergency-response",
+      "project-management"
+    ],
     "pathwayConnections": [
       { "to": "offshore-wind-project-director", "type": "progression", "timeframe": "5-10 years" }
     ],
@@ -46,7 +70,11 @@
     "entryLevel": "Mid",
     "description": "Plans and coordinates all marine vessel operations for offshore wind farm construction and maintenance campaigns. Manages vessel schedules, weather windows, and logistics.",
     "salaryRange": { "min": 50000, "max": 75000 },
-    "qualifications": ["Marine qualification or naval background", "Vessel management experience", "Offshore wind sector knowledge"],
+    "qualifications": [
+      "Marine qualification or naval background",
+      "Vessel management experience",
+      "Offshore wind sector knowledge"
+    ],
     "skills": ["marine-operations", "logistics", "project-management", "weather-analysis"],
     "pathwayConnections": [
       { "to": "offshore-installation-manager", "type": "progression", "timeframe": "5-7 years" },
@@ -61,13 +89,30 @@
     "entryLevel": "Mid",
     "description": "Manages technical aspects of offshore wind farm development from feasibility through to commissioning. Coordinates between design teams, contractors, and regulatory bodies.",
     "salaryRange": { "min": 55000, "max": 80000 },
-    "qualifications": ["BEng/MEng in Engineering", "Chartered Engineer status (desirable)", "2+ years in renewables"],
-    "skills": ["engineering-design", "project-management", "regulatory-compliance", "technical-documentation"],
+    "qualifications": [
+      "BEng/MEng in Engineering",
+      "Chartered Engineer status (desirable)",
+      "2+ years in renewables"
+    ],
+    "skills": [
+      "engineering-design",
+      "project-management",
+      "regulatory-compliance",
+      "technical-documentation"
+    ],
     "pathwayConnections": [
       { "to": "offshore-wind-project-director", "type": "progression", "timeframe": "5-8 years" },
-      { "to": "consenting-and-environmental-specialist", "type": "lateral", "timeframe": "2-3 years" }
+      {
+        "to": "consenting-and-environmental-specialist",
+        "type": "lateral",
+        "timeframe": "2-3 years"
+      }
     ],
-    "relatedCourses": ["project-management-renewables", "electrical-systems-owe", "wind-energy-micro-credential"]
+    "relatedCourses": [
+      "project-management-renewables",
+      "electrical-systems-owe",
+      "wind-energy-micro-credential"
+    ]
   },
   {
     "slug": "hse-advisor-offshore-wind",
@@ -76,8 +121,17 @@
     "entryLevel": "Mid",
     "description": "Ensures compliance with health, safety, and environmental regulations across offshore wind operations. Conducts risk assessments, audits, and incident investigations.",
     "salaryRange": { "min": 50000, "max": 70000 },
-    "qualifications": ["NEBOSH National Diploma or equivalent", "IOSH membership", "Offshore safety experience"],
-    "skills": ["safety-management", "risk-assessment", "regulatory-compliance", "incident-investigation"],
+    "qualifications": [
+      "NEBOSH National Diploma or equivalent",
+      "IOSH membership",
+      "Offshore safety experience"
+    ],
+    "skills": [
+      "safety-management",
+      "risk-assessment",
+      "regulatory-compliance",
+      "incident-investigation"
+    ],
     "pathwayConnections": [
       { "to": "hse-manager-renewables", "type": "progression", "timeframe": "3-5 years" }
     ],
@@ -90,7 +144,11 @@
     "entryLevel": "Mid",
     "description": "Designs, commissions, and maintains electrical systems for offshore wind substations and export cables. Works on high-voltage systems connecting turbines to the national grid.",
     "salaryRange": { "min": 55000, "max": 85000 },
-    "qualifications": ["BEng Electrical Engineering", "HV authorisation", "Power systems experience"],
+    "qualifications": [
+      "BEng Electrical Engineering",
+      "HV authorisation",
+      "Power systems experience"
+    ],
     "skills": ["electrical-systems", "high-voltage", "engineering-design", "grid-connection"],
     "pathwayConnections": [
       { "to": "owe-project-engineer", "type": "lateral", "timeframe": "1-2 years" },
@@ -105,8 +163,17 @@
     "entryLevel": "Mid",
     "description": "Manages the environmental impact assessment and consenting process for offshore wind developments. Liaises with regulatory bodies, conducts stakeholder consultations, and ensures compliance with maritime and environmental law.",
     "salaryRange": { "min": 48000, "max": 72000 },
-    "qualifications": ["Degree in Environmental Science, Marine Biology, or related", "EIA experience", "Knowledge of Irish maritime planning"],
-    "skills": ["regulatory-compliance", "environmental-assessment", "stakeholder-management", "technical-documentation"],
+    "qualifications": [
+      "Degree in Environmental Science, Marine Biology, or related",
+      "EIA experience",
+      "Knowledge of Irish maritime planning"
+    ],
+    "skills": [
+      "regulatory-compliance",
+      "environmental-assessment",
+      "stakeholder-management",
+      "technical-documentation"
+    ],
     "pathwayConnections": [
       { "to": "head-of-consenting", "type": "progression", "timeframe": "5-7 years" }
     ],
@@ -119,7 +186,11 @@
     "entryLevel": "Entry",
     "description": "Analyses operational data from offshore wind farms to optimise performance, predict maintenance needs, and support asset management decisions. Works with SCADA data, weather data, and turbine performance metrics.",
     "salaryRange": { "min": 38000, "max": 55000 },
-    "qualifications": ["Degree in Data Science, Engineering, or related", "Python/R proficiency", "Power BI or similar"],
+    "qualifications": [
+      "Degree in Data Science, Engineering, or related",
+      "Python/R proficiency",
+      "Power BI or similar"
+    ],
     "skills": ["data-analysis", "scada-systems", "python-programming", "performance-optimisation"],
     "pathwayConnections": [
       { "to": "asset-performance-manager", "type": "progression", "timeframe": "3-5 years" }
@@ -133,7 +204,11 @@
     "entryLevel": "Senior",
     "description": "Oversees the supply chain and logistics for offshore wind farm operations, including crew transfers, spare parts, heavy lift operations, and port management.",
     "salaryRange": { "min": 65000, "max": 90000 },
-    "qualifications": ["Supply chain or logistics qualification", "Offshore industry experience", "Port operations knowledge"],
+    "qualifications": [
+      "Supply chain or logistics qualification",
+      "Offshore industry experience",
+      "Port operations knowledge"
+    ],
     "skills": ["logistics", "supply-chain", "marine-operations", "project-management"],
     "pathwayConnections": [
       { "to": "offshore-installation-manager", "type": "progression", "timeframe": "3-5 years" }
@@ -147,13 +222,21 @@
     "entryLevel": "Entry",
     "description": "Specialises in the inspection, repair, and maintenance of wind turbine blades. Uses rope access techniques to perform repairs at height, including composite material repairs and leading-edge protection.",
     "salaryRange": { "min": 32000, "max": 48000 },
-    "qualifications": ["IRATA rope access certification", "Composite repair training", "GWO Basic Safety Training"],
+    "qualifications": [
+      "IRATA rope access certification",
+      "Composite repair training",
+      "GWO Basic Safety Training"
+    ],
     "skills": ["working-at-height", "composite-repair", "rope-access", "safety-protocols"],
     "pathwayConnections": [
       { "to": "offshore-wind-turbine-technician", "type": "lateral", "timeframe": "1-2 years" },
       { "to": "blade-inspection-lead", "type": "progression", "timeframe": "3-5 years" }
     ],
-    "relatedCourses": ["composite-repair-wind-blades", "irata-rope-access-level1", "gwo-basic-safety"]
+    "relatedCourses": [
+      "composite-repair-wind-blades",
+      "irata-rope-access-level1",
+      "gwo-basic-safety"
+    ]
   },
   {
     "slug": "onshore-wind-technician",
@@ -162,13 +245,20 @@
     "entryLevel": "Entry",
     "description": "Maintains and repairs onshore wind turbines. Many technicians in this role are looking to transition to offshore roles, which typically offer higher compensation and career progression.",
     "salaryRange": { "min": 30000, "max": 45000 },
-    "qualifications": ["Electrical or mechanical trade qualification", "GWO Basic Safety Training (desirable)"],
+    "qualifications": [
+      "Electrical or mechanical trade qualification",
+      "GWO Basic Safety Training (desirable)"
+    ],
     "skills": ["electrical-systems", "mechanical-maintenance", "safety-protocols"],
     "pathwayConnections": [
       { "to": "offshore-wind-turbine-technician", "type": "progression", "timeframe": "1-2 years" },
       { "to": "blade-technician", "type": "lateral", "timeframe": "6-12 months" }
     ],
-    "relatedCourses": ["gwo-basic-safety", "introduction-offshore-wind", "offshore-turbine-maintenance-cert"]
+    "relatedCourses": [
+      "gwo-basic-safety",
+      "introduction-offshore-wind",
+      "offshore-turbine-maintenance-cert"
+    ]
   },
   {
     "slug": "owe-commercial-manager",
@@ -177,8 +267,17 @@
     "entryLevel": "Senior",
     "description": "Manages commercial aspects of offshore wind projects including contract negotiations, procurement strategy, cost control, and stakeholder management across the development lifecycle.",
     "salaryRange": { "min": 70000, "max": 100000 },
-    "qualifications": ["Business or Engineering degree", "PMP or PRINCE2", "Commercial experience in energy or construction"],
-    "skills": ["commercial-management", "contract-negotiation", "project-management", "stakeholder-management"],
+    "qualifications": [
+      "Business or Engineering degree",
+      "PMP or PRINCE2",
+      "Commercial experience in energy or construction"
+    ],
+    "skills": [
+      "commercial-management",
+      "contract-negotiation",
+      "project-management",
+      "stakeholder-management"
+    ],
     "pathwayConnections": [
       { "to": "offshore-wind-project-director", "type": "progression", "timeframe": "3-5 years" }
     ],

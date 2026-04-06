@@ -17,7 +17,7 @@ export const test = base.extend({
         analytics: false,
         marketing: false,
         timestamp: new Date().toISOString(),
-      })
+      }),
     );
     await context.addCookies([
       {

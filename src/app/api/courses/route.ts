@@ -26,10 +26,10 @@ const deliveryFormatToEnum: Record<string, string> = {
   "Self-Paced": "SELF_PACED",
 };
 const providerTypeDisplay: Record<string, string> = Object.fromEntries(
-  Object.entries(providerTypeToEnum).map(([k, v]) => [v, k])
+  Object.entries(providerTypeToEnum).map(([k, v]) => [v, k]),
 );
 const deliveryFormatDisplay: Record<string, string> = Object.fromEntries(
-  Object.entries(deliveryFormatToEnum).map(([k, v]) => [v, k])
+  Object.entries(deliveryFormatToEnum).map(([k, v]) => [v, k]),
 );
 
 const courseInclude = {
@@ -59,12 +59,10 @@ function mapCourse(row: AnyRecord) {
       : undefined,
     accredited: (row.accredited as boolean) ?? undefined,
     certificationAwarded: (row.certificationAwarded as string) ?? undefined,
-    skills: ((row.skills as { skill: { slug: string } }[]) ?? []).map(
-      (s) => s.skill.slug
+    skills: ((row.skills as { skill: { slug: string } }[]) ?? []).map((s) => s.skill.slug),
+    careerRelevance: ((row.careerRelevance as { career: { slug: string } }[]) ?? []).map(
+      (c) => c.career.slug,
     ),
-    careerRelevance: (
-      (row.careerRelevance as { career: { slug: string } }[]) ?? []
-    ).map((c) => c.career.slug),
     tags: (row.tags as string[]) ?? [],
     status: (row.status as string) ?? "DRAFT",
     publishAt: row.publishAt ? (row.publishAt as Date).toISOString() : null,
@@ -82,8 +80,19 @@ export async function GET(request: NextRequest) {
   if (parsed.error) return parsed.error;
 
   const {
-    page, limit, sortBy, order,
-    topic, format, costMax, freeOnly, provider, providerType, startingSoon, nfqLevel, search,
+    page,
+    limit,
+    sortBy,
+    order,
+    topic,
+    format,
+    costMax,
+    freeOnly,
+    provider,
+    providerType,
+    startingSoon,
+    nfqLevel,
+    search,
   } = parsed.data;
 
   try {
@@ -123,9 +132,7 @@ export async function GET(request: NextRequest) {
     }
 
     const orderBy: Record<string, string> =
-      sortBy && SORTABLE_FIELDS.includes(sortBy)
-        ? { [sortBy]: order }
-        : { title: "asc" };
+      sortBy && SORTABLE_FIELDS.includes(sortBy) ? { [sortBy]: order } : { title: "asc" };
 
     const [allRows, total] = await Promise.all([
       prisma.course.findMany({
@@ -146,9 +153,7 @@ export async function GET(request: NextRequest) {
       rows = rows.filter(
         (c) =>
           c.tags.some((tag: string) => tag.toLowerCase().includes(t)) ||
-          c.skills.some((s: { skill: { slug: string } }) =>
-            s.skill.slug.toLowerCase().includes(t)
-          )
+          c.skills.some((s: { skill: { slug: string } }) => s.skill.slug.toLowerCase().includes(t)),
       );
     }
 

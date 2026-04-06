@@ -4,7 +4,10 @@ import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/Badge";
 import type { Event } from "@/lib/types";
 
-const typeVariant: Record<string, "primary" | "accent" | "secondary" | "info" | "warning" | "default"> = {
+const typeVariant: Record<
+  string,
+  "primary" | "accent" | "secondary" | "info" | "warning" | "default"
+> = {
   Conference: "primary",
   Webinar: "accent",
   Workshop: "secondary",
@@ -21,15 +24,19 @@ const locationIcons: Record<string, typeof MapPin> = {
 
 function formatEventDate(dateString: string): string {
   const d = new Date(dateString);
-  return d.toLocaleDateString("en-IE", {
-    weekday: "short",
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  }) + ", " + d.toLocaleTimeString("en-IE", {
-    hour: "numeric",
-    minute: "2-digit",
-  });
+  return (
+    d.toLocaleDateString("en-IE", {
+      weekday: "short",
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    }) +
+    ", " +
+    d.toLocaleTimeString("en-IE", {
+      hour: "numeric",
+      minute: "2-digit",
+    })
+  );
 }
 
 interface EventCardProps {
@@ -45,14 +52,12 @@ export function EventCard({ event, className }: EventCardProps) {
       href={`/events/${event.slug}`}
       className={cn(
         "group block bg-surface-card rounded-xl border border-gray-100 overflow-hidden transition-all duration-200 hover:shadow-lg hover:shadow-primary/5 hover:-translate-y-0.5",
-        className
+        className,
       )}
     >
       <div className="p-5">
         <div className="flex flex-wrap gap-2 mb-3">
-          <Badge variant={typeVariant[event.type] ?? "default"}>
-            {event.type}
-          </Badge>
+          <Badge variant={typeVariant[event.type] ?? "default"}>{event.type}</Badge>
           <Badge variant="default">
             <LocationIcon className="h-3 w-3 mr-1" />
             {event.locationType}
@@ -67,15 +72,9 @@ export function EventCard({ event, className }: EventCardProps) {
           {formatEventDate(event.startDate)}
         </p>
 
-        {event.location && (
-          <p className="text-sm text-text-secondary mb-3">
-            {event.location}
-          </p>
-        )}
+        {event.location && <p className="text-sm text-text-secondary mb-3">{event.location}</p>}
 
-        <p className="text-sm text-text-secondary line-clamp-2">
-          {event.description}
-        </p>
+        <p className="text-sm text-text-secondary line-clamp-2">{event.description}</p>
       </div>
     </Link>
   );

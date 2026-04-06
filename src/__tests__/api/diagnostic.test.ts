@@ -84,9 +84,7 @@ describe("POST /api/diagnostic/results", () => {
         id: "q8",
         text: "Interest area",
         type: "SINGLE_CHOICE",
-        options: [
-          { label: "Technical", value: "technical", scoreImpact: null },
-        ],
+        options: [{ label: "Technical", value: "technical", scoreImpact: null }],
         scaleMin: null,
         scaleMax: null,
         scaleLabels: null,

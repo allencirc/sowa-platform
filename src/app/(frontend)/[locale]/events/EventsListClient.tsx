@@ -74,7 +74,7 @@ export function EventsListClient({ events }: EventsListClientProps) {
             "px-5 py-2 rounded-md text-sm font-semibold transition-colors cursor-pointer",
             tab === "upcoming"
               ? "bg-white text-text-primary shadow-sm"
-              : "text-text-secondary hover:text-text-primary"
+              : "text-text-secondary hover:text-text-primary",
           )}
         >
           Upcoming ({upcoming.length})
@@ -85,7 +85,7 @@ export function EventsListClient({ events }: EventsListClientProps) {
             "px-5 py-2 rounded-md text-sm font-semibold transition-colors cursor-pointer",
             tab === "past"
               ? "bg-white text-text-primary shadow-sm"
-              : "text-text-secondary hover:text-text-primary"
+              : "text-text-secondary hover:text-text-primary",
           )}
         >
           Past ({past.length})
@@ -116,63 +116,57 @@ export function EventsListClient({ events }: EventsListClientProps) {
                   </div>
                 )}
                 <div className="p-5 sm:p-6">
-                <div className="flex flex-col sm:flex-row sm:items-start gap-4 sm:gap-6">
-                  {/* Date block */}
-                  <div className="hidden sm:flex flex-col items-center justify-center bg-primary/5 rounded-xl w-20 h-20 shrink-0">
-                    <span className="text-2xl font-bold text-primary leading-none">
-                      {new Date(event.startDate).getDate()}
-                    </span>
-                    <span className="text-xs font-semibold text-primary/70 uppercase mt-1">
-                      {new Date(event.startDate).toLocaleDateString("en-IE", {
-                        month: "short",
-                      })}
-                    </span>
-                  </div>
-
-                  {/* Content */}
-                  <div className="flex-1 min-w-0">
-                    <div className="flex flex-wrap gap-2 mb-2">
-                      <Badge variant={typeVariant[event.type] ?? "default"}>
-                        {event.type}
-                      </Badge>
-                      <Badge variant="default">
-                        <LocationIcon className="h-3 w-3 mr-1" />
-                        {event.locationType}
-                      </Badge>
-                      {event.capacity && (
-                        <Badge variant="default">
-                          {event.capacity} places
-                        </Badge>
-                      )}
-                    </div>
-
-                    <h3 className="text-lg font-semibold text-text-primary mb-1.5 group-hover:text-primary transition-colors">
-                      {event.title}
-                    </h3>
-
-                    <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-text-secondary mb-2">
-                      <span className="flex items-center gap-1.5">
-                        <Calendar className="h-3.5 w-3.5 text-accent-dark" />
-                        {formatEventDate(event.startDate)}
+                  <div className="flex flex-col sm:flex-row sm:items-start gap-4 sm:gap-6">
+                    {/* Date block */}
+                    <div className="hidden sm:flex flex-col items-center justify-center bg-primary/5 rounded-xl w-20 h-20 shrink-0">
+                      <span className="text-2xl font-bold text-primary leading-none">
+                        {new Date(event.startDate).getDate()}
                       </span>
-                      {event.location && (
-                        <span className="flex items-center gap-1.5">
-                          <MapPin className="h-3.5 w-3.5 text-accent-dark" />
-                          {event.location}
-                        </span>
-                      )}
+                      <span className="text-xs font-semibold text-primary/70 uppercase mt-1">
+                        {new Date(event.startDate).toLocaleDateString("en-IE", {
+                          month: "short",
+                        })}
+                      </span>
                     </div>
 
-                    <p className="text-sm text-text-secondary line-clamp-2 mb-3">
-                      {event.description}
-                    </p>
+                    {/* Content */}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex flex-wrap gap-2 mb-2">
+                        <Badge variant={typeVariant[event.type] ?? "default"}>{event.type}</Badge>
+                        <Badge variant="default">
+                          <LocationIcon className="h-3 w-3 mr-1" />
+                          {event.locationType}
+                        </Badge>
+                        {event.capacity && <Badge variant="default">{event.capacity} places</Badge>}
+                      </div>
 
-                    <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-accent-dark group-hover:text-accent-dark transition-colors">
-                      View Details
-                      <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-                    </span>
+                      <h3 className="text-lg font-semibold text-text-primary mb-1.5 group-hover:text-primary transition-colors">
+                        {event.title}
+                      </h3>
+
+                      <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-text-secondary mb-2">
+                        <span className="flex items-center gap-1.5">
+                          <Calendar className="h-3.5 w-3.5 text-accent-dark" />
+                          {formatEventDate(event.startDate)}
+                        </span>
+                        {event.location && (
+                          <span className="flex items-center gap-1.5">
+                            <MapPin className="h-3.5 w-3.5 text-accent-dark" />
+                            {event.location}
+                          </span>
+                        )}
+                      </div>
+
+                      <p className="text-sm text-text-secondary line-clamp-2 mb-3">
+                        {event.description}
+                      </p>
+
+                      <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-accent-dark group-hover:text-accent-dark transition-colors">
+                        View Details
+                        <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                      </span>
+                    </div>
                   </div>
-                </div>
                 </div>
               </Link>
             );
@@ -181,12 +175,8 @@ export function EventsListClient({ events }: EventsListClientProps) {
       ) : (
         <div className="text-center py-16">
           <Calendar className="h-12 w-12 text-text-muted/40 mx-auto mb-4" />
-          <p className="text-lg text-text-secondary">
-            No {tab} events at this time
-          </p>
-          <p className="text-sm text-text-muted mt-1">
-            Check back soon for updates.
-          </p>
+          <p className="text-lg text-text-secondary">No {tab} events at this time</p>
+          <p className="text-sm text-text-muted mt-1">Check back soon for updates.</p>
         </div>
       )}
     </div>

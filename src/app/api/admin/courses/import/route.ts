@@ -216,7 +216,7 @@ export async function POST(request: NextRequest) {
           errors: rowErrors,
         });
         rowErrors.forEach((re) =>
-          errors.push({ row: rowNumber, path: re.path, message: re.message })
+          errors.push({ row: rowNumber, path: re.path, message: re.message }),
         );
       } else {
         throw err;
@@ -251,7 +251,8 @@ export async function POST(request: NextRequest) {
           providerType: (providerTypeToEnum[data.providerType] ?? data.providerType) as never,
           description: data.description,
           entryRequirements: data.entryRequirements ?? null,
-          deliveryFormat: (deliveryFormatToEnum[data.deliveryFormat] ?? data.deliveryFormat) as never,
+          deliveryFormat: (deliveryFormatToEnum[data.deliveryFormat] ??
+            data.deliveryFormat) as never,
           location: data.location ?? null,
           nfqLevel: data.nfqLevel ?? null,
           duration: data.duration,

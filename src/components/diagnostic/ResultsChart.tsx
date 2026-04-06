@@ -25,7 +25,6 @@ interface ResultsChartProps {
 }
 
 export function ResultsChart({ result, allSkills }: ResultsChartProps) {
-
   // Group scores by skill category and average them
   const categoryScores: Record<string, { total: number; max: number; count: number }> = {};
 
@@ -55,10 +54,7 @@ export function ResultsChart({ result, allSkills }: ResultsChartProps) {
     <div className="w-full">
       <ResponsiveContainer width="100%" height={380}>
         <RadarChart cx="50%" cy="50%" outerRadius="75%" data={data}>
-          <PolarGrid
-            stroke="#E5E7EB"
-            strokeDasharray="3 3"
-          />
+          <PolarGrid stroke="#E5E7EB" strokeDasharray="3 3" />
           <PolarAngleAxis
             dataKey="category"
             tick={{ fill: "#6B7280", fontSize: 13, fontWeight: 600 }}
@@ -88,9 +84,7 @@ export function ResultsChart({ result, allSkills }: ResultsChartProps) {
             fill="#00A878"
             fillOpacity={0.15}
           />
-          <Legend
-            wrapperStyle={{ fontSize: 13, paddingTop: 12 }}
-          />
+          <Legend wrapperStyle={{ fontSize: 13, paddingTop: 12 }} />
         </RadarChart>
       </ResponsiveContainer>
     </div>

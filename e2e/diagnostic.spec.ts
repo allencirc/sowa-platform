@@ -8,12 +8,10 @@ import AxeBuilder from "@axe-core/playwright";
 
 const AXE_TAGS = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"];
 
-async function assertNoSeriousViolations(
-  page: import("@playwright/test").Page
-) {
+async function assertNoSeriousViolations(page: import("@playwright/test").Page) {
   const results = await new AxeBuilder({ page }).withTags(AXE_TAGS).analyze();
   const blocking = results.violations.filter(
-    (v) => v.impact === "critical" || v.impact === "serious"
+    (v) => v.impact === "critical" || v.impact === "serious",
   );
   if (blocking.length) {
     const summary = blocking
@@ -23,12 +21,10 @@ async function assertNoSeriousViolations(
           v.nodes
             .slice(0, 2)
             .map((n) => `      ${n.target.join(" ")}`)
-            .join("\n")
+            .join("\n"),
       )
       .join("\n");
-    throw new Error(
-      `axe found ${blocking.length} serious/critical violation(s):\n${summary}`
-    );
+    throw new Error(`axe found ${blocking.length} serious/critical violation(s):\n${summary}`);
   }
   expect(blocking).toEqual([]);
 }

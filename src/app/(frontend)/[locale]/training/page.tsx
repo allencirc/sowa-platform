@@ -19,8 +19,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Training & Courses — SOWA",
-    description:
-      "Accredited courses and training for offshore wind careers in Ireland.",
+    description: "Accredited courses and training for offshore wind careers in Ireland.",
   },
 };
 
@@ -36,8 +35,8 @@ export default async function TrainingPage() {
             Training &amp; Courses
           </h1>
           <p className="text-text-secondary max-w-2xl">
-            Find accredited courses, certifications, and training programmes for
-            offshore wind careers
+            Find accredited courses, certifications, and training programmes for offshore wind
+            careers
           </p>
         </Container>
       </section>
@@ -66,10 +65,7 @@ function CourseListingSkeleton() {
       {/* Cards placeholder */}
       <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-5">
         {Array.from({ length: 6 }).map((_, i) => (
-          <div
-            key={i}
-            className="h-56 bg-gray-100 rounded-xl animate-pulse"
-          />
+          <div key={i} className="h-56 bg-gray-100 rounded-xl animate-pulse" />
         ))}
       </div>
     </div>

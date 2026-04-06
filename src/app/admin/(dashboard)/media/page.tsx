@@ -75,7 +75,9 @@ export default function AdminMediaPage() {
 
   const handleDelete = async () => {
     if (!deleteFile) return;
-    const res = await fetch(`/api/media?filename=${encodeURIComponent(deleteFile)}`, { method: "DELETE" });
+    const res = await fetch(`/api/media?filename=${encodeURIComponent(deleteFile)}`, {
+      method: "DELETE",
+    });
     if (!res.ok) throw new Error("Delete failed");
     fetchFiles();
   };
@@ -87,18 +89,14 @@ export default function AdminMediaPage() {
     setTimeout(() => setCopied(null), 2000);
   };
 
-  const filtered = files.filter((f) =>
-    f.filename.toLowerCase().includes(search.toLowerCase())
-  );
+  const filtered = files.filter((f) => f.filename.toLowerCase().includes(search.toLowerCase()));
 
   return (
     <div>
       <div className="mb-6 flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-text-primary">Media Library</h1>
-          <p className="mt-1 text-sm text-text-secondary">
-            Upload and manage images for content.
-          </p>
+          <p className="mt-1 text-sm text-text-secondary">Upload and manage images for content.</p>
         </div>
         <div>
           <input
@@ -181,9 +179,7 @@ export default function AdminMediaPage() {
                 </div>
               </div>
               <div className="p-3">
-                <p className="truncate text-xs font-medium text-text-primary">
-                  {file.filename}
-                </p>
+                <p className="truncate text-xs font-medium text-text-primary">{file.filename}</p>
                 <p className="text-xs text-text-muted">{formatFileSize(file.size)}</p>
                 {file.variants && Object.keys(file.variants).length > 0 && (
                   <div className="mt-1.5 flex flex-wrap gap-1">
@@ -195,7 +191,7 @@ export default function AdminMediaPage() {
                           "rounded px-1.5 py-0.5 text-[10px] font-medium transition-colors",
                           copied === url
                             ? "bg-secondary/20 text-secondary-dark"
-                            : "bg-gray-100 text-text-secondary hover:bg-accent/10 hover:text-accent-dark"
+                            : "bg-gray-100 text-text-secondary hover:bg-accent/10 hover:text-accent-dark",
                         )}
                         title={`Copy ${label} URL`}
                       >

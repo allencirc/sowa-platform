@@ -114,10 +114,7 @@ export type Dictionary = Dict;
  * from the supplied params object. Not a full ICU implementation — if we
  * need plurals/selectors we'll adopt `@formatjs/intl-messageformat` then.
  */
-export function format(
-  template: string,
-  params: Record<string, string | number> = {},
-): string {
+export function format(template: string, params: Record<string, string | number> = {}): string {
   return template.replace(/\{(\w+)\}/g, (_, key: string) =>
     key in params ? String(params[key]) : `{${key}}`,
   );

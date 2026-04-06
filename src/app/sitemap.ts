@@ -1,5 +1,11 @@
 import type { MetadataRoute } from "next";
-import { getAllCareers, getAllCourses, getAllEvents, getAllResearch, getAllNews } from "@/lib/queries";
+import {
+  getAllCareers,
+  getAllCourses,
+  getAllEvents,
+  getAllResearch,
+  getAllNews,
+} from "@/lib/queries";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = "https://sowa.skillnetireland.ie";

@@ -62,9 +62,7 @@ export async function GET(request: NextRequest) {
     }
 
     const orderBy: Record<string, string> =
-      sortBy && SORTABLE_FIELDS.includes(sortBy)
-        ? { [sortBy]: order }
-        : { date: "desc" };
+      sortBy && SORTABLE_FIELDS.includes(sortBy) ? { [sortBy]: order } : { date: "desc" };
 
     const [rows, total] = await Promise.all([
       prisma.newsArticle.findMany({

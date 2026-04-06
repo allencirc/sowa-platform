@@ -6,7 +6,10 @@ const rawConnectionString = process.env.DATABASE_URL!;
 // `pg` now treats sslmode=prefer/require/verify-ca as aliases for verify-full
 // and emits a deprecation warning. Strip the query param and pass an explicit
 // ssl config so the warning doesn't fire at build/runtime.
-function parseConnection(raw: string): { connectionString: string; ssl: boolean | { rejectUnauthorized: boolean } } {
+function parseConnection(raw: string): {
+  connectionString: string;
+  ssl: boolean | { rejectUnauthorized: boolean };
+} {
   try {
     const url = new URL(raw);
     const sslmode = url.searchParams.get("sslmode");

@@ -18,10 +18,7 @@ const sectorColours: Record<string, string> = {
 export function CareerFilters({ careers }: { careers: Career[] }) {
   const [activeSectors, setActiveSectors] = useState<Set<string>>(new Set());
 
-  const sectors = useMemo(
-    () => Array.from(new Set(careers.map((c) => c.sector))),
-    [careers]
-  );
+  const sectors = useMemo(() => Array.from(new Set(careers.map((c) => c.sector))), [careers]);
 
   const toggleSector = (sector: string) => {
     setActiveSectors((prev) => {
@@ -33,11 +30,8 @@ export function CareerFilters({ careers }: { careers: Career[] }) {
   };
 
   const filtered = useMemo(
-    () =>
-      activeSectors.size === 0
-        ? careers
-        : careers.filter((c) => activeSectors.has(c.sector)),
-    [careers, activeSectors]
+    () => (activeSectors.size === 0 ? careers : careers.filter((c) => activeSectors.has(c.sector))),
+    [careers, activeSectors],
   );
 
   return (
@@ -59,7 +53,7 @@ export function CareerFilters({ careers }: { careers: Career[] }) {
             "px-3 py-1.5 rounded-full text-xs font-medium transition-colors border cursor-pointer",
             activeSectors.size === 0
               ? "bg-primary text-white border-primary"
-              : "bg-white text-text-secondary border-gray-200 hover:border-primary"
+              : "bg-white text-text-secondary border-gray-200 hover:border-primary",
           )}
         >
           All Sectors
@@ -72,7 +66,7 @@ export function CareerFilters({ careers }: { careers: Career[] }) {
               "px-3 py-1.5 rounded-full text-xs font-medium transition-colors border cursor-pointer",
               activeSectors.has(sector)
                 ? "text-white border-transparent"
-                : "bg-white text-text-secondary border-gray-200 hover:border-gray-400"
+                : "bg-white text-text-secondary border-gray-200 hover:border-gray-400",
             )}
             style={
               activeSectors.has(sector)

@@ -123,7 +123,9 @@ function makeSkillRow(overrides: Record<string, unknown> = {}) {
 describe("Career queries", () => {
   it("getAllCareers maps DB rows to frontend types", async () => {
     const row = makeCareerRow();
-    (prismaMock.career.findMany as ReturnType<typeof import("vitest").vi.fn>).mockResolvedValue([row]);
+    (prismaMock.career.findMany as ReturnType<typeof import("vitest").vi.fn>).mockResolvedValue([
+      row,
+    ]);
 
     const result = await getAllCareers();
 
@@ -140,18 +142,24 @@ describe("Career queries", () => {
   });
 
   it("getCareerBySlug returns mapped career or undefined", async () => {
-    (prismaMock.career.findFirst as ReturnType<typeof import("vitest").vi.fn>).mockResolvedValue(makeCareerRow());
+    (prismaMock.career.findFirst as ReturnType<typeof import("vitest").vi.fn>).mockResolvedValue(
+      makeCareerRow(),
+    );
 
     const result = await getCareerBySlug("turbine-tech");
     expect(result?.title).toBe("Turbine Technician");
 
-    (prismaMock.career.findFirst as ReturnType<typeof import("vitest").vi.fn>).mockResolvedValue(null);
+    (prismaMock.career.findFirst as ReturnType<typeof import("vitest").vi.fn>).mockResolvedValue(
+      null,
+    );
     const missing = await getCareerBySlug("nonexistent");
     expect(missing).toBeUndefined();
   });
 
   it("getCareersBySector maps sector string to enum", async () => {
-    (prismaMock.career.findMany as ReturnType<typeof import("vitest").vi.fn>).mockResolvedValue([makeCareerRow()]);
+    (prismaMock.career.findMany as ReturnType<typeof import("vitest").vi.fn>).mockResolvedValue([
+      makeCareerRow(),
+    ]);
 
     await getCareersBySector("Operations & Maintenance");
 
@@ -160,7 +168,7 @@ describe("Career queries", () => {
         where: expect.objectContaining({
           sector: "OPERATIONS_MAINTENANCE",
         }),
-      })
+      }),
     );
   });
 });
@@ -169,7 +177,9 @@ describe("Career queries", () => {
 
 describe("Course queries", () => {
   it("getAllCourses maps DB rows to frontend types", async () => {
-    (prismaMock.course.findMany as ReturnType<typeof import("vitest").vi.fn>).mockResolvedValue([makeCourseRow()]);
+    (prismaMock.course.findMany as ReturnType<typeof import("vitest").vi.fn>).mockResolvedValue([
+      makeCourseRow(),
+    ]);
 
     const result = await getAllCourses();
 
@@ -181,7 +191,9 @@ describe("Course queries", () => {
   });
 
   it("getFilteredCourses applies format filter", async () => {
-    (prismaMock.course.findMany as ReturnType<typeof import("vitest").vi.fn>).mockResolvedValue([makeCourseRow()]);
+    (prismaMock.course.findMany as ReturnType<typeof import("vitest").vi.fn>).mockResolvedValue([
+      makeCourseRow(),
+    ]);
 
     await getFilteredCourses({ format: "In-Person" });
 
@@ -190,12 +202,14 @@ describe("Course queries", () => {
         where: expect.objectContaining({
           deliveryFormat: "IN_PERSON",
         }),
-      })
+      }),
     );
   });
 
   it("getFilteredCourses applies freeOnly filter", async () => {
-    (prismaMock.course.findMany as ReturnType<typeof import("vitest").vi.fn>).mockResolvedValue([makeCourseRow()]);
+    (prismaMock.course.findMany as ReturnType<typeof import("vitest").vi.fn>).mockResolvedValue([
+      makeCourseRow(),
+    ]);
 
     await getFilteredCourses({ freeOnly: true });
 
@@ -204,7 +218,7 @@ describe("Course queries", () => {
         where: expect.objectContaining({
           cost: 0,
         }),
-      })
+      }),
     );
   });
 
@@ -218,7 +232,7 @@ describe("Course queries", () => {
         where: expect.objectContaining({
           cost: { lte: 1000 },
         }),
-      })
+      }),
     );
   });
 
@@ -232,7 +246,7 @@ describe("Course queries", () => {
         where: expect.objectContaining({
           nfqLevel: 7,
         }),
-      })
+      }),
     );
   });
 
@@ -249,13 +263,15 @@ describe("Course queries", () => {
             lte: expect.any(Date),
           }),
         }),
-      })
+      }),
     );
   });
 
   it("getFilteredCourses filters by topic in-memory", async () => {
     const row = makeCourseRow({ tags: ["gwo", "safety"] });
-    (prismaMock.course.findMany as ReturnType<typeof import("vitest").vi.fn>).mockResolvedValue([row]);
+    (prismaMock.course.findMany as ReturnType<typeof import("vitest").vi.fn>).mockResolvedValue([
+      row,
+    ]);
 
     const results = await getFilteredCourses({ topic: "safety" });
     expect(results).toHaveLength(1);
@@ -265,7 +281,9 @@ describe("Course queries", () => {
   });
 
   it("getFilteredCourses filters by provider in-memory", async () => {
-    (prismaMock.course.findMany as ReturnType<typeof import("vitest").vi.fn>).mockResolvedValue([makeCourseRow()]);
+    (prismaMock.course.findMany as ReturnType<typeof import("vitest").vi.fn>).mockResolvedValue([
+      makeCourseRow(),
+    ]);
 
     const results = await getFilteredCourses({ provider: "Wind Training" });
     expect(results).toHaveLength(1);
@@ -275,7 +293,9 @@ describe("Course queries", () => {
   });
 
   it("getFilteredCourses combines multiple filters", async () => {
-    (prismaMock.course.findMany as ReturnType<typeof import("vitest").vi.fn>).mockResolvedValue([makeCourseRow()]);
+    (prismaMock.course.findMany as ReturnType<typeof import("vitest").vi.fn>).mockResolvedValue([
+      makeCourseRow(),
+    ]);
 
     await getFilteredCourses({
       format: "In-Person",
@@ -289,7 +309,7 @@ describe("Course queries", () => {
           deliveryFormat: "IN_PERSON",
           cost: 0,
         }),
-      })
+      }),
     );
   });
 });
@@ -298,7 +318,9 @@ describe("Course queries", () => {
 
 describe("Event queries", () => {
   it("getAllEvents maps event types correctly", async () => {
-    (prismaMock.event.findMany as ReturnType<typeof import("vitest").vi.fn>).mockResolvedValue([makeEventRow()]);
+    (prismaMock.event.findMany as ReturnType<typeof import("vitest").vi.fn>).mockResolvedValue([
+      makeEventRow(),
+    ]);
 
     const result = await getAllEvents();
 
@@ -318,7 +340,7 @@ describe("Event queries", () => {
         where: expect.objectContaining({
           startDate: expect.objectContaining({ gte: expect.any(Date) }),
         }),
-      })
+      }),
     );
   });
 });
@@ -327,7 +349,9 @@ describe("Event queries", () => {
 
 describe("Research queries", () => {
   it("getAllResearch maps correctly", async () => {
-    (prismaMock.research.findMany as ReturnType<typeof import("vitest").vi.fn>).mockResolvedValue([makeResearchRow()]);
+    (prismaMock.research.findMany as ReturnType<typeof import("vitest").vi.fn>).mockResolvedValue([
+      makeResearchRow(),
+    ]);
 
     const result = await getAllResearch();
     expect(result[0].organisation).toBe("SEAI");
@@ -335,7 +359,9 @@ describe("Research queries", () => {
   });
 
   it("getFeaturedResearch queries isFeatured", async () => {
-    (prismaMock.research.findFirst as ReturnType<typeof import("vitest").vi.fn>).mockResolvedValue(makeResearchRow());
+    (prismaMock.research.findFirst as ReturnType<typeof import("vitest").vi.fn>).mockResolvedValue(
+      makeResearchRow(),
+    );
 
     const result = await getFeaturedResearch();
     expect(result?.isFeatured).toBe(true);
@@ -343,7 +369,7 @@ describe("Research queries", () => {
     expect(prismaMock.research.findFirst).toHaveBeenCalledWith(
       expect.objectContaining({
         where: expect.objectContaining({ isFeatured: true }),
-      })
+      }),
     );
   });
 });
@@ -352,7 +378,9 @@ describe("Research queries", () => {
 
 describe("Skill queries", () => {
   it("getAllSkills maps category enum", async () => {
-    (prismaMock.skill.findMany as ReturnType<typeof import("vitest").vi.fn>).mockResolvedValue([makeSkillRow()]);
+    (prismaMock.skill.findMany as ReturnType<typeof import("vitest").vi.fn>).mockResolvedValue([
+      makeSkillRow(),
+    ]);
 
     const result = await getAllSkills();
     expect(result[0].category).toBe("Technical");
@@ -384,8 +412,12 @@ describe("globalSearch", () => {
     ]);
     (prismaMock.course.findMany as ReturnType<typeof import("vitest").vi.fn>).mockResolvedValue([]);
     (prismaMock.event.findMany as ReturnType<typeof import("vitest").vi.fn>).mockResolvedValue([]);
-    (prismaMock.research.findMany as ReturnType<typeof import("vitest").vi.fn>).mockResolvedValue([]);
-    (prismaMock.newsArticle.findMany as ReturnType<typeof import("vitest").vi.fn>).mockResolvedValue([]);
+    (prismaMock.research.findMany as ReturnType<typeof import("vitest").vi.fn>).mockResolvedValue(
+      [],
+    );
+    (
+      prismaMock.newsArticle.findMany as ReturnType<typeof import("vitest").vi.fn>
+    ).mockResolvedValue([]);
 
     const result = await globalSearch("wind");
     expect(result).toHaveLength(1);
@@ -405,8 +437,12 @@ describe("globalSearch", () => {
     ]);
     (prismaMock.course.findMany as ReturnType<typeof import("vitest").vi.fn>).mockResolvedValue([]);
     (prismaMock.event.findMany as ReturnType<typeof import("vitest").vi.fn>).mockResolvedValue([]);
-    (prismaMock.research.findMany as ReturnType<typeof import("vitest").vi.fn>).mockResolvedValue([]);
-    (prismaMock.newsArticle.findMany as ReturnType<typeof import("vitest").vi.fn>).mockResolvedValue([]);
+    (prismaMock.research.findMany as ReturnType<typeof import("vitest").vi.fn>).mockResolvedValue(
+      [],
+    );
+    (
+      prismaMock.newsArticle.findMany as ReturnType<typeof import("vitest").vi.fn>
+    ).mockResolvedValue([]);
 
     const result = await globalSearch("wind");
     expect(result).toHaveLength(1);

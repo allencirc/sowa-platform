@@ -37,7 +37,7 @@ const SKIP_KEYS = new Set(["id", "createdAt", "updatedAt", "publishAt", "rejecti
 
 function computeDiff(
   oldData: Record<string, unknown>,
-  newData: Record<string, unknown>
+  newData: Record<string, unknown>,
 ): DiffLine[] {
   const allKeys = new Set([...Object.keys(oldData), ...Object.keys(newData)]);
   const lines: DiffLine[] = [];
@@ -96,10 +96,7 @@ export function DiffViewer({
       {/* Diff rows */}
       <div className="divide-y divide-gray-100">
         {diff.map((line) => (
-          <div
-            key={line.key}
-            className="grid grid-cols-[180px_1fr_1fr] text-sm"
-          >
+          <div key={line.key} className="grid grid-cols-[180px_1fr_1fr] text-sm">
             <div className="flex items-start px-3 py-2 font-medium text-text-primary">
               {formatKey(line.key)}
             </div>
@@ -109,22 +106,18 @@ export function DiffViewer({
               className={cn(
                 "border-l border-gray-100 px-3 py-2",
                 line.type === "removed" && "bg-red-50",
-                line.type === "changed" && "bg-red-50/50"
+                line.type === "changed" && "bg-red-50/50",
               )}
             >
               {(line.type === "removed" || line.type === "changed") && (
                 <div className="flex items-start gap-1.5">
-                  <span className="mt-0.5 shrink-0 text-xs font-bold text-red-500">
-                    −
-                  </span>
+                  <span className="mt-0.5 shrink-0 text-xs font-bold text-red-500">−</span>
                   <pre className="whitespace-pre-wrap break-words font-mono text-xs text-red-700">
                     {line.oldValue}
                   </pre>
                 </div>
               )}
-              {line.type === "added" && (
-                <span className="text-xs text-text-muted">—</span>
-              )}
+              {line.type === "added" && <span className="text-xs text-text-muted">—</span>}
             </div>
 
             {/* New value column */}
@@ -132,22 +125,18 @@ export function DiffViewer({
               className={cn(
                 "border-l border-gray-100 px-3 py-2",
                 line.type === "added" && "bg-green-50",
-                line.type === "changed" && "bg-green-50/50"
+                line.type === "changed" && "bg-green-50/50",
               )}
             >
               {(line.type === "added" || line.type === "changed") && (
                 <div className="flex items-start gap-1.5">
-                  <span className="mt-0.5 shrink-0 text-xs font-bold text-green-600">
-                    +
-                  </span>
+                  <span className="mt-0.5 shrink-0 text-xs font-bold text-green-600">+</span>
                   <pre className="whitespace-pre-wrap break-words font-mono text-xs text-green-700">
                     {line.newValue}
                   </pre>
                 </div>
               )}
-              {line.type === "removed" && (
-                <span className="text-xs text-text-muted">—</span>
-              )}
+              {line.type === "removed" && <span className="text-xs text-text-muted">—</span>}
             </div>
           </div>
         ))}
@@ -155,15 +144,9 @@ export function DiffViewer({
 
       {/* Summary */}
       <div className="flex gap-4 border-t border-gray-200 bg-gray-50 px-3 py-2 text-xs text-text-secondary">
-        <span>
-          {diff.filter((d) => d.type === "added").length} added
-        </span>
-        <span>
-          {diff.filter((d) => d.type === "removed").length} removed
-        </span>
-        <span>
-          {diff.filter((d) => d.type === "changed").length} changed
-        </span>
+        <span>{diff.filter((d) => d.type === "added").length} added</span>
+        <span>{diff.filter((d) => d.type === "removed").length} removed</span>
+        <span>{diff.filter((d) => d.type === "changed").length} changed</span>
       </div>
     </div>
   );

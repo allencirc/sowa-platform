@@ -270,9 +270,7 @@ async function main() {
           },
         });
       } else {
-        console.warn(
-          `    ⚠️  Pathway target "${conn.to}" not found for career "${career.slug}"`
-        );
+        console.warn(`    ⚠️  Pathway target "${conn.to}" not found for career "${career.slug}"`);
       }
     }
   }
@@ -297,9 +295,7 @@ async function main() {
         duration: course.duration,
         cost: course.cost,
         costNotes: course.costNotes ?? null,
-        nextStartDate: course.nextStartDate
-          ? new Date(course.nextStartDate)
-          : null,
+        nextStartDate: course.nextStartDate ? new Date(course.nextStartDate) : null,
         accredited: course.accredited ?? false,
         certificationAwarded: course.certificationAwarded ?? null,
         signupUrl: course.signupUrl ?? null,
@@ -396,9 +392,7 @@ async function main() {
 
   // 11. Diagnostic questions
   const diagnosticData = loadJson<DiagnosticJson>("diagnosticQuestions.json");
-  console.log(
-    `  📦 Seeding ${diagnosticData.questions.length} diagnostic questions...`
-  );
+  console.log(`  📦 Seeding ${diagnosticData.questions.length} diagnostic questions...`);
   for (const q of diagnosticData.questions) {
     await prisma.diagnosticQuestion.create({
       data: {

@@ -31,13 +31,7 @@ export interface Course {
   slug: string;
   title: string;
   provider: string;
-  providerType:
-    | "University"
-    | "ETB"
-    | "Private"
-    | "Industry"
-    | "Skillnet_Network"
-    | "Government";
+  providerType: "University" | "ETB" | "Private" | "Industry" | "Skillnet_Network" | "Government";
   description: string;
   entryRequirements?: string;
   deliveryFormat: "In-Person" | "Online" | "Blended" | "Self-Paced";
@@ -58,13 +52,7 @@ export interface Course {
 export interface Event {
   slug: string;
   title: string;
-  type:
-    | "Workshop"
-    | "Webinar"
-    | "Conference"
-    | "Networking"
-    | "Training"
-    | "Roadshow";
+  type: "Workshop" | "Webinar" | "Conference" | "Networking" | "Training" | "Roadshow";
   startDate: string;
   endDate?: string;
   locationType: "Physical" | "Virtual" | "Hybrid";

@@ -15,12 +15,10 @@ export function DiagnosticCTA() {
           </div>
 
           <div className="flex-1 text-center md:text-left">
-            <h3 className="text-2xl sm:text-3xl font-bold mb-2">
-              Not sure where to start?
-            </h3>
+            <h3 className="text-2xl sm:text-3xl font-bold mb-2">Not sure where to start?</h3>
             <p className="text-lg text-white/80 max-w-xl">
-              Assess your OWE skills in 5 minutes and get personalised career
-              and training recommendations.
+              Assess your OWE skills in 5 minutes and get personalised career and training
+              recommendations.
             </p>
           </div>
 

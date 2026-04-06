@@ -18,6 +18,7 @@ The job title as it will appear on the platform (e.g. "Wind Turbine Technician",
 
 **Sector** (Required)
 Select the primary sector that best describes this role. Choose one of:
+
 - Operations & Maintenance
 - Marine Operations
 - Survey & Design
@@ -28,6 +29,7 @@ Select the primary sector that best describes this role. Choose one of:
 
 **Entry Level** (Required)
 The typical entry level for someone starting in this role. Options are:
+
 - **Apprentice** — Formal apprenticeship role, typically requiring secondary education
 - **Entry** — Early career, usually requiring a relevant qualification or equivalent experience
 - **Mid** — 3–8 years of experience, may include supervisory responsibilities
@@ -36,6 +38,7 @@ The typical entry level for someone starting in this role. Options are:
 
 **Description** (Required)
 A comprehensive narrative describing the role, its responsibilities, and the work environment. Aim for 150–300 words. Cover:
+
 - What the person does day-to-day
 - Where they work (e.g. on a platform, in an office, on a vessel)
 - Who they work with
@@ -50,6 +53,7 @@ Minimum and maximum annual salary in EUR. Leave blank if salary information is u
 
 **Key Responsibilities** (Optional)
 A bulleted list of the main duties and activities for this role. Include 4–8 items. Examples for a Wind Turbine Technician:
+
 - Conduct routine maintenance inspections on turbine components
 - Diagnose and repair electrical faults
 - Work safely at height in challenging conditions
@@ -58,6 +62,7 @@ A bulleted list of the main duties and activities for this role. Include 4–8 i
 
 **Qualifications** (Optional)
 Prerequisites or typical qualifications for someone in this role. List specific certifications, educational levels, or experience. Examples:
+
 - Leaving Certificate (or equivalent) in STEM subjects
 - STCW (Standards of Training, Certification and Watchkeeping) certification
 - Height safety ticket or equivalent
@@ -71,6 +76,7 @@ An industry narrative about the future demand and growth prospects for this role
 
 **Skills** (Optional)
 Link relevant technical and soft skills from the skills database. Select only the skills that are core to success in this role. For a Wind Turbine Technician, examples might include:
+
 - Electrical troubleshooting
 - Mechanical maintenance
 - Height safety
@@ -79,6 +85,7 @@ Link relevant technical and soft skills from the skills database. Select only th
 
 **Pathway Connections** (Optional)
 Define career progressions, lateral moves, or specialisations related to this role. Each pathway has:
+
 - **Target Career** — The role someone might progress to
 - **Path Type** — "Progression" (advancement), "Lateral" (sideways move), or "Specialisation" (deeper expertise in a sub-domain)
 - **Timeframe** — Typical years or experience needed (e.g. "3–5 years")
@@ -112,6 +119,7 @@ The name of the organisation delivering the course (e.g. "University College Cor
 
 **Provider Type** (Required)
 Select the primary type of provider:
+
 - **University** — Higher education institution (universities)
 - **ETB** — Education and Training Board (Irish public providers)
 - **Private** — Private training company or academy
@@ -123,6 +131,7 @@ Select the primary type of provider:
 
 **Delivery Format** (Optional, but highly recommended)
 How the course is delivered:
+
 - **In-Person** — Classroom or workshop
 - **Online** — Fully virtual, synchronous or asynchronous
 - **Blended** — Mix of online and in-person
@@ -138,6 +147,7 @@ The venue or city where the course is taught. For online courses, write "Online"
 
 **NFQ Level** (Optional)
 The National Framework of Qualifications level in Ireland (1–10). This standardises course difficulty:
+
 - **Levels 1–3** — School or basic certification
 - **Levels 4–6** — Craft, diploma, or higher certificate
 - **Levels 7–8** — Degree (bachelor's)
@@ -162,6 +172,7 @@ The name of the certificate, diploma, or award given upon completion (e.g. "QQI 
 
 **Entry Requirements** (Optional)
 Prerequisites or prior knowledge assumed. Examples:
+
 - "Secondary education or equivalent numeracy/literacy"
 - "3 years offshore experience"
 - "STCW Basic Safety Training"
@@ -175,6 +186,7 @@ Select careers for which this course is particularly relevant. The platform will
 
 **Tags** (Optional)
 Freeform tags for internal organisation and public filtering. Useful examples:
+
 - `STCW-related`
 - `BOSIET`
 - `Mechanical`
@@ -196,6 +208,7 @@ See Careers section for slug and title guidance. The description should summaris
 
 **Type** (Required)
 The category of event:
+
 - **Workshop** — Hands-on training with practical activities
 - **Webinar** — Online presentation with Q&A
 - **Conference** — Multi-day or multi-speaker event
@@ -208,6 +221,7 @@ The date and time when the event begins. Use the date and time picker. Ensure th
 
 **Location Type** (Required)
 How the event is conducted:
+
 - **Physical** — In-person, one or more venues
 - **Virtual** — Online only
 - **Hybrid** — Both in-person and online attendance options
@@ -229,6 +243,7 @@ A hero image for the event. Use a landscape format (16:9 or similar). For in-per
 ### Event Scheduling and Registrations
 
 Events are always tied to one or more registration campaigns. When you create an event and publish it, the registration system is enabled automatically. Users can register via a form on the event page, and their registrations appear in the admin "Registrations" section with:
+
 - Name, email, phone, organisation, role
 - Any dietary requirements or additional notes (if the registration form includes these fields)
 - GDPR consent status
@@ -263,6 +278,7 @@ A short summary (1–2 sentences, 50–100 words) that appears on the news listi
 
 **Content** (Required)
 The full article text. Use the rich text editor to format headings, bold text, links, and lists. Aim for 400–800 words for most news articles. Structure your content:
+
 1. **Opening paragraph** — Summarise the news in one strong paragraph
 2. **Context** — Why this matters; industry background
 3. **Details** — Key facts, figures, quotes, or developments
@@ -270,6 +286,7 @@ The full article text. Use the rich text editor to format headings, bold text, l
 
 **Category** (Required)
 Choose one primary category for the article. Standard categories include:
+
 - "Announcements" — Platform updates, events, or Skillnet news
 - "Industry News" — Sector developments, policy changes, market trends
 - "Policy" — Regulatory or government updates affecting offshore wind
@@ -319,6 +336,7 @@ A 150–250 word abstract of the research. Summarise the research question, meth
 
 **Categories** (Required)
 Select one or more research categories. Standard categories include:
+
 - "Technological Development" — Advances in turbines, platforms, materials
 - "Economic Analysis" — Cost, funding, market analysis
 - "Environmental Impact" — Ecological, marine, or climate effects
@@ -349,13 +367,13 @@ A cover image for the research. Use the publication's original cover, or choose 
 
 ## Summary Table: Required vs Optional Fields
 
-| Content Type | Required Fields | Key Recommended Optional Fields |
-|--------------|-----------------|--------------------------------|
-| **Careers** | Slug, Title, Sector, Entry Level, Description | Salary Range, Key Responsibilities, Qualifications, Skills, Related Courses |
-| **Courses** | Slug, Title, Description, Provider, Provider Type | Delivery Format, Duration, NFQ Level, Cost, Next Start Date, Career Relevance |
-| **Events** | Slug, Title, Description, Type, Start Date, Location Type | End Date, Location, Capacity, Image |
-| **News** | Slug, Title, Date, Excerpt, Content, Category, Author | Image |
-| **Research** | Slug, Title, Author, Organisation, Publication Date, Summary, Categories | Featured, Image |
+| Content Type | Required Fields                                                          | Key Recommended Optional Fields                                               |
+| ------------ | ------------------------------------------------------------------------ | ----------------------------------------------------------------------------- |
+| **Careers**  | Slug, Title, Sector, Entry Level, Description                            | Salary Range, Key Responsibilities, Qualifications, Skills, Related Courses   |
+| **Courses**  | Slug, Title, Description, Provider, Provider Type                        | Delivery Format, Duration, NFQ Level, Cost, Next Start Date, Career Relevance |
+| **Events**   | Slug, Title, Description, Type, Start Date, Location Type                | End Date, Location, Capacity, Image                                           |
+| **News**     | Slug, Title, Date, Excerpt, Content, Category, Author                    | Image                                                                         |
+| **Research** | Slug, Title, Author, Organisation, Publication Date, Summary, Categories | Featured, Image                                                               |
 
 ---
 

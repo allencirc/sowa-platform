@@ -15,9 +15,7 @@ test.use({ ...devices["Pixel 5"] });
 const VIEWPORT_MIN_COVERAGE = 0.9; // drawer must cover ≥90% of viewport height
 
 test.describe("Mobile navigation drawer", () => {
-  test("opens, covers the viewport, has an opaque background, and closes", async ({
-    page,
-  }) => {
+  test("opens, covers the viewport, has an opaque background, and closes", async ({ page }) => {
     await page.goto("/");
 
     const hamburger = page.getByRole("button", { name: /open menu/i });
@@ -34,16 +32,12 @@ test.describe("Mobile navigation drawer", () => {
     const box = await drawer.boundingBox();
     expect(box).not.toBeNull();
     expect(box!.y).toBeLessThanOrEqual(2);
-    expect(box!.height).toBeGreaterThanOrEqual(
-      viewport.height * VIEWPORT_MIN_COVERAGE
-    );
+    expect(box!.height).toBeGreaterThanOrEqual(viewport.height * VIEWPORT_MIN_COVERAGE);
 
     // 2. Drawer must have a fully opaque background (no alpha < 1). This is the
     //    exact symptom of the old bug: text from the page showed through because
     //    the drawer was effectively unrendered.
-    const bg = await drawer.evaluate(
-      (el) => getComputedStyle(el).backgroundColor
-    );
+    const bg = await drawer.evaluate((el) => getComputedStyle(el).backgroundColor);
     expect(bg).toMatch(/^rgba?\(/);
     const alphaMatch = bg.match(/rgba?\(([^)]+)\)/);
     const parts = alphaMatch![1].split(",").map((s) => s.trim());
@@ -54,9 +48,7 @@ test.describe("Mobile navigation drawer", () => {
     const backdrop = page.locator('[aria-hidden="true"].fixed.inset-0');
     const backdropBox = await backdrop.first().boundingBox();
     expect(backdropBox).not.toBeNull();
-    expect(backdropBox!.height).toBeGreaterThanOrEqual(
-      viewport.height * VIEWPORT_MIN_COVERAGE
-    );
+    expect(backdropBox!.height).toBeGreaterThanOrEqual(viewport.height * VIEWPORT_MIN_COVERAGE);
 
     // 4. Explicit close button inside the drawer works.
     const closeBtn = drawer.getByRole("button", { name: /close menu/i });
@@ -93,12 +85,9 @@ test.describe("Mobile navigation drawer", () => {
     await expect(drawer).toBeHidden();
   });
 
-  test("body scroll is locked while open and restored on close", async ({
-    page,
-  }) => {
+  test("body scroll is locked while open and restored on close", async ({ page }) => {
     await page.goto("/");
-    const getOverflow = () =>
-      page.evaluate(() => document.body.style.overflow);
+    const getOverflow = () => page.evaluate(() => document.body.style.overflow);
 
     expect(await getOverflow()).toBe("");
     await page.getByRole("button", { name: /open menu/i }).click();

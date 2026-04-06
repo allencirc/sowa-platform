@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, Compass, BookOpen, RotateCcw } from "lucide-react";
+import { Compass, BookOpen, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { CareerCard } from "@/components/careers/CareerCard";
 import { CourseCard } from "@/components/courses/CourseCard";
@@ -22,9 +22,7 @@ export function RecommendationCards({ result }: RecommendationCardsProps) {
               <Compass className="h-5 w-5 text-accent-dark" />
             </div>
             <div>
-              <h3 className="text-xl font-bold text-text-primary">
-                Recommended Careers
-              </h3>
+              <h3 className="text-xl font-bold text-text-primary">Recommended Careers</h3>
               <p className="text-sm text-text-secondary">
                 Based on your interests and current skills
               </p>
@@ -46,9 +44,7 @@ export function RecommendationCards({ result }: RecommendationCardsProps) {
               <BookOpen className="h-5 w-5 text-secondary-dark" />
             </div>
             <div>
-              <h3 className="text-xl font-bold text-text-primary">
-                Recommended Training
-              </h3>
+              <h3 className="text-xl font-bold text-text-primary">Recommended Training</h3>
               <p className="text-sm text-text-secondary">
                 Courses that address your identified skill gaps
               </p>
@@ -76,11 +72,7 @@ export function RecommendationCards({ result }: RecommendationCardsProps) {
             Browse Training
           </Button>
         </Link>
-        <Button
-          variant="ghost"
-          size="lg"
-          onClick={() => window.location.reload()}
-        >
+        <Button variant="ghost" size="lg" onClick={() => window.location.reload()}>
           <RotateCcw className="h-5 w-5" />
           Take Again
         </Button>

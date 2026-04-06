@@ -17,14 +17,16 @@ export function ResearchCard({ research, featured = false, className }: Research
       href={`/research/${research.slug}`}
       className={cn(
         "group block bg-surface-card rounded-xl border border-gray-100 overflow-hidden transition-all duration-200 hover:shadow-lg hover:shadow-primary/5 hover:-translate-y-0.5",
-        className
+        className,
       )}
     >
       {/* Header image */}
-      <div className={cn(
-        "relative overflow-hidden bg-gradient-to-br from-primary to-primary-light flex items-center justify-center",
-        featured ? "h-48" : "h-32"
-      )}>
+      <div
+        className={cn(
+          "relative overflow-hidden bg-gradient-to-br from-primary to-primary-light flex items-center justify-center",
+          featured ? "h-48" : "h-32",
+        )}
+      >
         {research.image ? (
           <Image
             src={research.image}
@@ -34,38 +36,35 @@ export function ResearchCard({ research, featured = false, className }: Research
             sizes={featured ? "(max-width: 768px) 100vw, 50vw" : "(max-width: 768px) 100vw, 33vw"}
           />
         ) : (
-          <FileText className={cn(
-            "text-white/20",
-            featured ? "h-20 w-20" : "h-12 w-12"
-          )} />
+          <FileText className={cn("text-white/20", featured ? "h-20 w-20" : "h-12 w-12")} />
         )}
       </div>
 
       <div className={cn("p-5", featured && "p-6")}>
         <div className="flex flex-wrap gap-2 mb-3">
           {research.categories.map((cat) => (
-            <Badge key={cat} variant="primary">{cat}</Badge>
+            <Badge key={cat} variant="primary">
+              {cat}
+            </Badge>
           ))}
         </div>
 
-        <h3 className={cn(
-          "font-semibold text-text-primary mb-2 group-hover:text-primary transition-colors",
-          featured ? "text-xl" : "text-base"
-        )}>
+        <h3
+          className={cn(
+            "font-semibold text-text-primary mb-2 group-hover:text-primary transition-colors",
+            featured ? "text-xl" : "text-base",
+          )}
+        >
           {research.title}
         </h3>
 
-        <p className="text-sm text-text-secondary mb-1">
-          {research.author}
-        </p>
+        <p className="text-sm text-text-secondary mb-1">{research.author}</p>
         <p className="text-sm text-text-muted mb-3">
           {research.organisation} &middot; {formatDate(research.publicationDate)}
         </p>
 
         {featured && (
-          <p className="text-sm text-text-secondary line-clamp-3 mb-4">
-            {research.summary}
-          </p>
+          <p className="text-sm text-text-secondary line-clamp-3 mb-4">{research.summary}</p>
         )}
 
         <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-accent-dark group-hover:text-accent-dark transition-colors">

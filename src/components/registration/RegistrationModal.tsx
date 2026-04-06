@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import Link from "next/link";
 import { CheckCircle2, AlertCircle } from "lucide-react";
 import { Modal } from "@/components/admin/Modal";
 import { Input } from "@/components/ui/Input";
@@ -110,12 +111,9 @@ export function RegistrationModal({
           <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-secondary/10">
             <CheckCircle2 className="h-8 w-8 text-secondary-dark" />
           </div>
-          <h2 className="mb-2 text-xl font-bold text-text-primary">
-            Registration Submitted
-          </h2>
+          <h2 className="mb-2 text-xl font-bold text-text-primary">Registration Submitted</h2>
           <p className="mb-6 text-sm text-text-secondary">
-            Thank you for registering for{" "}
-            <span className="font-medium">{contentTitle}</span>.
+            Thank you for registering for <span className="font-medium">{contentTitle}</span>.
             You&apos;ll receive a confirmation email shortly.
           </p>
           <Button variant="primary" onClick={handleClose}>
@@ -220,41 +218,25 @@ export function RegistrationModal({
               {...register("gdprConsent")}
             />
             <span className="text-sm text-text-secondary">
-              I consent to SOWA processing my personal data for the purpose of
-              this registration. Your data will be handled in accordance with our{" "}
-              <a href="/privacy" className="text-accent-dark underline">
+              I consent to SOWA processing my personal data for the purpose of this registration.
+              Your data will be handled in accordance with our{" "}
+              <Link href="/privacy" className="text-accent-dark underline">
                 Privacy Policy
-              </a>
+              </Link>
               . *
             </span>
           </label>
           {errors.gdprConsent && (
-            <p className="mt-1.5 text-sm text-status-error">
-              {errors.gdprConsent.message}
-            </p>
+            <p className="mt-1.5 text-sm text-status-error">{errors.gdprConsent.message}</p>
           )}
         </div>
 
         <div className="flex gap-3 pt-2">
-          <Button
-            type="button"
-            variant="outline"
-            onClick={handleClose}
-            className="flex-1"
-          >
+          <Button type="button" variant="outline" onClick={handleClose} className="flex-1">
             Cancel
           </Button>
-          <Button
-            type="submit"
-            variant="primary"
-            disabled={isSubmitting}
-            className="flex-1"
-          >
-            {isSubmitting
-              ? "Submitting..."
-              : type === "EVENT"
-                ? "Register"
-                : "Express Interest"}
+          <Button type="submit" variant="primary" disabled={isSubmitting} className="flex-1">
+            {isSubmitting ? "Submitting..." : type === "EVENT" ? "Register" : "Express Interest"}
           </Button>
         </div>
       </form>

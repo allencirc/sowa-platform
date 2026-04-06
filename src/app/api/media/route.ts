@@ -34,9 +34,7 @@ export async function GET() {
 
     // Exclude variant files from the listing — they are implementation details.
     const originals = files.filter(
-      (f) =>
-        !f.startsWith(".") &&
-        !VARIANTS.some((v) => f.includes(`-${v.suffix}.`))
+      (f) => !f.startsWith(".") && !VARIANTS.some((v) => f.includes(`-${v.suffix}.`)),
     );
 
     const media = await Promise.all(
@@ -62,13 +60,10 @@ export async function GET() {
           createdAt: stats.birthtime.toISOString(),
           ...(Object.keys(variants).length > 0 && { variants }),
         };
-      })
+      }),
     );
 
-    media.sort(
-      (a, b) =>
-        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-    );
+    media.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
     return NextResponse.json({ data: media });
   } catch (err) {
@@ -94,26 +89,17 @@ export async function POST(request: NextRequest) {
     }
 
     // Validate file type
-    const allowedTypes = [
-      "image/jpeg",
-      "image/png",
-      "image/gif",
-      "image/webp",
-      "image/svg+xml",
-    ];
+    const allowedTypes = ["image/jpeg", "image/png", "image/gif", "image/webp", "image/svg+xml"];
     if (!allowedTypes.includes(file.type)) {
       return NextResponse.json(
         { error: "Invalid file type. Allowed: JPEG, PNG, GIF, WebP, SVG" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
     // Max 5 MB
     if (file.size > 5 * 1024 * 1024) {
-      return NextResponse.json(
-        { error: "File too large. Max 5MB." },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "File too large. Max 5MB." }, { status: 400 });
     }
 
     await mkdir(UPLOAD_DIR, { recursive: true });
@@ -133,7 +119,7 @@ export async function POST(request: NextRequest) {
       await writeFile(path.join(UPLOAD_DIR, filename), buffer);
       return NextResponse.json(
         { filename, url: `/uploads/${filename}`, size: buffer.length },
-        { status: 201 }
+        { status: 201 },
       );
     }
 
@@ -178,7 +164,7 @@ export async function POST(request: NextRequest) {
         const variantFilename = `${baseName}-${v.suffix}.webp`;
         await writeFile(path.join(UPLOAD_DIR, variantFilename), variantBuf);
         variantResults[v.suffix] = `/uploads/${variantFilename}`;
-      })
+      }),
     );
 
     return NextResponse.json(
@@ -190,7 +176,7 @@ export async function POST(request: NextRequest) {
         dimensions: { width: origWidth, height: origHeight },
         variants: variantResults,
       },
-      { status: 201 }
+      { status: 201 },
     );
   } catch (err) {
     if (err instanceof Error && err.message.includes("Unauthorized")) {
@@ -211,10 +197,7 @@ export async function DELETE(request: NextRequest) {
     const filename = searchParams.get("filename");
 
     if (!filename) {
-      return NextResponse.json(
-        { error: "No filename provided" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "No filename provided" }, { status: 400 });
     }
 
     // Prevent path traversal
@@ -230,9 +213,7 @@ export async function DELETE(request: NextRequest) {
     // Also clean up any generated variants
     const parsed = path.parse(safeName);
     await Promise.allSettled(
-      VARIANTS.map((v) =>
-        unlink(path.join(UPLOAD_DIR, `${parsed.name}-${v.suffix}.webp`))
-      )
+      VARIANTS.map((v) => unlink(path.join(UPLOAD_DIR, `${parsed.name}-${v.suffix}.webp`))),
     );
 
     return NextResponse.json({ success: true });

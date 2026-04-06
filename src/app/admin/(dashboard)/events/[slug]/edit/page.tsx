@@ -39,23 +39,30 @@ export default function EditEventPage() {
       .finally(() => setLoading(false));
   }, [slug]);
 
-  useEffect(() => { fetchEvent(); }, [fetchEvent]);
+  useEffect(() => {
+    fetchEvent();
+  }, [fetchEvent]);
 
   const handleStatusChange = (newStatus: ContentStatus) => {
     setEvent((prev) =>
-      prev ? { ...prev, status: newStatus, rejectionNote: null, publishAt: null } : prev
+      prev ? { ...prev, status: newStatus, rejectionNote: null, publishAt: null } : prev,
     );
   };
 
   const userRole = (session?.user?.role ?? "VIEWER") as "ADMIN" | "EDITOR" | "VIEWER";
 
-  if (loading) return <div className="flex h-64 items-center justify-center text-text-muted">Loading event...</div>;
+  if (loading)
+    return (
+      <div className="flex h-64 items-center justify-center text-text-muted">Loading event...</div>
+    );
 
   if (error || !event) {
     return (
       <div className="flex h-64 flex-col items-center justify-center gap-2">
         <p className="text-lg font-medium text-text-primary">{error ?? "Event not found"}</p>
-        <a href="/admin/events" className="text-sm text-accent-dark hover:underline">Back to events</a>
+        <a href="/admin/events" className="text-sm text-accent-dark hover:underline">
+          Back to events
+        </a>
       </div>
     );
   }
@@ -67,7 +74,9 @@ export default function EditEventPage() {
         <p className="mt-1 text-sm text-text-secondary">Update this event.</p>
       </div>
       <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
-        <div><EventForm event={event} mode="edit" /></div>
+        <div>
+          <EventForm event={event} mode="edit" />
+        </div>
         <div className="space-y-6">
           <StatusWorkflow
             currentStatus={event.status}
@@ -83,7 +92,7 @@ export default function EditEventPage() {
             contentId={event.id}
             userRole={userRole}
             onRestore={(snapshot) => {
-              setEvent((prev) => prev ? { ...prev, ...snapshot } as EventWithWorkflow : prev);
+              setEvent((prev) => (prev ? ({ ...prev, ...snapshot } as EventWithWorkflow) : prev));
               router.refresh();
             }}
           />

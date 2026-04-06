@@ -17,9 +17,7 @@ export async function generateStaticParams() {
   return (await getAllNews()).map((n) => ({ slug: n.slug }));
 }
 
-export async function generateMetadata({
-  params,
-}: NewsDetailProps): Promise<Metadata> {
+export async function generateMetadata({ params }: NewsDetailProps): Promise<Metadata> {
   const { slug } = await params;
   const article = await getNewsBySlug(slug);
   if (!article) return { title: "Article Not Found" };

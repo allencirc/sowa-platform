@@ -18,6 +18,7 @@ The SOWA (Skillnet Offshore Wind Academy) platform is a Next.js-based content ma
 ### Your Role
 
 Are you an **Editor**, **Admin**, or **Viewer**? This determines what you can do:
+
 - **Editors:** Create and edit content; submit for review
 - **Admins:** Create, edit, publish content; manage users; export data
 - **Viewers:** Read-only access to view content and registrations
@@ -31,18 +32,21 @@ Not sure? Check with your manager or the platform administrator.
 Complete this checklist during your first week:
 
 **Day 1: Setup**
+
 - [ ] Log in and change your password
 - [ ] Read the Admin User Guide (overview)
 - [ ] Read the Content-Type Guides (understand the 5 content types)
 - [ ] Explore the admin dashboard; familiarize yourself with the sidebar navigation
 
 **Day 2: Hands-On Practice**
+
 - [ ] Create a new Career (draft only) — fill in required fields, save as draft
 - [ ] Upload an image to the media library
 - [ ] Edit a published piece of content (make a small change, save)
 - [ ] View the version history of what you edited
 
 **Day 3: First Real Task**
+
 - [ ] Create a new Careers listing (complete, all fields)
 - [ ] Add related courses and skills
 - [ ] Save as draft, request feedback from an Admin
@@ -50,12 +54,14 @@ Complete this checklist during your first week:
 - [ ] Complete the Publishing Workflow guide (understand the review process)
 
 **Day 4: Registrations & Data**
+
 - [ ] View the Registrations section
 - [ ] Apply filters (by event, status, date)
 - [ ] Read the Registrations & CSV Export guide
 - [ ] If relevant to your role, download and open a sample CSV export
 
 **Day 5: Consolidation**
+
 - [ ] Review any feedback from your first submitted content
 - [ ] Ask questions; note any gaps in your understanding
 - [ ] Read User & Role Management (understand team structure)
@@ -122,6 +128,7 @@ Complete this checklist during your first week:
    - Share the link with your team for feedback
 
 **Tips:**
+
 - Save often (every 5 minutes) to avoid losing work
 - Add a change note if you make significant edits (e.g. "Updated salary range based on Q1 survey")
 - If rejected, read the Admin's feedback, make the requested changes, and resubmit
@@ -180,6 +187,7 @@ Complete this checklist during your first week:
    - The headcount updates automatically
 
 **Tips:**
+
 - Set accurate date and time; ambiguous times confuse registrants
 - Use a descriptive title so people know what the event is about
 - Upload a professional hero image to make the event page attractive
@@ -235,6 +243,7 @@ Complete this checklist during your first week:
    - This will help you interpret results and use them for reporting
 
 **Tips:**
+
 - Take the diagnostic yourself; this is the best way to understand it
 - Review diagnostic metrics monthly to understand what users are seeking
 - Use results to identify missing courses or poorly-described careers
@@ -291,6 +300,7 @@ Complete this checklist during your first week:
      - Any other insights
 
 **Tips:**
+
 - Export only the data you need (apply filters first)
 - Filter to "Confirmed" for accurate headcount; pending registrations may not attend
 - Save the CSV file with a clear name (e.g. `Event-SafetyWebinar-2026-03-15-Registrations.csv`)
@@ -412,18 +422,18 @@ Keep these handy for reference:
 
 ## Quick Reference: Common Admin Tasks
 
-| Task | Navigation | Key Steps |
-|------|-----------|-----------|
-| Create a career | Careers > Create New | Fill required fields, add skills, save/submit |
-| Create an event | Events > Create New | Set title, type, date/time, location type, capacity |
-| Create a course | Courses > Create New | Set provider, delivery format, duration, cost, NFQ level |
-| Publish content | Edit content > Publish (Admin) or Submit for Review (Editor) | Click Publish or Submit, confirm |
-| Export registrations | Registrations > Apply filters > Export CSV | Select event/course, status, date range; download CSV |
-| Upload an image | Media > Upload | Select file (under 5 MB); copy URL for use in content |
-| Create a user | Users > Create User | Enter email, name, password, role; click Create |
-| View version history | Edit content > Version History tab | See all edits, who made them, when, why (change notes) |
-| Schedule publication | Edit content > Set Publish At date > Save | Content publishes automatically at scheduled time |
-| Manage event capacity | Edit event > Change Capacity field > Save | Increase or decrease max registrations |
+| Task                  | Navigation                                                   | Key Steps                                                |
+| --------------------- | ------------------------------------------------------------ | -------------------------------------------------------- |
+| Create a career       | Careers > Create New                                         | Fill required fields, add skills, save/submit            |
+| Create an event       | Events > Create New                                          | Set title, type, date/time, location type, capacity      |
+| Create a course       | Courses > Create New                                         | Set provider, delivery format, duration, cost, NFQ level |
+| Publish content       | Edit content > Publish (Admin) or Submit for Review (Editor) | Click Publish or Submit, confirm                         |
+| Export registrations  | Registrations > Apply filters > Export CSV                   | Select event/course, status, date range; download CSV    |
+| Upload an image       | Media > Upload                                               | Select file (under 5 MB); copy URL for use in content    |
+| Create a user         | Users > Create User                                          | Enter email, name, password, role; click Create          |
+| View version history  | Edit content > Version History tab                           | See all edits, who made them, when, why (change notes)   |
+| Schedule publication  | Edit content > Set Publish At date > Save                    | Content publishes automatically at scheduled time        |
+| Manage event capacity | Edit event > Change Capacity field > Save                    | Increase or decrease max registrations                   |
 
 ---
 
@@ -441,6 +451,7 @@ Keep these handy for reference:
 ## Getting Help
 
 If you get stuck:
+
 1. **Check the relevant documentation** — It probably covers your question
 2. **Ask a teammate** — Your peers can often answer quickly
 3. **Contact your manager or platform admin** — For technical issues or clarifications

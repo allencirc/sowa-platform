@@ -78,9 +78,7 @@ function LookerStudioFallback({ url }: { url: string }) {
   return (
     <div className="rounded-xl bg-surface-card p-4 shadow-sm">
       <div className="mb-3 flex items-center justify-between">
-        <p className="text-sm text-text-secondary">
-          Embedded Looker Studio report (read-only)
-        </p>
+        <p className="text-sm text-text-secondary">Embedded Looker Studio report (read-only)</p>
         <a
           href={url}
           target="_blank"
@@ -110,19 +108,14 @@ function NotConfiguredPanel({ reason }: { reason: string }) {
       <div className="flex items-start gap-3">
         <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-amber-600" />
         <div>
-          <h2 className="text-base font-semibold text-amber-900">
-            Analytics not configured
-          </h2>
+          <h2 className="text-base font-semibold text-amber-900">Analytics not configured</h2>
           <p className="mt-1 text-sm text-amber-900/80">{reason}</p>
           <p className="mt-3 text-sm text-amber-900/80">
             Configure either of the following to enable this page:
           </p>
           <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-amber-900/80">
             <li>
-              <code className="rounded bg-white/60 px-1.5 py-0.5 text-xs">
-                GA4_PROPERTY_ID
-              </code>{" "}
-              +{" "}
+              <code className="rounded bg-white/60 px-1.5 py-0.5 text-xs">GA4_PROPERTY_ID</code> +{" "}
               <code className="rounded bg-white/60 px-1.5 py-0.5 text-xs">
                 GA4_SERVICE_ACCOUNT_JSON
               </code>{" "}
@@ -173,8 +166,7 @@ export default async function AdminAnalyticsPage() {
             Analytics
           </h1>
           <p className="mt-1 text-text-secondary">
-            Site traffic, top content, diagnostic completions, and conversion
-            events. Last 28 days.
+            Site traffic, top content, diagnostic completions, and conversion events. Last 28 days.
           </p>
         </div>
       </div>
@@ -206,10 +198,7 @@ function AnalyticsBody({
         ) : (
           <NotConfiguredPanel reason={ga4.reason} />
         )}
-        <LocalConversions
-          total={registrationsTotal}
-          last28={registrationsLast28}
-        />
+        <LocalConversions total={registrationsTotal} last28={registrationsLast28} />
       </div>
     );
   }
@@ -222,22 +211,13 @@ function AnalyticsBody({
           <div className="flex items-start gap-3">
             <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-red-600" />
             <div>
-              <h2 className="text-base font-semibold text-red-900">
-                Could not load GA4 report
-              </h2>
-              <p className="mt-1 break-words text-sm text-red-900/80">
-                {ga4.message}
-              </p>
+              <h2 className="text-base font-semibold text-red-900">Could not load GA4 report</h2>
+              <p className="mt-1 break-words text-sm text-red-900/80">{ga4.message}</p>
             </div>
           </div>
         </div>
-        {ga4.lookerStudioUrl ? (
-          <LookerStudioFallback url={ga4.lookerStudioUrl} />
-        ) : null}
-        <LocalConversions
-          total={registrationsTotal}
-          last28={registrationsLast28}
-        />
+        {ga4.lookerStudioUrl ? <LookerStudioFallback url={ga4.lookerStudioUrl} /> : null}
+        <LocalConversions total={registrationsTotal} last28={registrationsLast28} />
       </div>
     );
   }
@@ -276,9 +256,7 @@ function AnalyticsBody({
 
       {/* Conversion events */}
       <section>
-        <h2 className="mb-3 text-lg font-semibold text-text-primary">
-          Conversions
-        </h2>
+        <h2 className="mb-3 text-lg font-semibold text-text-primary">Conversions</h2>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <MetricCard
             label="Diagnostic completions"
@@ -309,25 +287,18 @@ function AnalyticsBody({
       {/* Top content + top events side-by-side */}
       <section className="grid gap-6 lg:grid-cols-2">
         <div className="rounded-xl bg-surface-card p-6 shadow-sm">
-          <h2 className="mb-4 text-lg font-semibold text-text-primary">
-            Top content
-          </h2>
+          <h2 className="mb-4 text-lg font-semibold text-text-primary">Top content</h2>
           {topPages.length === 0 ? (
             <p className="text-sm text-text-muted">No page views yet.</p>
           ) : (
             <ol className="divide-y divide-gray-100">
               {topPages.map((page) => (
-                <li
-                  key={page.path}
-                  className="flex items-center justify-between gap-4 py-3"
-                >
+                <li key={page.path} className="flex items-center justify-between gap-4 py-3">
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-sm font-medium text-text-primary">
                       {page.title || page.path}
                     </p>
-                    <p className="truncate text-xs text-text-muted">
-                      {page.path}
-                    </p>
+                    <p className="truncate text-xs text-text-muted">{page.path}</p>
                   </div>
                   <span className="shrink-0 text-sm font-semibold tabular-nums text-text-secondary">
                     {formatNumber(page.views)}
@@ -339,18 +310,13 @@ function AnalyticsBody({
         </div>
 
         <div className="rounded-xl bg-surface-card p-6 shadow-sm">
-          <h2 className="mb-4 text-lg font-semibold text-text-primary">
-            Top custom events
-          </h2>
+          <h2 className="mb-4 text-lg font-semibold text-text-primary">Top custom events</h2>
           {topEvents.length === 0 ? (
             <p className="text-sm text-text-muted">No events recorded yet.</p>
           ) : (
             <ol className="divide-y divide-gray-100">
               {topEvents.slice(0, 10).map((event) => (
-                <li
-                  key={event.eventName}
-                  className="flex items-center justify-between gap-4 py-3"
-                >
+                <li key={event.eventName} className="flex items-center justify-between gap-4 py-3">
                   <span className="truncate text-sm font-medium text-text-primary">
                     {event.eventName}
                   </span>
@@ -365,20 +331,13 @@ function AnalyticsBody({
       </section>
 
       <p className="text-xs text-text-muted">
-        GA4 data refreshed every 5 minutes. Registrations sourced from the
-        platform database.
+        GA4 data refreshed every 5 minutes. Registrations sourced from the platform database.
       </p>
     </div>
   );
 }
 
-function LocalConversions({
-  total,
-  last28,
-}: {
-  total: number;
-  last28: number;
-}) {
+function LocalConversions({ total, last28 }: { total: number; last28: number }) {
   return (
     <section>
       <h2 className="mb-3 text-lg font-semibold text-text-primary">

@@ -3,13 +3,7 @@ import { Wind } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { format, type Dictionary, type Locale } from "@/lib/i18n";
 
-export function Footer({
-  locale,
-  dict,
-}: {
-  locale: Locale;
-  dict: Dictionary;
-}) {
+export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   const prefix = `/${locale}`;
 
   const footerColumns = [
@@ -29,9 +23,7 @@ export function Footer({
     },
     {
       title: dict.footer.columns.events,
-      links: [
-        { label: dict.nav.events, href: `${prefix}/events` },
-      ],
+      links: [{ label: dict.nav.events, href: `${prefix}/events` }],
     },
     {
       title: dict.footer.columns.research,
@@ -62,17 +54,13 @@ export function Footer({
                 <Wind className="h-8 w-8 text-secondary-dark" />
                 <span className="text-lg font-bold tracking-tight">SOWA</span>
               </Link>
-              <p className="text-sm text-text-inverse/60 leading-relaxed">
-                {dict.footer.tagline}
-              </p>
+              <p className="text-sm text-text-inverse/60 leading-relaxed">{dict.footer.tagline}</p>
             </div>
 
             {/* Nav columns */}
             {footerColumns.map((col) => (
               <div key={col.title}>
-                <h3 className="text-sm font-semibold mb-3 text-text-inverse/80">
-                  {col.title}
-                </h3>
+                <h3 className="text-sm font-semibold mb-3 text-text-inverse/80">{col.title}</h3>
                 <ul className="space-y-2">
                   {col.links.map((link) => (
                     <li key={link.href}>

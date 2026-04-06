@@ -115,34 +115,34 @@ Three boundaries are enforced:
 
 ### Security & Compliance Notes (cross-referenced with the diagram)
 
-| Concern | Control |
-|---|---|
-| Encryption in transit | TLS 1.3 for all public traffic and all outbound integration calls. HSTS enabled at the edge. |
-| Encryption at rest | Managed Postgres and object storage both use AES-256 at rest (provider-managed keys). |
-| EU data residency | Vercel serverless functions, Postgres (Neon / Supabase / RDS), and media (Vercel Blob / S3) are all pinned to an EU region. |
-| Backups | Managed Postgres provides daily automated backups and point-in-time recovery (PITR) for a minimum 7-day window. |
-| Rate limiting | Applied at the edge (coarse) and in `/api/*` route handlers (fine, per-identity) via the limiter in `src/lib/rate-limit.ts`. |
-| AuthN/AuthZ | NextAuth v5 with JWT sessions. Role-based access (`ADMIN` / `EDITOR` / `VIEWER`) enforced in middleware for `/admin/**` and in each protected API route. |
-| Consent-gated analytics | GA4, Meta Pixel and LinkedIn Insight Tag only load after the user grants the corresponding consent category in the `sowa_consent` cookie. |
-| Secrets | All integration keys (HubSpot, Eventbrite, Qualifax, feed APIs) live in Vercel environment variables and are only readable by server functions. |
+| Concern                 | Control                                                                                                                                                  |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Encryption in transit   | TLS 1.3 for all public traffic and all outbound integration calls. HSTS enabled at the edge.                                                             |
+| Encryption at rest      | Managed Postgres and object storage both use AES-256 at rest (provider-managed keys).                                                                    |
+| EU data residency       | Vercel serverless functions, Postgres (Neon / Supabase / RDS), and media (Vercel Blob / S3) are all pinned to an EU region.                              |
+| Backups                 | Managed Postgres provides daily automated backups and point-in-time recovery (PITR) for a minimum 7-day window.                                          |
+| Rate limiting           | Applied at the edge (coarse) and in `/api/*` route handlers (fine, per-identity) via the limiter in `src/lib/rate-limit.ts`.                             |
+| AuthN/AuthZ             | NextAuth v5 with JWT sessions. Role-based access (`ADMIN` / `EDITOR` / `VIEWER`) enforced in middleware for `/admin/**` and in each protected API route. |
+| Consent-gated analytics | GA4, Meta Pixel and LinkedIn Insight Tag only load after the user grants the corresponding consent category in the `sowa_consent` cookie.                |
+| Secrets                 | All integration keys (HubSpot, Eventbrite, Qualifax, feed APIs) live in Vercel environment variables and are only readable by server functions.          |
 
 ## Tech Stack
 
-| Layer | Technology | Version | Rationale |
-|-------|-----------|---------|-----------|
-| Framework | Next.js | 16.2.2 | App Router with server/client component model, SSR for SEO, API routes for backend, single deployable unit |
-| Language | TypeScript | 5.x | Strict mode. Type safety across frontend and backend reduces runtime errors |
-| Runtime | React | 19.2.4 | Server Components for data-heavy pages, Client Components only where interactivity is needed |
-| Styling | Tailwind CSS | 4.x | Utility-first CSS with design tokens. Consistent theming, no CSS-in-JS runtime overhead |
-| Database | PostgreSQL | 15+ | Relational model fits the structured content domain. JSONB for flexible diagnostic scoring |
-| ORM | Prisma | 7.6.0 | Type-safe database access, auto-generated client, migration management, visual studio |
-| Auth | NextAuth.js | 5.0.0-beta.30 | JWT sessions, credentials provider, role-based middleware. Integrates natively with Next.js |
-| Forms | React Hook Form + Zod | 7.72 / 4.3 | Performant form handling with schema-based validation shared between client and server |
-| Rich Text | TipTap | 3.22.1 | Extensible ProseMirror-based editor for admin content editing |
-| Visualisation | @xyflow/react (React Flow) | 12.10.2 | Interactive node-based career pathway maps |
-| Charts | Recharts | 3.8.1 | Radar charts for diagnostic skill assessment results |
-| Icons | Lucide React | 1.7.0 | Tree-shakeable SVG icon library. Consistent line-icon style |
-| Utilities | clsx + tailwind-merge | 2.1 / 3.5 | Conditional class names with Tailwind conflict resolution via `cn()` helper |
+| Layer         | Technology                 | Version       | Rationale                                                                                                  |
+| ------------- | -------------------------- | ------------- | ---------------------------------------------------------------------------------------------------------- |
+| Framework     | Next.js                    | 16.2.2        | App Router with server/client component model, SSR for SEO, API routes for backend, single deployable unit |
+| Language      | TypeScript                 | 5.x           | Strict mode. Type safety across frontend and backend reduces runtime errors                                |
+| Runtime       | React                      | 19.2.4        | Server Components for data-heavy pages, Client Components only where interactivity is needed               |
+| Styling       | Tailwind CSS               | 4.x           | Utility-first CSS with design tokens. Consistent theming, no CSS-in-JS runtime overhead                    |
+| Database      | PostgreSQL                 | 15+           | Relational model fits the structured content domain. JSONB for flexible diagnostic scoring                 |
+| ORM           | Prisma                     | 7.6.0         | Type-safe database access, auto-generated client, migration management, visual studio                      |
+| Auth          | NextAuth.js                | 5.0.0-beta.30 | JWT sessions, credentials provider, role-based middleware. Integrates natively with Next.js                |
+| Forms         | React Hook Form + Zod      | 7.72 / 4.3    | Performant form handling with schema-based validation shared between client and server                     |
+| Rich Text     | TipTap                     | 3.22.1        | Extensible ProseMirror-based editor for admin content editing                                              |
+| Visualisation | @xyflow/react (React Flow) | 12.10.2       | Interactive node-based career pathway maps                                                                 |
+| Charts        | Recharts                   | 3.8.1         | Radar charts for diagnostic skill assessment results                                                       |
+| Icons         | Lucide React               | 1.7.0         | Tree-shakeable SVG icon library. Consistent line-icon style                                                |
+| Utilities     | clsx + tailwind-merge      | 2.1 / 3.5     | Conditional class names with Tailwind conflict resolution via `cn()` helper                                |
 
 ---
 
@@ -345,12 +345,12 @@ To activate: set `HUBSPOT_API_KEY`, `HUBSPOT_PORTAL_ID`, and `HUBSPOT_NEWSLETTER
 
 To keep the course directory and NFQ metadata current without double-keying, the admin CMS can ingest from three Irish sources via scheduled server-side jobs. All calls are outbound HTTPS from `/api/*` route handlers; credentials live in Vercel environment variables.
 
-| Source | Purpose | Mode |
-|---|---|---|
-| **Eventbrite API** | Pulls SOWA-hosted events and writes them as draft `Event` rows for editor review | Scheduled sync + webhook |
-| **careersportal.ie** | Reference feed for Irish career descriptors and labour-market signals | Scheduled pull |
-| **Fetchcourses.ie** | Authoritative feed of FET/HET courses to pre-populate `Course` drafts | Scheduled pull |
-| **Qualifax** | NFQ level reference data used to validate `Course.nfqLevel` on save | On-demand lookup |
+| Source               | Purpose                                                                          | Mode                     |
+| -------------------- | -------------------------------------------------------------------------------- | ------------------------ |
+| **Eventbrite API**   | Pulls SOWA-hosted events and writes them as draft `Event` rows for editor review | Scheduled sync + webhook |
+| **careersportal.ie** | Reference feed for Irish career descriptors and labour-market signals            | Scheduled pull           |
+| **Fetchcourses.ie**  | Authoritative feed of FET/HET courses to pre-populate `Course` drafts            | Scheduled pull           |
+| **Qualifax**         | NFQ level reference data used to validate `Course.nfqLevel` on save              | On-demand lookup         |
 
 Ingested records are always created in `DRAFT` status and routed through the standard editorial workflow (DRAFT → IN_REVIEW → PUBLISHED) so an SOWA editor approves anything that goes public.
 
@@ -397,15 +397,15 @@ Consent-aware tracking is implemented in `src/lib/analytics.ts` and `src/lib/mar
 
 ## Key Architectural Decisions
 
-| Decision | Choice | Alternative Considered | Rationale |
-|----------|--------|----------------------|-----------|
-| Database | PostgreSQL + Prisma | Payload CMS + MongoDB, Supabase | Structured relational data model fits the career/course/skill/pathway domain, which has many cross-entity relationships. Prisma provides end-to-end type safety, migrations, and a familiar workflow. A headless CMS was considered and rejected: the content model is tightly constrained and relational, not free-form, so a custom admin UI on top of Prisma is a better fit than a generic CMS. |
-| Auth | NextAuth credentials | OAuth providers | Admin-only auth. Credentials provider is simplest for internal users. OAuth can be added later. |
-| Styling | Tailwind CSS 4 | CSS Modules, styled-components | Utility-first approach, design tokens in config, no runtime overhead, good DX with IDE support |
-| State management | Server Components + URL state | Redux, Zustand | Most pages are server-rendered. Filter state lives in URL params. Client state only for modals and forms. |
-| Rate limiting | In-memory Map | Redis, Upstash | Sufficient for single-instance deployment. Redis recommended for production multi-instance. |
-| Rich text | TipTap | Draft.js, Slate | Modern ProseMirror-based editor with good extension ecosystem. Outputs HTML for flexible rendering. |
-| Pathway visualisation | React Flow | D3.js, Cytoscape | Purpose-built for node/edge diagrams with built-in pan, zoom, and interactivity |
+| Decision              | Choice                        | Alternative Considered          | Rationale                                                                                                                                                                                                                                                                                                                                                                                           |
+| --------------------- | ----------------------------- | ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Database              | PostgreSQL + Prisma           | Payload CMS + MongoDB, Supabase | Structured relational data model fits the career/course/skill/pathway domain, which has many cross-entity relationships. Prisma provides end-to-end type safety, migrations, and a familiar workflow. A headless CMS was considered and rejected: the content model is tightly constrained and relational, not free-form, so a custom admin UI on top of Prisma is a better fit than a generic CMS. |
+| Auth                  | NextAuth credentials          | OAuth providers                 | Admin-only auth. Credentials provider is simplest for internal users. OAuth can be added later.                                                                                                                                                                                                                                                                                                     |
+| Styling               | Tailwind CSS 4                | CSS Modules, styled-components  | Utility-first approach, design tokens in config, no runtime overhead, good DX with IDE support                                                                                                                                                                                                                                                                                                      |
+| State management      | Server Components + URL state | Redux, Zustand                  | Most pages are server-rendered. Filter state lives in URL params. Client state only for modals and forms.                                                                                                                                                                                                                                                                                           |
+| Rate limiting         | In-memory Map                 | Redis, Upstash                  | Sufficient for single-instance deployment. Redis recommended for production multi-instance.                                                                                                                                                                                                                                                                                                         |
+| Rich text             | TipTap                        | Draft.js, Slate                 | Modern ProseMirror-based editor with good extension ecosystem. Outputs HTML for flexible rendering.                                                                                                                                                                                                                                                                                                 |
+| Pathway visualisation | React Flow                    | D3.js, Cytoscape                | Purpose-built for node/edge diagrams with built-in pan, zoom, and interactivity                                                                                                                                                                                                                                                                                                                     |
 
 ---
 

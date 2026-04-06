@@ -19,9 +19,7 @@ export function FilterDrawer({ courses, activeFilterCount }: FilterDrawerProps) 
   const searchParams = useSearchParams();
 
   // Local draft state — only applied on "Apply"
-  const [draftParams, setDraftParams] = useState(
-    new URLSearchParams(searchParams.toString())
-  );
+  const [draftParams, setDraftParams] = useState(new URLSearchParams(searchParams.toString()));
 
   // Sync draft when URL changes externally
   useEffect(() => {
@@ -52,12 +50,7 @@ export function FilterDrawer({ courses, activeFilterCount }: FilterDrawerProps) 
     return Array.from(providerSet).sort();
   }, [courses]);
 
-  const allFormats: Course["deliveryFormat"][] = [
-    "In-Person",
-    "Online",
-    "Blended",
-    "Self-Paced",
-  ];
+  const allFormats: Course["deliveryFormat"][] = ["In-Person", "Online", "Blended", "Self-Paced"];
 
   const toggleDraftArray = (key: string, value: string, checked: boolean) => {
     const next = new URLSearchParams(draftParams.toString());
@@ -97,7 +90,7 @@ export function FilterDrawer({ courses, activeFilterCount }: FilterDrawerProps) 
         onClick={() => setOpen(true)}
         className={cn(
           "lg:hidden inline-flex items-center gap-2 px-4 py-2.5 rounded-lg border border-gray-200 text-sm font-medium text-text-primary transition-colors hover:bg-gray-50 cursor-pointer",
-          activeFilterCount > 0 && "border-secondary text-secondary-dark"
+          activeFilterCount > 0 && "border-secondary text-secondary-dark",
         )}
       >
         <SlidersHorizontal className="h-4 w-4" />
@@ -111,17 +104,14 @@ export function FilterDrawer({ courses, activeFilterCount }: FilterDrawerProps) 
 
       {/* Backdrop */}
       {open && (
-        <div
-          className="fixed inset-0 bg-black/40 z-40 lg:hidden"
-          onClick={() => setOpen(false)}
-        />
+        <div className="fixed inset-0 bg-black/40 z-40 lg:hidden" onClick={() => setOpen(false)} />
       )}
 
       {/* Drawer */}
       <div
         className={cn(
           "fixed inset-x-0 bottom-0 z-50 bg-white rounded-t-2xl max-h-[85vh] flex flex-col transition-transform duration-300 ease-out lg:hidden",
-          open ? "translate-y-0" : "translate-y-full"
+          open ? "translate-y-0" : "translate-y-full",
         )}
       >
         {/* Header */}
@@ -164,9 +154,7 @@ export function FilterDrawer({ courses, activeFilterCount }: FilterDrawerProps) 
 
           {/* Delivery Format */}
           <div>
-            <h3 className="text-sm font-semibold text-text-primary mb-3">
-              Delivery Format
-            </h3>
+            <h3 className="text-sm font-semibold text-text-primary mb-3">Delivery Format</h3>
             <div className="space-y-2.5">
               {allFormats.map((format) => (
                 <Checkbox
@@ -174,9 +162,7 @@ export function FilterDrawer({ courses, activeFilterCount }: FilterDrawerProps) 
                   id={`d-format-${format}`}
                   label={format}
                   checked={draftParams.getAll("format").includes(format)}
-                  onChange={(checked) =>
-                    toggleDraftArray("format", format, checked)
-                  }
+                  onChange={(checked) => toggleDraftArray("format", format, checked)}
                 />
               ))}
             </div>
@@ -203,9 +189,7 @@ export function FilterDrawer({ courses, activeFilterCount }: FilterDrawerProps) 
                   id={`d-provider-${provider}`}
                   label={provider}
                   checked={draftParams.getAll("provider").includes(provider)}
-                  onChange={(checked) =>
-                    toggleDraftArray("provider", provider, checked)
-                  }
+                  onChange={(checked) => toggleDraftArray("provider", provider, checked)}
                 />
               ))}
             </div>
@@ -213,9 +197,7 @@ export function FilterDrawer({ courses, activeFilterCount }: FilterDrawerProps) 
 
           {/* Starting Soon */}
           <div>
-            <h3 className="text-sm font-semibold text-text-primary mb-3">
-              Availability
-            </h3>
+            <h3 className="text-sm font-semibold text-text-primary mb-3">Availability</h3>
             <Checkbox
               id="d-starting-soon"
               label="Starting within 30 days"

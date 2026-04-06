@@ -7,10 +7,6 @@ export const metadata = {
   },
 };
 
-export default function AdminLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return <AdminProviders>{children}</AdminProviders>;
 }

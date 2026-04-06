@@ -1,9 +1,5 @@
 import { describe, it, expect } from "vitest";
-import {
-  parseEmbedUrl,
-  isValidParsedEmbed,
-  EMBED_IFRAME_SANDBOX,
-} from "@/lib/safe-embed";
+import { parseEmbedUrl, isValidParsedEmbed, EMBED_IFRAME_SANDBOX } from "@/lib/safe-embed";
 
 describe("parseEmbedUrl — allowlist", () => {
   it("rejects non-allowlisted hosts", () => {
@@ -73,17 +69,13 @@ describe("parseEmbedUrl — Vimeo", () => {
 
 describe("parseEmbedUrl — Twitter / X", () => {
   it("parses a twitter.com status URL", () => {
-    const r = parseEmbedUrl(
-      "https://twitter.com/jack/status/20",
-    );
+    const r = parseEmbedUrl("https://twitter.com/jack/status/20");
     // minimum id length is 5; 20 is short — should fail
     expect(r).toBeNull();
   });
 
   it("parses a realistic tweet id", () => {
-    const r = parseEmbedUrl(
-      "https://twitter.com/elonmusk/status/1234567890123456789",
-    );
+    const r = parseEmbedUrl("https://twitter.com/elonmusk/status/1234567890123456789");
     expect(r?.provider).toBe("twitter");
     expect(r?.id).toBe("1234567890123456789");
     expect(r?.embedUrl).toContain(
@@ -92,9 +84,7 @@ describe("parseEmbedUrl — Twitter / X", () => {
   });
 
   it("parses x.com as twitter", () => {
-    const r = parseEmbedUrl(
-      "https://x.com/user/status/1234567890123456789",
-    );
+    const r = parseEmbedUrl("https://x.com/user/status/1234567890123456789");
     expect(r?.provider).toBe("twitter");
   });
 
@@ -109,16 +99,12 @@ describe("parseEmbedUrl — LinkedIn", () => {
       "https://www.linkedin.com/embed/feed/update/urn:li:share:7000000000000000000",
     );
     expect(r?.provider).toBe("linkedin");
-    expect(r?.embedUrl).toContain(
-      "https://www.linkedin.com/embed/feed/update/",
-    );
+    expect(r?.embedUrl).toContain("https://www.linkedin.com/embed/feed/update/");
   });
 
   it("rejects a linkedin feed post (non-embed) URL", () => {
     expect(
-      parseEmbedUrl(
-        "https://www.linkedin.com/feed/update/urn:li:activity:7000000000000000000/",
-      ),
+      parseEmbedUrl("https://www.linkedin.com/feed/update/urn:li:activity:7000000000000000000/"),
     ).toBeNull();
   });
 });

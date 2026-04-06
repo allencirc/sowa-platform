@@ -21,10 +21,7 @@ interface UseAdminFetchOptions {
   order?: "asc" | "desc";
 }
 
-export function useAdminFetch<T>(
-  endpoint: string,
-  options: UseAdminFetchOptions = {}
-) {
+export function useAdminFetch<T>(endpoint: string, options: UseAdminFetchOptions = {}) {
   const { page = 1, limit = 20, search, filters, sortBy, order } = options;
   const [data, setData] = useState<T[]>([]);
   const [total, setTotal] = useState(0);
@@ -66,7 +63,7 @@ export function useAdminFetch<T>(
     } finally {
       setLoading(false);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [endpoint, page, limit, search, sortBy, order, filtersKey]);
 
   useEffect(() => {
@@ -84,10 +81,7 @@ export async function adminDelete(endpoint: string): Promise<void> {
   }
 }
 
-export async function adminPost<T>(
-  endpoint: string,
-  data: unknown
-): Promise<T> {
+export async function adminPost<T>(endpoint: string, data: unknown): Promise<T> {
   const res = await fetch(endpoint, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -100,10 +94,7 @@ export async function adminPost<T>(
   return res.json();
 }
 
-export async function adminPatch<T>(
-  endpoint: string,
-  data: unknown
-): Promise<T> {
+export async function adminPatch<T>(endpoint: string, data: unknown): Promise<T> {
   const res = await fetch(endpoint, {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },

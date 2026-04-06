@@ -46,14 +46,19 @@ export async function POST(request: NextRequest) {
   const parsed = await parseBody(request, statusUpdateSchema);
   if (parsed.error) return parsed.error;
 
-  const { contentType, slug, newStatus, publishAt, rejectionNote, changeNote } =
-    parsed.data;
+  const { contentType, slug, newStatus, publishAt, rejectionNote, changeNote } = parsed.data;
 
   try {
     const model = getModel(contentType as ContentType);
 
     // Find the content by slug
-    const existing = await (model as never as { findUnique: (args: { where: { slug: string } }) => Promise<{ id: string; status: string; title?: string } | null> }).findUnique({
+    const existing = await (
+      model as never as {
+        findUnique: (args: {
+          where: { slug: string };
+        }) => Promise<{ id: string; status: string; title?: string } | null>;
+      }
+    ).findUnique({
       where: { slug },
     });
 
@@ -67,26 +72,19 @@ export async function POST(request: NextRequest) {
     if (!isValidTransition(currentStatus, newStatus, user.role)) {
       return errorResponse(
         `Cannot transition from ${currentStatus} to ${newStatus} with role ${user.role}`,
-        403
+        403,
       );
     }
 
     // If rejecting (back to DRAFT from IN_REVIEW), require a note
-    if (
-      currentStatus === "IN_REVIEW" &&
-      newStatus === "DRAFT" &&
-      !rejectionNote
-    ) {
+    if (currentStatus === "IN_REVIEW" && newStatus === "DRAFT" && !rejectionNote) {
       return errorResponse("Rejection note is required when rejecting content", 400);
     }
 
     // Build update data
     const updateData: Record<string, unknown> = {
       status: newStatus as ContentStatus,
-      rejectionNote:
-        newStatus === "DRAFT" && currentStatus === "IN_REVIEW"
-          ? rejectionNote
-          : null,
+      rejectionNote: newStatus === "DRAFT" && currentStatus === "IN_REVIEW" ? rejectionNote : null,
     };
 
     // Handle scheduled publishing
@@ -104,7 +102,14 @@ export async function POST(request: NextRequest) {
     }
 
     // Update the content
-    const updated = await (model as never as { update: (args: { where: { slug: string }; data: Record<string, unknown> }) => Promise<Record<string, unknown>> }).update({
+    const updated = await (
+      model as never as {
+        update: (args: {
+          where: { slug: string };
+          data: Record<string, unknown>;
+        }) => Promise<Record<string, unknown>>;
+      }
+    ).update({
       where: { slug },
       data: updateData,
     });
@@ -151,7 +156,13 @@ export async function PUT(request: NextRequest) {
     ];
 
     for (const { model, type } of models) {
-      const items = await (model as never as { findMany: (args: { where: Record<string, unknown> }) => Promise<{ id: string; slug: string }[]> }).findMany({
+      const items = await (
+        model as never as {
+          findMany: (args: {
+            where: Record<string, unknown>;
+          }) => Promise<{ id: string; slug: string }[]>;
+        }
+      ).findMany({
         where: {
           status: "IN_REVIEW",
           publishAt: { lte: now },
@@ -159,7 +170,14 @@ export async function PUT(request: NextRequest) {
       });
 
       for (const item of items) {
-        await (model as never as { update: (args: { where: { id: string }; data: Record<string, unknown> }) => Promise<Record<string, unknown>> }).update({
+        await (
+          model as never as {
+            update: (args: {
+              where: { id: string };
+              data: Record<string, unknown>;
+            }) => Promise<Record<string, unknown>>;
+          }
+        ).update({
           where: { id: item.id },
           data: {
             status: "PUBLISHED" as ContentStatus,

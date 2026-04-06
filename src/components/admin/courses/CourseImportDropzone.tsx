@@ -44,34 +44,37 @@ export function CourseImportDropzone({ onImported }: Props) {
     if (inputRef.current) inputRef.current.value = "";
   };
 
-  const upload = useCallback(async (f: File, dryRun: boolean) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const body = new FormData();
-      body.append("file", f);
-      body.append("dryRun", dryRun ? "true" : "false");
-      const res = await fetch("/api/admin/courses/import", {
-        method: "POST",
-        body,
-      });
-      const json = await res.json();
-      if (!res.ok) {
-        setError(json.error ?? "Import failed");
-        setPreview(null);
-        return;
+  const upload = useCallback(
+    async (f: File, dryRun: boolean) => {
+      setLoading(true);
+      setError(null);
+      try {
+        const body = new FormData();
+        body.append("file", f);
+        body.append("dryRun", dryRun ? "true" : "false");
+        const res = await fetch("/api/admin/courses/import", {
+          method: "POST",
+          body,
+        });
+        const json = await res.json();
+        if (!res.ok) {
+          setError(json.error ?? "Import failed");
+          setPreview(null);
+          return;
+        }
+        setPreview(json as ImportResponse);
+        if (!dryRun) {
+          setConfirmed(true);
+          onImported?.();
+        }
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Import failed");
+      } finally {
+        setLoading(false);
       }
-      setPreview(json as ImportResponse);
-      if (!dryRun) {
-        setConfirmed(true);
-        onImported?.();
-      }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Import failed");
-    } finally {
-      setLoading(false);
-    }
-  }, [onImported]);
+    },
+    [onImported],
+  );
 
   const handleFile = (f: File) => {
     const lower = f.name.toLowerCase();
@@ -104,8 +107,8 @@ export function CourseImportDropzone({ onImported }: Props) {
         <div>
           <h2 className="text-base font-semibold text-text-primary">Batch import courses</h2>
           <p className="text-xs text-text-secondary">
-            Upload a .csv or .xlsx file. Use <code className="rounded bg-surface px-1">|</code> to separate skill,
-            career and tag values. Dry run runs automatically on upload.
+            Upload a .csv or .xlsx file. Use <code className="rounded bg-surface px-1">|</code> to
+            separate skill, career and tag values. Dry run runs automatically on upload.
           </p>
         </div>
         {(file || preview) && (
@@ -125,7 +128,7 @@ export function CourseImportDropzone({ onImported }: Props) {
         onClick={() => inputRef.current?.click()}
         className={cn(
           "flex cursor-pointer flex-col items-center justify-center gap-2 rounded-md border-2 border-dashed px-6 py-8 text-center transition-colors",
-          dragOver ? "border-accent bg-accent/5" : "border-text-muted/30 hover:border-accent/60"
+          dragOver ? "border-accent bg-accent/5" : "border-text-muted/30 hover:border-accent/60",
         )}
       >
         <input
@@ -150,9 +153,7 @@ export function CourseImportDropzone({ onImported }: Props) {
         )}
       </div>
 
-      {loading && (
-        <p className="mt-3 text-sm text-text-secondary">Processing file…</p>
-      )}
+      {loading && <p className="mt-3 text-sm text-text-secondary">Processing file…</p>}
 
       {error && (
         <div className="mt-3 flex items-start gap-2 rounded-md bg-status-error/10 px-3 py-2 text-sm text-status-error">
@@ -166,7 +167,11 @@ export function CourseImportDropzone({ onImported }: Props) {
           <div className="grid grid-cols-3 gap-2 text-center">
             <Stat label="Total rows" value={preview.totalRows} />
             <Stat label="Valid" value={preview.validCount} tone="success" />
-            <Stat label="Invalid" value={preview.invalidCount} tone={preview.invalidCount > 0 ? "error" : "muted"} />
+            <Stat
+              label="Invalid"
+              value={preview.invalidCount}
+              tone={preview.invalidCount > 0 ? "error" : "muted"}
+            />
           </div>
 
           {preview.rows.length > 0 && (
@@ -223,10 +228,7 @@ export function CourseImportDropzone({ onImported }: Props) {
                   ? `Importing will create ${preview.validCount} valid row${preview.validCount === 1 ? "" : "s"} and skip ${preview.invalidCount} invalid.`
                   : `Ready to import ${preview.validCount} row${preview.validCount === 1 ? "" : "s"}.`}
               </p>
-              <Button
-                onClick={() => file && upload(file, false)}
-                disabled={loading}
-              >
+              <Button onClick={() => file && upload(file, false)} disabled={loading}>
                 Confirm import
               </Button>
             </div>

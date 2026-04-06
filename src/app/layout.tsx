@@ -3,12 +3,7 @@ import { Inter } from "next/font/google";
 import { headers } from "next/headers";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { CookieConsent } from "@/components/layout/CookieConsent";
-import {
-  defaultLocale,
-  isLocale,
-  localeBcp47,
-  type Locale,
-} from "@/lib/i18n";
+import { defaultLocale, isLocale, localeBcp47, type Locale } from "@/lib/i18n";
 import "./globals.css";
 
 // Subsets cover every script SOWA ships: `latin` for English,
@@ -96,12 +91,8 @@ export const metadata: Metadata = {
     },
   },
   icons: {
-    icon: [
-      { url: "/favicon.svg", type: "image/svg+xml" },
-    ],
-    apple: [
-      { url: "/icon.svg" },
-    ],
+    icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
+    apple: [{ url: "/icon.svg" }],
   },
   alternates: {
     canonical: "https://sowa.skillnetireland.ie",

@@ -29,7 +29,7 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
             className={cn(
               "w-full appearance-none rounded-lg border border-gray-200 bg-white px-4 py-2.5 pr-10 text-base text-text-primary transition-colors duration-200",
               "focus:border-accent focus:ring-2 focus:ring-accent/20 focus:outline-none",
-              className
+              className,
             )}
             {...props}
           >
@@ -48,7 +48,7 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
         </div>
       </div>
     );
-  }
+  },
 );
 
 Select.displayName = "Select";

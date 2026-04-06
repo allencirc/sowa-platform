@@ -12,6 +12,7 @@ export default defineConfig({
   test: {
     environment: "jsdom",
     globals: true,
+    pool: "forks",
     setupFiles: ["./src/__tests__/setup.tsx"],
     include: ["src/**/*.test.{ts,tsx}"],
     exclude: ["node_modules", ".next", "e2e"],
@@ -19,11 +20,7 @@ export default defineConfig({
       provider: "v8",
       reporter: ["text", "text-summary", "lcov", "html"],
       include: ["src/lib/**", "src/components/**", "src/app/api/**"],
-      exclude: [
-        "src/**/*.test.{ts,tsx}",
-        "src/__tests__/**",
-        "src/lib/data/**",
-      ],
+      exclude: ["src/**/*.test.{ts,tsx}", "src/__tests__/**", "src/lib/data/**"],
     },
   },
 });

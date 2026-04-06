@@ -5,12 +5,7 @@ import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
-import {
-  Search,
-  Download,
-  ChevronLeft,
-  ChevronRight,
-} from "lucide-react";
+import { Search, Download, ChevronLeft, ChevronRight } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 
 interface Registration {
@@ -77,7 +72,12 @@ export function RegistrationsTable({
   const limit = initialLimit;
   const totalPages = Math.ceil(total / limit);
 
-  const fetchData = async (newPage: number, newSearch?: string, newType?: string, newStatus?: string) => {
+  const fetchData = async (
+    newPage: number,
+    newSearch?: string,
+    newType?: string,
+    newStatus?: string,
+  ) => {
     setLoading(true);
     const params = new URLSearchParams();
     params.set("page", String(newPage));
@@ -124,8 +124,8 @@ export function RegistrationsTable({
       if (res.ok) {
         setData((prev) =>
           prev.map((r) =>
-            r.id === id ? { ...r, status: newStatus as Registration["status"] } : r
-          )
+            r.id === id ? { ...r, status: newStatus as Registration["status"] } : r,
+          ),
         );
       }
     } catch {
@@ -210,9 +210,7 @@ export function RegistrationsTable({
             ) : (
               data.map((reg) => (
                 <tr key={reg.id} className="hover:bg-gray-50">
-                  <td className="px-4 py-3 font-medium text-text-primary">
-                    {reg.name}
-                  </td>
+                  <td className="px-4 py-3 font-medium text-text-primary">{reg.name}</td>
                   <td className="px-4 py-3 text-text-secondary">{reg.email}</td>
                   <td className="px-4 py-3">
                     <Badge variant={reg.type === "EVENT" ? "accent" : "secondary"}>
@@ -222,9 +220,7 @@ export function RegistrationsTable({
                   <td className="px-4 py-3 text-text-secondary max-w-[200px] truncate">
                     {reg.contentId}
                   </td>
-                  <td className="px-4 py-3 text-text-secondary">
-                    {reg.organisation || "—"}
-                  </td>
+                  <td className="px-4 py-3 text-text-secondary">{reg.organisation || "—"}</td>
                   <td className="px-4 py-3">
                     <select
                       value={reg.status}

@@ -47,7 +47,7 @@ export function MultiSelect({
   const filtered = options.filter(
     (opt) =>
       opt.label.toLowerCase().includes(search.toLowerCase()) ||
-      opt.value.toLowerCase().includes(search.toLowerCase())
+      opt.value.toLowerCase().includes(search.toLowerCase()),
   );
 
   const toggle = (val: string) => {
@@ -62,14 +62,14 @@ export function MultiSelect({
     onChange(value.filter((v) => v !== val));
   };
 
-  const selectedLabels = value.map(
-    (v) => options.find((o) => o.value === v)?.label ?? v
-  );
+  const selectedLabels = value.map((v) => options.find((o) => o.value === v)?.label ?? v);
 
   const showCreate =
     allowCreate &&
     search.trim() &&
-    !options.some((o) => o.value === search.trim() || o.label.toLowerCase() === search.toLowerCase());
+    !options.some(
+      (o) => o.value === search.trim() || o.label.toLowerCase() === search.toLowerCase(),
+    );
 
   return (
     <div ref={ref} className={cn("relative", className)}>
@@ -77,7 +77,7 @@ export function MultiSelect({
         className={cn(
           "flex min-h-[42px] flex-wrap items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3 py-1.5 transition-colors cursor-pointer",
           open && "border-accent ring-2 ring-accent/20",
-          error && "border-status-error"
+          error && "border-status-error",
         )}
         onClick={() => setOpen(true)}
       >
@@ -99,9 +99,7 @@ export function MultiSelect({
             </button>
           </span>
         ))}
-        {value.length === 0 && (
-          <span className="text-sm text-text-muted">{placeholder}</span>
-        )}
+        {value.length === 0 && <span className="text-sm text-text-muted">{placeholder}</span>}
         <ChevronDown className="ml-auto h-4 w-4 shrink-0 text-text-muted" />
       </div>
 
@@ -129,18 +127,14 @@ export function MultiSelect({
                   type="button"
                   className={cn(
                     "flex w-full items-center gap-2 rounded-md px-3 py-1.5 text-sm transition-colors",
-                    selected
-                      ? "bg-primary/5 text-primary"
-                      : "text-text-primary hover:bg-gray-50"
+                    selected ? "bg-primary/5 text-primary" : "text-text-primary hover:bg-gray-50",
                   )}
                   onClick={() => toggle(opt.value)}
                 >
                   <span
                     className={cn(
                       "flex h-4 w-4 shrink-0 items-center justify-center rounded border",
-                      selected
-                        ? "border-primary bg-primary text-white"
-                        : "border-gray-300"
+                      selected ? "border-primary bg-primary text-white" : "border-gray-300",
                     )}
                   >
                     {selected && <Check className="h-3 w-3" />}

@@ -11,13 +11,10 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const variantStyles: Record<ButtonVariant, string> = {
-  primary:
-    "bg-primary text-text-inverse hover:bg-primary-light active:bg-primary-dark",
+  primary: "bg-primary text-text-inverse hover:bg-primary-light active:bg-primary-dark",
   // Navy text on green bg (6.1:1) — white on #00A878 only reaches 3.05:1 and fails WCAG AA.
-  secondary:
-    "bg-secondary text-primary hover:bg-secondary-light active:bg-secondary-dark",
-  outline:
-    "border-2 border-primary text-primary hover:bg-primary hover:text-text-inverse",
+  secondary: "bg-secondary text-primary hover:bg-secondary-light active:bg-secondary-dark",
+  outline: "border-2 border-primary text-primary hover:bg-primary hover:text-text-inverse",
   ghost: "text-primary hover:bg-primary/10",
 };
 
@@ -39,7 +36,7 @@ const BUTTON_BASE =
 export function buttonClassName(
   variant: ButtonVariant = "primary",
   size: ButtonSize = "md",
-  className?: string
+  className?: string,
 ): string {
   return cn(BUTTON_BASE, variantStyles[variant], sizeStyles[size], className);
 }
@@ -47,15 +44,11 @@ export function buttonClassName(
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant = "primary", size = "md", children, ...props }, ref) => {
     return (
-      <button
-        ref={ref}
-        className={buttonClassName(variant, size, className)}
-        {...props}
-      >
+      <button ref={ref} className={buttonClassName(variant, size, className)} {...props}>
         {children}
       </button>
     );
-  }
+  },
 );
 
 Button.displayName = "Button";

@@ -44,13 +44,9 @@ export function AudienceCards() {
                 <item.icon className="h-6 w-6" />
               </div>
 
-              <h3 className="text-lg font-semibold text-text-primary mb-1">
-                {item.title}
-              </h3>
+              <h3 className="text-lg font-semibold text-text-primary mb-1">{item.title}</h3>
 
-              <p className="text-sm text-text-secondary flex-1">
-                {item.description}
-              </p>
+              <p className="text-sm text-text-secondary flex-1">{item.description}</p>
 
               <div className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-accent-dark group-hover:text-accent-dark transition-colors">
                 Learn more

@@ -17,11 +17,7 @@ export function RoleFitView({ result }: RoleFitViewProps) {
   const top = result.roleFamilyFit.slice(0, 3);
 
   if (top.length === 0) {
-    return (
-      <p className="text-center text-text-secondary">
-        No role fit data available yet.
-      </p>
-    );
+    return <p className="text-center text-text-secondary">No role fit data available yet.</p>;
   }
 
   return (
@@ -31,12 +27,9 @@ export function RoleFitView({ result }: RoleFitViewProps) {
           <Target className="h-5 w-5 text-accent-dark" />
         </div>
         <div>
-          <h2 className="text-2xl font-bold text-text-primary">
-            Your best-fit role families
-          </h2>
+          <h2 className="text-2xl font-bold text-text-primary">Your best-fit role families</h2>
           <p className="text-sm text-text-secondary">
-            Where your current strengths place you in the offshore wind
-            workforce
+            Where your current strengths place you in the offshore wind workforce
           </p>
         </div>
       </div>
@@ -56,9 +49,7 @@ export function RoleFitView({ result }: RoleFitViewProps) {
                   >
                     {index + 1}
                   </span>
-                  <h3 className="text-lg sm:text-xl font-bold text-text-primary">
-                    {fit.label}
-                  </h3>
+                  <h3 className="text-lg sm:text-xl font-bold text-text-primary">{fit.label}</h3>
                 </div>
                 <p className="text-sm text-text-secondary">{fit.tagline}</p>
               </div>
@@ -69,9 +60,7 @@ export function RoleFitView({ result }: RoleFitViewProps) {
               >
                 <div className="text-3xl font-bold text-accent-dark leading-none">
                   {fit.confidence}
-                  <span className="text-base font-medium text-text-muted">
-                    /100
-                  </span>
+                  <span className="text-base font-medium text-text-muted">/100</span>
                 </div>
                 <div className="text-xs font-medium text-text-muted uppercase tracking-wide mt-1">
                   Confidence
@@ -98,10 +87,7 @@ export function RoleFitView({ result }: RoleFitViewProps) {
             {fit.reasoning.length > 0 && (
               <ul className="space-y-2 mb-5">
                 {fit.reasoning.map((r, i) => (
-                  <li
-                    key={i}
-                    className="flex items-start gap-2 text-sm text-text-secondary"
-                  >
+                  <li key={i} className="flex items-start gap-2 text-sm text-text-secondary">
                     <Check
                       className="h-4 w-4 text-secondary-dark flex-shrink-0 mt-0.5"
                       aria-hidden="true"

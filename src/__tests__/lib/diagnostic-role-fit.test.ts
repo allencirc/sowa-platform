@@ -1,12 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { computeRoleFamilyFit, calculateResults } from "@/lib/diagnostic";
 import { ROLE_FAMILIES } from "@/lib/diagnostic-role-weights";
-import type {
-  Career,
-  Course,
-  DiagnosticQuestion,
-  Skill,
-} from "@/lib/types";
+import type { Career, Course, DiagnosticQuestion, Skill } from "@/lib/types";
 
 // ── Fixtures ────────────────────────────────────────────
 // Covers the skills referenced by all role families so we can exercise
@@ -80,7 +75,7 @@ describe("computeRoleFamilyFit", () => {
     const fit = computeRoleFamilyFit(
       { "mechanical-maintenance": 10 },
       { "mechanical-maintenance": 10 },
-      skills
+      skills,
     );
     const tech = fit.find((f) => f.family === "technician");
     expect(tech?.confidence).toBe(100);
@@ -114,25 +109,15 @@ describe("computeRoleFamilyFit", () => {
   });
 
   it("uses 'strong' phrasing for percentages >= 75%", () => {
-    const fit = computeRoleFamilyFit(
-      { "data-analysis": 10 },
-      { "data-analysis": 10 },
-      skills
-    );
+    const fit = computeRoleFamilyFit({ "data-analysis": 10 }, { "data-analysis": 10 }, skills);
     const digital = fit.find((f) => f.family === "data_digital");
     expect(digital?.reasoning.some((r) => /strong/i.test(r))).toBe(true);
   });
 
   it("uses 'developing' phrasing for very low scores", () => {
-    const fit = computeRoleFamilyFit(
-      { "data-analysis": 1 },
-      { "data-analysis": 10 },
-      skills
-    );
+    const fit = computeRoleFamilyFit({ "data-analysis": 1 }, { "data-analysis": 10 }, skills);
     const digital = fit.find((f) => f.family === "data_digital");
-    expect(digital?.reasoning.some((r) => /developing|focused course/i.test(r))).toBe(
-      true
-    );
+    expect(digital?.reasoning.some((r) => /developing|focused course/i.test(r))).toBe(true);
   });
 
   it("attaches career slugs aligned with interestToCareerMap", () => {
@@ -176,7 +161,7 @@ describe("calculateResults returns roleFamilyFit", () => {
     expect(result.roleFamilyFit.length).toBe(ROLE_FAMILIES.length);
     for (let i = 1; i < result.roleFamilyFit.length; i++) {
       expect(result.roleFamilyFit[i - 1].confidence).toBeGreaterThanOrEqual(
-        result.roleFamilyFit[i].confidence
+        result.roleFamilyFit[i].confidence,
       );
     }
   });

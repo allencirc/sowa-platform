@@ -28,7 +28,7 @@ export default function AdminNewsPage() {
 
   const { data, totalPages, loading, refetch } = useAdminFetch<NewsArticle & { status?: string }>(
     "/api/news",
-    { page, search, filters }
+    { page, search, filters },
   );
 
   const columns: Column<NewsArticle & { status?: string }>[] = [
@@ -62,7 +62,9 @@ export default function AdminNewsPage() {
       key: "status",
       label: "Status",
       render: (row) => (
-        <StatusBadge status={(row.status as "DRAFT" | "IN_REVIEW" | "PUBLISHED" | "ARCHIVED") ?? "DRAFT"} />
+        <StatusBadge
+          status={(row.status as "DRAFT" | "IN_REVIEW" | "PUBLISHED" | "ARCHIVED") ?? "DRAFT"}
+        />
       ),
     },
     {
@@ -72,9 +74,18 @@ export default function AdminNewsPage() {
       render: (row) => (
         <div className="flex items-center gap-1">
           <Link href={`/admin/news/${row.slug}/edit`}>
-            <Button variant="ghost" size="sm"><Pencil className="h-4 w-4" /></Button>
+            <Button variant="ghost" size="sm">
+              <Pencil className="h-4 w-4" />
+            </Button>
           </Link>
-          <Button variant="ghost" size="sm" onClick={(e) => { e.stopPropagation(); setDeleteSlug(row.slug); }}>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={(e) => {
+              e.stopPropagation();
+              setDeleteSlug(row.slug);
+            }}
+          >
             <Trash2 className="h-4 w-4 text-status-error" />
           </Button>
         </div>
@@ -87,17 +98,29 @@ export default function AdminNewsPage() {
       <div className="mb-6 flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-text-primary">News</h1>
-          <p className="mt-1 text-sm text-text-secondary">Manage news articles and announcements.</p>
+          <p className="mt-1 text-sm text-text-secondary">
+            Manage news articles and announcements.
+          </p>
         </div>
         <Link href="/admin/news/new">
-          <Button><Plus className="h-4 w-4" /> Add Article</Button>
+          <Button>
+            <Plus className="h-4 w-4" /> Add Article
+          </Button>
         </Link>
       </div>
 
       <div className="mb-4 flex flex-col gap-3 sm:flex-row">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-text-muted" />
-          <Input placeholder="Search news..." value={search} onChange={(e) => { setSearch(e.target.value); setPage(1); }} className="pl-10" />
+          <Input
+            placeholder="Search news..."
+            value={search}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setPage(1);
+            }}
+            className="pl-10"
+          />
         </div>
         <Select
           options={[
@@ -120,15 +143,28 @@ export default function AdminNewsPage() {
         <div className="flex h-64 items-center justify-center text-text-muted">Loading...</div>
       ) : (
         <>
-          <DataTable columns={columns} data={data} rowKey={(row) => row.slug} onRowClick={(row) => router.push(`/admin/news/${row.slug}/edit`)} emptyMessage="No news articles found." />
-          <div className="mt-4"><Pagination page={page} totalPages={totalPages} onPageChange={setPage} /></div>
+          <DataTable
+            columns={columns}
+            data={data}
+            rowKey={(row) => row.slug}
+            onRowClick={(row) => router.push(`/admin/news/${row.slug}/edit`)}
+            emptyMessage="No news articles found."
+          />
+          <div className="mt-4">
+            <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
+          </div>
         </>
       )}
 
       <DeleteDialog
         open={!!deleteSlug}
         onClose={() => setDeleteSlug(null)}
-        onConfirm={async () => { if (deleteSlug) { await adminDelete(`/api/news/${deleteSlug}`); refetch(); } }}
+        onConfirm={async () => {
+          if (deleteSlug) {
+            await adminDelete(`/api/news/${deleteSlug}`);
+            refetch();
+          }
+        }}
         title="Delete Article?"
         description="This will permanently remove this news article."
       />

@@ -7,12 +7,7 @@ import { Badge, SectorBadge } from "@/components/ui/Badge";
 import { SkillBadge } from "@/components/careers/SkillBadge";
 import { MiniPathway } from "@/components/careers/MiniPathway";
 import { CourseCard } from "@/components/courses/CourseCard";
-import {
-  getCareerBySlug,
-  getCourseBySlug,
-  getSkillsByCareer,
-  getAllCareers,
-} from "@/lib/queries";
+import { getCareerBySlug, getCourseBySlug, getSkillsByCareer, getAllCareers } from "@/lib/queries";
 import { formatCurrency } from "@/lib/utils";
 
 interface CareerDetailProps {
@@ -54,10 +49,10 @@ export default async function CareerDetailPage({ params }: CareerDetailProps) {
 
   const skills = await getSkillsByCareer(career.slug);
   const relatedCourseResults = await Promise.all(
-    (career.relatedCourses ?? []).map((s) => getCourseBySlug(s))
+    (career.relatedCourses ?? []).map((s) => getCourseBySlug(s)),
   );
   const relatedCourses = relatedCourseResults.filter(
-    (c): c is NonNullable<typeof c> => c !== undefined
+    (c): c is NonNullable<typeof c> => c !== undefined,
   );
 
   return (
@@ -85,8 +80,7 @@ export default async function CareerDetailPage({ params }: CareerDetailProps) {
             {career.salaryRange && (
               <div className="flex items-center gap-2 text-lg font-semibold text-secondary-dark">
                 <Briefcase className="h-5 w-5" />
-                {formatCurrency(career.salaryRange.min)} –{" "}
-                {formatCurrency(career.salaryRange.max)}
+                {formatCurrency(career.salaryRange.min)} – {formatCurrency(career.salaryRange.max)}
                 <span className="text-sm font-normal text-text-muted">per year</span>
               </div>
             )}
@@ -103,17 +97,13 @@ export default async function CareerDetailPage({ params }: CareerDetailProps) {
                 <Briefcase className="h-5 w-5 text-accent-dark" />
                 About This Role
               </h2>
-              <p className="text-text-secondary leading-relaxed">
-                {career.description}
-              </p>
+              <p className="text-text-secondary leading-relaxed">{career.description}</p>
             </div>
 
             {/* Key Responsibilities */}
             {career.keyResponsibilities && career.keyResponsibilities.length > 0 && (
               <div>
-                <h2 className="text-xl font-bold text-text-primary mb-3">
-                  Key Responsibilities
-                </h2>
+                <h2 className="text-xl font-bold text-text-primary mb-3">Key Responsibilities</h2>
                 <ul className="space-y-2">
                   {career.keyResponsibilities.map((item, i) => (
                     <li key={i} className="flex items-start gap-3 text-text-secondary">
@@ -167,9 +157,7 @@ export default async function CareerDetailPage({ params }: CareerDetailProps) {
                   <MapPin className="h-5 w-5 text-accent-dark" />
                   Working Conditions
                 </h2>
-                <p className="text-text-secondary leading-relaxed">
-                  {career.workingConditions}
-                </p>
+                <p className="text-text-secondary leading-relaxed">{career.workingConditions}</p>
               </div>
             )}
 
@@ -193,9 +181,7 @@ export default async function CareerDetailPage({ params }: CareerDetailProps) {
       {relatedCourses.length > 0 && (
         <section className="py-12 sm:py-16 bg-surface">
           <Container>
-            <h2 className="text-2xl font-bold text-text-primary mb-6">
-              Related Training
-            </h2>
+            <h2 className="text-2xl font-bold text-text-primary mb-6">Related Training</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
               {relatedCourses.map((course) => (
                 <CourseCard key={course.slug} course={course} />
@@ -208,9 +194,7 @@ export default async function CareerDetailPage({ params }: CareerDetailProps) {
       {/* Career Pathway */}
       <section className="py-12 sm:py-16 bg-white">
         <Container>
-          <h2 className="text-2xl font-bold text-text-primary mb-8">
-            Career Pathway
-          </h2>
+          <h2 className="text-2xl font-bold text-text-primary mb-8">Career Pathway</h2>
           <div className="max-w-2xl mx-auto">
             <MiniPathway career={career} />
           </div>

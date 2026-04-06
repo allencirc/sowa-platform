@@ -35,7 +35,7 @@ describe("CareerCard", () => {
   it("renders description", () => {
     render(<CareerCard career={mockCareer} />);
     expect(
-      screen.getByText("Install, maintain and repair offshore wind turbines.")
+      screen.getByText("Install, maintain and repair offshore wind turbines."),
     ).toBeInTheDocument();
   });
 
@@ -48,11 +48,7 @@ describe("CareerCard", () => {
 
   it("does not render salary when not provided", () => {
     const { salaryRange, ...noSalary } = mockCareer;
-    render(
-      <CareerCard
-        career={{ ...noSalary, salaryRange: undefined } as Career}
-      />
-    );
+    render(<CareerCard career={{ ...noSalary, salaryRange: undefined } as Career} />);
     expect(screen.queryByText(/€/)).not.toBeInTheDocument();
   });
 

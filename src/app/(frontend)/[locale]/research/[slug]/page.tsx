@@ -18,9 +18,7 @@ export async function generateStaticParams() {
   return (await getAllResearch()).map((r) => ({ slug: r.slug }));
 }
 
-export async function generateMetadata({
-  params,
-}: ResearchDetailProps): Promise<Metadata> {
+export async function generateMetadata({ params }: ResearchDetailProps): Promise<Metadata> {
   const { slug } = await params;
   const research = await getResearchBySlug(slug);
   if (!research) return { title: "Research Not Found" };
@@ -43,9 +41,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function ResearchDetailPage({
-  params,
-}: ResearchDetailProps) {
+export default async function ResearchDetailPage({ params }: ResearchDetailProps) {
   const { slug } = await params;
   const research = await getResearchBySlug(slug);
   if (!research) notFound();
@@ -84,9 +80,7 @@ export default async function ResearchDetailPage({
                   {cat}
                 </Badge>
               ))}
-              {research.isFeatured && (
-                <Badge variant="success">Featured</Badge>
-              )}
+              {research.isFeatured && <Badge variant="success">Featured</Badge>}
             </div>
 
             <h1 className="text-3xl sm:text-4xl font-bold text-text-primary mb-6">
@@ -116,20 +110,14 @@ export default async function ResearchDetailPage({
         <Container>
           <div className="max-w-3xl space-y-10">
             <div>
-              <h2 className="text-xl font-bold text-text-primary mb-3">
-                Summary
-              </h2>
-              <p className="text-text-secondary leading-relaxed text-lg">
-                {research.summary}
-              </p>
+              <h2 className="text-xl font-bold text-text-primary mb-3">Summary</h2>
+              <p className="text-text-secondary leading-relaxed text-lg">{research.summary}</p>
             </div>
 
             {/* Download CTA */}
             <div className="bg-surface rounded-xl p-6 sm:p-8 flex flex-col sm:flex-row items-start sm:items-center gap-4">
               <div className="flex-1">
-                <h3 className="font-bold text-text-primary mb-1">
-                  Download Full Report
-                </h3>
+                <h3 className="font-bold text-text-primary mb-1">Download Full Report</h3>
                 <p className="text-sm text-text-secondary">
                   Access the complete publication in PDF format.
                 </p>
