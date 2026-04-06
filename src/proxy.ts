@@ -4,6 +4,41 @@ import { auth } from "@/lib/auth";
 import { applyReadOnly } from "@/lib/read-only";
 import { isLocale, matchLocale, type Locale } from "@/lib/i18n";
 
+// ---------------------------------------------------------------------------
+// CSP nonce helper
+// ---------------------------------------------------------------------------
+
+/**
+ * Build a Content-Security-Policy header with a per-request nonce.
+ *
+ * `'unsafe-eval'` is retained on script-src ONLY because React Flow
+ * (@xyflow/react) uses `new Function()` internally for its layout engine.
+ * Remove it once React Flow ships a CSP-safe build.
+ */
+function buildCsp(nonce: string): string {
+  return [
+    "default-src 'self'",
+    `script-src 'self' 'nonce-${nonce}' 'unsafe-eval' https://www.googletagmanager.com https://connect.facebook.net https://snap.licdn.com`,
+    `style-src 'self' 'nonce-${nonce}' https://fonts.googleapis.com`,
+    "img-src 'self' data: blob: https://images.unsplash.com https://www.google-analytics.com https://www.facebook.com https://px.ads.linkedin.com https://*.public.blob.vercel-storage.com",
+    "font-src 'self' data: https://fonts.gstatic.com",
+    "media-src 'self' https://*.public.blob.vercel-storage.com",
+    "connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://www.facebook.com https://px.ads.linkedin.com",
+    "frame-ancestors 'none'",
+    "base-uri 'self'",
+    "form-action 'self'",
+    "object-src 'none'",
+    "upgrade-insecure-requests",
+  ].join("; ");
+}
+
+/** Attach the CSP header and x-nonce to any outgoing response. */
+function withCsp(response: NextResponse, nonce: string): NextResponse {
+  response.headers.set("Content-Security-Policy", buildCsp(nonce));
+  response.headers.set("x-nonce", nonce);
+  return response;
+}
+
 // Paths that are NOT localised — admin UI, API routes, and Next internals.
 // Everything else sits under `/[locale]/...` and should be redirected if
 // a visitor hits it without a locale prefix.
@@ -34,6 +69,9 @@ function extractLocale(pathname: string): Locale | null {
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  // Generate a per-request nonce for CSP.
+  const nonce = crypto.randomUUID();
+
   // ── i18n: public surface ───────────────────────────────────────────────
   // See docs/adr/0001-i18n.md. Non-localised surfaces (admin, api, static
   // assets) fall through untouched. Any other request that doesn't start
@@ -48,11 +86,12 @@ export async function proxy(request: NextRequest) {
       const preferred = matchLocale(request.headers.get("accept-language"));
       const url = request.nextUrl.clone();
       url.pathname = `/${preferred}${pathname === "/" ? "" : pathname}`;
-      return NextResponse.redirect(url);
+      return withCsp(NextResponse.redirect(url), nonce);
     }
     const requestHeaders = new Headers(request.headers);
     requestHeaders.set("x-sowa-locale", current);
-    return NextResponse.next({ request: { headers: requestHeaders } });
+    requestHeaders.set("x-nonce", nonce);
+    return withCsp(NextResponse.next({ request: { headers: requestHeaders } }), nonce);
   }
 
   // ── READ_ONLY kill switch ──────────────────────────────────────────────
@@ -68,12 +107,14 @@ export async function proxy(request: NextRequest) {
   const isAuthEndpoint = pathname.startsWith("/api/auth/") || pathname === "/admin/login";
   if (!isAuthEndpoint && (pathname.startsWith("/api") || pathname.startsWith("/admin"))) {
     const readOnly = applyReadOnly(request);
-    if (readOnly) return readOnly;
+    if (readOnly) return withCsp(readOnly, nonce);
   }
 
   // /api routes do their own auth; proxy only handles /admin from here on.
   if (!pathname.startsWith("/admin")) {
-    return NextResponse.next();
+    const requestHeaders = new Headers(request.headers);
+    requestHeaders.set("x-nonce", nonce);
+    return withCsp(NextResponse.next({ request: { headers: requestHeaders } }), nonce);
   }
 
   const session = await auth();
@@ -82,14 +123,14 @@ export async function proxy(request: NextRequest) {
   // Already logged in — skip the login page
   if (pathname === "/admin/login" && session?.user) {
     const target = session.user.mustChangePassword ? CHANGE_PASSWORD_PATH : "/admin";
-    return NextResponse.redirect(new URL(target, request.url));
+    return withCsp(NextResponse.redirect(new URL(target, request.url)), nonce);
   }
 
   // Protect all /admin routes except /admin/login
   if (pathname !== "/admin/login" && !session?.user) {
     const loginUrl = new URL("/admin/login", request.url);
     loginUrl.searchParams.set("callbackUrl", pathname);
-    return NextResponse.redirect(loginUrl);
+    return withCsp(NextResponse.redirect(loginUrl), nonce);
   }
 
   // Force password rotation before any other admin route is reachable.
@@ -99,10 +140,12 @@ export async function proxy(request: NextRequest) {
     pathname !== CHANGE_PASSWORD_PATH &&
     pathname !== "/admin/login"
   ) {
-    return NextResponse.redirect(new URL(CHANGE_PASSWORD_PATH, request.url));
+    return withCsp(NextResponse.redirect(new URL(CHANGE_PASSWORD_PATH, request.url)), nonce);
   }
 
-  return NextResponse.next();
+  const requestHeaders = new Headers(request.headers);
+  requestHeaders.set("x-nonce", nonce);
+  return withCsp(NextResponse.next({ request: { headers: requestHeaders } }), nonce);
 }
 
 export const config = {

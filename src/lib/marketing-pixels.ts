@@ -25,7 +25,7 @@ const LINKEDIN_PARTNER_ID = process.env.NEXT_PUBLIC_LINKEDIN_PARTNER_ID ?? "";
 
 let metaLoaded = false;
 
-function loadMetaPixel(): void {
+function loadMetaPixel(nonce?: string): void {
   if (metaLoaded || !META_PIXEL_ID) return;
   metaLoaded = true;
 
@@ -46,6 +46,7 @@ function loadMetaPixel(): void {
   const script = document.createElement("script");
   script.async = true;
   script.src = "https://connect.facebook.net/en_US/fbevents.js";
+  if (nonce) script.nonce = nonce;
   document.head.appendChild(script);
 
   w.fbq("init", META_PIXEL_ID);
@@ -58,7 +59,7 @@ function loadMetaPixel(): void {
 
 let linkedInLoaded = false;
 
-function loadLinkedInInsightTag(): void {
+function loadLinkedInInsightTag(nonce?: string): void {
   if (linkedInLoaded || !LINKEDIN_PARTNER_ID) return;
   linkedInLoaded = true;
 
@@ -71,6 +72,7 @@ function loadLinkedInInsightTag(): void {
   const script = document.createElement("script");
   script.async = true;
   script.src = "https://snap.licdn.com/li.lms-analytics/insight.min.js";
+  if (nonce) script.nonce = nonce;
   document.head.appendChild(script);
 }
 
@@ -78,10 +80,10 @@ function loadLinkedInInsightTag(): void {
 // Public loader — called by CookieConsent when marketing consent is given
 // ---------------------------------------------------------------------------
 
-export function loadMarketingPixels(): void {
+export function loadMarketingPixels(nonce?: string): void {
   if (typeof window === "undefined") return;
   if (!hasMarketingConsent()) return;
 
-  loadMetaPixel();
-  loadLinkedInInsightTag();
+  loadMetaPixel(nonce);
+  loadLinkedInInsightTag(nonce);
 }

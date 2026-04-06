@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import { headers } from "next/headers";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { CookieConsent } from "@/components/layout/CookieConsent";
+import { NonceProvider } from "@/components/NonceProvider";
 import { defaultLocale, isLocale, localeBcp47, type Locale } from "@/lib/i18n";
 import "./globals.css";
 
@@ -112,6 +113,7 @@ export default async function RootLayout({
   const rawLocale = headerList.get("x-sowa-locale");
   const locale: Locale = isLocale(rawLocale) ? rawLocale : defaultLocale;
   const htmlLang = localeBcp47[locale];
+  const nonce = headerList.get("x-nonce") ?? "";
 
   return (
     <html lang={htmlLang} className={`${inter.variable} h-full antialiased`}>
@@ -123,8 +125,10 @@ export default async function RootLayout({
         >
           Skip to main content
         </a>
-        {children}
-        <CookieConsent />
+        <NonceProvider nonce={nonce}>
+          {children}
+          <CookieConsent />
+        </NonceProvider>
         <SpeedInsights />
       </body>
     </html>

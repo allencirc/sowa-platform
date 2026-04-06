@@ -63,7 +63,7 @@ export function hasMarketingConsent(): boolean {
 let gtagLoaded = false;
 
 /** Dynamically injects the GA4 script + dataLayer. Idempotent. */
-export function loadGtagScript(): void {
+export function loadGtagScript(nonce?: string): void {
   if (typeof window === "undefined") return;
   if (gtagLoaded) return;
   if (GA_MEASUREMENT_ID === "G-XXXXXXXXXX") return; // no real ID configured
@@ -85,6 +85,7 @@ export function loadGtagScript(): void {
   const script = document.createElement("script");
   script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
   script.async = true;
+  if (nonce) script.nonce = nonce;
   document.head.appendChild(script);
 }
 
@@ -92,9 +93,9 @@ export function loadGtagScript(): void {
  * Call once on app mount (or when consent changes).
  * Loads GA4 only if analytics consent has been given.
  */
-export function initAnalytics(): void {
+export function initAnalytics(nonce?: string): void {
   if (hasAnalyticsConsent()) {
-    loadGtagScript();
+    loadGtagScript(nonce);
   }
 }
 

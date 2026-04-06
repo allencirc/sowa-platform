@@ -1,26 +1,8 @@
 import type { NextConfig } from "next";
 
-// Content Security Policy
-// - 'unsafe-inline' on style-src is required by Next.js for inline critical CSS
-// - 'unsafe-inline' / 'unsafe-eval' on script-src kept for the dev/build pipeline
-//   (Next dev overlay, React Flow runtime). Tighten with nonces before production.
-const contentSecurityPolicy = [
-  "default-src 'self'",
-  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://connect.facebook.net https://snap.licdn.com",
-  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-  "img-src 'self' data: blob: https://images.unsplash.com https://www.google-analytics.com https://www.facebook.com https://px.ads.linkedin.com https://*.public.blob.vercel-storage.com",
-  "font-src 'self' data: https://fonts.gstatic.com",
-  "media-src 'self' https://*.public.blob.vercel-storage.com",
-  "connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://www.facebook.com https://px.ads.linkedin.com",
-  "frame-ancestors 'none'",
-  "base-uri 'self'",
-  "form-action 'self'",
-  "object-src 'none'",
-  "upgrade-insecure-requests",
-].join("; ");
-
+// CSP is now set dynamically by src/middleware.ts with per-request nonces.
+// Only non-CSP security headers remain here.
 const securityHeaders = [
-  { key: "Content-Security-Policy", value: contentSecurityPolicy },
   { key: "X-Frame-Options", value: "DENY" },
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
