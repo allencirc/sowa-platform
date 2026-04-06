@@ -17,7 +17,7 @@ import { QuestionStep } from "@/components/diagnostic/QuestionStep";
 import { ResultsView } from "@/components/diagnostic/ResultsView";
 import { calculateResults } from "@/lib/diagnostic";
 import { encodeAnswers, type ResultsTab } from "@/lib/diagnostic-share";
-import { trackDiagnosticCompleted } from "@/lib/analytics";
+import { trackDiagnosticComplete } from "@/lib/analytics";
 import type {
   Career,
   Course,
@@ -129,7 +129,7 @@ export default function AssessmentClient({
         setResult(res);
         setIsCalculating(false);
         setShowResults(true);
-        trackDiagnosticCompleted({
+        trackDiagnosticComplete({
           top_gaps: res.gaps
             .slice(0, 3)
             .map((g) => g.skill.slug)
