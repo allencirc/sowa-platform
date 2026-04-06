@@ -143,6 +143,8 @@ Three boundaries are enforced:
 | Charts        | Recharts                   | 3.8.1         | Radar charts for diagnostic skill assessment results                                                       |
 | Icons         | Lucide React               | 1.7.0         | Tree-shakeable SVG icon library. Consistent line-icon style                                                |
 | Utilities     | clsx + tailwind-merge      | 2.1 / 3.5     | Conditional class names with Tailwind conflict resolution via `cn()` helper                                |
+| Media Storage | Vercel Blob (@vercel/blob) | 2.3.3         | Cloud object storage for uploaded media. EU-region, encrypted at rest, served via edge CDN                 |
+| Export        | ExcelJS                    | 4.4.0         | Server-side Excel (.xlsx) generation for admin report and registration exports                             |
 
 ---
 
@@ -311,12 +313,12 @@ Public User → RegisterButton → RegistrationModal
     ┌────┴────┐
     │  Media   │
     │ Storage  │
-    │ (local/  │
-    │  S3)     │
+    │ (Vercel  │
+    │  Blob)   │
     └─────────┘
 ```
 
-**Current state:** Media files are stored on the local filesystem under `public/uploads/`. For production, migrate to an object storage service (S3, Cloudflare R2, or Vercel Blob).
+**Current state:** Media files are stored in Vercel Blob (`@vercel/blob`), an EU-region cloud object store with edge CDN delivery. Uploaded assets are encrypted at rest and served over HTTPS with automatic cache headers.
 
 ### Environment Requirements
 
