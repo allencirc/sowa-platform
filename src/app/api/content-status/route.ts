@@ -3,7 +3,6 @@ import { prisma } from "@/lib/prisma";
 import { applyRateLimit, parseBody, errorResponse } from "@/lib/api-utils";
 import { requireRole } from "@/lib/auth-utils";
 import { isValidTransition, createContentVersion } from "@/lib/versions";
-import { runScheduledPublishing } from "@/lib/scheduled-publish";
 import { z } from "zod";
 import { ContentStatusEnum, ContentTypeEnum } from "@/lib/validations";
 import type { ContentStatus, ContentType } from "@/generated/prisma/client";
@@ -137,16 +136,101 @@ export async function POST(request: NextRequest) {
 
 /**
  * Check and auto-publish content with scheduled publishAt dates.
- * This can be called on-demand. For automatic scheduling, use the
- * Vercel Cron route at /api/cron/publish instead.
+ * This can be called by a cron job or on-demand.
  */
 export async function PUT(request: NextRequest) {
   const rateLimited = applyRateLimit(request);
   if (rateLimited) return rateLimited;
 
   try {
-    const result = await runScheduledPublishing();
-    return NextResponse.json(result);
+    const now = new Date();
+    let publishedCount = 0;
+
+    // Find all content with publishAt <= now that is still IN_REVIEW
+    const models = [
+      { model: prisma.career, type: "CAREER" as ContentType },
+      { model: prisma.course, type: "COURSE" as ContentType },
+      { model: prisma.event, type: "EVENT" as ContentType },
+      { model: prisma.research, type: "RESEARCH" as ContentType },
+      { model: prisma.newsArticle, type: "NEWS" as ContentType },
+    ];
+
+    for (const { model, type } of models) {
+      const items = await (
+        model as never as {
+          findMany: (args: {
+            where: Record<string, unknown>;
+          }) => Promise<{ id: string; slug: string }[]>;
+        }
+      ).findMany({
+        where: {
+          status: "IN_REVIEW",
+          publishAt: { lte: now },
+        },
+      });
+
+      for (const item of items) {
+        await (
+          model as never as {
+            update: (args: {
+              where: { id: string };
+              data: Record<string, unknown>;
+            }) => Promise<Record<string, unknown>>;
+          }
+        ).update({
+          where: { id: item.id },
+          data: {
+            status: "PUBLISHED" as ContentStatus,
+            publishAt: null,
+          },
+        });
+
+        await createContentVersion({
+          contentType: type,
+          contentId: item.id,
+          snapshot: { status: "PUBLISHED", autoPublished: true },
+          changedById: "system",
+          changeNote: "Auto-published (scheduled)",
+        }).catch(() => {
+          // Ignore version creation errors for system auto-publish
+        });
+
+        publishedCount++;
+      }
+    }
+
+    // Auto-archive PUBLISHED events whose endDate is older than 30 days
+    const archiveCutoff = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+    let archivedCount = 0;
+
+    const staleEvents = await prisma.event.findMany({
+      where: {
+        status: "PUBLISHED",
+        endDate: { lt: archiveCutoff },
+      },
+      select: { id: true, slug: true },
+    });
+
+    for (const evt of staleEvents) {
+      await prisma.event.update({
+        where: { id: evt.id },
+        data: { status: "ARCHIVED" as ContentStatus },
+      });
+
+      await createContentVersion({
+        contentType: "EVENT" as ContentType,
+        contentId: evt.id,
+        snapshot: { status: "ARCHIVED", autoArchived: true },
+        changedById: "system",
+        changeNote: "Auto-archived (endDate > 30d old)",
+      }).catch(() => {
+        // Ignore version creation errors for system auto-archive
+      });
+
+      archivedCount++;
+    }
+
+    return NextResponse.json({ publishedCount, archivedCount });
   } catch (err) {
     console.error("PUT /api/content-status error:", err);
     return errorResponse("Failed to process scheduled publishing");
