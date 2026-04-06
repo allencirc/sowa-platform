@@ -187,6 +187,7 @@ function mapCourse(row: AnyRecord): Course {
     accredited: (row.accredited as boolean) ?? undefined,
     certificationAwarded:
       (row.certificationAwarded as string) ?? undefined,
+    signupUrl: (row.signupUrl as string) ?? undefined,
     skills: ((row.skills as { skill: { slug: string } }[]) ?? []).map(
       (s) => s.skill.slug
     ),
@@ -489,6 +490,7 @@ export async function createCourse(data: Course): Promise<Course> {
         : null,
       accredited: data.accredited ?? false,
       certificationAwarded: data.certificationAwarded ?? null,
+      signupUrl: data.signupUrl ?? null,
       tags: data.tags,
       skills: {
         create: data.skills.map((skillSlug) => ({
@@ -540,6 +542,9 @@ export async function updateCourse(
       ...(data.accredited !== undefined && { accredited: data.accredited }),
       ...(data.certificationAwarded !== undefined && {
         certificationAwarded: data.certificationAwarded ?? null,
+      }),
+      ...(data.signupUrl !== undefined && {
+        signupUrl: data.signupUrl ?? null,
       }),
       ...(data.tags !== undefined && { tags: data.tags }),
     },

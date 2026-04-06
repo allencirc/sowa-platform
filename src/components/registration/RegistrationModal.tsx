@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
 import { Button } from "@/components/ui/Button";
 import { createRegistrationSchema } from "@/lib/validations";
+import { trackCourseRegister, trackEventRegister } from "@/lib/analytics";
 
 type RegistrationFormData = z.infer<typeof createRegistrationSchema>;
 
@@ -79,6 +80,17 @@ export function RegistrationModal({
       }
 
       setSubmitted(true);
+      if (type === "COURSE") {
+        trackCourseRegister({
+          course_id: contentId,
+          course_title: contentTitle,
+        });
+      } else {
+        trackEventRegister({
+          event_id: contentId,
+          event_title: contentTitle,
+        });
+      }
     } catch {
       setServerError("Network error. Please check your connection and try again.");
     }

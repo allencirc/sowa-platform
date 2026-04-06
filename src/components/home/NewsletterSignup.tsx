@@ -5,6 +5,7 @@ import { Mail, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { Checkbox } from "@/components/ui/Checkbox";
+import { trackNewsletterSubscribe } from "@/lib/analytics";
 
 const topics = ["Careers", "Training", "Events", "Research", "Policy"];
 
@@ -41,6 +42,7 @@ export function NewsletterSignup() {
       }
 
       setSubmitted(true);
+      trackNewsletterSubscribe({ topics: selectedTopics });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");
     } finally {

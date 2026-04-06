@@ -9,9 +9,12 @@ import {
   trackCareerView,
   trackCourseView,
   trackDiagnosticStarted,
-  trackDiagnosticCompleted,
+  trackDiagnosticComplete,
   trackSearchPerformed,
-  trackNewsletterSignup,
+  trackNewsletterSubscribe,
+  trackCourseRegister,
+  trackEventRegister,
+  trackOutboundCourseClick,
   trackPageView,
   type ConsentPreferences,
 } from "@/lib/analytics";
@@ -168,22 +171,71 @@ describe("Analytics tracking", () => {
     expect(gtagSpy).toHaveBeenCalledWith("event", "diagnostic_started", undefined);
   });
 
-  it("fires diagnostic_completed event with params", () => {
+  it("fires diagnostic_complete event with params", () => {
     setConsentCookie({
       analytics: true,
       marketing: false,
       timestamp: new Date().toISOString(),
     });
 
-    trackDiagnosticCompleted({
+    trackDiagnosticComplete({
       top_gaps: "safety,mechanical",
       recommended_careers_count: 3,
       recommended_courses_count: 5,
     });
-    expect(gtagSpy).toHaveBeenCalledWith("event", "diagnostic_completed", {
+    expect(gtagSpy).toHaveBeenCalledWith("event", "diagnostic_complete", {
       top_gaps: "safety,mechanical",
       recommended_careers_count: 3,
       recommended_courses_count: 5,
+    });
+  });
+
+  it("fires course_register event", () => {
+    setConsentCookie({
+      analytics: true,
+      marketing: false,
+      timestamp: new Date().toISOString(),
+    });
+
+    trackCourseRegister({ course_id: "c1", course_title: "Wind Safety" });
+    expect(gtagSpy).toHaveBeenCalledWith("event", "course_register", {
+      course_id: "c1",
+      course_title: "Wind Safety",
+    });
+  });
+
+  it("fires event_register event", () => {
+    setConsentCookie({
+      analytics: true,
+      marketing: false,
+      timestamp: new Date().toISOString(),
+    });
+
+    trackEventRegister({ event_id: "e1", event_title: "OWE Summit" });
+    expect(gtagSpy).toHaveBeenCalledWith("event", "event_register", {
+      event_id: "e1",
+      event_title: "OWE Summit",
+    });
+  });
+
+  it("fires outbound_course_click event", () => {
+    setConsentCookie({
+      analytics: true,
+      marketing: false,
+      timestamp: new Date().toISOString(),
+    });
+
+    trackOutboundCourseClick({
+      course_id: "c1",
+      course_title: "Wind Safety",
+      provider: "UCD",
+      destination_url: "https://ucd.ie/wind",
+    });
+    expect(gtagSpy).toHaveBeenCalledWith("event", "outbound_course_click", {
+      course_id: "c1",
+      course_title: "Wind Safety",
+      provider: "UCD",
+      destination_url: "https://ucd.ie/wind",
     });
   });
 
@@ -201,15 +253,17 @@ describe("Analytics tracking", () => {
     });
   });
 
-  it("fires newsletter_signup event", () => {
+  it("fires newsletter_subscribe event", () => {
     setConsentCookie({
       analytics: true,
       marketing: false,
       timestamp: new Date().toISOString(),
     });
 
-    trackNewsletterSignup();
-    expect(gtagSpy).toHaveBeenCalledWith("event", "newsletter_signup", undefined);
+    trackNewsletterSubscribe({ topics: ["Careers"] });
+    expect(gtagSpy).toHaveBeenCalledWith("event", "newsletter_subscribe", {
+      topics: ["Careers"],
+    });
   });
 
   it("fires page_view event with parsed path", () => {

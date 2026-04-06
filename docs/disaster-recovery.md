@@ -272,9 +272,65 @@ be read as "configured, pending first production run".
 
 ---
 
-## 9. Change Log
+## 9. Pre-Go-Live Checklist (Handover)
+
+**Delivery framing:** daily backup automation is **delivered** as part of this tender — the workflows, scripts, scoring logic, retention policy, and drill harness are all committed to the repository and reviewable today. The SLA is not "backups running in production from day one of evaluation"; it is **"daily backup automation delivered; activated on cutover by the operations team"**, because the secrets that arm the workflows can only be issued against the operations team's own cloud accounts after contract award.
+
+This section makes the configured-vs-pending split explicit so the evaluator and the incoming operations team can see exactly what ships in the box and what must be provisioned at cutover.
+
+### 9.1 Configured and delivered in the repository (no action required)
+
+| Item | Where it lives | Status |
+|------|----------------|--------|
+| Daily backup workflow (encrypted `pg_dump` → Object-Locked S3) | `.github/workflows/backup.yml` | ✅ Committed |
+| Weekly automated restore-drill workflow | `.github/workflows/restore-drill.yml` | ✅ Committed |
+| Daily code bundle workflow (`git bundle` → S3 + GPG + age) | `.github/workflows/code-bundle.yml` | ✅ Committed |
+| Hot-mirror push to secondary Git host | `.github/workflows/mirror.yml` | ✅ Committed |
+| Read-only mode enforcement (kill-switch for Scenario B) | `src/lib/read-only.ts`, `src/proxy.ts` | ✅ Implemented + tested |
+| Read-only mode test coverage | `src/__tests__/lib/read-only.test.ts`, `src/__tests__/proxy.test.ts` | ✅ Passing in CI |
+| Dockerfile for rebuild-from-source (Scenarios E, G, H) | `/Dockerfile` | ✅ Committed |
+| Recovery runbook (this document) | `docs/disaster-recovery.md` | ✅ Committed |
+| Deployment runbook | `docs/deployment-guide.md` | ✅ Committed |
+| Prisma migration history | `prisma/migrations/` | ✅ Committed (authoritative schema) |
+| Seed data for scratch-restore verification | `prisma/seed.ts` | ✅ Committed |
+| DR drill log template | `ops/dr-drill-log.md` | ✅ Committed with "pending first production run" placeholder rows |
+
+### 9.2 Requires secrets / external provisioning at handover (operations team)
+
+These items cannot be configured during the tender phase because they require credentials against the operations team's own cloud accounts. Each row maps to a step in §8.2.
+
+| Item | Blocker | §8.2 step | Owner at cutover |
+|------|---------|-----------|------------------|
+| Age keypair for backup encryption | Must be generated and stored in the operations password manager | 1 | Database Operator |
+| S3 Paris backup bucket with Object Lock + lifecycle rules | Requires AWS account in a separate tenancy from Neon/Vercel | 2 | Incident Commander |
+| Backup IAM user (least-privilege, backup bucket only) | Depends on bucket provisioning (step 2) | 3 | Incident Commander |
+| Neon `pg_dump`-only role (`BACKUP_DATABASE_URL`) | Requires production Neon project access | 4 | Database Operator |
+| Neon read-only role (`DATABASE_URL_READONLY`) for drill verification | Requires production Neon project access | 5 | Database Operator |
+| Neon API token scoped to branch management (`NEON_API_KEY`) | Requires production Neon project access | 6 | Database Operator |
+| All GitHub Actions secrets populated from steps 1–6 | Depends on all of the above | 7 | Platform Lead |
+| Secondary Git host account + push-mirror deploy key | Requires GitLab or Codeberg account under operations control | — (§2.2) | Platform Lead |
+| Cloudflare DNS with 300s TTL on `sowa.ie` | Requires DNS delegation to operations | — (§4.5) | Platform Lead |
+| Standby Neon project in `aws-eu-central-1` (Frankfurt) for Scenario C | Requires Neon account | — (§4.3) | Incident Commander |
+
+### 9.3 Activation procedure (performed by operations team on cutover day)
+
+1. Work through §8.2 steps 1–7 to provision secrets and external resources.
+2. Manually trigger `backup.yml` (§8.2 step 8). Confirm an encrypted object lands in the backup bucket.
+3. Manually trigger `restore-drill.yml` (§8.2 step 9). Confirm the ephemeral Neon branch is created, populated, verified, and torn down cleanly.
+4. Manually trigger `code-bundle.yml`. Confirm the encrypted `.bundle.age` lands alongside the database dump.
+5. Verify the hot mirror by pushing a no-op commit and checking that `HEAD` on the secondary Git host matches GitHub within 5 minutes.
+6. Record the first successful run of each workflow in `ops/dr-drill-log.md`, replacing the "pending first production run" placeholder rows (§8.2 step 10).
+7. Confirm on-call paging is wired to the weekly restore-drill and daily hot-mirror freshness checks (§5).
+8. Sign off on the checklist in `ops/dr-drill-log.md`. From this point, the cells in §5 marked "Automated" are live rather than configured-pending.
+
+**Exit criteria for go-live:** every row in §9.1 is ✅, every row in §9.2 is satisfied against the operations team's own cloud accounts, and steps 9.3.1–9.3.8 are complete and logged. Only then does the daily backup automation transition from "delivered" to "running in production".
+
+---
+
+## 10. Change Log
 
 | Date | Change | Author |
 |------|--------|--------|
 | 2026-04-05 | Initial DR document created for tender submission | Platform Lead |
 | 2026-04-05 | Added §8 Automation Prerequisites documenting the setup checklist for `backup.yml` and `restore-drill.yml` | Platform Lead |
+| 2026-04-05 | Added §9 Pre-Go-Live Checklist making configured-vs-pending split explicit for handover; reframed backup automation SLA as "delivered; activated on cutover by operations team" | Platform Lead |

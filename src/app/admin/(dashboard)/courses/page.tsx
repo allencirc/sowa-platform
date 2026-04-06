@@ -13,6 +13,7 @@ import { DeleteDialog } from "@/components/admin/DeleteDialog";
 import { Pagination } from "@/components/admin/Pagination";
 import { useAdminFetch, adminDelete } from "@/hooks/useAdminFetch";
 import { StatusBadge } from "@/components/admin/StatusBadge";
+import { CourseImportDropzone } from "@/components/admin/courses/CourseImportDropzone";
 import { formatCurrency } from "@/lib/utils";
 import type { Course } from "@/lib/types";
 
@@ -113,6 +114,10 @@ export default function AdminCoursesPage() {
         <Link href="/admin/courses/new">
           <Button><Plus className="h-4 w-4" /> Add Course</Button>
         </Link>
+      </div>
+
+      <div className="mb-4">
+        <CourseImportDropzone onImported={refetch} />
       </div>
 
       <div className="mb-4 flex flex-col gap-3 sm:flex-row">

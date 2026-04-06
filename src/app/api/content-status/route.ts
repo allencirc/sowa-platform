@@ -181,7 +181,38 @@ export async function PUT(request: NextRequest) {
       }
     }
 
-    return NextResponse.json({ publishedCount });
+    // Auto-archive PUBLISHED events whose endDate is older than 30 days
+    const archiveCutoff = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+    let archivedCount = 0;
+
+    const staleEvents = await prisma.event.findMany({
+      where: {
+        status: "PUBLISHED",
+        endDate: { lt: archiveCutoff },
+      },
+      select: { id: true, slug: true },
+    });
+
+    for (const evt of staleEvents) {
+      await prisma.event.update({
+        where: { id: evt.id },
+        data: { status: "ARCHIVED" as ContentStatus },
+      });
+
+      await createContentVersion({
+        contentType: "EVENT" as ContentType,
+        contentId: evt.id,
+        snapshot: { status: "ARCHIVED", autoArchived: true },
+        changedById: "system",
+        changeNote: "Auto-archived (endDate > 30d old)",
+      }).catch(() => {
+        // Ignore version creation errors for system auto-archive
+      });
+
+      archivedCount++;
+    }
+
+    return NextResponse.json({ publishedCount, archivedCount });
   } catch (err) {
     console.error("PUT /api/content-status error:", err);
     return errorResponse("Failed to process scheduled publishing");

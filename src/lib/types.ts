@@ -49,6 +49,7 @@ export interface Course {
   nextStartDate?: string;
   accredited?: boolean;
   certificationAwarded?: string;
+  signupUrl?: string;
   skills: string[];
   careerRelevance: string[];
   tags: string[];

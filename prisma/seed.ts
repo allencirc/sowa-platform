@@ -119,6 +119,7 @@ interface CourseJson {
   nextStartDate?: string;
   accredited?: boolean;
   certificationAwarded?: string;
+  signupUrl?: string;
   skills: string[];
   careerRelevance: string[];
   tags: string[];
@@ -301,6 +302,7 @@ async function main() {
           : null,
         accredited: course.accredited ?? false,
         certificationAwarded: course.certificationAwarded ?? null,
+        signupUrl: course.signupUrl ?? null,
         tags: course.tags,
       },
     });

@@ -5,6 +5,8 @@ import StarterKit from "@tiptap/starter-kit";
 import Link from "@tiptap/extension-link";
 import Placeholder from "@tiptap/extension-placeholder";
 import { cn } from "@/lib/utils";
+import { SafeEmbed } from "@/components/admin/extensions/SafeEmbed";
+import { parseEmbedUrl, EMBED_PROVIDER_LABELS } from "@/lib/safe-embed";
 import {
   Bold,
   Italic,
@@ -16,6 +18,7 @@ import {
   Undo,
   Redo,
   Quote,
+  Video,
 } from "lucide-react";
 
 interface RichTextEditorProps {
@@ -38,8 +41,10 @@ export function RichTextEditor({
       StarterKit,
       Link.configure({ openOnClick: false }),
       Placeholder.configure({ placeholder }),
+      SafeEmbed,
     ],
     content,
+    immediatelyRender: false,
     onUpdate: ({ editor }) => {
       onChange?.(editor.getHTML());
     },
@@ -78,6 +83,22 @@ export function RichTextEditor({
     if (url) {
       editor.chain().focus().setLink({ href: url }).run();
     }
+  };
+
+  const addEmbed = () => {
+    const providers = Object.values(EMBED_PROVIDER_LABELS).join(", ");
+    const url = window.prompt(
+      `Paste a ${providers} URL to embed:`,
+    );
+    if (!url) return;
+    const parsed = parseEmbedUrl(url);
+    if (!parsed) {
+      window.alert(
+        `That URL isn't on the embed allowlist. Allowed providers: ${providers}.`,
+      );
+      return;
+    }
+    editor.chain().focus().insertSafeEmbed(url).run();
   };
 
   return (
@@ -147,6 +168,13 @@ export function RichTextEditor({
         <div className="mx-1 h-5 w-px bg-gray-200" />
         <ToolbarButton onClick={addLink} active={editor.isActive("link")} title="Link">
           <LinkIcon className="h-4 w-4" />
+        </ToolbarButton>
+        <ToolbarButton
+          onClick={addEmbed}
+          active={editor.isActive("safeEmbed")}
+          title="Embed video or social post"
+        >
+          <Video className="h-4 w-4" />
         </ToolbarButton>
         <div className="mx-1 h-5 w-px bg-gray-200" />
         <ToolbarButton

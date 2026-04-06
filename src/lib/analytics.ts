@@ -109,6 +109,22 @@ function sendEvent(name: string, params?: Record<string, unknown>): void {
   window.gtag?.('event', name, params)
 }
 
+/**
+ * Dispatch a Meta Pixel "Standard Event" (e.g. Lead, Subscribe,
+ * CompleteRegistration) if the pixel is loaded. Safe no-op otherwise.
+ * Gated by marketing consent via the pixel loader.
+ */
+function fireMetaStandardEvent(
+  eventName: string,
+  params?: Record<string, unknown>,
+): void {
+  if (typeof window === 'undefined') return
+  if (!hasMarketingConsent()) return
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const fbq = (window as any).fbq as undefined | ((...a: unknown[]) => void)
+  fbq?.('track', eventName, params)
+}
+
 // ---------------------------------------------------------------------------
 // Typed custom events — one function per event for call-site safety
 // ---------------------------------------------------------------------------
@@ -129,13 +145,6 @@ export function trackCourseView(params: {
   sendEvent('course_view', params)
 }
 
-export function trackCourseInterestClick(params: {
-  course_id: string
-  destination: string
-}) {
-  sendEvent('course_interest_click', params)
-}
-
 export function trackEventView(params: {
   event_id: string
   event_title: string
@@ -148,12 +157,17 @@ export function trackDiagnosticStarted() {
   sendEvent('diagnostic_started')
 }
 
-export function trackDiagnosticCompleted(params: {
+/**
+ * Conversion event — fired when a user reaches the diagnostic results screen.
+ * GA4 event name: `diagnostic_complete`.
+ */
+export function trackDiagnosticComplete(params: {
   top_gaps?: string
   recommended_careers_count?: number
   recommended_courses_count?: number
 }) {
-  sendEvent('diagnostic_completed', params)
+  sendEvent('diagnostic_complete', params)
+  fireMetaStandardEvent('Lead', { content_name: 'diagnostic' })
 }
 
 export function trackSearchPerformed(params: {
@@ -177,8 +191,65 @@ export function trackExternalLinkClick(params: {
   sendEvent('external_link_click', params)
 }
 
-export function trackNewsletterSignup() {
-  sendEvent('newsletter_signup')
+/**
+ * Conversion event — fired on successful in-site course interest submission.
+ * GA4 event name: `course_register`.
+ */
+export function trackCourseRegister(params: {
+  course_id: string
+  course_title: string
+}) {
+  sendEvent('course_register', params)
+  fireMetaStandardEvent('CompleteRegistration', {
+    content_name: params.course_title,
+    content_ids: [params.course_id],
+    content_category: 'course',
+  })
+}
+
+/**
+ * Conversion event — fired on successful in-site event registration.
+ * GA4 event name: `event_register`.
+ */
+export function trackEventRegister(params: {
+  event_id: string
+  event_title: string
+}) {
+  sendEvent('event_register', params)
+  fireMetaStandardEvent('CompleteRegistration', {
+    content_name: params.event_title,
+    content_ids: [params.event_id],
+    content_category: 'event',
+  })
+}
+
+/**
+ * Conversion event — fired on successful newsletter subscription.
+ * GA4 event name: `newsletter_subscribe`.
+ */
+export function trackNewsletterSubscribe(params?: { topics?: string[] }) {
+  sendEvent('newsletter_subscribe', params)
+  fireMetaStandardEvent('Subscribe', {
+    content_name: 'newsletter',
+  })
+}
+
+/**
+ * Conversion event — fired when a user clicks through to an external course
+ * provider from a SOWA course page. GA4 event name: `outbound_course_click`.
+ */
+export function trackOutboundCourseClick(params: {
+  course_id: string
+  course_title: string
+  provider: string
+  destination_url: string
+}) {
+  sendEvent('outbound_course_click', params)
+  fireMetaStandardEvent('Lead', {
+    content_name: params.course_title,
+    content_ids: [params.course_id],
+    content_category: 'course_outbound',
+  })
 }
 
 export function trackPathwayExplored(params: { pathway_id: string }) {

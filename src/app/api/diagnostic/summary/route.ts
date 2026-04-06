@@ -108,7 +108,7 @@ export async function POST(request: NextRequest) {
   const userPrompt = buildPrompt(body);
 
   // Try Anthropic API first, fall back to OpenAI
-  const anthropicKey = process.env.ANTHROPIC_API_KEY;
+  const anthropicKey = process.env.CLAUDE_KEY || process.env.ANTHROPIC_API_KEY;
   const openaiKey = process.env.OPENAI_API_KEY;
 
   if (!anthropicKey && !openaiKey) {

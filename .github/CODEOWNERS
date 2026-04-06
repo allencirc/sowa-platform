@@ -1,0 +1,38 @@
+# CODEOWNERS — automatic PR reviewer assignment.
+# Docs: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-security/customizing-your-repository/about-code-owners
+#
+# Order matters: the LAST matching pattern wins for a given file.
+# A single approval from ANY listed owner for a touched path satisfies
+# the branch-protection "require review from code owners" rule.
+#
+# Policy: both Allen and Ronan are owners of every path. GitHub's
+# auto-request will nominate the SUBJECT-MATTER LEAD listed first for
+# each area, but either contributor can approve any PR. This keeps the
+# tender push unblocked if one person is unavailable.
+
+# Default owners — everything not matched below.
+*                                   @allenwixted @ronanwalsh
+
+# ─── Backend / data / infra (Ronan leads, Allen co-owner) ──────────
+/prisma/                            @ronanwalsh @allenwixted
+/src/server/                        @ronanwalsh @allenwixted
+/src/lib/prisma.ts                  @ronanwalsh @allenwixted
+/src/lib/auth.ts                    @ronanwalsh @allenwixted
+/src/lib/integrations/              @ronanwalsh @allenwixted
+/src/app/api/                       @ronanwalsh @allenwixted
+/.github/                           @ronanwalsh @allenwixted
+/.github/workflows/                 @ronanwalsh @allenwixted
+/Dockerfile                         @ronanwalsh @allenwixted
+/ops/                               @ronanwalsh @allenwixted
+/docs/security.md                   @ronanwalsh @allenwixted
+/docs/disaster-recovery.md          @ronanwalsh @allenwixted
+/docs/deployment-guide.md           @ronanwalsh @allenwixted
+/SECURITY.md                        @ronanwalsh @allenwixted
+
+# ─── Frontend / admin UI / design (Allen leads, Ronan co-owner) ────
+/src/app/(frontend)/                @allenwixted @ronanwalsh
+/src/app/admin/                     @allenwixted @ronanwalsh
+/src/components/                    @allenwixted @ronanwalsh
+/src/styles/                        @allenwixted @ronanwalsh
+/public/                            @allenwixted @ronanwalsh
+/messages/                          @allenwixted @ronanwalsh

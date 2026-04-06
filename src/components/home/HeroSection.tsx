@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Wind } from "lucide-react";
-import { Button } from "@/components/ui/Button";
+import { buttonClassName } from "@/components/ui/Button";
 
 function TurbineSVG({ className }: { className?: string }) {
   return (
@@ -73,19 +73,21 @@ export function HeroSection() {
           </p>
 
           <div className="mt-10 flex flex-wrap gap-4">
-            <Link href="/careers">
-              <Button size="lg" variant="secondary">
-                Explore Careers
-              </Button>
+            <Link
+              href="/careers"
+              className={buttonClassName("secondary", "lg")}
+            >
+              Explore Careers
             </Link>
-            <Link href="/diagnostic">
-              <Button
-                size="lg"
-                variant="outline"
-                className="border-white/60 text-white hover:bg-white hover:text-primary"
-              >
-                Take Skills Assessment
-              </Button>
+            <Link
+              href="/diagnostic"
+              className={buttonClassName(
+                "outline",
+                "lg",
+                "border-white/60 text-white hover:bg-white hover:text-primary"
+              )}
+            >
+              Take Skills Assessment
             </Link>
           </div>
         </div>

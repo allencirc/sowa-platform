@@ -23,7 +23,7 @@
 | Variable | Description |
 |----------|-------------|
 | `AI_SUMMARY_ENABLED` | Set to `"true"` to enable AI-powered diagnostic summaries |
-| `ANTHROPIC_API_KEY` | Anthropic API key (preferred for AI summaries) |
+| `CLAUDE_KEY` (or `ANTHROPIC_API_KEY`) | Anthropic API key (preferred for AI summaries) |
 | `OPENAI_API_KEY` | OpenAI API key (fallback if Anthropic not set) |
 
 ### HubSpot CRM (Optional)

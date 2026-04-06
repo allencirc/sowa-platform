@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "./fixtures";
 
 // WCAG 2.2 AA axe sweeps live in a11y.spec.ts.
 

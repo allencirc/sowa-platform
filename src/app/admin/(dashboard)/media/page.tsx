@@ -12,6 +12,7 @@ interface MediaFile {
   url: string;
   size: number;
   createdAt: string;
+  variants?: Record<string, string>;
 }
 
 function formatFileSize(bytes: number): string {
@@ -151,9 +152,10 @@ export default function AdminMediaPage() {
               <div className="relative aspect-square bg-gray-100">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src={file.url}
+                  src={file.variants?.thumb ?? file.url}
                   alt={file.filename}
                   className="h-full w-full object-cover"
+                  loading="lazy"
                 />
                 <div className="absolute inset-0 flex items-center justify-center gap-2 bg-black/50 opacity-0 transition-opacity group-hover:opacity-100">
                   <Button
@@ -183,6 +185,25 @@ export default function AdminMediaPage() {
                   {file.filename}
                 </p>
                 <p className="text-xs text-text-muted">{formatFileSize(file.size)}</p>
+                {file.variants && Object.keys(file.variants).length > 0 && (
+                  <div className="mt-1.5 flex flex-wrap gap-1">
+                    {Object.entries(file.variants).map(([label, url]) => (
+                      <button
+                        key={label}
+                        onClick={() => copyUrl(url)}
+                        className={cn(
+                          "rounded px-1.5 py-0.5 text-[10px] font-medium transition-colors",
+                          copied === url
+                            ? "bg-secondary/20 text-secondary-dark"
+                            : "bg-gray-100 text-text-secondary hover:bg-accent/10 hover:text-accent-dark"
+                        )}
+                        title={`Copy ${label} URL`}
+                      >
+                        {copied === url ? "Copied!" : label}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           ))}

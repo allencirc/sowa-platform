@@ -16,6 +16,15 @@ Version 0.1.0 | Last updated: 4 April 2026
 | [Admin User Guide](./admin-guide.md) | CMS login, content management, registrations, exports | Content Editors, Admins |
 | [Deployment Guide](./deployment-guide.md) | Environment setup, build, deploy, migrations, rollback | DevOps, Developers |
 | [Security Documentation](./security.md) | Auth model, GDPR, data protection, security headers | Security, Compliance |
+| | | |
+| **For the Skillnet team — Operational Documentation** | | |
+| [Content Type Guides](./content-type-guides.md) | Guidelines for creating and managing different content types | Content Editors, Team |
+| [Publishing Workflow](./publishing-workflow.md) | Content publishing process, review stages, and approval workflows | Content Editors, Team |
+| [User Role Management](./user-role-management.md) | User permissions, role assignments, and access control | Admins, Team |
+| [Media Library](./media-library.md) | Managing images, videos, and other media assets | Content Editors, Team |
+| [Registrations Export](./registrations-export.md) | Exporting and managing registration data | Admins, Data Managers |
+| [Diagnostic Tool](./diagnostic-tool.md) | Skills diagnostic tool features and administration | Team, Support |
+| [Training Materials](./training-materials.md) | Training resources and onboarding materials for the team | Team, New Users |
 
 ---
 

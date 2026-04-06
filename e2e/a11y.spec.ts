@@ -70,8 +70,13 @@ test.describe("Accessibility — desktop", () => {
 });
 
 test.describe("Accessibility — mobile", () => {
-  // Simulate a mobile form factor without swapping defaultBrowserType
-  // (which Playwright forbids inside a describe block).
+  // isMobile / hasTouch are Chromium-only. Firefox gets desktop-only a11y
+  // coverage; the mobile-chrome project (devices["Pixel 5"]) already exercises
+  // a full mobile context via playwright.config.ts.
+  test.skip(
+    ({ browserName }) => browserName !== "chromium",
+    "mobile emulation requires Chromium"
+  );
   test.use({
     viewport: { width: 393, height: 851 },
     isMobile: true,
