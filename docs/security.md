@@ -173,7 +173,7 @@ Every item in the current OWASP Top 10 is addressed in the running codebase. Eac
 | A03 | Injection (SQLi, XSS, command)           | Prisma ORM parameterises every query (no raw SQL); React auto-escapes all rendered content; Zod validation at every API boundary; no `dangerouslySetInnerHTML` without sanitisation                         | `src/lib/validations.ts`, all `src/app/api/**/route.ts` |
 | A04 | Insecure Design                          | Least-privilege RBAC; deny-by-default on admin routes; input validation colocated with route handlers; rate limiting on all mutating endpoints                                                              | `src/lib/rate-limit.ts`, `src/lib/auth-utils.ts`        |
 | A05 | Security Misconfiguration                | Security headers set in `next.config.ts` (see §Security Headers); `X-Powered-By` disabled; production-only cookies flagged `Secure` and `HttpOnly`; no debug mode in production build                       | `next.config.ts`                                        |
-| A06 | Vulnerable & Outdated Components         | `npm audit` runs in CI; Dependabot PRs merged weekly; see §Dependency Scanning Plan                                                                                                                         | `.github/workflows/ci.yml` (planned), `package.json`    |
+| A06 | Vulnerable & Outdated Components         | `npm audit` runs in CI and blocks on high/critical; Dependabot PRs merged weekly; lockfile integrity validated; see §Dependency Scanning                                                                    | `.github/workflows/security.yml`, `.github/dependabot.yml` |
 | A07 | Identification & Authentication Failures | NextAuth v5 (credentials provider) with bcrypt password hashing, HTTP-only JWT cookies, rate-limited login endpoint, 8-character minimum password, forced change on default admin                           | `src/lib/auth.ts`, `src/lib/validations.ts`             |
 | A08 | Software & Data Integrity Failures       | Package manager uses lockfile (`package-lock.json`); CI rebuilds from lockfile; Prisma migrations checked into git and applied via `migrate deploy`; Vercel deployments are content-addressed and immutable | `package-lock.json`, `prisma/migrations/`               |
 | A09 | Security Logging & Monitoring Failures   | Vercel function logs capture every request; admin audit trail via `ContentVersion` model; failed auth attempts logged; see §Audit Logging                                                                   | `src/lib/audit-log.ts` (planned), Vercel Logs           |
@@ -197,17 +197,18 @@ A CVE register (`ops/cve-register.md`) tracks every CVSS ≥ 7.0 advisory that t
 
 ---
 
-## Dependency Scanning Plan
+## Dependency Scanning
 
-Three complementary scanners, run in CI on every push and nightly on `main`:
+Three complementary scanners run in CI on every push to `main`, on every pull request, and on a weekly schedule (Monday 08:00 UTC):
 
-1. **`npm audit --production`** — blocks the CI pipeline if any production dependency has a high or critical advisory.
-2. **GitHub Dependabot** — opens PRs for out-of-date dependencies; auto-merged for patch versions, reviewed for minor/major.
-3. **`osv-scanner`** (Google OSV) — scans the lockfile against the Open Source Vulnerability database; runs nightly and alerts via GitHub Issue.
+1. **`npm audit --audit-level=high`** — runs in `.github/workflows/security.yml` and fails the build if any dependency has a high or critical advisory.
+2. **Lockfile integrity** — `lockfile-lint` validates that `package-lock.json` only references the npm registry over HTTPS, preventing supply-chain substitution attacks. Runs in the same workflow.
+3. **GitHub Dependabot** (`.github/dependabot.yml`) — opens PRs weekly for out-of-date npm, GitHub Actions, and Docker dependencies; auto-grouped by ecosystem; limited to 10 open PRs.
 
 Optional, for production rollout:
 
-4. **Snyk** or **Socket.dev** free tier for supply-chain attack detection (typosquatting, install scripts, malicious maintainer takeovers).
+4. **`osv-scanner`** (Google OSV) — scans the lockfile against the Open Source Vulnerability database; can be added as a nightly job.
+5. **Snyk** or **Socket.dev** free tier for supply-chain attack detection (typosquatting, install scripts, malicious maintainer takeovers).
 
 A scan that surfaces a CVSS ≥ 9.0 advisory triggers the **24-hour emergency patch** workflow (see Patch Management).
 
