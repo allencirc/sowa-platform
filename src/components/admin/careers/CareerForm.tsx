@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Plus, Trash2, Save, ArrowLeft, AlertCircle } from "lucide-react";
+import { Plus, Trash2, Save, ArrowLeft, AlertCircle, Sparkles, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
@@ -42,6 +42,8 @@ export function CareerForm({ career, mode }: CareerFormProps) {
   const [skills, setSkills] = useState<{ label: string; value: string }[]>([]);
   const [courses, setCourses] = useState<{ label: string; value: string }[]>([]);
   const [allCareers, setAllCareers] = useState<{ label: string; value: string }[]>([]);
+  const [aiDrafting, setAiDrafting] = useState(false);
+  const [aiError, setAiError] = useState<string | null>(null);
 
   const {
     register,
@@ -129,6 +131,59 @@ export function CareerForm({ career, mode }: CareerFormProps) {
     }
   };
 
+  const handleAiDraft = async () => {
+    const currentTitle = watch("title");
+    if (!currentTitle?.trim()) {
+      setAiError("Add a title first so the AI has content to work with.");
+      return;
+    }
+
+    const hasContent =
+      watch("description")?.trim() ||
+      (watch("keyResponsibilities")?.length ?? 0) > 0 ||
+      (watch("qualifications")?.length ?? 0) > 0;
+
+    if (
+      hasContent &&
+      !window.confirm(
+        "This will replace existing description, responsibilities, qualifications, working conditions, and growth outlook. Continue?",
+      )
+    ) {
+      return;
+    }
+
+    setAiDrafting(true);
+    setAiError(null);
+
+    try {
+      const res = await fetch("/api/admin/generate-career-draft", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: currentTitle,
+          sector: watch("sector"),
+          entryLevel: watch("entryLevel"),
+        }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => null);
+        throw new Error(data?.error || `Request failed (${res.status})`);
+      }
+
+      const draft = await res.json();
+      setValue("description", draft.description, { shouldValidate: true });
+      setValue("keyResponsibilities", draft.keyResponsibilities ?? [], { shouldValidate: true });
+      setValue("qualifications", draft.qualifications ?? [], { shouldValidate: true });
+      setValue("workingConditions", draft.workingConditions ?? "", { shouldValidate: true });
+      setValue("growthOutlook", draft.growthOutlook ?? "", { shouldValidate: true });
+    } catch (err) {
+      setAiError(err instanceof Error ? err.message : "Failed to generate draft");
+    } finally {
+      setAiDrafting(false);
+    }
+  };
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
       {error && (
@@ -167,6 +222,26 @@ export function CareerForm({ career, mode }: CareerFormProps) {
           >
             <Select id="entryLevel" options={levelOptions} {...register("entryLevel")} />
           </FormField>
+        </div>
+
+        <div className="mt-4 flex items-center gap-3">
+          <button
+            type="button"
+            onClick={handleAiDraft}
+            disabled={aiDrafting || isSubmitting}
+            className="inline-flex items-center gap-2 rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-accent-dark disabled:opacity-50"
+          >
+            {aiDrafting ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <Sparkles className="h-4 w-4" />
+            )}
+            {aiDrafting ? "Drafting..." : "AI Draft"}
+          </button>
+          <span className="text-xs text-text-muted">
+            Generate description, responsibilities &amp; qualifications from the title and sector
+          </span>
+          {aiError && <span className="text-sm text-status-error">{aiError}</span>}
         </div>
 
         <div className="mt-4">
