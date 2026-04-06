@@ -59,7 +59,7 @@ test.describe("Accessibility — desktop", () => {
   for (const route of PUBLIC_ROUTES) {
     test(`${route} has no WCAG 2.2 AA violations`, async ({ page }) => {
       await page.goto(route);
-      await page.waitForLoadState("networkidle");
+      await page.waitForLoadState("domcontentloaded");
       await expectNoViolations(page);
     });
   }
@@ -79,7 +79,7 @@ test.describe("Accessibility — mobile", () => {
   for (const route of PUBLIC_ROUTES) {
     test(`${route} has no WCAG 2.2 AA violations`, async ({ page }) => {
       await page.goto(route);
-      await page.waitForLoadState("networkidle");
+      await page.waitForLoadState("domcontentloaded");
       await expectNoViolations(page);
     });
   }

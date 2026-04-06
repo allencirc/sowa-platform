@@ -69,7 +69,7 @@ jobs:
         run: npm run db:seed
 
       - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium
+        run: npx playwright install --with-deps chromium firefox
 
       - name: Build
         run: npx next build

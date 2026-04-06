@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect } from "./fixtures";
 import AxeBuilder from "@axe-core/playwright";
 
 // The platform-wide WCAG 2.2 AA sweep lives in a11y.spec.ts. The axe

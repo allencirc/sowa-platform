@@ -5,14 +5,14 @@ import { cn } from "@/lib/utils";
 import { CareerCard } from "./CareerCard";
 import type { Career } from "@/lib/types";
 
-const sectorColours: Record<string, string> = {
-  "Operations & Maintenance": "#0C2340",
-  "Marine Operations": "#1E6091",
-  Electrical: "#F59E0B",
-  "Survey & Design": "#7C3AED",
-  "Health, Safety & Environment": "#DC2626",
-  "Policy & Regulation": "#059669",
-  "Project Management": "#EA580C",
+const sectorColours: Record<string, { bg: string; text: string }> = {
+  "Operations & Maintenance": { bg: "#0C2340", text: "#FFFFFF" },
+  "Marine Operations": { bg: "#1E6091", text: "#FFFFFF" },
+  Electrical: { bg: "#F59E0B", text: "#451A03" },
+  "Survey & Design": { bg: "#7C3AED", text: "#FFFFFF" },
+  "Health, Safety & Environment": { bg: "#DC2626", text: "#FFFFFF" },
+  "Policy & Regulation": { bg: "#059669", text: "#022C22" },
+  "Project Management": { bg: "#EA580C", text: "#431407" },
 };
 
 export function CareerFilters({ careers }: { careers: Career[] }) {
@@ -65,14 +65,15 @@ export function CareerFilters({ careers }: { careers: Career[] }) {
             className={cn(
               "px-3 py-1.5 rounded-full text-xs font-medium transition-colors border cursor-pointer",
               activeSectors.has(sector)
-                ? "text-white border-transparent"
+                ? "border-transparent"
                 : "bg-white text-text-secondary border-gray-200 hover:border-gray-400",
             )}
             style={
               activeSectors.has(sector)
                 ? {
-                    backgroundColor: sectorColours[sector],
-                    borderColor: sectorColours[sector],
+                    backgroundColor: sectorColours[sector]?.bg,
+                    borderColor: sectorColours[sector]?.bg,
+                    color: sectorColours[sector]?.text,
                   }
                 : undefined
             }
