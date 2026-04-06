@@ -95,7 +95,9 @@ describe("Account lockout", () => {
     prismaMock.user.findUnique.mockResolvedValue(
       makeUser({ failedLoginAttempts: MAX_FAILED_ATTEMPTS - 1 }),
     );
-    prismaMock.user.update.mockResolvedValue(makeUser({ failedLoginAttempts: MAX_FAILED_ATTEMPTS }));
+    prismaMock.user.update.mockResolvedValue(
+      makeUser({ failedLoginAttempts: MAX_FAILED_ATTEMPTS }),
+    );
 
     await authorize({ email: "test@example.com", password: "wrong" });
 
@@ -129,17 +131,13 @@ describe("Account lockout", () => {
   });
 
   it("resets failedLoginAttempts on successful login", async () => {
-    prismaMock.user.findUnique.mockResolvedValue(
-      makeUser({ failedLoginAttempts: 3 }),
-    );
+    prismaMock.user.findUnique.mockResolvedValue(makeUser({ failedLoginAttempts: 3 }));
     prismaMock.user.update.mockResolvedValue(makeUser());
 
     const result = await authorize({ email: "test@example.com", password: "correct-password" });
 
     expect(result).not.toBeNull();
-    expect(result).toEqual(
-      expect.objectContaining({ id: "user-1", email: "test@example.com" }),
-    );
+    expect(result).toEqual(expect.objectContaining({ id: "user-1", email: "test@example.com" }));
     expect(prismaMock.user.update).toHaveBeenCalledWith(
       expect.objectContaining({
         data: { failedLoginAttempts: 0, lockedUntil: null },
@@ -157,8 +155,6 @@ describe("Account lockout", () => {
     const result = await authorize({ email: "test@example.com", password: "correct-password" });
 
     expect(result).not.toBeNull();
-    expect(result).toEqual(
-      expect.objectContaining({ id: "user-1", email: "test@example.com" }),
-    );
+    expect(result).toEqual(expect.objectContaining({ id: "user-1", email: "test@example.com" }));
   });
 });
