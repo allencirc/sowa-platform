@@ -345,6 +345,8 @@ model User {
   role         UserRole @default(VIEWER)
   passwordHash String?
   mustChangePassword Boolean @default(false)
+  failedLoginAttempts Int @default(0)
+  lockedUntil  DateTime?
 
   contentVersions ContentVersion[]
 

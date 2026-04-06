@@ -115,6 +115,20 @@ In-memory rate limiter (`src/lib/rate-limit.ts`):
   enforces a 12-character minimum, requires the current password, and forces a
   re-login on success so the old JWT cannot be reused.
 
+### Account Lockout
+
+Brute-force login attempts are mitigated by an automatic account lockout policy:
+
+| Setting          | Value                                                                       |
+| ---------------- | --------------------------------------------------------------------------- |
+| Threshold        | **5** consecutive failed login attempts                                     |
+| Lockout duration | **15 minutes** from the final failed attempt                                |
+| Reset on success | Counter and lock are cleared on any successful login                        |
+| Configuration    | `src/lib/account-lockout.ts` (`MAX_FAILED_ATTEMPTS`, `LOCKOUT_DURATION_MS`) |
+| Database fields  | `User.failedLoginAttempts` (Int), `User.lockedUntil` (DateTime?)            |
+
+When a locked account attempts to authenticate — even with the correct password — the credentials provider returns an error message ("Account temporarily locked. Try again later.") and does not evaluate the password. Once the lockout window expires the next successful login resets the counter to zero.
+
 ---
 
 ## GDPR Compliance Features
@@ -166,18 +180,18 @@ Currently there is no automatic data purging. Recommendations for production:
 
 Every item in the current OWASP Top 10 is addressed in the running codebase. Each row below names the specific control and where it lives in the repo.
 
-| #   | OWASP Category                           | Control in this codebase                                                                                                                                                                                    | Location                                                |
-| --- | ---------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
-| A01 | Broken Access Control                    | Role-based middleware (`requireAuth`, `requireRole`) on every admin API route; NextAuth session checks in `/admin` layout; route-level role enforcement on status transitions                               | `src/lib/auth-utils.ts`, `src/app/admin/layout.tsx`     |
-| A02 | Cryptographic Failures                   | Passwords hashed with bcryptjs; JWT signing secret from env; TLS enforced via HSTS header; no secrets in source control                                                                                     | `src/lib/auth.ts`, `next.config.ts`                     |
-| A03 | Injection (SQLi, XSS, command)           | Prisma ORM parameterises every query (no raw SQL); React auto-escapes all rendered content; Zod validation at every API boundary; no `dangerouslySetInnerHTML` without sanitisation                         | `src/lib/validations.ts`, all `src/app/api/**/route.ts` |
-| A04 | Insecure Design                          | Least-privilege RBAC; deny-by-default on admin routes; input validation colocated with route handlers; rate limiting on all mutating endpoints                                                              | `src/lib/rate-limit.ts`, `src/lib/auth-utils.ts`        |
-| A05 | Security Misconfiguration                | Security headers set in `next.config.ts` (see §Security Headers); `X-Powered-By` disabled; production-only cookies flagged `Secure` and `HttpOnly`; no debug mode in production build                       | `next.config.ts`                                        |
+| #   | OWASP Category                           | Control in this codebase                                                                                                                                                                                    | Location                                                   |
+| --- | ---------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- |
+| A01 | Broken Access Control                    | Role-based middleware (`requireAuth`, `requireRole`) on every admin API route; NextAuth session checks in `/admin` layout; route-level role enforcement on status transitions                               | `src/lib/auth-utils.ts`, `src/app/admin/layout.tsx`        |
+| A02 | Cryptographic Failures                   | Passwords hashed with bcryptjs; JWT signing secret from env; TLS enforced via HSTS header; no secrets in source control                                                                                     | `src/lib/auth.ts`, `next.config.ts`                        |
+| A03 | Injection (SQLi, XSS, command)           | Prisma ORM parameterises every query (no raw SQL); React auto-escapes all rendered content; Zod validation at every API boundary; no `dangerouslySetInnerHTML` without sanitisation                         | `src/lib/validations.ts`, all `src/app/api/**/route.ts`    |
+| A04 | Insecure Design                          | Least-privilege RBAC; deny-by-default on admin routes; input validation colocated with route handlers; rate limiting on all mutating endpoints                                                              | `src/lib/rate-limit.ts`, `src/lib/auth-utils.ts`           |
+| A05 | Security Misconfiguration                | Security headers set in `next.config.ts` (see §Security Headers); `X-Powered-By` disabled; production-only cookies flagged `Secure` and `HttpOnly`; no debug mode in production build                       | `next.config.ts`                                           |
 | A06 | Vulnerable & Outdated Components         | `npm audit` runs in CI and blocks on high/critical; Dependabot PRs merged weekly; lockfile integrity validated; see §Dependency Scanning                                                                    | `.github/workflows/security.yml`, `.github/dependabot.yml` |
-| A07 | Identification & Authentication Failures | NextAuth v5 (credentials provider) with bcrypt password hashing, HTTP-only JWT cookies, rate-limited login endpoint, 8-character minimum password, forced change on default admin                           | `src/lib/auth.ts`, `src/lib/validations.ts`             |
-| A08 | Software & Data Integrity Failures       | Package manager uses lockfile (`package-lock.json`); CI rebuilds from lockfile; Prisma migrations checked into git and applied via `migrate deploy`; Vercel deployments are content-addressed and immutable | `package-lock.json`, `prisma/migrations/`               |
-| A09 | Security Logging & Monitoring Failures   | Vercel function logs capture every request; admin audit trail via `ContentVersion` model; failed auth attempts logged; see §Audit Logging                                                                   | `src/lib/audit-log.ts` (planned), Vercel Logs           |
-| A10 | Server-Side Request Forgery (SSRF)       | No user-supplied URL is fetched server-side; remote image hosts explicitly whitelisted in `next.config.ts`; outbound HTTP restricted to documented third parties (Anthropic, OpenAI, HubSpot)               | `next.config.ts` — `images.remotePatterns`              |
+| A07 | Identification & Authentication Failures | NextAuth v5 (credentials provider) with bcrypt password hashing, HTTP-only JWT cookies, rate-limited login endpoint, 8-character minimum password, forced change on default admin                           | `src/lib/auth.ts`, `src/lib/validations.ts`                |
+| A08 | Software & Data Integrity Failures       | Package manager uses lockfile (`package-lock.json`); CI rebuilds from lockfile; Prisma migrations checked into git and applied via `migrate deploy`; Vercel deployments are content-addressed and immutable | `package-lock.json`, `prisma/migrations/`                  |
+| A09 | Security Logging & Monitoring Failures   | Vercel function logs capture every request; admin audit trail via `ContentVersion` model; failed auth attempts logged; see §Audit Logging                                                                   | `src/lib/audit-log.ts` (planned), Vercel Logs              |
+| A10 | Server-Side Request Forgery (SSRF)       | No user-supplied URL is fetched server-side; remote image hosts explicitly whitelisted in `next.config.ts`; outbound HTTP restricted to documented third parties (Anthropic, OpenAI, HubSpot)               | `next.config.ts` — `images.remotePatterns`                 |
 
 ---
 
@@ -308,7 +322,6 @@ If deployed on Vercel, add a `vercel.json`:
 | In-memory rate limiting                                      | Resets on restart, not shared across instances                         | Migrate to Redis                                                                                  |
 | Local file storage                                           | Not scalable, no CDN, lost on redeploy                                 | Migrate to S3/R2/Vercel Blob                                                                      |
 | Default admin password                                       | Known credential in seed data                                          | Force password change on first login                                                              |
-| No account lockout                                           | Unlimited login attempts (rate-limited only)                           | Add account lockout after N failures                                                              |
 | No audit log for auth events                                 | Login/logout not tracked                                               | Add auth event logging                                                                            |
 | CSP allows `'unsafe-inline'` / `'unsafe-eval'` on script-src | Relaxation kept for React Flow runtime and Next.js inline critical CSS | Tighten with per-request nonces before production; base policy is in place (`next.config.ts`)     |
 | HSTS relies on the hosting provider for HTTPS termination    | TLS is enforced at the Vercel edge                                     | HSTS header now present in `next.config.ts`; verify domain is in the HSTS preload list at go-live |
