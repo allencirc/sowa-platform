@@ -15,13 +15,7 @@ const VARIANTS = [
 ] as const;
 
 // ─── Accepted MIME types by category ───────────────────────────────────────
-const IMAGE_TYPES = [
-  "image/jpeg",
-  "image/png",
-  "image/gif",
-  "image/webp",
-  "image/svg+xml",
-];
+const IMAGE_TYPES = ["image/jpeg", "image/png", "image/gif", "image/webp", "image/svg+xml"];
 
 const VIDEO_TYPES = ["video/mp4", "video/webm"];
 
@@ -132,8 +126,7 @@ export async function POST(request: NextRequest) {
     if (!ALLOWED_TYPES.includes(file.type)) {
       return NextResponse.json(
         {
-          error:
-            "Invalid file type. Allowed: JPEG, PNG, GIF, WebP, SVG, MP4, WebM, MP3, WAV",
+          error: "Invalid file type. Allowed: JPEG, PNG, GIF, WebP, SVG, MP4, WebM, MP3, WAV",
         },
         { status: 400 },
       );
@@ -162,11 +155,7 @@ export async function POST(request: NextRequest) {
     const buffer = Buffer.from(await file.arrayBuffer());
 
     // ── SVGs, audio, and video: store verbatim (no processing) ──
-    if (
-      file.type === "image/svg+xml" ||
-      category === "audio" ||
-      category === "video"
-    ) {
+    if (file.type === "image/svg+xml" || category === "audio" || category === "video") {
       await writeFile(path.join(UPLOAD_DIR, filename), buffer);
       return NextResponse.json(
         { filename, url: `/uploads/${filename}`, size: buffer.length, category },

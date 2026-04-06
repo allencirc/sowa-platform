@@ -1,16 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
-import {
-  Upload,
-  Trash2,
-  Copy,
-  Check,
-  Search,
-  Image as ImageIcon,
-  Film,
-  Music,
-} from "lucide-react";
+import { Upload, Trash2, Copy, Check, Search, Image as ImageIcon, Film, Music } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { DeleteDialog } from "@/components/admin/DeleteDialog";

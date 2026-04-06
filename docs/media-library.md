@@ -48,10 +48,10 @@ The platform accepts the following formats:
 ### File Size Limits
 
 | Media Type | Maximum Size | Recommended Size |
-|------------|-------------|-----------------|
-| **Images** | 5 MB | 500 KB – 2 MB |
-| **Video** | 50 MB | 5 – 20 MB |
-| **Audio** | 20 MB | 1 – 5 MB |
+| ---------- | ------------ | ---------------- |
+| **Images** | 5 MB         | 500 KB – 2 MB    |
+| **Video**  | 50 MB        | 5 – 20 MB        |
+| **Audio**  | 20 MB        | 1 – 5 MB         |
 
 Large files slow down page load times. Compress media before uploading where possible.
 
