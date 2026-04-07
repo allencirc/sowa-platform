@@ -3,10 +3,10 @@
   "configurations": [
     {
       "name": "sowa-dev",
-      "runtimeExecutable": "/bin/sh",
+      "runtimeExecutable": "/bin/bash",
       "runtimeArgs": [
         "-c",
-        "export HOME=/Users/allenwixted && . $HOME/.nvm/nvm.sh && nvm use default && cd \"$HOME/Downloads/SOWA Tender/Skillnet Offshore Wind Energy/sowa-platform\" && exec node node_modules/next/dist/bin/next dev -p 3000"
+        "cd '/Users/allenwixted/Downloads/SOWA Tender/Skillnet Offshore Wind Energy/sowa-platform' && exec node_modules/.bin/next dev -p 3000 --turbopack"
       ],
       "port": 3000
     }
