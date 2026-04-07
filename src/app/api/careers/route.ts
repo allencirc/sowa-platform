@@ -10,6 +10,7 @@ import {
 import { careerFiltersSchema, createCareerSchema, draftCareerSchema } from "@/lib/validations";
 import { requireRole } from "@/lib/auth-utils";
 import { createContentVersion } from "@/lib/versions";
+import { uniqueSlug } from "@/lib/unique-slug";
 
 // Forward maps for enum conversion
 const sectorToEnum: Record<string, string> = {
@@ -156,9 +157,11 @@ export async function POST(request: NextRequest) {
   const data = parsed.data;
 
   try {
+    const slug = await uniqueSlug(data.slug, "career");
+
     const row = await prisma.career.create({
       data: {
-        slug: data.slug,
+        slug,
         title: data.title,
         sector: (sectorToEnum[data.sector ?? "Operations & Maintenance"] ??
           "OPERATIONS_MAINTENANCE") as never,

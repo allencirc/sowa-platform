@@ -10,6 +10,7 @@ import {
 import { courseFiltersSchema, createCourseSchema, draftCourseSchema } from "@/lib/validations";
 import { requireRole } from "@/lib/auth-utils";
 import { createContentVersion } from "@/lib/versions";
+import { uniqueSlug } from "@/lib/unique-slug";
 
 const providerTypeToEnum: Record<string, string> = {
   University: "UNIVERSITY",
@@ -196,9 +197,11 @@ export async function POST(request: NextRequest) {
   }
 
   try {
+    const slug = await uniqueSlug(data.slug, "course");
+
     const row = await prisma.course.create({
       data: {
-        slug: data.slug,
+        slug,
         title: data.title,
         provider: data.provider ?? "",
         providerType: (providerTypeToEnum[data.providerType ?? "University"] ??

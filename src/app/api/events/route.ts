@@ -10,6 +10,7 @@ import {
 import { eventFiltersSchema, createEventSchema, draftEventSchema } from "@/lib/validations";
 import { requireRole } from "@/lib/auth-utils";
 import { createContentVersion } from "@/lib/versions";
+import { uniqueSlug } from "@/lib/unique-slug";
 
 const eventTypeToEnum: Record<string, string> = {
   Workshop: "WORKSHOP",
@@ -128,9 +129,11 @@ export async function POST(request: NextRequest) {
   const data = parsed.data;
 
   try {
+    const slug = await uniqueSlug(data.slug, "event");
+
     const row = await prisma.event.create({
       data: {
-        slug: data.slug,
+        slug,
         title: data.title,
         type: (eventTypeToEnum[data.type ?? "Workshop"] ?? "WORKSHOP") as never,
         startDate: data.startDate ? new Date(data.startDate) : new Date(),
