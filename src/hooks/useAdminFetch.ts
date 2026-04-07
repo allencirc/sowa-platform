@@ -96,7 +96,7 @@ export async function adminPost<T>(endpoint: string, data: unknown): Promise<T> 
 
 export async function adminPatch<T>(endpoint: string, data: unknown): Promise<T> {
   const res = await fetch(endpoint, {
-    method: "PATCH",
+    method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
   });

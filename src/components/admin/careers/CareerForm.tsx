@@ -6,7 +6,16 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Plus, Trash2, Save, ArrowLeft, AlertCircle, Sparkles, Loader2 } from "lucide-react";
+import {
+  Plus,
+  Trash2,
+  Save,
+  ArrowLeft,
+  AlertCircle,
+  Sparkles,
+  Loader2,
+  FileEdit,
+} from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
@@ -23,6 +32,9 @@ import {
 import { adminPost, adminPatch } from "@/hooks/useAdminFetch";
 import { slugify } from "@/lib/utils";
 import { SeoFields } from "@/components/admin/SeoFields";
+import { useAIEnabled } from "@/hooks/useAIEnabled";
+import { useAutoSave } from "@/hooks/useAutoSave";
+import { AutoSaveIndicator } from "@/components/admin/AutoSaveIndicator";
 import type { Career, Skill, Course } from "@/lib/types";
 
 type CareerFormData = z.infer<typeof createCareerSchema>;
@@ -44,6 +56,7 @@ export function CareerForm({ career, mode }: CareerFormProps) {
   const [allCareers, setAllCareers] = useState<{ label: string; value: string }[]>([]);
   const [aiDrafting, setAiDrafting] = useState(false);
   const [aiError, setAiError] = useState<string | null>(null);
+  const { aiAvailable } = useAIEnabled();
 
   const {
     register,
@@ -51,7 +64,8 @@ export function CareerForm({ career, mode }: CareerFormProps) {
     control,
     watch,
     setValue,
-    formState: { errors, isSubmitting },
+    getValues,
+    formState: { errors, isSubmitting, isDirty },
   } = useForm<CareerFormData>({
     resolver: zodResolver(createCareerSchema),
     defaultValues: career
@@ -90,6 +104,15 @@ export function CareerForm({ career, mode }: CareerFormProps) {
   const { fields, append, remove } = useFieldArray({
     control,
     name: "pathwayConnections",
+  });
+
+  const autoSave = useAutoSave({
+    contentType: "careers",
+    slug: career?.slug ?? null,
+    mode,
+    getValues: getValues as () => Record<string, unknown>,
+    isDirty,
+    onCreated: (newSlug) => router.replace(`/admin/careers/${newSlug}/edit`, { scroll: false }),
   });
 
   const title = watch("title");
@@ -224,25 +247,27 @@ export function CareerForm({ career, mode }: CareerFormProps) {
           </FormField>
         </div>
 
-        <div className="mt-4 flex items-center gap-3">
-          <button
-            type="button"
-            onClick={handleAiDraft}
-            disabled={aiDrafting || isSubmitting}
-            className="inline-flex items-center gap-2 rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-accent-dark disabled:opacity-50"
-          >
-            {aiDrafting ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
-            ) : (
-              <Sparkles className="h-4 w-4" />
-            )}
-            {aiDrafting ? "Drafting..." : "AI Draft"}
-          </button>
-          <span className="text-xs text-text-muted">
-            Generate description, responsibilities &amp; qualifications from the title and sector
-          </span>
-          {aiError && <span className="text-sm text-status-error">{aiError}</span>}
-        </div>
+        {aiAvailable && (
+          <div className="mt-4 flex items-center gap-3">
+            <button
+              type="button"
+              onClick={handleAiDraft}
+              disabled={aiDrafting || isSubmitting}
+              className="inline-flex items-center gap-2 rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-accent-dark disabled:opacity-50"
+            >
+              {aiDrafting ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Sparkles className="h-4 w-4" />
+              )}
+              {aiDrafting ? "Drafting..." : "AI Draft"}
+            </button>
+            <span className="text-xs text-text-muted">
+              Generate description, responsibilities &amp; qualifications from the title and sector
+            </span>
+            {aiError && <span className="text-sm text-status-error">{aiError}</span>}
+          </div>
+        )}
 
         <div className="mt-4">
           <FormField
@@ -413,10 +438,27 @@ export function CareerForm({ career, mode }: CareerFormProps) {
             <ArrowLeft className="h-4 w-4" /> Back to Careers
           </Button>
         </Link>
-        <Button type="submit" disabled={isSubmitting}>
-          <Save className="h-4 w-4" />
-          {isSubmitting ? "Saving..." : mode === "create" ? "Create Career" : "Update Career"}
-        </Button>
+        <div className="flex items-center gap-3">
+          <AutoSaveIndicator
+            saveStatus={autoSave.saveStatus}
+            hasUnsavedChanges={autoSave.hasUnsavedChanges}
+            lastSavedAt={autoSave.lastSavedAt}
+            error={autoSave.error}
+          />
+          <Button
+            type="button"
+            variant="outline"
+            onClick={autoSave.saveDraft}
+            disabled={autoSave.saveStatus === "saving"}
+          >
+            <FileEdit className="h-4 w-4" />
+            {autoSave.saveStatus === "saving" ? "Saving..." : "Save as Draft"}
+          </Button>
+          <Button type="submit" disabled={isSubmitting}>
+            <Save className="h-4 w-4" />
+            {isSubmitting ? "Saving..." : mode === "create" ? "Create Career" : "Update Career"}
+          </Button>
+        </div>
       </div>
     </form>
   );

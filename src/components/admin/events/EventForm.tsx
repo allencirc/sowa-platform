@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Save, ArrowLeft, AlertCircle } from "lucide-react";
+import { Save, ArrowLeft, AlertCircle, FileEdit } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
@@ -16,6 +16,8 @@ import { createEventSchema, EventTypeEnum, LocationTypeEnum } from "@/lib/valida
 import { adminPost, adminPatch } from "@/hooks/useAdminFetch";
 import { slugify } from "@/lib/utils";
 import { SeoFields } from "@/components/admin/SeoFields";
+import { useAutoSave } from "@/hooks/useAutoSave";
+import { AutoSaveIndicator } from "@/components/admin/AutoSaveIndicator";
 import type { Event } from "@/lib/types";
 
 type EventFormData = z.infer<typeof createEventSchema>;
@@ -37,7 +39,8 @@ export function EventForm({ event, mode }: EventFormProps) {
     handleSubmit,
     watch,
     setValue,
-    formState: { errors, isSubmitting },
+    getValues,
+    formState: { errors, isSubmitting, isDirty },
   } = useForm<EventFormData>({
     resolver: zodResolver(createEventSchema),
     defaultValues: event
@@ -64,6 +67,15 @@ export function EventForm({ event, mode }: EventFormProps) {
           locationType: "Physical",
           description: "",
         },
+  });
+
+  const autoSave = useAutoSave({
+    contentType: "events",
+    slug: event?.slug ?? null,
+    mode,
+    getValues: getValues as () => Record<string, unknown>,
+    isDirty,
+    onCreated: (newSlug) => router.replace(`/admin/events/${newSlug}/edit`, { scroll: false }),
   });
 
   const title = watch("title");
@@ -170,10 +182,27 @@ export function EventForm({ event, mode }: EventFormProps) {
             <ArrowLeft className="h-4 w-4" /> Back to Events
           </Button>
         </Link>
-        <Button type="submit" disabled={isSubmitting}>
-          <Save className="h-4 w-4" />
-          {isSubmitting ? "Saving..." : mode === "create" ? "Create Event" : "Update Event"}
-        </Button>
+        <div className="flex items-center gap-3">
+          <AutoSaveIndicator
+            saveStatus={autoSave.saveStatus}
+            hasUnsavedChanges={autoSave.hasUnsavedChanges}
+            lastSavedAt={autoSave.lastSavedAt}
+            error={autoSave.error}
+          />
+          <Button
+            type="button"
+            variant="outline"
+            onClick={autoSave.saveDraft}
+            disabled={autoSave.saveStatus === "saving"}
+          >
+            <FileEdit className="h-4 w-4" />
+            {autoSave.saveStatus === "saving" ? "Saving..." : "Save as Draft"}
+          </Button>
+          <Button type="submit" disabled={isSubmitting}>
+            <Save className="h-4 w-4" />
+            {isSubmitting ? "Saving..." : mode === "create" ? "Create Event" : "Update Event"}
+          </Button>
+        </div>
       </div>
     </form>
   );

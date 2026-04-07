@@ -50,7 +50,10 @@ Context: Ireland is targeting 5 GW of offshore wind capacity by 2030 and up to 3
 
 export async function POST(request: NextRequest) {
   if (process.env.AI_SUMMARY_ENABLED !== "true") {
-    return errorResponse("AI features are not enabled", 403);
+    return errorResponse(
+      "AI features are not enabled. Set AI_SUMMARY_ENABLED=true in your environment variables.",
+      403,
+    );
   }
 
   const rateLimited = applyRateLimit(request);
