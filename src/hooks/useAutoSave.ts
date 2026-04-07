@@ -23,6 +23,25 @@ interface UseAutoSaveReturn {
   error: string | null;
 }
 
+/**
+ * Recursively clean form values for safe JSON serialisation:
+ * - Converts NaN → undefined (so JSON.stringify drops the key)
+ * - Removes objects that become empty after cleaning (e.g. salaryRange with two NaN fields)
+ */
+function cleanValues(obj: Record<string, unknown>): Record<string, unknown> {
+  const result: Record<string, unknown> = {};
+  for (const [key, value] of Object.entries(obj)) {
+    if (typeof value === "number" && Number.isNaN(value)) continue;
+    if (value && typeof value === "object" && !Array.isArray(value) && !(value instanceof Date)) {
+      const cleaned = cleanValues(value as Record<string, unknown>);
+      if (Object.keys(cleaned).length > 0) result[key] = cleaned;
+    } else {
+      result[key] = value;
+    }
+  }
+  return result;
+}
+
 export function useAutoSave({
   contentType,
   slug,
@@ -50,7 +69,7 @@ export function useAutoSave({
   }, [slug]);
 
   const saveDraft = useCallback(async () => {
-    const values = getValues();
+    const values = cleanValues(getValues());
     const titleVal = values.title;
     const slugVal = values.slug;
 
