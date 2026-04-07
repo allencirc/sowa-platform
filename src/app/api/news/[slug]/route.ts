@@ -108,10 +108,16 @@ export async function DELETE(
   const rateLimited = applyRateLimit(request);
   if (rateLimited) return rateLimited;
 
+  let user;
   try {
-    const user = await requireRole(["ADMIN"]);
-    const { slug } = await params;
+    user = await requireRole(["ADMIN"]);
+  } catch {
+    return errorResponse("Unauthorized", 401);
+  }
 
+  const { slug } = await params;
+
+  try {
     await prisma.newsArticle.update({
       where: { slug },
       data: { deletedAt: new Date(), deletedById: user.id },
@@ -120,9 +126,6 @@ export async function DELETE(
   } catch (err) {
     if (err instanceof Error && err.message.includes("Record to update not found")) {
       return errorResponse("News article not found", 404);
-    }
-    if (err instanceof Error && "status" in err) {
-      return errorResponse(err.message, (err as { status: number }).status);
     }
     console.error("DELETE /api/news error:", err);
     return errorResponse("Failed to delete news article");
