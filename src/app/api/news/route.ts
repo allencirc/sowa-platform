@@ -10,6 +10,7 @@ import {
 import { newsFiltersSchema, createNewsSchema, draftNewsSchema } from "@/lib/validations";
 import { requireRole } from "@/lib/auth-utils";
 import { createContentVersion } from "@/lib/versions";
+import { uniqueSlug } from "@/lib/unique-slug";
 
 type AnyRecord = Record<string, unknown>;
 
@@ -101,9 +102,11 @@ export async function POST(request: NextRequest) {
   const data = parsed.data;
 
   try {
+    const slug = await uniqueSlug(data.slug, "newsArticle");
+
     const row = await prisma.newsArticle.create({
       data: {
-        slug: data.slug,
+        slug,
         title: data.title,
         date: data.date ? new Date(data.date) : new Date(),
         excerpt: data.excerpt ?? "",

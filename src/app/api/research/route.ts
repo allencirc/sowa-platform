@@ -14,6 +14,7 @@ import {
 } from "@/lib/validations";
 import { requireRole } from "@/lib/auth-utils";
 import { createContentVersion } from "@/lib/versions";
+import { uniqueSlug } from "@/lib/unique-slug";
 
 type AnyRecord = Record<string, unknown>;
 
@@ -111,9 +112,11 @@ export async function POST(request: NextRequest) {
   const data = parsed.data;
 
   try {
+    const slug = await uniqueSlug(data.slug, "research");
+
     const row = await prisma.research.create({
       data: {
-        slug: data.slug,
+        slug,
         title: data.title,
         author: data.author ?? "",
         organisation: data.organisation ?? "",
