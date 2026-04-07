@@ -36,7 +36,7 @@ export function HeroSection() {
         priority
       />
       {/* Overlay gradient */}
-      <div className="absolute inset-0 bg-gradient-to-r from-[#0a1c33]/90 via-primary/80 to-primary-light/60" />
+      <div className="absolute inset-0 bg-gradient-to-r from-[#0a1c33]/85 via-primary/60 to-primary/30" />
 
       {/* Decorative turbine silhouettes */}
       <div className="absolute inset-0 pointer-events-none select-none">
