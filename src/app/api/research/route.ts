@@ -7,7 +7,11 @@ import {
   errorResponse,
   paginatedResponse,
 } from "@/lib/api-utils";
-import { researchFiltersSchema, createResearchSchema } from "@/lib/validations";
+import {
+  researchFiltersSchema,
+  createResearchSchema,
+  draftResearchSchema,
+} from "@/lib/validations";
 import { requireRole } from "@/lib/auth-utils";
 import { createContentVersion } from "@/lib/versions";
 
@@ -99,7 +103,9 @@ export async function POST(request: NextRequest) {
     return errorResponse("Unauthorized", 401);
   }
 
-  const parsed = await parseBody(request, createResearchSchema);
+  const isDraft = new URL(request.url).searchParams.get("draft") === "true";
+  const schema = isDraft ? draftResearchSchema : createResearchSchema;
+  const parsed = await parseBody(request, schema);
   if (parsed.error) return parsed.error;
 
   const data = parsed.data;
@@ -109,11 +115,11 @@ export async function POST(request: NextRequest) {
       data: {
         slug: data.slug,
         title: data.title,
-        author: data.author,
-        organisation: data.organisation,
-        publicationDate: new Date(data.publicationDate),
-        summary: data.summary,
-        categories: data.categories,
+        author: data.author ?? "",
+        organisation: data.organisation ?? "",
+        publicationDate: data.publicationDate ? new Date(data.publicationDate) : new Date(),
+        summary: data.summary ?? "",
+        categories: data.categories ?? [],
         isFeatured: data.isFeatured ?? false,
         image: data.image ?? null,
         status: "DRAFT" as never,

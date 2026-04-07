@@ -7,7 +7,7 @@ import {
   errorResponse,
   paginatedResponse,
 } from "@/lib/api-utils";
-import { careerFiltersSchema, createCareerSchema } from "@/lib/validations";
+import { careerFiltersSchema, createCareerSchema, draftCareerSchema } from "@/lib/validations";
 import { requireRole } from "@/lib/auth-utils";
 import { createContentVersion } from "@/lib/versions";
 
@@ -148,7 +148,9 @@ export async function POST(request: NextRequest) {
     return errorResponse("Unauthorized", 401);
   }
 
-  const parsed = await parseBody(request, createCareerSchema);
+  const isDraft = new URL(request.url).searchParams.get("draft") === "true";
+  const schema = isDraft ? draftCareerSchema : createCareerSchema;
+  const parsed = await parseBody(request, schema);
   if (parsed.error) return parsed.error;
 
   const data = parsed.data;
@@ -158,21 +160,26 @@ export async function POST(request: NextRequest) {
       data: {
         slug: data.slug,
         title: data.title,
-        sector: (sectorToEnum[data.sector] ?? data.sector) as never,
-        entryLevel: (entryLevelToEnum[data.entryLevel] ?? data.entryLevel) as never,
-        description: data.description,
+        sector: (sectorToEnum[data.sector ?? "Operations & Maintenance"] ??
+          "OPERATIONS_MAINTENANCE") as never,
+        entryLevel: (entryLevelToEnum[data.entryLevel ?? "Entry"] ?? "ENTRY") as never,
+        description: data.description ?? "",
         salaryMin: data.salaryRange?.min ?? null,
         salaryMax: data.salaryRange?.max ?? null,
         keyResponsibilities: data.keyResponsibilities ?? [],
-        qualifications: data.qualifications,
+        qualifications: data.qualifications ?? [],
         workingConditions: data.workingConditions ?? null,
         growthOutlook: data.growthOutlook ?? null,
         status: "DRAFT" as never,
-        skills: {
-          create: data.skills.map((skillSlug) => ({
-            skill: { connect: { slug: skillSlug } },
-          })),
-        },
+        ...(data.skills?.length
+          ? {
+              skills: {
+                create: data.skills.map((skillSlug) => ({
+                  skill: { connect: { slug: skillSlug } },
+                })),
+              },
+            }
+          : {}),
       },
       include: careerInclude,
     });
