@@ -137,6 +137,14 @@ export const draftCareerSchema = createCareerSchema
     skills: z.array(z.string()).optional(),
     sector: CareerSectorEnum.optional(),
     entryLevel: EntryLevelEnum.optional(),
+    // Empty number inputs produce NaN → null after JSON serialisation; accept that
+    salaryRange: z
+      .object({
+        min: z.number().int().min(0).nullable().optional(),
+        max: z.number().int().min(0).nullable().optional(),
+      })
+      .nullable()
+      .optional(),
   })
   .merge(seoFieldsSchema);
 
