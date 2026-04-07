@@ -73,8 +73,13 @@ export function useAdminFetch<T>(endpoint: string, options: UseAdminFetchOptions
   return { data, total, totalPages, loading, error, refetch: fetchData };
 }
 
-export async function adminDelete(endpoint: string): Promise<void> {
-  const res = await fetch(endpoint, { method: "DELETE" });
+export async function adminDelete(endpoint: string, data?: unknown): Promise<void> {
+  const res = await fetch(endpoint, {
+    method: "DELETE",
+    ...(data
+      ? { headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) }
+      : {}),
+  });
   if (!res.ok) {
     const body = await res.json().catch(() => ({}));
     throw new Error(body.error ?? `Delete failed: ${res.statusText}`);

@@ -10,8 +10,9 @@ import { Select } from "@/components/ui/Select";
 import { Badge } from "@/components/ui/Badge";
 import { DataTable, type Column } from "@/components/admin/DataTable";
 import { DeleteDialog } from "@/components/admin/DeleteDialog";
+import { BulkActionBar } from "@/components/admin/BulkActionBar";
 import { Pagination } from "@/components/admin/Pagination";
-import { useAdminFetch, adminDelete } from "@/hooks/useAdminFetch";
+import { useAdminFetch, adminDelete, adminPost } from "@/hooks/useAdminFetch";
 import { StatusBadge } from "@/components/admin/StatusBadge";
 import { formatDate } from "@/lib/utils";
 import type { NewsArticle } from "@/lib/types";
@@ -22,16 +23,28 @@ export default function AdminNewsPage() {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [deleteSlug, setDeleteSlug] = useState<string | null>(null);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
 
   const filters: Record<string, string> = {};
   if (statusFilter) filters.status = statusFilter;
 
-  const { data, totalPages, loading, refetch } = useAdminFetch<NewsArticle & { status?: string }>(
-    "/api/news",
-    { page, search, filters },
-  );
+  const { data, totalPages, loading, refetch } = useAdminFetch<
+    NewsArticle & { id: string; status?: string }
+  >("/api/news", { page, search, filters });
 
-  const columns: Column<NewsArticle & { status?: string }>[] = [
+  const handleBulkAction = async (action: string, status?: string) => {
+    const ids = [...selectedIds];
+    await adminPost("/api/admin/bulk", {
+      action,
+      contentType: "NEWS",
+      ids,
+      ...(status ? { status } : {}),
+    });
+    setSelectedIds(new Set());
+    refetch();
+  };
+
+  const columns: Column<NewsArticle & { id: string; status?: string }>[] = [
     {
       key: "title",
       label: "Title",
@@ -139,6 +152,25 @@ export default function AdminNewsPage() {
         />
       </div>
 
+      {selectedIds.size > 0 && (
+        <BulkActionBar
+          selectedCount={selectedIds.size}
+          onClear={() => setSelectedIds(new Set())}
+          actions={[
+            { label: "Set Draft", onClick: () => handleBulkAction("updateStatus", "DRAFT") },
+            {
+              label: "Set Published",
+              onClick: () => handleBulkAction("updateStatus", "PUBLISHED"),
+            },
+            {
+              label: "Delete Selected",
+              onClick: () => handleBulkAction("delete"),
+              variant: "danger",
+            },
+          ]}
+        />
+      )}
+
       {loading ? (
         <div className="flex h-64 items-center justify-center text-text-muted">Loading...</div>
       ) : (
@@ -146,9 +178,12 @@ export default function AdminNewsPage() {
           <DataTable
             columns={columns}
             data={data}
-            rowKey={(row) => row.slug}
+            rowKey={(row) => row.id}
             onRowClick={(row) => router.push(`/admin/news/${row.slug}/edit`)}
             emptyMessage="No news articles found."
+            selectable
+            selectedIds={selectedIds}
+            onSelectionChange={setSelectedIds}
           />
           <div className="mt-4">
             <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
@@ -166,7 +201,7 @@ export default function AdminNewsPage() {
           }
         }}
         title="Delete Article?"
-        description="This will permanently remove this news article."
+        description="This will move the article to trash. Items are automatically purged after 30 days."
       />
     </div>
   );

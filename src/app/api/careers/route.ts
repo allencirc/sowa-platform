@@ -98,7 +98,7 @@ export async function GET(request: NextRequest) {
   const statusFilter = url.searchParams.get("status");
 
   try {
-    const where: Record<string, unknown> = {};
+    const where: Record<string, unknown> = { deletedAt: null };
 
     if (statusFilter) {
       where.status = statusFilter;

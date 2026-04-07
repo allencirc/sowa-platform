@@ -160,6 +160,9 @@ model Career {
   pathwayTo           PathwayConnection[] @relation("PathwayTo")
   relatedCourses      CourseCareer[]
 
+  deletedAt   DateTime?
+  deletedById String?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -220,6 +223,9 @@ model Course {
   skills               CourseSkill[]
   careerRelevance      CourseCareer[]
 
+  deletedAt   DateTime?
+  deletedById String?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -268,6 +274,9 @@ model Event {
   source       ContentSource @default(MANUAL)
   externalId   String?
 
+  deletedAt   DateTime?
+  deletedById String?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -293,6 +302,9 @@ model Research {
   metaDescription String?
   metaKeywords    String?
 
+  deletedAt   DateTime?
+  deletedById String?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -315,6 +327,9 @@ model NewsArticle {
   metaTitle     String?
   metaDescription String?
   metaKeywords  String?
+
+  deletedAt   DateTime?
+  deletedById String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

@@ -20,6 +20,7 @@ import {
   Wind,
   Image,
   ClipboardList,
+  Trash2,
   X,
   type LucideIcon,
 } from "lucide-react";
@@ -90,6 +91,12 @@ const navItems: NavItem[] = [
     label: "Users",
     href: "/admin/users",
     icon: Users,
+    roles: ["ADMIN"],
+  },
+  {
+    label: "Trash",
+    href: "/admin/trash",
+    icon: Trash2,
     roles: ["ADMIN"],
   },
   {

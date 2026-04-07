@@ -131,16 +131,23 @@ export async function DELETE(
   const rateLimited = applyRateLimit(request);
   if (rateLimited) return rateLimited;
 
-  const { slug } = await params;
-
   try {
-    await prisma.event.delete({ where: { slug } });
-    return new NextResponse(null, { status: 204 });
+    const user = await requireRole(["ADMIN"]);
+    const { slug } = await params;
+
+    await prisma.event.update({
+      where: { slug },
+      data: { deletedAt: new Date(), deletedById: user.id },
+    });
+    return NextResponse.json({ message: "Moved to trash" });
   } catch (err) {
-    if (err instanceof Error && err.message.includes("Record to delete does not exist")) {
+    if (err instanceof Error && err.message.includes("Record to update not found")) {
       return errorResponse("Event not found", 404);
     }
-    console.error(`DELETE /api/events/${slug} error:`, err);
+    if (err instanceof Error && "status" in err) {
+      return errorResponse(err.message, (err as { status: number }).status);
+    }
+    console.error("DELETE /api/events error:", err);
     return errorResponse("Failed to delete event");
   }
 }
