@@ -25,7 +25,7 @@ export function HeroSection() {
   // contrast holds even if the background image fails to load — axe (and
   // users with blocked images) only sees the composited gradient+colour.
   return (
-    <section className="relative overflow-hidden bg-primary text-text-inverse">
+    <section className="relative min-h-[70vh] overflow-hidden bg-primary text-text-inverse">
       {/* Background image */}
       <Image
         src="https://images.unsplash.com/photo-1532601224476-15c79f2f7a51?w=1920&h=1080&fit=crop"
@@ -35,8 +35,8 @@ export function HeroSection() {
         sizes="100vw"
         priority
       />
-      {/* Overlay gradient */}
-      <div className="absolute inset-0 bg-gradient-to-r from-[#0a1c33]/85 via-primary/60 to-primary/30" />
+      {/* Overlay gradient — heavier on the left for text contrast, lighter on the right to show the image */}
+      <div className="absolute inset-0 bg-gradient-to-r from-[#0a1c33]/85 via-[#0a1c33]/40 via-50% to-primary/10" />
 
       {/* Decorative turbine silhouettes */}
       <div className="absolute inset-0 pointer-events-none select-none">
