@@ -35,8 +35,8 @@ export function HeroSection() {
         sizes="100vw"
         priority
       />
-      {/* Overlay gradient */}
-      <div className="absolute inset-0 bg-gradient-to-r from-[#0a1c33]/85 via-primary/60 to-primary/30" />
+      {/* Overlay gradient — heavy on the left (text area), transparent on the right so the image shows */}
+      <div className="absolute inset-0 bg-gradient-to-r from-[#0a1c33]/90 via-[#0a1c33]/50 via-50% to-transparent" />
 
       {/* Decorative turbine silhouettes */}
       <div className="absolute inset-0 pointer-events-none select-none">
