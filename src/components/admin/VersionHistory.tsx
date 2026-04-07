@@ -34,6 +34,7 @@ interface VersionHistoryProps {
   contentId: string;
   onRestore?: (snapshot: Record<string, unknown>) => void;
   userRole: "ADMIN" | "EDITOR" | "VIEWER";
+  onVersionRestored?: () => void;
 }
 
 export function VersionHistory({
@@ -41,6 +42,7 @@ export function VersionHistory({
   contentId,
   onRestore,
   userRole,
+  onVersionRestored,
 }: VersionHistoryProps) {
   const [versions, setVersions] = useState<Version[]>([]);
   const [loading, setLoading] = useState(true);
@@ -53,6 +55,7 @@ export function VersionHistory({
   ]);
   const [showDiff, setShowDiff] = useState(false);
   const [restoring, setRestoring] = useState(false);
+  const [confirmRestore, setConfirmRestore] = useState<Version | null>(null);
 
   const fetchVersions = useCallback(async () => {
     if (!contentId) return;
@@ -83,12 +86,29 @@ export function VersionHistory({
   }, [expanded, fetchVersions]);
 
   const handleRestore = async (version: Version) => {
-    if (!onRestore) return;
     setRestoring(true);
     try {
-      onRestore(version.snapshot);
+      const res = await fetch("/api/admin/versions/restore", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ versionId: version.id }),
+      });
+
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        console.error("Failed to restore version:", body.error);
+        return;
+      }
+
+      // Refresh version list
+      fetchVersions();
+
+      // Notify parent to refresh its data
+      if (onRestore) onRestore(version.snapshot);
+      if (onVersionRestored) onVersionRestored();
     } finally {
       setRestoring(false);
+      setConfirmRestore(null);
     }
   };
 
@@ -259,19 +279,17 @@ export function VersionHistory({
                           {isSelected ? "Selected" : "Compare"}
                         </button>
 
-                        {!isLatest &&
-                          onRestore &&
-                          (userRole === "ADMIN" || userRole === "EDITOR") && (
-                            <button
-                              type="button"
-                              onClick={() => handleRestore(version)}
-                              disabled={restoring}
-                              className="flex items-center gap-1 rounded bg-gray-100 px-2 py-1 text-[11px] font-medium text-text-secondary transition-colors hover:bg-amber-50 hover:text-amber-700"
-                            >
-                              <RotateCcw className="h-3 w-3" />
-                              Restore
-                            </button>
-                          )}
+                        {!isLatest && (userRole === "ADMIN" || userRole === "EDITOR") && (
+                          <button
+                            type="button"
+                            onClick={() => setConfirmRestore(version)}
+                            disabled={restoring}
+                            className="flex items-center gap-1 rounded bg-gray-100 px-2 py-1 text-[11px] font-medium text-text-secondary transition-colors hover:bg-amber-50 hover:text-amber-700"
+                          >
+                            <RotateCcw className="h-3 w-3" />
+                            Restore
+                          </button>
+                        )}
                       </div>
                     </div>
                   );
@@ -304,6 +322,42 @@ export function VersionHistory({
               )}
             </>
           )}
+        </div>
+      )}
+
+      {/* Restore confirmation modal */}
+      {confirmRestore && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-2xl">
+            <h3 className="text-lg font-semibold text-text-primary">Restore Version?</h3>
+            <p className="mt-2 text-sm text-text-secondary">
+              This will revert to version {confirmRestore.version} from{" "}
+              {new Date(confirmRestore.changedAt).toLocaleDateString("en-IE", {
+                day: "numeric",
+                month: "short",
+                year: "numeric",
+              })}
+              . A new version will be created so you can undo this.
+            </p>
+            <div className="mt-4 flex gap-3">
+              <button
+                type="button"
+                onClick={() => setConfirmRestore(null)}
+                disabled={restoring}
+                className="flex-1 rounded-lg border border-gray-200 px-4 py-2 text-sm font-medium text-text-primary transition-colors hover:bg-gray-50"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => handleRestore(confirmRestore)}
+                disabled={restoring}
+                className="flex-1 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-accent-dark"
+              >
+                {restoring ? "Restoring..." : "Restore"}
+              </button>
+            </div>
+          </div>
         </div>
       )}
 

@@ -65,7 +65,7 @@ export async function GET(request: NextRequest) {
   const { page, limit, sortBy, order, type, locationType, upcoming, search } = parsed.data;
 
   try {
-    const where: Record<string, unknown> = {};
+    const where: Record<string, unknown> = { deletedAt: null };
 
     const url = new URL(request.url);
     const statusFilter = url.searchParams.get("status");

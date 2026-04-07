@@ -11,8 +11,9 @@ import { Badge, SectorBadge } from "@/components/ui/Badge";
 import { StatusBadge } from "@/components/admin/StatusBadge";
 import { DataTable, type Column } from "@/components/admin/DataTable";
 import { DeleteDialog } from "@/components/admin/DeleteDialog";
+import { BulkActionBar } from "@/components/admin/BulkActionBar";
 import { Pagination } from "@/components/admin/Pagination";
-import { useAdminFetch, adminDelete } from "@/hooks/useAdminFetch";
+import { useAdminFetch, adminDelete, adminPost } from "@/hooks/useAdminFetch";
 import type { Career } from "@/lib/types";
 
 const sectorOptions = [
@@ -33,17 +34,29 @@ export default function AdminCareersPage() {
   const [sector, setSector] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [deleteSlug, setDeleteSlug] = useState<string | null>(null);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
 
   const filters: Record<string, string> = {};
   if (sector) filters.sector = sector;
   if (statusFilter) filters.status = statusFilter;
 
-  const { data, totalPages, loading, refetch } = useAdminFetch<Career & { status?: string }>(
-    "/api/careers",
-    { page, search, filters },
-  );
+  const { data, totalPages, loading, refetch } = useAdminFetch<
+    Career & { id: string; status?: string }
+  >("/api/careers", { page, search, filters });
 
-  const columns: Column<Career & { status?: string }>[] = [
+  const handleBulkAction = async (action: string, status?: string) => {
+    const ids = [...selectedIds];
+    await adminPost("/api/admin/bulk", {
+      action,
+      contentType: "CAREER",
+      ids,
+      ...(status ? { status } : {}),
+    });
+    setSelectedIds(new Set());
+    refetch();
+  };
+
+  const columns: Column<Career & { id: string; status?: string }>[] = [
     {
       key: "title",
       label: "Title",
@@ -155,6 +168,28 @@ export default function AdminCareersPage() {
         />
       </div>
 
+      {selectedIds.size > 0 && (
+        <BulkActionBar
+          selectedCount={selectedIds.size}
+          onClear={() => setSelectedIds(new Set())}
+          actions={[
+            {
+              label: "Set Draft",
+              onClick: () => handleBulkAction("updateStatus", "DRAFT"),
+            },
+            {
+              label: "Set Published",
+              onClick: () => handleBulkAction("updateStatus", "PUBLISHED"),
+            },
+            {
+              label: "Delete Selected",
+              onClick: () => handleBulkAction("delete"),
+              variant: "danger",
+            },
+          ]}
+        />
+      )}
+
       {loading ? (
         <div className="flex h-64 items-center justify-center text-text-muted">Loading...</div>
       ) : (
@@ -162,9 +197,12 @@ export default function AdminCareersPage() {
           <DataTable
             columns={columns}
             data={data}
-            rowKey={(row) => row.slug}
+            rowKey={(row) => row.id}
             onRowClick={(row) => router.push(`/admin/careers/${row.slug}/edit`)}
             emptyMessage="No careers found. Create your first career profile."
+            selectable
+            selectedIds={selectedIds}
+            onSelectionChange={setSelectedIds}
           />
           <div className="mt-4">
             <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
@@ -182,7 +220,7 @@ export default function AdminCareersPage() {
           }
         }}
         title="Delete Career?"
-        description="This will permanently remove this career profile and all associated pathway connections."
+        description="This will move the career to trash. Items are automatically purged after 30 days."
       />
     </div>
   );

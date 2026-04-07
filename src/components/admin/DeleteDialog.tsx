@@ -11,9 +11,17 @@ interface DeleteDialogProps {
   onConfirm: () => Promise<void>;
   title: string;
   description?: string;
+  isSoftDelete?: boolean;
 }
 
-export function DeleteDialog({ open, onClose, onConfirm, title, description }: DeleteDialogProps) {
+export function DeleteDialog({
+  open,
+  onClose,
+  onConfirm,
+  title,
+  description,
+  isSoftDelete = true,
+}: DeleteDialogProps) {
   const [loading, setLoading] = useState(false);
 
   const handleConfirm = async () => {
@@ -25,6 +33,9 @@ export function DeleteDialog({ open, onClose, onConfirm, title, description }: D
       setLoading(false);
     }
   };
+
+  const buttonLabel = isSoftDelete ? "Move to Trash" : "Delete Permanently";
+  const loadingLabel = isSoftDelete ? "Moving to trash..." : "Deleting...";
 
   return (
     <Modal open={open} onClose={onClose} className="max-w-md">
@@ -50,7 +61,7 @@ export function DeleteDialog({ open, onClose, onConfirm, title, description }: D
             onClick={handleConfirm}
             disabled={loading}
           >
-            {loading ? "Deleting..." : "Delete"}
+            {loading ? loadingLabel : buttonLabel}
           </Button>
         </div>
       </div>
