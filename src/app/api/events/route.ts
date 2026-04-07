@@ -7,7 +7,7 @@ import {
   errorResponse,
   paginatedResponse,
 } from "@/lib/api-utils";
-import { eventFiltersSchema, createEventSchema } from "@/lib/validations";
+import { eventFiltersSchema, createEventSchema, draftEventSchema } from "@/lib/validations";
 import { requireRole } from "@/lib/auth-utils";
 import { createContentVersion } from "@/lib/versions";
 
@@ -120,7 +120,9 @@ export async function POST(request: NextRequest) {
     return errorResponse("Unauthorized", 401);
   }
 
-  const parsed = await parseBody(request, createEventSchema);
+  const isDraft = new URL(request.url).searchParams.get("draft") === "true";
+  const schema = isDraft ? draftEventSchema : createEventSchema;
+  const parsed = await parseBody(request, schema);
   if (parsed.error) return parsed.error;
 
   const data = parsed.data;
@@ -130,12 +132,12 @@ export async function POST(request: NextRequest) {
       data: {
         slug: data.slug,
         title: data.title,
-        type: (eventTypeToEnum[data.type] ?? data.type) as never,
-        startDate: new Date(data.startDate),
+        type: (eventTypeToEnum[data.type ?? "Workshop"] ?? "WORKSHOP") as never,
+        startDate: data.startDate ? new Date(data.startDate) : new Date(),
         endDate: data.endDate ? new Date(data.endDate) : null,
-        locationType: (locationTypeToEnum[data.locationType] ?? data.locationType) as never,
+        locationType: (locationTypeToEnum[data.locationType ?? "Physical"] ?? "PHYSICAL") as never,
         location: data.location ?? null,
-        description: data.description,
+        description: data.description ?? "",
         capacity: data.capacity ?? null,
         image: data.image ?? null,
         status: "DRAFT" as never,

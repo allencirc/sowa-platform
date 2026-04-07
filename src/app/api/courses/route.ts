@@ -7,7 +7,7 @@ import {
   errorResponse,
   paginatedResponse,
 } from "@/lib/api-utils";
-import { courseFiltersSchema, createCourseSchema } from "@/lib/validations";
+import { courseFiltersSchema, createCourseSchema, draftCourseSchema } from "@/lib/validations";
 import { requireRole } from "@/lib/auth-utils";
 import { createContentVersion } from "@/lib/versions";
 
@@ -181,7 +181,9 @@ export async function POST(request: NextRequest) {
   const rateLimited = applyRateLimit(request);
   if (rateLimited) return rateLimited;
 
-  const parsed = await parseBody(request, createCourseSchema);
+  const isDraft = new URL(request.url).searchParams.get("draft") === "true";
+  const schema = isDraft ? draftCourseSchema : createCourseSchema;
+  const parsed = await parseBody(request, schema);
   if (parsed.error) return parsed.error;
 
   const data = parsed.data;
@@ -198,31 +200,41 @@ export async function POST(request: NextRequest) {
       data: {
         slug: data.slug,
         title: data.title,
-        provider: data.provider,
-        providerType: (providerTypeToEnum[data.providerType] ?? data.providerType) as never,
-        description: data.description,
+        provider: data.provider ?? "",
+        providerType: (providerTypeToEnum[data.providerType ?? "University"] ??
+          "UNIVERSITY") as never,
+        description: data.description ?? "",
         entryRequirements: data.entryRequirements ?? null,
-        deliveryFormat: (deliveryFormatToEnum[data.deliveryFormat] ?? data.deliveryFormat) as never,
+        deliveryFormat: (deliveryFormatToEnum[data.deliveryFormat ?? "In-Person"] ??
+          "IN_PERSON") as never,
         location: data.location ?? null,
         nfqLevel: data.nfqLevel ?? null,
-        duration: data.duration,
-        cost: data.cost,
+        duration: data.duration ?? "",
+        cost: data.cost ?? 0,
         costNotes: data.costNotes ?? null,
         nextStartDate: data.nextStartDate ? new Date(data.nextStartDate) : null,
         accredited: data.accredited ?? false,
         certificationAwarded: data.certificationAwarded ?? null,
-        tags: data.tags,
+        tags: data.tags ?? [],
         status: "DRAFT" as never,
-        skills: {
-          create: data.skills.map((skillSlug) => ({
-            skill: { connect: { slug: skillSlug } },
-          })),
-        },
-        careerRelevance: {
-          create: data.careerRelevance.map((careerSlug) => ({
-            career: { connect: { slug: careerSlug } },
-          })),
-        },
+        ...(data.skills?.length
+          ? {
+              skills: {
+                create: data.skills.map((skillSlug) => ({
+                  skill: { connect: { slug: skillSlug } },
+                })),
+              },
+            }
+          : {}),
+        ...(data.careerRelevance?.length
+          ? {
+              careerRelevance: {
+                create: data.careerRelevance.map((careerSlug) => ({
+                  career: { connect: { slug: careerSlug } },
+                })),
+              },
+            }
+          : {}),
       },
       include: courseInclude,
     });

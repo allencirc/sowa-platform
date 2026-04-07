@@ -130,6 +130,16 @@ export const createCareerSchema = z
 
 export const updateCareerSchema = createCareerSchema.omit({ slug: true }).partial();
 
+export const draftCareerSchema = createCareerSchema
+  .extend({
+    description: z.string().optional(),
+    qualifications: z.array(z.string()).optional(),
+    skills: z.array(z.string()).optional(),
+    sector: CareerSectorEnum.optional(),
+    entryLevel: EntryLevelEnum.optional(),
+  })
+  .merge(seoFieldsSchema);
+
 export const careerFiltersSchema = paginationSchema.merge(sortSchema).extend({
   sector: CareerSectorEnum.optional(),
   entryLevel: EntryLevelEnum.optional(),
@@ -175,6 +185,19 @@ export const createCourseSchema = z
 
 export const updateCourseSchema = createCourseSchema.omit({ slug: true }).partial();
 
+export const draftCourseSchema = createCourseSchema
+  .extend({
+    provider: z.string().optional(),
+    description: z.string().optional(),
+    duration: z.string().optional(),
+    skills: z.array(z.string()).optional(),
+    careerRelevance: z.array(z.string()).optional(),
+    tags: z.array(z.string()).optional(),
+    providerType: ProviderTypeEnum.optional(),
+    deliveryFormat: DeliveryFormatEnum.optional(),
+  })
+  .merge(seoFieldsSchema);
+
 export const courseFiltersSchema = paginationSchema.merge(sortSchema).extend({
   topic: z.string().optional(),
   format: DeliveryFormatEnum.optional(),
@@ -209,6 +232,15 @@ export const createEventSchema = z
 
 export const updateEventSchema = createEventSchema.omit({ slug: true }).partial();
 
+export const draftEventSchema = createEventSchema
+  .extend({
+    type: EventTypeEnum.optional(),
+    startDate: z.string().optional(),
+    locationType: LocationTypeEnum.optional(),
+    description: z.string().optional(),
+  })
+  .merge(seoFieldsSchema);
+
 export const eventFiltersSchema = paginationSchema.merge(sortSchema).extend({
   type: EventTypeEnum.optional(),
   locationType: LocationTypeEnum.optional(),
@@ -237,6 +269,16 @@ export const createResearchSchema = z
 
 export const updateResearchSchema = createResearchSchema.omit({ slug: true }).partial();
 
+export const draftResearchSchema = createResearchSchema
+  .extend({
+    author: z.string().optional(),
+    organisation: z.string().optional(),
+    publicationDate: z.string().optional(),
+    summary: z.string().optional(),
+    categories: z.array(z.string()).optional(),
+  })
+  .merge(seoFieldsSchema);
+
 export const researchFiltersSchema = paginationSchema.merge(sortSchema).extend({
   category: z.string().optional(),
   featured: z.coerce.boolean().optional(),
@@ -262,6 +304,16 @@ export const createNewsSchema = z
   .merge(seoFieldsSchema);
 
 export const updateNewsSchema = createNewsSchema.omit({ slug: true }).partial();
+
+export const draftNewsSchema = createNewsSchema
+  .extend({
+    date: z.string().optional(),
+    excerpt: z.string().optional(),
+    content: z.string().optional(),
+    category: z.string().optional(),
+    author: z.string().optional(),
+  })
+  .merge(seoFieldsSchema);
 
 export const newsFiltersSchema = paginationSchema.merge(sortSchema).extend({
   category: z.string().optional(),

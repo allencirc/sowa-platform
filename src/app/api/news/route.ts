@@ -7,7 +7,7 @@ import {
   errorResponse,
   paginatedResponse,
 } from "@/lib/api-utils";
-import { newsFiltersSchema, createNewsSchema } from "@/lib/validations";
+import { newsFiltersSchema, createNewsSchema, draftNewsSchema } from "@/lib/validations";
 import { requireRole } from "@/lib/auth-utils";
 import { createContentVersion } from "@/lib/versions";
 
@@ -93,7 +93,9 @@ export async function POST(request: NextRequest) {
     return errorResponse("Unauthorized", 401);
   }
 
-  const parsed = await parseBody(request, createNewsSchema);
+  const isDraft = new URL(request.url).searchParams.get("draft") === "true";
+  const schema = isDraft ? draftNewsSchema : createNewsSchema;
+  const parsed = await parseBody(request, schema);
   if (parsed.error) return parsed.error;
 
   const data = parsed.data;
@@ -103,11 +105,11 @@ export async function POST(request: NextRequest) {
       data: {
         slug: data.slug,
         title: data.title,
-        date: new Date(data.date),
-        excerpt: data.excerpt,
-        content: data.content,
-        category: data.category,
-        author: data.author,
+        date: data.date ? new Date(data.date) : new Date(),
+        excerpt: data.excerpt ?? "",
+        content: data.content ?? "",
+        category: data.category ?? "",
+        author: data.author ?? "",
         image: data.image ?? null,
         status: "DRAFT" as never,
       },

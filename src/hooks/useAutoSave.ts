@@ -72,7 +72,7 @@ export function useAutoSave({
       const endpoint = `/api/${contentType}`;
 
       if (isFirstCreate) {
-        const result = await adminPost<{ slug: string }>(endpoint, values);
+        const result = await adminPost<{ slug: string }>(`${endpoint}?draft=true`, values);
         createdSlugRef.current = result.slug;
         onCreatedRef.current?.(result.slug);
       } else {
