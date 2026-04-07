@@ -26,7 +26,10 @@ export async function generateText(
   maxTokens: number,
 ): Promise<string> {
   const ai = getAIProvider();
-  if (!ai) throw new Error("No AI API key configured");
+  if (!ai)
+    throw new Error(
+      "No AI API key configured. Set ANTHROPIC_API_KEY or OPENAI_API_KEY in your environment variables.",
+    );
 
   if (ai.provider === "anthropic") {
     return callAnthropic(ai.key, systemPrompt, userPrompt, maxTokens);

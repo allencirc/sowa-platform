@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Save, ArrowLeft, AlertCircle } from "lucide-react";
+import { Save, ArrowLeft, AlertCircle, FileEdit } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { FormField } from "@/components/admin/FormField";
@@ -16,6 +16,8 @@ import { createResearchSchema } from "@/lib/validations";
 import { adminPost, adminPatch } from "@/hooks/useAdminFetch";
 import { slugify } from "@/lib/utils";
 import { SeoFields } from "@/components/admin/SeoFields";
+import { useAutoSave } from "@/hooks/useAutoSave";
+import { AutoSaveIndicator } from "@/components/admin/AutoSaveIndicator";
 import type { Research } from "@/lib/types";
 
 type ResearchFormData = z.infer<typeof createResearchSchema>;
@@ -34,7 +36,8 @@ export function ResearchForm({ research, mode }: ResearchFormProps) {
     handleSubmit,
     watch,
     setValue,
-    formState: { errors, isSubmitting },
+    getValues,
+    formState: { errors, isSubmitting, isDirty },
   } = useForm<ResearchFormData>({
     resolver: zodResolver(createResearchSchema),
     defaultValues: research
@@ -62,6 +65,15 @@ export function ResearchForm({ research, mode }: ResearchFormProps) {
           categories: [],
           isFeatured: false,
         },
+  });
+
+  const autoSave = useAutoSave({
+    contentType: "research",
+    slug: research?.slug ?? null,
+    mode,
+    getValues: getValues as () => Record<string, unknown>,
+    isDirty,
+    onCreated: (newSlug) => router.replace(`/admin/research/${newSlug}/edit`, { scroll: false }),
   });
 
   const title = watch("title");
@@ -171,10 +183,27 @@ export function ResearchForm({ research, mode }: ResearchFormProps) {
             <ArrowLeft className="h-4 w-4" /> Back to Research
           </Button>
         </Link>
-        <Button type="submit" disabled={isSubmitting}>
-          <Save className="h-4 w-4" />
-          {isSubmitting ? "Saving..." : mode === "create" ? "Create Research" : "Update Research"}
-        </Button>
+        <div className="flex items-center gap-3">
+          <AutoSaveIndicator
+            saveStatus={autoSave.saveStatus}
+            hasUnsavedChanges={autoSave.hasUnsavedChanges}
+            lastSavedAt={autoSave.lastSavedAt}
+            error={autoSave.error}
+          />
+          <Button
+            type="button"
+            variant="outline"
+            onClick={autoSave.saveDraft}
+            disabled={autoSave.saveStatus === "saving"}
+          >
+            <FileEdit className="h-4 w-4" />
+            {autoSave.saveStatus === "saving" ? "Saving..." : "Save as Draft"}
+          </Button>
+          <Button type="submit" disabled={isSubmitting}>
+            <Save className="h-4 w-4" />
+            {isSubmitting ? "Saving..." : mode === "create" ? "Create Research" : "Update Research"}
+          </Button>
+        </div>
       </div>
     </form>
   );

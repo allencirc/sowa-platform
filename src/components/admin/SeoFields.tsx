@@ -5,6 +5,7 @@ import { ChevronDown, ChevronRight, Search, Sparkles, Loader2 } from "lucide-rea
 import { Input } from "@/components/ui/Input";
 import { FormField } from "@/components/admin/FormField";
 import { Textarea } from "@/components/admin/Textarea";
+import { useAIEnabled } from "@/hooks/useAIEnabled";
 import type { UseFormRegister, UseFormSetValue, FieldErrors } from "react-hook-form";
 
 interface SeoFieldsProps {
@@ -30,6 +31,7 @@ export function SeoFields({
   const [open, setOpen] = useState(false);
   const [generating, setGenerating] = useState(false);
   const [genError, setGenError] = useState<string | null>(null);
+  const { aiAvailable } = useAIEnabled();
 
   async function handleGenerate() {
     if (!contentTitle.trim()) {
@@ -89,22 +91,24 @@ export function SeoFields({
 
       {open && (
         <div className="mt-4 space-y-4">
-          <div className="flex items-center gap-3">
-            <button
-              type="button"
-              onClick={handleGenerate}
-              disabled={generating}
-              className="inline-flex items-center gap-2 rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-accent-dark disabled:opacity-50"
-            >
-              {generating ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                <Sparkles className="h-4 w-4" />
-              )}
-              {generating ? "Generating..." : "Generate SEO"}
-            </button>
-            {genError && <span className="text-sm text-status-error">{genError}</span>}
-          </div>
+          {aiAvailable && (
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={handleGenerate}
+                disabled={generating}
+                className="inline-flex items-center gap-2 rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-accent-dark disabled:opacity-50"
+              >
+                {generating ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <Sparkles className="h-4 w-4" />
+                )}
+                {generating ? "Generating..." : "Generate SEO"}
+              </button>
+              {genError && <span className="text-sm text-status-error">{genError}</span>}
+            </div>
+          )}
 
           <FormField
             label="Meta Title"

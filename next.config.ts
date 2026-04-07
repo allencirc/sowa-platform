@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { withSentryConfig } from "@sentry/nextjs";
 
 // CSP is now set dynamically by src/middleware.ts with per-request nonces.
 // Only non-CSP security headers remain here.
@@ -18,6 +19,7 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  turbopack: { root: "." },
   serverExternalPackages: ["sharp"],
   images: {
     remotePatterns: [
@@ -42,4 +44,16 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+export default withSentryConfig(nextConfig, {
+  // Suppress noisy build logs from the Sentry webpack plugin.
+  silent: true,
+
+  // Upload source maps so Sentry can de-minify stack traces.
+  // Requires SENTRY_AUTH_TOKEN, SENTRY_ORG, and SENTRY_PROJECT env vars.
+  widenClientFileUpload: true,
+
+  // Delete source maps after upload — keeps them off the client bundle.
+  sourcemaps: {
+    deleteSourcemapsAfterUpload: true,
+  },
+});

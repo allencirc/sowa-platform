@@ -41,7 +41,10 @@ Generate optimised SEO metadata targeting the Irish offshore wind energy sector 
 
 export async function POST(request: NextRequest) {
   if (process.env.AI_SUMMARY_ENABLED !== "true") {
-    return errorResponse("AI features are not enabled", 403);
+    return errorResponse(
+      "AI features are not enabled. Set AI_SUMMARY_ENABLED=true in your environment variables.",
+      403,
+    );
   }
 
   const rateLimited = applyRateLimit(request);
