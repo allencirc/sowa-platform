@@ -24,7 +24,7 @@ vi.mock("@/lib/auth-utils", () => ({
 
 vi.mock("next/cache", () => ({
   revalidateTag: vi.fn(),
-  unstable_cache: vi.fn((fn: Function) => fn),
+  unstable_cache: vi.fn((fn: (...args: unknown[]) => unknown) => fn),
 }));
 
 function makeRequest(url: string, options: RequestInit = {}) {

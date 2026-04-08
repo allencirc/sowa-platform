@@ -21,11 +21,11 @@ This procedure governs how changes to the SOWA platform are requested, assessed,
 
 ## 2. Change Categories
 
-| Category     | Definition                                                                                          | Examples                                                                                        | Target Turnaround       |
-| ------------ | --------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | ----------------------- |
-| **Minor**    | Low-risk changes with no impact on data, security, or user-facing functionality                     | Copy corrections, style tweaks, dependency patch updates, documentation updates                  | 1–3 business days       |
-| **Major**    | Changes that affect user-facing features, data models, integrations, or performance                 | New feature development, API changes, database migrations, third-party integration updates       | 5–15 business days      |
-| **Critical** | Changes with significant risk to platform availability, data integrity, security, or compliance     | Security patches for active exploits, database schema changes affecting live data, auth changes  | Immediate–5 business days |
+| Category     | Definition                                                                                      | Examples                                                                                        | Target Turnaround         |
+| ------------ | ----------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | ------------------------- |
+| **Minor**    | Low-risk changes with no impact on data, security, or user-facing functionality                 | Copy corrections, style tweaks, dependency patch updates, documentation updates                 | 1–3 business days         |
+| **Major**    | Changes that affect user-facing features, data models, integrations, or performance             | New feature development, API changes, database migrations, third-party integration updates      | 5–15 business days        |
+| **Critical** | Changes with significant risk to platform availability, data integrity, security, or compliance | Security patches for active exploits, database schema changes affecting live data, auth changes | Immediate–5 business days |
 
 ---
 
@@ -35,17 +35,17 @@ This procedure governs how changes to the SOWA platform are requested, assessed,
 
 All change requests are submitted as **GitHub Issues** in the `skillnet-owa/sowa-platform` repository using the **Change Request** issue template. The template captures:
 
-| Field                    | Description                                                              | Required |
-| ------------------------ | ------------------------------------------------------------------------ | -------- |
-| **Title**                | Concise description of the proposed change                               | Yes      |
-| **Category**             | Minor / Major / Critical                                                 | Yes      |
-| **Description**          | Detailed explanation of what is being changed and why                    | Yes      |
-| **Business Justification** | Why this change is needed — user need, compliance, defect, enhancement | Yes      |
-| **Affected Components**  | Which parts of the system are impacted (frontend, API, database, infra)  | Yes      |
-| **Impact Assessment**    | Scope, timeline, cost, and risk analysis (see §3.2)                     | Yes      |
-| **Proposed Timeline**    | Requested implementation and deployment dates                            | Yes      |
-| **Requestor**            | Name and role of the person requesting the change                        | Yes      |
-| **Attachments**          | Screenshots, mockups, specifications, or related documents               | No       |
+| Field                      | Description                                                             | Required |
+| -------------------------- | ----------------------------------------------------------------------- | -------- |
+| **Title**                  | Concise description of the proposed change                              | Yes      |
+| **Category**               | Minor / Major / Critical                                                | Yes      |
+| **Description**            | Detailed explanation of what is being changed and why                   | Yes      |
+| **Business Justification** | Why this change is needed — user need, compliance, defect, enhancement  | Yes      |
+| **Affected Components**    | Which parts of the system are impacted (frontend, API, database, infra) | Yes      |
+| **Impact Assessment**      | Scope, timeline, cost, and risk analysis (see §3.2)                     | Yes      |
+| **Proposed Timeline**      | Requested implementation and deployment dates                           | Yes      |
+| **Requestor**              | Name and role of the person requesting the change                       | Yes      |
+| **Attachments**            | Screenshots, mockups, specifications, or related documents              | No       |
 
 For urgent security issues, a change request may be submitted via email to the developer lead with a GitHub Issue created retrospectively within 24 hours.
 
@@ -53,15 +53,15 @@ For urgent security issues, a change request may be submitted via email to the d
 
 Every change request must include an impact assessment covering:
 
-| Criterion      | Assessment Questions                                                                                     |
-| -------------- | -------------------------------------------------------------------------------------------------------- |
-| **Scope**      | How many components/services are affected? Does the change touch the database schema?                    |
-| **Timeline**   | How long will implementation take? Does it block other work? Is there a deadline?                        |
-| **Cost**       | Does it require additional infrastructure, licensing, or third-party services?                           |
-| **Risk**       | What could go wrong? What is the blast radius? Can the change be rolled back?                            |
-| **Testing**    | What testing is required to validate the change? Are new tests needed?                                   |
-| **Compliance** | Does the change affect GDPR compliance, accessibility (WCAG 2.2 AA), or security controls?              |
-| **Users**      | Does the change affect end-user experience? Does it require communication to stakeholders?               |
+| Criterion      | Assessment Questions                                                                       |
+| -------------- | ------------------------------------------------------------------------------------------ |
+| **Scope**      | How many components/services are affected? Does the change touch the database schema?      |
+| **Timeline**   | How long will implementation take? Does it block other work? Is there a deadline?          |
+| **Cost**       | Does it require additional infrastructure, licensing, or third-party services?             |
+| **Risk**       | What could go wrong? What is the blast radius? Can the change be rolled back?              |
+| **Testing**    | What testing is required to validate the change? Are new tests needed?                     |
+| **Compliance** | Does the change affect GDPR compliance, accessibility (WCAG 2.2 AA), or security controls? |
+| **Users**      | Does the change affect end-user experience? Does it require communication to stakeholders? |
 
 ---
 
@@ -69,11 +69,11 @@ Every change request must include an impact assessment covering:
 
 ### 4.1 Approval Matrix
 
-| Category     | Approver(s)                                         | Approval Method              | SLA for Decision   |
-| ------------ | --------------------------------------------------- | ---------------------------- | ------------------ |
-| **Minor**    | Developer lead                                      | GitHub Issue approval comment | 1 business day     |
-| **Major**    | Developer lead **and** SOWA project manager         | GitHub Issue approval + email | 3 business days    |
-| **Critical** | Developer lead, SOWA project manager, steering group | Steering group meeting/email  | 1 business day     |
+| Category     | Approver(s)                                          | Approval Method               | SLA for Decision |
+| ------------ | ---------------------------------------------------- | ----------------------------- | ---------------- |
+| **Minor**    | Developer lead                                       | GitHub Issue approval comment | 1 business day   |
+| **Major**    | Developer lead **and** SOWA project manager          | GitHub Issue approval + email | 3 business days  |
+| **Critical** | Developer lead, SOWA project manager, steering group | Steering group meeting/email  | 1 business day   |
 
 ### 4.2 Workflow Diagram
 
@@ -128,8 +128,8 @@ For Critical changes requiring immediate action (e.g., active security exploit, 
 
 All changes follow a branch-based workflow on the `main` branch:
 
-| Change Type       | Branch Naming Convention | Base Branch | Merge Target |
-| ----------------- | ------------------------ | ----------- | ------------ |
+| Change Type        | Branch Naming Convention              | Base Branch | Merge Target |
+| ------------------ | ------------------------------------- | ----------- | ------------ |
 | New feature        | `feature/<issue-number>-<short-desc>` | `main`      | `main`       |
 | Bug fix            | `fix/<issue-number>-<short-desc>`     | `main`      | `main`       |
 | Critical/hotfix    | `hotfix/<issue-number>-<short-desc>`  | `main`      | `main`       |
@@ -146,11 +146,11 @@ All changes follow a branch-based workflow on the `main` branch:
 
 ### 5.2 Testing Requirements
 
-| Category     | Unit Tests | Integration Tests | E2E Tests  | Staging Verification | Security Review |
-| ------------ | ---------- | ----------------- | ---------- | -------------------- | --------------- |
-| **Minor**    | If applicable | —           | —          | PR preview           | —               |
-| **Major**    | Required   | Required          | Required   | PR preview + manual  | If applicable   |
-| **Critical** | Required   | Required          | Required   | PR preview + manual  | Required        |
+| Category     | Unit Tests    | Integration Tests | E2E Tests | Staging Verification | Security Review |
+| ------------ | ------------- | ----------------- | --------- | -------------------- | --------------- |
+| **Minor**    | If applicable | —                 | —         | PR preview           | —               |
+| **Major**    | Required      | Required          | Required  | PR preview + manual  | If applicable   |
+| **Critical** | Required      | Required          | Required  | PR preview + manual  | Required        |
 
 All PRs must pass the existing CI pipeline before merge:
 
@@ -164,11 +164,11 @@ All PRs must pass the existing CI pipeline before merge:
 
 If a deployment introduces a regression or defect:
 
-| Action                         | Method                                                                                          | Time to Execute |
-| ------------------------------ | ----------------------------------------------------------------------------------------------- | --------------- |
-| **Application rollback**       | Vercel dashboard → Deployments → promote previous deployment to production                      | ≤ 2 minutes     |
-| **Database rollback (schema)** | Revert the Prisma migration and redeploy, or restore via Neon point-in-time recovery            | ≤ 60 minutes    |
-| **Full regional failover**     | Deploy to fallback region (`dub1` Dublin) + restore DB to Neon `aws-eu-central-1` (Frankfurt)   | ≤ 4 hours       |
+| Action                         | Method                                                                                        | Time to Execute |
+| ------------------------------ | --------------------------------------------------------------------------------------------- | --------------- |
+| **Application rollback**       | Vercel dashboard → Deployments → promote previous deployment to production                    | ≤ 2 minutes     |
+| **Database rollback (schema)** | Revert the Prisma migration and redeploy, or restore via Neon point-in-time recovery          | ≤ 60 minutes    |
+| **Full regional failover**     | Deploy to fallback region (`dub1` Dublin) + restore DB to Neon `aws-eu-central-1` (Frankfurt) | ≤ 4 hours       |
 
 Full rollback and disaster recovery procedures are documented in [Disaster Recovery Plan](./disaster-recovery.md).
 
@@ -188,22 +188,22 @@ All changes are tracked in:
 
 The platform follows [Semantic Versioning (SemVer)](https://semver.org/):
 
-| Component | When to Increment                                                      | Example         |
-| --------- | ---------------------------------------------------------------------- | --------------- |
-| **MAJOR** | Breaking changes to APIs, database schema, or user-facing workflows    | `1.0.0 → 2.0.0` |
-| **MINOR** | New features, non-breaking enhancements                                | `1.0.0 → 1.1.0` |
-| **PATCH** | Bug fixes, security patches, documentation updates                     | `1.0.0 → 1.0.1` |
+| Component | When to Increment                                                   | Example         |
+| --------- | ------------------------------------------------------------------- | --------------- |
+| **MAJOR** | Breaking changes to APIs, database schema, or user-facing workflows | `1.0.0 → 2.0.0` |
+| **MINOR** | New features, non-breaking enhancements                             | `1.0.0 → 1.1.0` |
+| **PATCH** | Bug fixes, security patches, documentation updates                  | `1.0.0 → 1.0.1` |
 
 ### 6.3 Stakeholder Communication
 
-| Event                        | Audience                        | Channel                    | Timing                       |
-| ---------------------------- | ------------------------------- | -------------------------- | ---------------------------- |
-| Minor change deployed        | Development team                | GitHub notification         | On merge                     |
-| Major change approved        | SOWA project manager, dev team  | Email + GitHub notification | On approval                  |
-| Major change deployed        | SOWA project manager, dev team  | Email summary               | Within 1 business day        |
-| Critical change initiated    | SOWA PM, steering group         | Email + phone if urgent     | Within 1 hour                |
-| Critical change deployed     | All stakeholders                | Email summary               | Within 4 hours               |
-| Scheduled maintenance        | All stakeholders                | Email notice                | ≥ 5 business days in advance |
+| Event                     | Audience                       | Channel                     | Timing                       |
+| ------------------------- | ------------------------------ | --------------------------- | ---------------------------- |
+| Minor change deployed     | Development team               | GitHub notification         | On merge                     |
+| Major change approved     | SOWA project manager, dev team | Email + GitHub notification | On approval                  |
+| Major change deployed     | SOWA project manager, dev team | Email summary               | Within 1 business day        |
+| Critical change initiated | SOWA PM, steering group        | Email + phone if urgent     | Within 1 hour                |
+| Critical change deployed  | All stakeholders               | Email summary               | Within 4 hours               |
+| Scheduled maintenance     | All stakeholders               | Email notice                | ≥ 5 business days in advance |
 
 ---
 
@@ -214,31 +214,36 @@ The platform follows [Semantic Versioning (SemVer)](https://semver.org/):
 ```markdown
 ## Change Request
 
-| Field                    | Details                                |
-| ------------------------ | -------------------------------------- |
-| **Request ID**           | CR-YYYY-NNN (assigned on submission)   |
-| **Date Submitted**       |                                        |
-| **Requestor**            |                                        |
-| **Category**             | Minor / Major / Critical               |
-| **Priority**             | Low / Medium / High / Urgent           |
+| Field              | Details                              |
+| ------------------ | ------------------------------------ |
+| **Request ID**     | CR-YYYY-NNN (assigned on submission) |
+| **Date Submitted** |                                      |
+| **Requestor**      |                                      |
+| **Category**       | Minor / Major / Critical             |
+| **Priority**       | Low / Medium / High / Urgent         |
 
 ### Description
+
 <!-- What is being changed and why? -->
 
 ### Business Justification
+
 <!-- Why is this change needed? What problem does it solve? -->
 
 ### Affected Components
+
 <!-- Frontend / API / Database / Infrastructure / Integrations / Documentation -->
 
 ### Proposed Timeline
-| Milestone              | Date       |
-| ---------------------- | ---------- |
-| Implementation start   |            |
-| Testing complete       |            |
-| Target deployment      |            |
+
+| Milestone            | Date |
+| -------------------- | ---- |
+| Implementation start |      |
+| Testing complete     |      |
+| Target deployment    |      |
 
 ### Attachments
+
 <!-- Screenshots, mockups, specifications -->
 ```
 
@@ -247,23 +252,26 @@ The platform follows [Semantic Versioning (SemVer)](https://semver.org/):
 ```markdown
 ## Impact Assessment — CR-YYYY-NNN
 
-| Criterion       | Assessment                              | Risk Level         |
-| --------------- | --------------------------------------- | ------------------ |
-| **Scope**       |                                         | Low / Medium / High |
-| **Timeline**    |                                         | Low / Medium / High |
-| **Cost**        |                                         | Low / Medium / High |
-| **Risk**        |                                         | Low / Medium / High |
-| **Testing**     |                                         | Low / Medium / High |
-| **Compliance**  |                                         | Low / Medium / High |
-| **User Impact** |                                         | Low / Medium / High |
+| Criterion       | Assessment | Risk Level          |
+| --------------- | ---------- | ------------------- |
+| **Scope**       |            | Low / Medium / High |
+| **Timeline**    |            | Low / Medium / High |
+| **Cost**        |            | Low / Medium / High |
+| **Risk**        |            | Low / Medium / High |
+| **Testing**     |            | Low / Medium / High |
+| **Compliance**  |            | Low / Medium / High |
+| **User Impact** |            | Low / Medium / High |
 
 ### Overall Risk Rating
+
 <!-- Low / Medium / High / Critical -->
 
 ### Dependencies
+
 <!-- List any dependencies on other changes, teams, or third parties -->
 
 ### Rollback Plan
+
 <!-- How will this change be reversed if issues are discovered? -->
 
 ### Sign-Off
@@ -279,6 +287,6 @@ The platform follows [Semantic Versioning (SemVer)](https://semver.org/):
 
 ## Change Log
 
-| Date       | Change                                   | Author          |
-| ---------- | ---------------------------------------- | --------------- |
-| 2026-04-08 | Initial version created for RFT §13.5    | Development Team |
+| Date       | Change                                | Author           |
+| ---------- | ------------------------------------- | ---------------- |
+| 2026-04-08 | Initial version created for RFT §13.5 | Development Team |
