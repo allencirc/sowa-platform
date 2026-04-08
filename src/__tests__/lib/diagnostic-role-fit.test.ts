@@ -19,15 +19,15 @@ const skills: Skill[] = [
     slug: "working-at-height",
     name: "Working at Height",
     category: "Safety",
-    isTransferable: true,
-    adjacentSectors: ["construction"],
+    isTransferable: false,
+    adjacentSectors: [],
   },
   {
     slug: "safety-protocols",
     name: "Safety Protocols",
     category: "Safety",
-    isTransferable: true,
-    adjacentSectors: ["construction"],
+    isTransferable: false,
+    adjacentSectors: [],
   },
   {
     slug: "electrical-systems",
@@ -75,8 +75,8 @@ const skills: Skill[] = [
     slug: "data-analysis",
     name: "Data Analysis",
     category: "Digital",
-    isTransferable: true,
-    adjacentSectors: ["technology"],
+    isTransferable: false,
+    adjacentSectors: [],
   },
   {
     slug: "safety-management",
@@ -96,8 +96,8 @@ const skills: Skill[] = [
     slug: "project-management",
     name: "Project Management",
     category: "Management",
-    isTransferable: true,
-    adjacentSectors: ["construction"],
+    isTransferable: false,
+    adjacentSectors: [],
   },
   {
     slug: "commercial-management",
@@ -117,8 +117,8 @@ const skills: Skill[] = [
     slug: "python-programming",
     name: "Python Programming",
     category: "Digital",
-    isTransferable: true,
-    adjacentSectors: ["technology"],
+    isTransferable: false,
+    adjacentSectors: [],
   },
 ];
 
