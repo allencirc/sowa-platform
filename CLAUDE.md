@@ -435,3 +435,15 @@ The seeded dataset includes:
 - 5 research items (including the 2 key policy documents)
 - 31 skills across 5 categories
 - 15 diagnostic questions with branching logic and scoring
+
+---
+
+## GIT & DEPLOYMENT WORKFLOW
+
+- **Branch + PR for all non-trivial changes.** Create a feature branch, push, open a PR via `gh pr create`. Only typos/copy tweaks go directly to `main`.
+- **Run Prettier before every commit:** `npx prettier --write <changed files>`. CI runs `prettier --check .` and will reject unformatted code.
+- **Conventional Commits for PR titles:** `feat:`, `fix:`, `chore:`, `docs:`, `refactor:`, `test:`, etc.
+- **Vercel preview deploys** are created automatically for every PR branch push. Always check the preview URL before requesting review.
+- **Never force-push to `main`.** Branch protection requires PRs; never bypass with `--no-verify`.
+- **Confirm with the user before pushing or merging.** Do not push to remote or merge PRs autonomously.
+- **After merge:** Vercel auto-deploys `main` to production. Delete the feature branch.

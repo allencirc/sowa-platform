@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Select } from "@/components/ui/Select";
-import { Search, Download, ChevronLeft, ChevronRight } from "lucide-react";
+import { Search, Download, ChevronLeft, ChevronRight, Check } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 
 interface Registration {
@@ -20,6 +20,7 @@ interface Registration {
   additionalNotes: string | null;
   gdprConsent: boolean;
   status: "PENDING" | "CONFIRMED" | "CANCELLED";
+  attendedAt: string | null;
   createdAt: string;
 }
 
@@ -126,6 +127,25 @@ export function RegistrationsTable({
     }
   };
 
+  const handleAttendanceToggle = async (id: string, currentlyAttended: boolean) => {
+    const newAttended = !currentlyAttended;
+    try {
+      const res = await fetch(`/api/admin/registrations/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ attended: newAttended }),
+      });
+      if (res.ok) {
+        const json = await res.json();
+        setData((prev) =>
+          prev.map((r) => (r.id === id ? { ...r, attendedAt: json.data.attendedAt ?? null } : r)),
+        );
+      }
+    } catch {
+      // silently fail — user will see no change
+    }
+  };
+
   const handleExport = () => {
     const params = new URLSearchParams();
     if (typeFilter) params.set("type", typeFilter);
@@ -184,19 +204,20 @@ export function RegistrationsTable({
               <th className="px-4 py-3 font-semibold text-text-primary">Content</th>
               <th className="px-4 py-3 font-semibold text-text-primary">Organisation</th>
               <th className="px-4 py-3 font-semibold text-text-primary">Status</th>
+              <th className="px-4 py-3 font-semibold text-text-primary">Attended</th>
               <th className="px-4 py-3 font-semibold text-text-primary">Date</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
             {loading ? (
               <tr>
-                <td colSpan={7} className="px-4 py-8 text-center text-text-muted">
+                <td colSpan={8} className="px-4 py-8 text-center text-text-muted">
                   Loading...
                 </td>
               </tr>
             ) : data.length === 0 ? (
               <tr>
-                <td colSpan={7} className="px-4 py-8 text-center text-text-muted">
+                <td colSpan={8} className="px-4 py-8 text-center text-text-muted">
                   No registrations found.
                 </td>
               </tr>
@@ -232,6 +253,28 @@ export function RegistrationsTable({
                         </option>
                       ))}
                     </select>
+                  </td>
+                  <td className="px-4 py-3">
+                    {reg.type === "EVENT" ? (
+                      <button
+                        type="button"
+                        onClick={() => handleAttendanceToggle(reg.id, !!reg.attendedAt)}
+                        title={
+                          reg.attendedAt
+                            ? `Attended on ${formatDate(reg.attendedAt)}`
+                            : "Mark as attended"
+                        }
+                        className={`flex h-5 w-5 items-center justify-center rounded border-2 transition-colors ${
+                          reg.attendedAt
+                            ? "border-secondary bg-secondary text-white"
+                            : "border-gray-300 hover:border-secondary/50"
+                        }`}
+                      >
+                        {reg.attendedAt && <Check className="h-3.5 w-3.5" strokeWidth={3} />}
+                      </button>
+                    ) : (
+                      <span className="text-text-muted">—</span>
+                    )}
                   </td>
                   <td className="px-4 py-3 text-text-muted whitespace-nowrap">
                     {formatDate(reg.createdAt)}
