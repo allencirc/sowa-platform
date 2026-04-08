@@ -7,6 +7,7 @@ import { Badge, SectorBadge } from "@/components/ui/Badge";
 import { SkillBadge } from "@/components/careers/SkillBadge";
 import { MiniPathway } from "@/components/careers/MiniPathway";
 import { CourseCard } from "@/components/courses/CourseCard";
+import { SkillsBridge } from "@/components/frontend/SkillsBridge";
 import {
   getCareerBySlug,
   getCoursesByCareer,
@@ -199,8 +200,17 @@ export default async function CareerDetailPage({ params }: CareerDetailProps) {
         </section>
       )}
 
+      {/* Skills Bridge */}
+      {skills.length > 0 && (
+        <section className="py-12 sm:py-16 bg-white">
+          <Container>
+            <SkillsBridge skills={skills} courses={relatedCourses} />
+          </Container>
+        </section>
+      )}
+
       {/* Career Pathway */}
-      <section className="py-12 sm:py-16 bg-white">
+      <section className="py-12 sm:py-16 bg-surface">
         <Container>
           <h2 className="text-2xl font-bold text-text-primary mb-8">Career Pathway</h2>
           <div className="max-w-2xl mx-auto">
