@@ -109,6 +109,80 @@
       "timeCommitment": "[TODO] How much time per week can you commit to training?"
     }
   },
+  "enterprise": {
+    "title": "[TODO] Build Your OWE Talent Pipeline",
+    "subtitle": "[TODO] Strategic workforce development solutions for organisations entering or expanding in Ireland's offshore wind energy sector.",
+    "ctaDiagnostic": "[TODO] Start Team Assessment",
+    "ctaTraining": "[TODO] Browse Training",
+    "valueCards": {
+      "workforcePlanning": {
+        "title": "[TODO] Workforce Planning",
+        "description": "[TODO] Plan and build your offshore wind team with structured role mapping and recruitment guidance."
+      },
+      "skillsGap": {
+        "title": "[TODO] Skills Gap Analysis",
+        "description": "[TODO] Identify critical competency gaps across your workforce and prioritise development areas."
+      },
+      "trainingDirectory": {
+        "title": "[TODO] Training Directory",
+        "description": "[TODO] Access Ireland's most comprehensive directory of accredited OWE training programmes."
+      },
+      "industryIntelligence": {
+        "title": "[TODO] Industry Intelligence",
+        "description": "[TODO] Stay informed with the latest research, policy updates, and labour market insights."
+      }
+    },
+    "howItWorks": {
+      "title": "[TODO] How It Works",
+      "subtitle": "[TODO] Three steps to building your offshore wind workforce.",
+      "step1": {
+        "title": "[TODO] Assess",
+        "description": "[TODO] Use our diagnostic tool to benchmark your team's current offshore wind competencies against industry standards."
+      },
+      "step2": {
+        "title": "[TODO] Plan",
+        "description": "[TODO] Receive a tailored workforce development plan with prioritised skills gaps and recommended training pathways."
+      },
+      "step3": {
+        "title": "[TODO] Develop",
+        "description": "[TODO] Enrol your team in accredited courses from leading Irish and international training providers."
+      }
+    },
+    "diagnosticCta": {
+      "title": "[TODO] Assess Your Team's OWE Readiness",
+      "description": "[TODO] Use our diagnostic tool to evaluate your team's offshore wind skills and identify training priorities."
+    },
+    "trainingCta": {
+      "title": "[TODO] Enterprise Training Solutions",
+      "description": "[TODO] Browse our directory of accredited courses from leading providers, filterable by format, level, and sector relevance.",
+      "cta": "[TODO] Explore Training Directory"
+    },
+    "testimonials": {
+      "title": "[TODO] What Employers Say",
+      "placeholder": "[TODO] Case studies and testimonials coming soon.",
+      "quotes": [
+        {
+          "quote": "[TODO] SOWA helped us identify the exact skills our team needed to transition into offshore wind operations.",
+          "author": "[TODO] Operations Director",
+          "company": "Atlantic Energy Services"
+        },
+        {
+          "quote": "[TODO] The diagnostic tool gave us a clear roadmap for upskilling our marine crew for OWE projects.",
+          "author": "[TODO] HR Manager",
+          "company": "Celtic Marine Group"
+        },
+        {
+          "quote": "[TODO] Having access to a curated training directory saved us months of research and procurement time.",
+          "author": "[TODO] Head of Learning & Development",
+          "company": "WindTech Ireland"
+        }
+      ]
+    },
+    "contactSection": {
+      "title": "[TODO] Discuss Your Workforce Needs",
+      "subtitle": "[TODO] Our enterprise team can help you plan your organisation's offshore wind workforce development strategy."
+    }
+  },
   "skillsBridge": {
     "title": "[TODO] Skills Bridge",
     "subtitle": "[TODO] Already working in another industry? See which of your existing skills transfer to this role and what you'll need to develop.",

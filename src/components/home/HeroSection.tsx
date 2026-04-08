@@ -69,6 +69,16 @@ export function HeroSection() {
             >
               Take Skills Assessment
             </Link>
+            <Link
+              href="/enterprise"
+              className={buttonClassName(
+                "outline",
+                "lg",
+                "border-white/60 text-white hover:bg-white hover:text-primary",
+              )}
+            >
+              Enterprise Support
+            </Link>
           </div>
         </div>
       </div>

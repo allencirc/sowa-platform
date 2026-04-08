@@ -19,7 +19,7 @@ const audiences = [
     icon: Building2,
     title: "Enterprise Support",
     description: "Workforce planning tools and employer resources.",
-    href: "/diagnostic",
+    href: "/enterprise",
   },
   {
     icon: HandHeart,
