@@ -23,15 +23,15 @@ const skills: Skill[] = [
     slug: "data-analysis",
     name: "Data Analysis",
     category: "Digital",
-    isTransferable: true,
-    adjacentSectors: ["technology"],
+    isTransferable: false,
+    adjacentSectors: [],
   },
   {
     slug: "project-planning",
     name: "Project Planning",
     category: "Management",
-    isTransferable: true,
-    adjacentSectors: ["construction"],
+    isTransferable: false,
+    adjacentSectors: [],
   },
 ];
 

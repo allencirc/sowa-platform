@@ -28,7 +28,7 @@ export function RoleFamiliesPie({ data }: Props) {
           outerRadius={100}
           innerRadius={50}
           paddingAngle={2}
-          label={(props) => {
+          label={(props: { name?: string; percent?: number }) => {
             const name = String(props.name ?? "");
             const pct = typeof props.percent === "number" ? props.percent : 0;
             return `${name.split(" ")[0]} ${(pct * 100).toFixed(0)}%`;
@@ -40,7 +40,7 @@ export function RoleFamiliesPie({ data }: Props) {
           ))}
         </Pie>
         <Tooltip
-          formatter={(value) => [String(value), "Recommendations"]}
+          formatter={(value: unknown) => [String(value ?? ""), "Recommendations"]}
           contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb" }}
         />
         <Legend wrapperStyle={{ fontSize: 12 }} />

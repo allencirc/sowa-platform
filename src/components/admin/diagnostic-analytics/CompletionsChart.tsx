@@ -9,6 +9,7 @@ import {
   Tooltip,
   CartesianGrid,
 } from "recharts";
+import type { ReactNode } from "react";
 
 interface Props {
   data: { date: string; count: number }[];
@@ -29,7 +30,7 @@ export function CompletionsChart({ data }: Props) {
         />
         <YAxis tick={{ fontSize: 12, fill: "#6B7280" }} allowDecimals={false} />
         <Tooltip
-          labelFormatter={(v) => new Date(String(v)).toLocaleDateString("en-IE")}
+          labelFormatter={(v: ReactNode) => new Date(String(v)).toLocaleDateString("en-IE")}
           contentStyle={{ borderRadius: 8, border: "1px solid #e5e7eb" }}
         />
         <Line
