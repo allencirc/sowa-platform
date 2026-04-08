@@ -113,6 +113,9 @@ describe("POST /api/diagnostic/results", () => {
       },
     ]);
     (prismaMock.course.findMany as ReturnType<typeof vi.fn>).mockResolvedValue([]);
+    (prismaMock.diagnosticSession.create as ReturnType<typeof vi.fn>).mockResolvedValue({
+      id: "mock-session",
+    });
 
     const { POST } = await import("@/app/api/diagnostic/results/route");
     const request = makeRequest("http://localhost:3000/api/diagnostic/results", {
