@@ -10,6 +10,8 @@
     "research": "Дослідження",
     "news": "Новини",
     "diagnostic": "Діагностика",
+    "enterprise": "Для бізнесу",
+    "contact": "Контакти",
     "search": "Пошук",
     "getInvolved": "Долучитися",
     "openMenu": "Відкрити меню",
@@ -56,6 +58,38 @@
     },
     "copyright": "© {year} Skillnet Offshore Wind Academy. Усі права захищені."
   },
+  "contact": {
+    "title": "[TODO] Contact Us",
+    "subtitle": "[TODO] Have a question about offshore wind careers, training, or partnerships? We'd love to hear from you.",
+    "form": {
+      "name": "[TODO] Full Name",
+      "namePlaceholder": "[TODO] Your full name",
+      "email": "[TODO] Email Address",
+      "emailPlaceholder": "you@example.com",
+      "organisation": "[TODO] Organisation",
+      "organisationPlaceholder": "[TODO] Your company or institution (optional)",
+      "subject": "[TODO] Subject",
+      "subjectPlaceholder": "[TODO] Select a subject...",
+      "subjects": {
+        "GENERAL": "[TODO] General Inquiry",
+        "TRAINING": "[TODO] Training Information",
+        "PARTNERSHIP": "[TODO] Partnership",
+        "CAREER_GUIDANCE": "[TODO] Career Guidance",
+        "TECHNICAL_SUPPORT": "[TODO] Technical Support"
+      },
+      "message": "[TODO] Message",
+      "messagePlaceholder": "[TODO] How can we help you?",
+      "gdprConsent": "[TODO] I consent to SOWA processing my personal data for the purpose of this inquiry. Your data will be handled in accordance with our",
+      "gdprPrivacyLink": "[TODO] Privacy Policy",
+      "submit": "[TODO] Send Message",
+      "submitting": "[TODO] Sending..."
+    },
+    "success": {
+      "title": "[TODO] Message Sent",
+      "description": "[TODO] Thank you for getting in touch. We'll respond to your inquiry within 2 business days.",
+      "sendAnother": "[TODO] Send another message"
+    }
+  },
   "diagnostic": {
     "title": "[TODO] Skills Diagnostic",
     "intro": "[TODO] Answer a few questions to discover offshore wind career pathways that fit your background.",
@@ -74,5 +108,19 @@
       "languages": "[TODO] Which languages do you work in professionally?",
       "timeCommitment": "[TODO] How much time per week can you commit to training?"
     }
+  },
+  "skillsBridge": {
+    "title": "[TODO] Skills Bridge",
+    "subtitle": "[TODO] Already working in another industry? See which of your existing skills transfer to this role and what you'll need to develop.",
+    "selectSector": "[TODO] I'm coming from...",
+    "selectPlaceholder": "[TODO] Select your industry",
+    "matchLabel": "[TODO] {percentage}% Skills Match",
+    "matchSummary": "[TODO] {matched} transferable skill(s), {gap} to develop",
+    "existingSkills": "[TODO] Your Existing Skills",
+    "skillsToDevelop": "[TODO] Skills to Develop",
+    "noMatch": "[TODO] No direct skill matches found for this sector.",
+    "fullMatch": "[TODO] Great news — your skills fully cover this role!",
+    "escoTooltip": "[TODO] ESCO Level {level} — {type}",
+    "transferable": "[TODO] Transferable across sectors"
   }
 }

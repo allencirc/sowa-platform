@@ -132,6 +132,12 @@ function mapSkill(row: AnyRecord): Skill {
     slug: row.slug as string,
     name: row.name as string,
     category: (skillCategoryDisplay[row.category as string] ?? row.category) as Skill["category"],
+    escoUri: (row.escoUri as string) ?? undefined,
+    onetCode: (row.onetCode as string) ?? undefined,
+    isTransferable: (row.isTransferable as boolean) ?? false,
+    adjacentSectors: (row.adjacentSectors as string[]) ?? [],
+    escoLevel: (row.escoLevel as number) ?? undefined,
+    escoType: (row.escoType as string) ?? undefined,
   };
 }
 
@@ -177,6 +183,27 @@ export async function POST(request: NextRequest) {
       allCareers,
       allCourses,
     });
+
+    // Persist anonymous diagnostic session (fire-and-forget)
+    const locale = request.headers.get("accept-language")?.split(",")[0]?.split("-")[0] ?? "en";
+    const referrerSource =
+      new URL(request.url).searchParams.get("source") ?? request.headers.get("referer") ?? null;
+
+    prisma.diagnosticSession
+      .create({
+        data: {
+          answers: answers as never,
+          scores: result.scores,
+          maxPossible: result.maxPossible,
+          topRoleFamilies: result.roleFamilyFit.slice(0, 3).map((f) => f.family),
+          topSkillGaps: result.gaps.slice(0, 3).map((g) => g.skill.slug),
+          locale,
+          referrerSource,
+        },
+      })
+      .catch((err) => {
+        console.error("[Diagnostic] Session persist failed:", err);
+      });
 
     // If user consented, sync results to HubSpot in the background
     if (contact?.consent && contact.email) {

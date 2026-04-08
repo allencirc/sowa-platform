@@ -28,6 +28,12 @@ function mapSkill(row: AnyRecord) {
     slug: row.slug as string,
     name: row.name as string,
     category: skillCategoryDisplay[row.category as string] ?? row.category,
+    escoUri: (row.escoUri as string) ?? undefined,
+    onetCode: (row.onetCode as string) ?? undefined,
+    isTransferable: (row.isTransferable as boolean) ?? false,
+    adjacentSectors: (row.adjacentSectors as string[]) ?? [],
+    escoLevel: (row.escoLevel as number) ?? undefined,
+    escoType: (row.escoType as string) ?? undefined,
   };
 }
 
@@ -40,7 +46,7 @@ export async function GET(request: NextRequest) {
   const parsed = parseQuery(new URL(request.url), skillFiltersSchema);
   if (parsed.error) return parsed.error;
 
-  const { page, limit, sortBy, order, category, search } = parsed.data;
+  const { page, limit, sortBy, order, category, search, transferable, sector } = parsed.data;
 
   try {
     const where: Record<string, unknown> = {};
@@ -50,6 +56,12 @@ export async function GET(request: NextRequest) {
     }
     if (search) {
       where.name = { contains: search, mode: "insensitive" };
+    }
+    if (transferable) {
+      where.isTransferable = true;
+    }
+    if (sector) {
+      where.adjacentSectors = { has: sector };
     }
 
     const orderBy: Record<string, string> =
@@ -95,6 +107,12 @@ export async function POST(request: NextRequest) {
         slug: data.slug,
         name: data.name,
         category: (skillCategoryToEnum[data.category] ?? data.category) as never,
+        escoUri: data.escoUri,
+        onetCode: data.onetCode,
+        isTransferable: data.isTransferable,
+        adjacentSectors: data.adjacentSectors,
+        escoLevel: data.escoLevel,
+        escoType: data.escoType,
       },
     });
 

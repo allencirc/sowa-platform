@@ -118,13 +118,33 @@ enum ContentSource {
   QUALIFAX
 }
 
+enum SubscriptionTopic {
+  CAREERS    @map("Careers")
+  TRAINING   @map("Training")
+  EVENTS     @map("Events")
+  RESEARCH   @map("Research")
+  NEWS       @map("News")
+  DIAGNOSTIC @map("Diagnostic")
+}
+
+enum SubscriptionFrequency {
+  WEEKLY
+  MONTHLY
+}
+
 // ─── Models ───────────────────────────────────────────────
 
 model Skill {
-  id        String        @id @default(cuid())
-  slug      String        @unique
-  name      String
-  category  SkillCategory
+  id              String        @id @default(cuid())
+  slug            String        @unique
+  name            String
+  category        SkillCategory
+  escoUri         String?
+  onetCode        String?
+  isTransferable  Boolean       @default(false)
+  adjacentSectors String[]
+  escoLevel       Int?
+  escoType        String?
 
   careers   CareerSkill[]
   courses   CourseSkill[]
@@ -353,6 +373,25 @@ model DiagnosticQuestion {
   @@map("diagnostic_questions")
 }
 
+model DiagnosticSession {
+  id              String   @id @default(cuid())
+  sessionId       String   @unique @default(uuid())
+  answers         Json     // Raw answers: Record<string, string | string[]>
+  scores          Json     // Computed scores: Record<string, number>
+  maxPossible     Json     // Max possible: Record<string, number>
+  topRoleFamilies String[] // Top 3 role family keys
+  topSkillGaps    String[] // Top 3 gap skill slugs
+  completedAt     DateTime @default(now())
+  locale          String   @default("en")
+  referrerSource  String?
+
+  createdAt DateTime @default(now())
+
+  @@index([completedAt])
+  @@index([locale])
+  @@map("diagnostic_sessions")
+}
+
 model User {
   id           String   @id @default(cuid())
   email        String   @unique
@@ -385,6 +424,7 @@ model Registration {
   additionalNotes     String?
   gdprConsent         Boolean
   status              RegistrationStatus @default(PENDING)
+  attendedAt          DateTime?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -410,6 +450,24 @@ model ContentVersion {
   @@map("content_versions")
 }
 
+model Subscription {
+  id                String                @id @default(cuid())
+  email             String                @unique
+  name              String?
+  topics            SubscriptionTopic[]
+  frequency         SubscriptionFrequency @default(WEEKLY)
+  verified          Boolean               @default(false)
+  verificationToken String                @unique
+  unsubscribeToken  String                @unique
+  gdprConsent       Boolean               @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([verificationToken])
+  @@index([unsubscribeToken])
+  @@map("subscriptions")
+}
 model NotificationPreference {
   id        String   @id @default(cuid())
   userId    String

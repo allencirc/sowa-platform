@@ -84,6 +84,12 @@ export interface Skill {
   slug: string;
   name: string;
   category: "Technical" | "Safety" | "Regulatory" | "Digital" | "Management";
+  escoUri?: string;
+  onetCode?: string;
+  isTransferable: boolean;
+  adjacentSectors: string[];
+  escoLevel?: number;
+  escoType?: string;
 }
 
 export interface DiagnosticQuestion {

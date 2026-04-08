@@ -330,6 +330,17 @@ export const newsFiltersSchema = paginationSchema.merge(sortSchema).extend({
 
 // ─── Skill schemas ───────────────────────────────────────
 
+export const AdjacentSectorEnum = z.enum([
+  "Maritime",
+  "Construction",
+  "Oil & Gas",
+  "Aerospace",
+  "Nuclear",
+  "Renewable Energy",
+  "Defence",
+  "Heavy Engineering",
+]);
+
 export const createSkillSchema = z.object({
   slug: z
     .string()
@@ -337,11 +348,26 @@ export const createSkillSchema = z.object({
     .regex(/^[a-z0-9-]+$/),
   name: z.string().min(1).max(100),
   category: SkillCategoryEnum,
+  escoUri: z.string().url().optional(),
+  onetCode: z
+    .string()
+    .regex(/^\d{2}-\d{4}\.\d{2}$/)
+    .optional(),
+  isTransferable: z.boolean().default(false),
+  adjacentSectors: z.array(AdjacentSectorEnum).default([]),
+  escoLevel: z.number().int().min(1).max(4).optional(),
+  escoType: z.string().optional(),
 });
 
 export const skillFiltersSchema = paginationSchema.merge(sortSchema).extend({
   category: SkillCategoryEnum.optional(),
   search: z.string().optional(),
+  transferable: z.coerce.boolean().optional(),
+  sector: AdjacentSectorEnum.optional(),
+});
+
+export const transferableSkillsSchema = z.object({
+  sector: AdjacentSectorEnum.optional(),
 });
 
 // ─── Diagnostic schemas ──────────────────────────────────
@@ -383,6 +409,10 @@ export const updateRegistrationStatusSchema = z.object({
   status: RegistrationStatusEnum,
 });
 
+export const updateRegistrationAttendanceSchema = z.object({
+  attended: z.boolean(),
+});
+
 export const registrationFiltersSchema = paginationSchema.merge(sortSchema).extend({
   type: RegistrationTypeEnum.optional(),
   contentId: z.string().optional(),
@@ -397,4 +427,28 @@ export const registrationFiltersSchema = paginationSchema.merge(sortSchema).exte
 export const searchSchema = paginationSchema.extend({
   q: z.string().min(1),
   type: z.enum(["career", "course", "event", "research", "news"]).optional(),
+});
+
+// ─── Contact form schema ──────────────────────────────
+
+export const ContactSubjectEnum = z.enum([
+  "GENERAL",
+  "TRAINING",
+  "PARTNERSHIP",
+  "CAREER_GUIDANCE",
+  "TECHNICAL_SUPPORT",
+]);
+
+export const contactFormSchema = z.object({
+  name: z.string().min(1, "Name is required").max(200),
+  email: z.string().email("Valid email is required"),
+  organisation: z.string().max(200).optional().or(z.literal("")),
+  subject: ContactSubjectEnum,
+  message: z
+    .string()
+    .min(10, "Message must be at least 10 characters")
+    .max(2000, "Message must be at most 2000 characters"),
+  gdprConsent: z.boolean().refine((val) => val === true, {
+    message: "You must consent to data processing to submit this form",
+  }),
 });
