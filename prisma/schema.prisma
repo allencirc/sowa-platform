@@ -404,11 +404,37 @@ model User {
 
   contentVersions ContentVersion[]
   notificationPreferences NotificationPreference[]
+  siteSettingsUpdates SiteSettings[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@map("users")
+}
+
+model SiteSettings {
+  id                  String   @id @default("default")
+  colorPrimary        String?
+  colorPrimaryLight   String?
+  colorPrimaryDark    String?
+  colorSecondary      String?
+  colorSecondaryLight String?
+  colorSecondaryDark  String?
+  colorAccent         String?
+  colorAccentLight    String?
+  colorAccentDark     String?
+  headingFont         String?
+  bodyFont            String?
+  logoUrl             String?
+  faviconUrl          String?
+  footerText          String?
+  socialLinks         Json?
+
+  updatedAt   DateTime @updatedAt
+  updatedById String?
+  updatedBy   User?    @relation(fields: [updatedById], references: [id])
+
+  @@map("site_settings")
 }
 
 model Registration {
