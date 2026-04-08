@@ -34,6 +34,7 @@ After logging in, you land on the **Admin Dashboard**. The sidebar on the left p
 - **Research** — Research publications
 - **Users** — User management (Admin only)
 - **Media** — Image uploads
+- **Settings** — Profile, security, notification preferences, SEO tools
 
 ---
 
@@ -76,13 +77,15 @@ A version snapshot is automatically created each time you save, preserving the p
 1. Edit the content until it is ready
 2. Click **Submit for Review**
 3. The status changes to "In Review"
-4. An Admin must approve and publish
+4. All admins receive an email notification (if enabled)
+5. An Admin must approve and publish
 
 **If you are an Admin:**
 
 1. You can publish directly: click **Publish**
 2. Or schedule publication: set a future date in the **Publish At** field and save
 3. To reject content back to draft: click **Reject** and add a rejection note explaining what needs to change
+4. The original author is notified by email when content is approved, rejected, or published
 
 ### Archiving Content
 
@@ -329,6 +332,29 @@ View these in your Google Analytics dashboard. Analytics only activates for user
 ### HubSpot CRM
 
 If HubSpot is configured, event/course registrations and newsletter subscriptions are synced to your HubSpot portal automatically. Check sync status via the HubSpot widget on the admin dashboard.
+
+### Email Notifications
+
+The platform sends email notifications when content moves through the publishing workflow:
+
+| Event                            | Recipients      | When                                                      |
+| -------------------------------- | --------------- | --------------------------------------------------------- |
+| **Content submitted for review** | All Admins      | An editor (or admin) changes status to "In Review"        |
+| **Content approved**             | Original author | An admin publishes content that was "In Review"           |
+| **Content rejected**             | Original author | An admin returns content to "Draft" with a rejection note |
+| **Content published**            | Original author | Content goes live on the public site                      |
+
+**Managing your notification preferences:**
+
+1. Go to **Settings** from the admin sidebar
+2. Find the **Notifications** card
+3. Toggle each notification type on or off
+
+Admins see all four event toggles. Editors see three (approved, rejected, published) since "submitted for review" is only relevant to admins.
+
+Notifications default to **enabled** for all users. Changes take effect immediately — no save button needed.
+
+> **Note:** Email notifications require SMTP configuration (`EMAIL_ENABLED="true"` and valid SMTP credentials). When email is disabled, notification events are logged to the server console instead of sent. See the [Deployment Guide](./deployment-guide.md) for environment variable details.
 
 ---
 
