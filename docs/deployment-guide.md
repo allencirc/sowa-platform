@@ -34,6 +34,19 @@
 | `HUBSPOT_PORTAL_ID`          | HubSpot account/portal ID                                   |
 | `HUBSPOT_NEWSLETTER_LIST_ID` | Static list ID for newsletter subscribers                   |
 
+### Email Notifications (Optional)
+
+| Variable        | Description                                                                        | Default                                           |
+| --------------- | ---------------------------------------------------------------------------------- | ------------------------------------------------- |
+| `EMAIL_ENABLED` | Set to `"true"` to activate email dispatch. Logs only when `"false"`.              | `"false"`                                         |
+| `SMTP_HOST`     | SMTP server hostname (e.g. `smtp.gmail.com`, `email-smtp.eu-west-1.amazonaws.com`) | —                                                 |
+| `SMTP_PORT`     | SMTP port                                                                          | `587`                                             |
+| `SMTP_USER`     | SMTP authentication username                                                       | —                                                 |
+| `SMTP_PASS`     | SMTP authentication password or app-specific password                              | —                                                 |
+| `SMTP_FROM`     | Sender address for all platform emails                                             | `SOWA Platform <noreply@sowa.skillnetireland.ie>` |
+
+> **How it works:** When content moves through the publishing workflow (submitted for review, approved, rejected, published), the platform sends email notifications to relevant users. Each user can toggle notifications on/off per event type in admin Settings. When `EMAIL_ENABLED` is `"false"`, emails are logged to the console instead of sent — useful for development.
+
 ### Analytics and Marketing (Optional, client-side)
 
 | Variable                          | Description                                             |

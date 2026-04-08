@@ -364,6 +364,7 @@ model User {
   lockedUntil  DateTime?
 
   contentVersions ContentVersion[]
+  notificationPreferences NotificationPreference[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -407,4 +408,17 @@ model ContentVersion {
   @@unique([contentType, contentId, version])
   @@index([contentType, contentId])
   @@map("content_versions")
+}
+
+model NotificationPreference {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  event     String   // CONTENT_SUBMITTED | CONTENT_APPROVED | CONTENT_REJECTED | CONTENT_PUBLISHED
+  enabled   Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, event])
+  @@map("notification_preferences")
 }
