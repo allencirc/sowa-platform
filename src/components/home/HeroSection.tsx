@@ -1,7 +1,9 @@
 import Link from "next/link";
-import Image from "next/image";
 import { Wind } from "lucide-react";
 import { buttonClassName } from "@/components/ui/Button";
+
+const HERO_IMAGE_URL =
+  "https://images.unsplash.com/photo-1532601224476-15c79f2f7a51?w=1920&h=1080&fit=crop";
 
 function TurbineSVG({ className }: { className?: string }) {
   return (
@@ -25,16 +27,10 @@ export function HeroSection() {
   // contrast holds even if the background image fails to load — axe (and
   // users with blocked images) only sees the composited gradient+colour.
   return (
-    <section className="relative min-h-[70vh] overflow-hidden bg-primary text-text-inverse">
-      {/* Background image */}
-      <Image
-        src="https://images.unsplash.com/photo-1532601224476-15c79f2f7a51?w=1920&h=1080&fit=crop"
-        alt=""
-        fill
-        className="object-cover"
-        sizes="100vw"
-        priority
-      />
+    <section
+      className="relative min-h-[70vh] overflow-hidden bg-primary bg-cover bg-center text-text-inverse"
+      style={{ backgroundImage: `url(${HERO_IMAGE_URL})` }}
+    >
       {/* Overlay gradient — heavier on the left for text contrast, lighter on the right to show the image */}
       <div className="absolute inset-0 bg-gradient-to-r from-[#0a1c33]/85 via-[#0a1c33]/40 via-50% to-primary/10" />
 
