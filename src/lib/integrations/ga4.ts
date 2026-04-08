@@ -147,7 +147,7 @@ async function getAccessToken(cfg: Ga4Config): Promise<string> {
 // Data API types (minimal — only what the admin page consumes)
 // ---------------------------------------------------------------------------
 
-interface RunReportRequest {
+export interface RunReportRequest {
   dimensions?: { name: string }[];
   metrics: { name: string }[];
   dateRanges: { startDate: string; endDate: string }[];
@@ -160,7 +160,7 @@ interface RunReportRequest {
   dimensionFilter?: unknown;
 }
 
-interface RunReportResponse {
+export interface RunReportResponse {
   dimensionHeaders?: { name: string }[];
   metricHeaders?: { name: string }[];
   rows?: {
@@ -170,7 +170,10 @@ interface RunReportResponse {
   rowCount?: number;
 }
 
-async function runReport(cfg: Ga4Config, body: RunReportRequest): Promise<RunReportResponse> {
+export async function runReport(
+  cfg: Ga4Config,
+  body: RunReportRequest,
+): Promise<RunReportResponse> {
   const token = await getAccessToken(cfg);
   const res = await fetch(
     `https://analyticsdata.googleapis.com/v1beta/${cfg.propertyId}:runReport`,
@@ -234,8 +237,13 @@ export type Ga4ReportResult =
 /**
  * Pull the admin-analytics overview in a single call batch. Designed for the
  * `/admin/analytics` page: sessions + top content + custom event counts.
+ *
+ * Accepts either a `days` count (backward-compatible) or explicit start/end
+ * date strings in "YYYY-MM-DD" or GA4 relative format ("7daysAgo", "today").
  */
-export async function fetchGa4Overview(days = 28): Promise<Ga4ReportResult> {
+export async function fetchGa4Overview(
+  daysOrRange: number | { startDate: string; endDate: string } = 28,
+): Promise<Ga4ReportResult> {
   const cfg = getGa4Config();
   if (!cfg.configured) {
     return {
@@ -246,7 +254,10 @@ export async function fetchGa4Overview(days = 28): Promise<Ga4ReportResult> {
   }
 
   const lookerStudioUrl = process.env.GA4_LOOKER_STUDIO_URL ?? null;
-  const dateRange = { startDate: `${days}daysAgo`, endDate: "today" };
+  const dateRange =
+    typeof daysOrRange === "number"
+      ? { startDate: `${daysOrRange}daysAgo`, endDate: "today" }
+      : daysOrRange;
 
   try {
     const [overviewRes, topPagesRes, eventsRes] = await Promise.all([

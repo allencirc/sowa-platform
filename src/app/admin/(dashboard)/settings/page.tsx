@@ -2,7 +2,21 @@
 
 import { useState } from "react";
 import { useSession } from "next-auth/react";
-import { Settings, User, Shield, Bell, Globe, ExternalLink, Copy, Check } from "lucide-react";
+import {
+  Settings,
+  User,
+  Shield,
+  Bell,
+  Globe,
+  ExternalLink,
+  Copy,
+  Check,
+  BarChart3,
+  CheckCircle2,
+  XCircle,
+  ChevronDown,
+  ChevronUp,
+} from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Badge } from "@/components/ui/Badge";
@@ -194,6 +208,9 @@ export default function AdminSettingsPage() {
           </p>
         </div>
 
+        {/* Marketing Pixels */}
+        <MarketingPixelsCard />
+
         {/* Platform */}
         <div className="rounded-xl border border-gray-200 bg-surface-card p-6 lg:col-span-2">
           <div className="mb-4 flex items-center gap-2">
@@ -205,6 +222,198 @@ export default function AdminSettingsPage() {
           </p>
         </div>
       </div>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Marketing Pixels card (inline — only used here)
+// ---------------------------------------------------------------------------
+
+const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID ?? "";
+const LINKEDIN_PARTNER_ID = process.env.NEXT_PUBLIC_LINKEDIN_PARTNER_ID ?? "";
+
+const META_EVENTS = [
+  { event: "PageView", trigger: "Every page load (automatic)" },
+  { event: "Lead", trigger: "Diagnostic completion, outbound course clicks" },
+  { event: "CompleteRegistration", trigger: "Course or event registration" },
+  { event: "Subscribe", trigger: "Newsletter signup" },
+];
+
+const LINKEDIN_EVENTS = [
+  { event: "Page view", trigger: "Every page load (automatic via Insight Tag)" },
+];
+
+function MarketingPixelsCard() {
+  const [docsOpen, setDocsOpen] = useState(false);
+
+  const metaConfigured = META_PIXEL_ID.length > 0;
+  const linkedinConfigured = LINKEDIN_PARTNER_ID.length > 0;
+
+  return (
+    <div className="rounded-xl border border-gray-200 bg-surface-card p-6 lg:col-span-2">
+      <div className="mb-4 flex items-center gap-2">
+        <BarChart3 className="h-5 w-5 text-accent-dark" />
+        <h2 className="text-lg font-semibold text-text-primary">Marketing Pixels</h2>
+      </div>
+      <p className="mb-4 text-sm text-text-secondary">
+        Consent-gated tracking pixels for retargeting and conversion measurement. Pixels only load
+        when users grant marketing consent via the cookie banner.
+      </p>
+
+      <div className="grid gap-4 sm:grid-cols-2">
+        {/* Meta Pixel */}
+        <div className="rounded-lg border border-gray-100 bg-surface p-4">
+          <div className="mb-2 flex items-center gap-2">
+            {metaConfigured ? (
+              <CheckCircle2 className="h-4 w-4 text-secondary" />
+            ) : (
+              <XCircle className="h-4 w-4 text-text-muted" />
+            )}
+            <span className="text-sm font-medium text-text-primary">Meta Pixel (Facebook)</span>
+          </div>
+          <p className="text-xs text-text-secondary">
+            {metaConfigured
+              ? `Configured — ID: ${META_PIXEL_ID}`
+              : "Not configured. Set NEXT_PUBLIC_META_PIXEL_ID."}
+          </p>
+          {metaConfigured && (
+            <div className="mt-3">
+              <p className="mb-1 text-xs font-medium text-text-secondary">Events tracked:</p>
+              <ul className="space-y-0.5">
+                {META_EVENTS.map((e) => (
+                  <li key={e.event} className="text-xs text-text-muted">
+                    <code className="rounded bg-white px-1 py-0.5 text-[11px]">{e.event}</code> —{" "}
+                    {e.trigger}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+
+        {/* LinkedIn Insight Tag */}
+        <div className="rounded-lg border border-gray-100 bg-surface p-4">
+          <div className="mb-2 flex items-center gap-2">
+            {linkedinConfigured ? (
+              <CheckCircle2 className="h-4 w-4 text-secondary" />
+            ) : (
+              <XCircle className="h-4 w-4 text-text-muted" />
+            )}
+            <span className="text-sm font-medium text-text-primary">LinkedIn Insight Tag</span>
+          </div>
+          <p className="text-xs text-text-secondary">
+            {linkedinConfigured
+              ? `Configured — Partner ID: ${LINKEDIN_PARTNER_ID}`
+              : "Not configured. Set NEXT_PUBLIC_LINKEDIN_PARTNER_ID."}
+          </p>
+          {linkedinConfigured && (
+            <div className="mt-3">
+              <p className="mb-1 text-xs font-medium text-text-secondary">Events tracked:</p>
+              <ul className="space-y-0.5">
+                {LINKEDIN_EVENTS.map((e) => (
+                  <li key={e.event} className="text-xs text-text-muted">
+                    <code className="rounded bg-white px-1 py-0.5 text-[11px]">{e.event}</code> —{" "}
+                    {e.trigger}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Expandable setup docs */}
+      <button
+        className="mt-4 flex items-center gap-1 text-sm font-medium text-accent hover:text-accent-dark"
+        onClick={() => setDocsOpen(!docsOpen)}
+      >
+        {docsOpen ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+        {docsOpen ? "Hide setup instructions" : "Show setup instructions"}
+      </button>
+
+      {docsOpen && (
+        <div className="mt-3 space-y-4 rounded-lg border border-gray-100 bg-surface p-4 text-sm text-text-secondary">
+          <div>
+            <h3 className="mb-1 font-semibold text-text-primary">Meta Pixel Setup</h3>
+            <ol className="list-decimal space-y-1 pl-5">
+              <li>
+                Go to{" "}
+                <a
+                  href="https://business.facebook.com/events_manager"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-accent hover:text-accent-dark"
+                >
+                  Meta Events Manager
+                </a>{" "}
+                and create or find your Pixel.
+              </li>
+              <li>Copy the Pixel ID (numeric, e.g. 123456789012345).</li>
+              <li>
+                Set{" "}
+                <code className="rounded bg-white px-1 py-0.5 text-xs">
+                  NEXT_PUBLIC_META_PIXEL_ID
+                </code>{" "}
+                in Vercel Environment Variables (Production + Preview).
+              </li>
+              <li>Redeploy. The pixel loads automatically when users accept marketing cookies.</li>
+              <li>Verify in Meta Events Manager &gt; Test Events using the browser extension.</li>
+            </ol>
+          </div>
+
+          <div>
+            <h3 className="mb-1 font-semibold text-text-primary">LinkedIn Insight Tag Setup</h3>
+            <ol className="list-decimal space-y-1 pl-5">
+              <li>
+                Go to{" "}
+                <a
+                  href="https://www.linkedin.com/campaignmanager"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-accent hover:text-accent-dark"
+                >
+                  LinkedIn Campaign Manager
+                </a>{" "}
+                &gt; Analyze &gt; Insight Tag.
+              </li>
+              <li>Copy the Partner ID (numeric).</li>
+              <li>
+                Set{" "}
+                <code className="rounded bg-white px-1 py-0.5 text-xs">
+                  NEXT_PUBLIC_LINKEDIN_PARTNER_ID
+                </code>{" "}
+                in Vercel Environment Variables.
+              </li>
+              <li>Redeploy. The tag loads when users accept marketing cookies.</li>
+              <li>Verify in Campaign Manager &gt; Insight Tag &gt; Domains.</li>
+            </ol>
+          </div>
+
+          <div>
+            <h3 className="mb-1 font-semibold text-text-primary">How to verify pixel firing</h3>
+            <ul className="list-disc space-y-1 pl-5">
+              <li>
+                Open browser Dev Tools &gt; Network tab, filter by "fbevents" or "insight.min.js".
+              </li>
+              <li>Accept marketing cookies on the site, then reload.</li>
+              <li>You should see the pixel script load and fire initial events.</li>
+              <li>
+                Install the{" "}
+                <a
+                  href="https://chrome.google.com/webstore/detail/meta-pixel-helper/fdgfkebogiimcoedlicjlajpkdmockpc"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-accent hover:text-accent-dark"
+                >
+                  Meta Pixel Helper
+                </a>{" "}
+                Chrome extension for real-time debugging.
+              </li>
+            </ul>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
