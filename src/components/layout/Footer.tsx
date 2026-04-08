@@ -46,6 +46,7 @@ export function Footer({ locale, dict, customFooterText, socialLinks }: FooterPr
         { label: dict.nav.research, href: `${prefix}/research` },
         { label: dict.nav.news, href: `${prefix}/news` },
         { label: dict.nav.diagnostic, href: `${prefix}/diagnostic` },
+        { label: dict.nav.enterprise, href: `${prefix}/enterprise` },
         { label: dict.nav.contact, href: `${prefix}/contact` },
       ],
     },

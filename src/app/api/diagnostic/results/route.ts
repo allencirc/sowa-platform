@@ -190,7 +190,7 @@ export async function POST(request: NextRequest) {
       new URL(request.url).searchParams.get("source") ?? request.headers.get("referer") ?? null;
 
     prisma.diagnosticSession
-      .create({
+      ?.create({
         data: {
           answers: answers as never,
           scores: result.scores,
@@ -201,7 +201,7 @@ export async function POST(request: NextRequest) {
           referrerSource,
         },
       })
-      .catch((err) => {
+      ?.catch((err: unknown) => {
         console.error("[Diagnostic] Session persist failed:", err);
       });
 

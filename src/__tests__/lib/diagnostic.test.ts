@@ -5,10 +5,34 @@ import type { Career, Course, DiagnosticQuestion, Skill } from "@/lib/types";
 // ── Minimal test fixtures ────────────────────────────────
 
 const skills: Skill[] = [
-  { slug: "mechanical-systems", name: "Mechanical Systems", category: "Technical" },
-  { slug: "safety-management", name: "Safety Management", category: "Safety" },
-  { slug: "data-analysis", name: "Data Analysis", category: "Digital" },
-  { slug: "project-planning", name: "Project Planning", category: "Management" },
+  {
+    slug: "mechanical-systems",
+    name: "Mechanical Systems",
+    category: "Technical",
+    isTransferable: false,
+    adjacentSectors: [],
+  },
+  {
+    slug: "safety-management",
+    name: "Safety Management",
+    category: "Safety",
+    isTransferable: false,
+    adjacentSectors: [],
+  },
+  {
+    slug: "data-analysis",
+    name: "Data Analysis",
+    category: "Digital",
+    isTransferable: true,
+    adjacentSectors: ["technology"],
+  },
+  {
+    slug: "project-planning",
+    name: "Project Planning",
+    category: "Management",
+    isTransferable: true,
+    adjacentSectors: ["construction"],
+  },
 ];
 
 const careers: Career[] = [

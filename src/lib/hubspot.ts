@@ -52,6 +52,21 @@ export async function syncDiagnosticResults(data: DiagnosticResultsSync): Promis
   console.log("[HubSpot] Would sync diagnostic results:", data.email, data.topGaps);
 }
 
+interface ContactInquirySync {
+  email: string;
+  name: string;
+  organisation?: string;
+  subject: string;
+  message: string;
+}
+
+export async function syncContactInquiry(data: ContactInquirySync): Promise<void> {
+  // No-op until HubSpot integration is configured
+  if (!process.env.HUBSPOT_API_KEY) return;
+
+  console.log("[HubSpot] Would sync contact inquiry:", data.email, data.subject);
+}
+
 export function getSyncStatus(): SyncStatus {
   return {
     configured: !!process.env.HUBSPOT_API_KEY,
