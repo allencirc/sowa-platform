@@ -1,10 +1,6 @@
 import Link from "next/link";
-import Image from "next/image";
 import { Wind } from "lucide-react";
 import { buttonClassName } from "@/components/ui/Button";
-
-const HERO_IMAGE_URL =
-  "https://images.unsplash.com/photo-1532601224476-15c79f2f7a51?w=1920&h=1080&fit=crop";
 
 function TurbineSVG({ className }: { className?: string }) {
   return (
@@ -28,13 +24,7 @@ export function HeroSection() {
   // contrast holds even if the background image fails to load — axe (and
   // users with blocked images) only sees the composited gradient+colour.
   return (
-    <section
-      className="relative min-h-[70vh] overflow-hidden bg-primary bg-cover bg-center text-text-inverse"
-      style={{ backgroundImage: `url(${HERO_IMAGE_URL})` }}
-    >
-      {/* Next.js Image — proxied through /_next/image so Arc doesn't block it.
-          CSS background-image on the section is the fallback for other browsers. */}
-      <Image src={HERO_IMAGE_URL} alt="" fill className="object-cover" sizes="100vw" priority />
+    <section className="relative min-h-[70vh] overflow-hidden bg-primary bg-[url('/images/hero-wind-farm.jpg')] bg-cover bg-center text-text-inverse">
       {/* Overlay gradient — extends across most of the hero for text readability */}
       <div className="absolute inset-0 bg-gradient-to-r from-[#0a1c33]/90 via-[#0a1c33]/60 via-60% to-primary/20" />
 
