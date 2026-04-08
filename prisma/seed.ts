@@ -165,6 +165,8 @@ interface SkillJson {
   slug: string;
   name: string;
   category: string;
+  isTransferable?: boolean;
+  adjacentSectors?: string[];
 }
 
 interface DiagnosticJson {
@@ -211,6 +213,8 @@ async function main() {
         slug: skill.slug,
         name: skill.name,
         category: skillCategoryMap[skill.category] as never,
+        isTransferable: skill.isTransferable ?? false,
+        adjacentSectors: skill.adjacentSectors ?? [],
       },
     });
     skillIdMap.set(skill.slug, created.id);

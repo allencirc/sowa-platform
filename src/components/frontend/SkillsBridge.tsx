@@ -36,8 +36,8 @@ export function SkillsBridge({ skills, courses }: SkillsBridgeProps) {
         Skills Bridge
       </h2>
       <p className="text-text-secondary mb-6 max-w-2xl">
-        Already working in another industry? See which of your existing skills
-        transfer to this role and what you&apos;ll need to develop.
+        Already working in another industry? See which of your existing skills transfer to this role
+        and what you&apos;ll need to develop.
       </p>
 
       <div className="max-w-xs mb-8">
@@ -65,14 +65,8 @@ export function SkillsBridge({ skills, courses }: SkillsBridgeProps) {
         {result && (
           <>
             {/* Match percentage */}
-            <div
-              role="status"
-              className="mb-8 flex items-center gap-4"
-            >
-              <div
-                className="relative h-16 w-16 shrink-0"
-                aria-hidden="true"
-              >
+            <div role="status" className="mb-8 flex items-center gap-4">
+              <div className="relative h-16 w-16 shrink-0" aria-hidden="true">
                 <svg viewBox="0 0 36 36" className="h-16 w-16 -rotate-90">
                   <circle
                     cx="18"
@@ -112,8 +106,7 @@ export function SkillsBridge({ skills, courses }: SkillsBridgeProps) {
                 </p>
                 <p className="text-sm text-text-secondary">
                   {result.matchedSkills.length} transferable skill
-                  {result.matchedSkills.length !== 1 && "s"},{" "}
-                  {result.gapSkills.length} to develop
+                  {result.matchedSkills.length !== 1 && "s"}, {result.gapSkills.length} to develop
                 </p>
               </div>
             </div>
@@ -135,10 +128,7 @@ export function SkillsBridge({ skills, courses }: SkillsBridgeProps) {
                   <ul className="space-y-2" aria-label="Matched skills">
                     {result.matchedSkills.map((skill) => (
                       <li key={skill.slug} className="flex items-center gap-2">
-                        <Check
-                          className="h-4 w-4 text-secondary shrink-0"
-                          aria-hidden="true"
-                        />
+                        <Check className="h-4 w-4 text-secondary shrink-0" aria-hidden="true" />
                         <span className="inline-flex items-center rounded-full bg-secondary/10 px-3 py-1 text-xs font-medium text-secondary-dark">
                           {skill.name}
                         </span>

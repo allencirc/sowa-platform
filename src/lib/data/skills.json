@@ -1,37 +1,279 @@
 [
-  { "slug": "electrical-systems", "name": "Electrical Systems", "category": "Technical" },
-  { "slug": "mechanical-maintenance", "name": "Mechanical Maintenance", "category": "Technical" },
-  { "slug": "safety-protocols", "name": "Safety Protocols", "category": "Safety" },
-  { "slug": "working-at-height", "name": "Working at Height", "category": "Safety" },
-  { "slug": "marine-operations", "name": "Marine Operations", "category": "Technical" },
-  { "slug": "safety-management", "name": "Safety Management", "category": "Safety" },
-  { "slug": "risk-assessment", "name": "Risk Assessment", "category": "Safety" },
-  { "slug": "project-management", "name": "Project Management", "category": "Management" },
-  { "slug": "leadership", "name": "Leadership", "category": "Management" },
-  { "slug": "emergency-response", "name": "Emergency Response", "category": "Safety" },
-  { "slug": "logistics", "name": "Logistics & Supply Chain", "category": "Management" },
-  { "slug": "weather-analysis", "name": "Weather Analysis", "category": "Technical" },
-  { "slug": "engineering-design", "name": "Engineering Design", "category": "Technical" },
-  { "slug": "regulatory-compliance", "name": "Regulatory Compliance", "category": "Regulatory" },
-  { "slug": "technical-documentation", "name": "Technical Documentation", "category": "Technical" },
+  {
+    "slug": "electrical-systems",
+    "name": "Electrical Systems",
+    "category": "Technical",
+    "isTransferable": true,
+    "adjacentSectors": ["Renewable Energy", "Nuclear", "Heavy Engineering", "Defence"]
+  },
+  {
+    "slug": "mechanical-maintenance",
+    "name": "Mechanical Maintenance",
+    "category": "Technical",
+    "isTransferable": true,
+    "adjacentSectors": ["Construction", "Heavy Engineering", "Oil & Gas", "Nuclear", "Defence"]
+  },
+  {
+    "slug": "safety-protocols",
+    "name": "Safety Protocols",
+    "category": "Safety",
+    "isTransferable": true,
+    "adjacentSectors": [
+      "Maritime",
+      "Construction",
+      "Oil & Gas",
+      "Aerospace",
+      "Nuclear",
+      "Renewable Energy",
+      "Defence",
+      "Heavy Engineering"
+    ]
+  },
+  {
+    "slug": "working-at-height",
+    "name": "Working at Height",
+    "category": "Safety",
+    "isTransferable": true,
+    "adjacentSectors": ["Construction", "Maritime", "Oil & Gas", "Renewable Energy"]
+  },
+  {
+    "slug": "marine-operations",
+    "name": "Marine Operations",
+    "category": "Technical",
+    "isTransferable": true,
+    "adjacentSectors": ["Maritime", "Oil & Gas", "Defence"]
+  },
+  {
+    "slug": "safety-management",
+    "name": "Safety Management",
+    "category": "Safety",
+    "isTransferable": true,
+    "adjacentSectors": [
+      "Oil & Gas",
+      "Nuclear",
+      "Aerospace",
+      "Construction",
+      "Defence",
+      "Heavy Engineering"
+    ]
+  },
+  {
+    "slug": "risk-assessment",
+    "name": "Risk Assessment",
+    "category": "Safety",
+    "isTransferable": true,
+    "adjacentSectors": [
+      "Oil & Gas",
+      "Nuclear",
+      "Aerospace",
+      "Construction",
+      "Defence",
+      "Heavy Engineering",
+      "Renewable Energy"
+    ]
+  },
+  {
+    "slug": "project-management",
+    "name": "Project Management",
+    "category": "Management",
+    "isTransferable": true,
+    "adjacentSectors": [
+      "Construction",
+      "Oil & Gas",
+      "Aerospace",
+      "Nuclear",
+      "Renewable Energy",
+      "Defence",
+      "Heavy Engineering"
+    ]
+  },
+  {
+    "slug": "leadership",
+    "name": "Leadership",
+    "category": "Management",
+    "isTransferable": true,
+    "adjacentSectors": [
+      "Maritime",
+      "Construction",
+      "Oil & Gas",
+      "Aerospace",
+      "Nuclear",
+      "Defence",
+      "Heavy Engineering"
+    ]
+  },
+  {
+    "slug": "emergency-response",
+    "name": "Emergency Response",
+    "category": "Safety",
+    "isTransferable": true,
+    "adjacentSectors": ["Maritime", "Oil & Gas", "Nuclear", "Aerospace", "Defence"]
+  },
+  {
+    "slug": "logistics",
+    "name": "Logistics & Supply Chain",
+    "category": "Management",
+    "isTransferable": true,
+    "adjacentSectors": ["Maritime", "Construction", "Oil & Gas", "Defence", "Heavy Engineering"]
+  },
+  {
+    "slug": "weather-analysis",
+    "name": "Weather Analysis",
+    "category": "Technical",
+    "isTransferable": true,
+    "adjacentSectors": ["Maritime", "Aerospace"]
+  },
+  {
+    "slug": "engineering-design",
+    "name": "Engineering Design",
+    "category": "Technical",
+    "isTransferable": true,
+    "adjacentSectors": ["Heavy Engineering", "Aerospace", "Nuclear", "Renewable Energy", "Defence"]
+  },
+  {
+    "slug": "regulatory-compliance",
+    "name": "Regulatory Compliance",
+    "category": "Regulatory",
+    "isTransferable": true,
+    "adjacentSectors": ["Oil & Gas", "Nuclear", "Aerospace", "Renewable Energy"]
+  },
+  {
+    "slug": "technical-documentation",
+    "name": "Technical Documentation",
+    "category": "Technical",
+    "isTransferable": true,
+    "adjacentSectors": [
+      "Aerospace",
+      "Nuclear",
+      "Oil & Gas",
+      "Defence",
+      "Heavy Engineering",
+      "Renewable Energy"
+    ]
+  },
   {
     "slug": "environmental-assessment",
     "name": "Environmental Assessment",
-    "category": "Regulatory"
+    "category": "Regulatory",
+    "isTransferable": true,
+    "adjacentSectors": ["Oil & Gas", "Construction", "Renewable Energy", "Nuclear"]
   },
-  { "slug": "stakeholder-management", "name": "Stakeholder Management", "category": "Management" },
-  { "slug": "data-analysis", "name": "Data Analysis", "category": "Digital" },
-  { "slug": "scada-systems", "name": "SCADA Systems", "category": "Digital" },
-  { "slug": "python-programming", "name": "Python Programming", "category": "Digital" },
-  { "slug": "performance-optimisation", "name": "Performance Optimisation", "category": "Digital" },
-  { "slug": "high-voltage", "name": "High Voltage Systems", "category": "Technical" },
-  { "slug": "grid-connection", "name": "Grid Connection", "category": "Technical" },
-  { "slug": "composite-repair", "name": "Composite Repair", "category": "Technical" },
-  { "slug": "rope-access", "name": "Rope Access", "category": "Safety" },
-  { "slug": "supply-chain", "name": "Supply Chain Management", "category": "Management" },
-  { "slug": "commercial-management", "name": "Commercial Management", "category": "Management" },
-  { "slug": "contract-negotiation", "name": "Contract Negotiation", "category": "Management" },
-  { "slug": "incident-investigation", "name": "Incident Investigation", "category": "Safety" },
-  { "slug": "industry-knowledge", "name": "OWE Industry Knowledge", "category": "Regulatory" },
-  { "slug": "technical-foundation", "name": "Technical Foundation", "category": "Technical" }
+  {
+    "slug": "stakeholder-management",
+    "name": "Stakeholder Management",
+    "category": "Management",
+    "isTransferable": true,
+    "adjacentSectors": [
+      "Construction",
+      "Oil & Gas",
+      "Nuclear",
+      "Renewable Energy",
+      "Heavy Engineering"
+    ]
+  },
+  {
+    "slug": "data-analysis",
+    "name": "Data Analysis",
+    "category": "Digital",
+    "isTransferable": true,
+    "adjacentSectors": ["Aerospace", "Nuclear", "Renewable Energy", "Oil & Gas"]
+  },
+  {
+    "slug": "scada-systems",
+    "name": "SCADA Systems",
+    "category": "Digital",
+    "isTransferable": true,
+    "adjacentSectors": ["Oil & Gas", "Nuclear", "Renewable Energy", "Heavy Engineering"]
+  },
+  {
+    "slug": "python-programming",
+    "name": "Python Programming",
+    "category": "Digital",
+    "isTransferable": true,
+    "adjacentSectors": ["Aerospace", "Nuclear", "Renewable Energy"]
+  },
+  {
+    "slug": "performance-optimisation",
+    "name": "Performance Optimisation",
+    "category": "Digital",
+    "isTransferable": true,
+    "adjacentSectors": ["Aerospace", "Renewable Energy", "Nuclear"]
+  },
+  {
+    "slug": "high-voltage",
+    "name": "High Voltage Systems",
+    "category": "Technical",
+    "isTransferable": true,
+    "adjacentSectors": ["Nuclear", "Renewable Energy", "Oil & Gas", "Heavy Engineering"]
+  },
+  {
+    "slug": "grid-connection",
+    "name": "Grid Connection",
+    "category": "Technical",
+    "isTransferable": true,
+    "adjacentSectors": ["Renewable Energy", "Nuclear"]
+  },
+  {
+    "slug": "composite-repair",
+    "name": "Composite Repair",
+    "category": "Technical",
+    "isTransferable": true,
+    "adjacentSectors": ["Aerospace", "Maritime", "Renewable Energy"]
+  },
+  {
+    "slug": "rope-access",
+    "name": "Rope Access",
+    "category": "Safety",
+    "isTransferable": true,
+    "adjacentSectors": ["Construction", "Oil & Gas", "Maritime"]
+  },
+  {
+    "slug": "supply-chain",
+    "name": "Supply Chain Management",
+    "category": "Management",
+    "isTransferable": true,
+    "adjacentSectors": ["Construction", "Oil & Gas", "Aerospace", "Defence", "Heavy Engineering"]
+  },
+  {
+    "slug": "commercial-management",
+    "name": "Commercial Management",
+    "category": "Management",
+    "isTransferable": true,
+    "adjacentSectors": ["Construction", "Oil & Gas", "Defence", "Heavy Engineering"]
+  },
+  {
+    "slug": "contract-negotiation",
+    "name": "Contract Negotiation",
+    "category": "Management",
+    "isTransferable": true,
+    "adjacentSectors": ["Construction", "Oil & Gas", "Defence", "Heavy Engineering"]
+  },
+  {
+    "slug": "incident-investigation",
+    "name": "Incident Investigation",
+    "category": "Safety",
+    "isTransferable": true,
+    "adjacentSectors": ["Oil & Gas", "Nuclear", "Aerospace", "Defence"]
+  },
+  {
+    "slug": "industry-knowledge",
+    "name": "OWE Industry Knowledge",
+    "category": "Regulatory",
+    "isTransferable": false,
+    "adjacentSectors": []
+  },
+  {
+    "slug": "technical-foundation",
+    "name": "Technical Foundation",
+    "category": "Technical",
+    "isTransferable": true,
+    "adjacentSectors": [
+      "Construction",
+      "Heavy Engineering",
+      "Oil & Gas",
+      "Nuclear",
+      "Renewable Energy",
+      "Defence"
+    ]
+  }
 ]
