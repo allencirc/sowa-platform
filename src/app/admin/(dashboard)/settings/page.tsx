@@ -394,7 +394,8 @@ function MarketingPixelsCard() {
             <h3 className="mb-1 font-semibold text-text-primary">How to verify pixel firing</h3>
             <ul className="list-disc space-y-1 pl-5">
               <li>
-                Open browser Dev Tools &gt; Network tab, filter by "fbevents" or "insight.min.js".
+                Open browser Dev Tools &gt; Network tab, filter by &ldquo;fbevents&rdquo; or
+                &ldquo;insight.min.js&rdquo;.
               </li>
               <li>Accept marketing cookies on the site, then reload.</li>
               <li>You should see the pixel script load and fire initial events.</li>
