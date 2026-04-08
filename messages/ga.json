@@ -148,6 +148,35 @@
         "description": "[TODO] Enrol your team in accredited courses from leading Irish and international training providers."
       }
     },
+    "teamAssessment": {
+      "title": "[TODO] Team Skills Assessment",
+      "description": "[TODO] Create a team assessment to benchmark your workforce's offshore wind competencies. Share a link with your team, and receive an anonymised AI-generated training report when enough responses are in.",
+      "features": [
+        "[TODO] Each team member completes the same 5-minute diagnostic",
+        "[TODO] Results are fully anonymised — you see aggregate data only",
+        "[TODO] AI-generated training recommendations based on team gaps",
+        "[TODO] Matched course suggestions from the SOWA training directory"
+      ],
+      "form": {
+        "teamName": "[TODO] Team / Organisation Name",
+        "teamNamePlaceholder": "[TODO] e.g. Atlantic Energy — Marine Ops Team",
+        "managerEmail": "[TODO] Your Email Address",
+        "managerEmailPlaceholder": "manager@company.com",
+        "responseThreshold": "[TODO] Notify Me After",
+        "responseThresholdHelp": "[TODO] Number of completed assessments before we email your team report.",
+        "gdprConsent": "[TODO] I consent to SOWA processing this data in accordance with the",
+        "gdprPrivacyLink": "[TODO] Privacy Policy",
+        "submit": "[TODO] Create Team Assessment",
+        "submitting": "[TODO] Creating...",
+        "successTitle": "[TODO] Team Assessment Created",
+        "successDescription": "[TODO] Share the link below with your team members. We've also emailed you a private link to your team report dashboard.",
+        "teamLinkLabel": "[TODO] Team Assessment Link",
+        "reportLinkLabel": "[TODO] Your private report link has been emailed to you.",
+        "copyLink": "[TODO] Copy",
+        "copied": "[TODO] Copied!",
+        "createAnother": "[TODO] Create another team assessment"
+      }
+    },
     "diagnosticCta": {
       "title": "[TODO] Assess Your Team's OWE Readiness",
       "description": "[TODO] Use our diagnostic tool to evaluate your team's offshore wind skills and identify training priorities."

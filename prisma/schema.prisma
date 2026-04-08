@@ -506,3 +506,41 @@ model NotificationPreference {
   @@unique([userId, event])
   @@map("notification_preferences")
 }
+
+// ─── Team Assessment ──────────────────────────────────────
+
+model TeamAssessment {
+  id                String   @id @default(cuid())
+  token             String   @unique @default(uuid())   // Shared with team members
+  managerToken      String   @unique @default(uuid())   // Private — manager report access
+  teamName          String
+  managerEmail      String
+  responseThreshold Int      @default(5)
+  expiresAt         DateTime?
+  thresholdNotified Boolean  @default(false)
+  aiReport          Json?                                // Cached AI-generated report
+  reportGeneratedAt DateTime?
+
+  responses TeamResponse[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([token])
+  @@index([managerToken])
+  @@map("team_assessments")
+}
+
+model TeamResponse {
+  id               String         @id @default(cuid())
+  teamAssessment   TeamAssessment @relation(fields: [teamAssessmentId], references: [id], onDelete: Cascade)
+  teamAssessmentId String
+  scores           Json           // Record<string, number>
+  maxPossible      Json           // Record<string, number>
+  topRoleFamilies  String[]
+  topSkillGaps     String[]
+  completedAt      DateTime       @default(now())
+
+  @@index([teamAssessmentId])
+  @@map("team_responses")
+}

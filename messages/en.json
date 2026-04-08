@@ -148,6 +148,35 @@
         "description": "Enrol your team in accredited courses from leading Irish and international training providers."
       }
     },
+    "teamAssessment": {
+      "title": "Team Skills Assessment",
+      "description": "Create a team assessment to benchmark your workforce's offshore wind competencies. Share a link with your team, and receive an anonymised AI-generated training report when enough responses are in.",
+      "features": [
+        "Each team member completes the same 5-minute diagnostic",
+        "Results are fully anonymised — you see aggregate data only",
+        "AI-generated training recommendations based on team gaps",
+        "Matched course suggestions from the SOWA training directory"
+      ],
+      "form": {
+        "teamName": "Team / Organisation Name",
+        "teamNamePlaceholder": "e.g. Atlantic Energy — Marine Ops Team",
+        "managerEmail": "Your Email Address",
+        "managerEmailPlaceholder": "manager@company.com",
+        "responseThreshold": "Notify Me After",
+        "responseThresholdHelp": "Number of completed assessments before we email your team report.",
+        "gdprConsent": "I consent to SOWA processing this data in accordance with the",
+        "gdprPrivacyLink": "Privacy Policy",
+        "submit": "Create Team Assessment",
+        "submitting": "Creating...",
+        "successTitle": "Team Assessment Created",
+        "successDescription": "Share the link below with your team members. We've also emailed you a private link to your team report dashboard.",
+        "teamLinkLabel": "Team Assessment Link",
+        "reportLinkLabel": "Your private report link has been emailed to you.",
+        "copyLink": "Copy",
+        "copied": "Copied!",
+        "createAnother": "Create another team assessment"
+      }
+    },
     "diagnosticCta": {
       "title": "Assess Your Team's OWE Readiness",
       "description": "Use our diagnostic tool to evaluate your team's offshore wind skills and identify training priorities."
