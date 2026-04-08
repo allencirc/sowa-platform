@@ -21,6 +21,7 @@ import {
   Image,
   ClipboardList,
   Trash2,
+  Stethoscope,
   X,
   type LucideIcon,
 } from "lucide-react";
@@ -86,6 +87,12 @@ const navItems: NavItem[] = [
     href: "/admin/analytics",
     icon: BarChart3,
     roles: ["ADMIN", "EDITOR", "VIEWER"],
+  },
+  {
+    label: "Diagnostic Insights",
+    href: "/admin/analytics/diagnostic",
+    icon: Stethoscope,
+    roles: ["ADMIN", "EDITOR"],
   },
   {
     label: "Users",

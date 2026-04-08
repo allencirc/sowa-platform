@@ -1,4 +1,5 @@
-import { BarChart3 } from "lucide-react";
+import Link from "next/link";
+import { BarChart3, Stethoscope, ArrowRight } from "lucide-react";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { fetchGa4Overview } from "@/lib/integrations/ga4";
@@ -41,6 +42,23 @@ export default async function AdminAnalyticsPage() {
           </p>
         </div>
       </div>
+
+      {/* Diagnostic Insights link */}
+      <Link
+        href="/admin/analytics/diagnostic"
+        className="mb-6 flex items-center justify-between rounded-xl border border-secondary/20 bg-secondary/5 px-6 py-4 transition-colors hover:bg-secondary/10"
+      >
+        <div className="flex items-center gap-3">
+          <Stethoscope className="h-5 w-5 text-secondary-dark" />
+          <div>
+            <p className="text-sm font-semibold text-text-primary">Diagnostic Insights</p>
+            <p className="text-xs text-text-secondary">
+              Skill gaps, role family trends, and completion analytics from the diagnostic tool.
+            </p>
+          </div>
+        </div>
+        <ArrowRight className="h-4 w-4 text-secondary-dark" />
+      </Link>
 
       <AnalyticsDashboard
         initialGa4={ga4}
