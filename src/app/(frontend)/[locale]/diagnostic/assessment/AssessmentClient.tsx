@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useCallback, useEffect, useRef, useMemo, useLayoutEffect } from "react";
-import { useRouter, useParams } from "next/navigation";
-import { ArrowLeft, ArrowRight, Sparkles } from "lucide-react";
+import { useRouter, useParams, useSearchParams } from "next/navigation";
+import { ArrowLeft, ArrowRight, Sparkles, Users } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { ProgressBar } from "@/components/diagnostic/ProgressBar";
@@ -44,8 +44,26 @@ export default function AssessmentClient({
 }: AssessmentClientProps) {
   const router = useRouter();
   const params = useParams();
+  const searchParams = useSearchParams();
   const locale = typeof params?.locale === "string" ? params.locale : "";
   const totalQuestions = questions.length;
+
+  // Team mode: detected from ?team=TOKEN query param
+  const teamToken = searchParams.get("team");
+  const [teamName, setTeamName] = useState<string | null>(null);
+
+  // Fetch team info on mount if team token is present
+  useEffect(() => {
+    if (!teamToken) return;
+    fetch(`/api/team/${teamToken}`)
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data?.teamName) setTeamName(data.teamName);
+      })
+      .catch(() => {
+        // Team lookup failed — continue as individual assessment
+      });
+  }, [teamToken]);
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string | string[]>>({});
@@ -117,6 +135,17 @@ export default function AssessmentClient({
           recommended_courses_count: res.recommendedCourses.length,
         });
 
+        // If in team mode, submit to team endpoint (fire-and-forget)
+        if (teamToken) {
+          fetch(`/api/team/${teamToken}/respond`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ answers: finalAnswers }),
+          }).catch(() => {
+            // Team submission failed — individual results still shown
+          });
+        }
+
         // Update the URL so the result is shareable and reload-safe.
         // We use history.replaceState rather than router.replace so we
         // don't trigger a full Next navigation — the in-memory result
@@ -131,7 +160,7 @@ export default function AssessmentClient({
         }
       }, 1500);
     },
-    [questions, allSkills, allCareers, allCourses, locale],
+    [questions, allSkills, allCareers, allCourses, locale, teamToken],
   );
 
   const handleNext = useCallback(() => {
@@ -277,6 +306,21 @@ export default function AssessmentClient({
         aria-atomic="true"
         className="sr-only"
       />
+
+      {/* Team mode banner */}
+      {teamName && (
+        <div className="bg-secondary/10 border-b border-secondary/20">
+          <Container>
+            <div className="flex items-center gap-3 py-3 text-sm text-secondary-dark">
+              <Users className="h-4 w-4 flex-shrink-0" />
+              <span>
+                You&apos;re completing this as part of <strong>{teamName}</strong>&apos;s team
+                assessment. Your individual results will remain private.
+              </span>
+            </div>
+          </Container>
+        </div>
+      )}
 
       <div className="bg-white border-b border-gray-100 sticky top-0 z-20">
         <Container>

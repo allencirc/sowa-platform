@@ -370,6 +370,18 @@ export const transferableSkillsSchema = z.object({
   sector: AdjacentSectorEnum.optional(),
 });
 
+// ─── Team Assessment schemas ─────────────────────────────
+
+export const createTeamAssessmentSchema = z.object({
+  teamName: z.string().min(1, "Team name is required").max(200),
+  managerEmail: z.string().email("Valid email is required"),
+  responseThreshold: z.number().int().min(1).max(500),
+  expiresAt: z.string().datetime().optional(),
+  gdprConsent: z.boolean().refine((val) => val === true, {
+    message: "You must consent to data processing",
+  }),
+});
+
 // ─── Diagnostic schemas ──────────────────────────────────
 
 export const diagnosticAnswersSchema = z.object({

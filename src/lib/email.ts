@@ -167,3 +167,73 @@ export function contentPublished(
     `),
   };
 }
+
+// ─── Team Assessment Email Templates ─────────────────────
+
+export function teamCreated(
+  teamName: string,
+  teamLink: string,
+  reportLink: string,
+): { subject: string; html: string } {
+  return {
+    subject: `Your SOWA Team Assessment is ready: ${teamName}`,
+    html: wrap(`
+      <h2 style="color:#1A1A2E;font-size:18px;margin:0 0 12px;">Team Assessment Created</h2>
+      <p style="color:#6B7280;margin:0 0 16px;line-height:1.5;">
+        Your team assessment <strong>"${teamName}"</strong> has been set up. Share the link below with your team members to get started.
+      </p>
+
+      <div style="background:#F7F9FC;border-left:4px solid #00A878;padding:16px;border-radius:4px;margin:0 0 16px;">
+        <p style="margin:0 0 8px;font-size:13px;font-weight:600;color:#6B7280;">Team Assessment Link</p>
+        <p style="margin:0;word-break:break-all;">
+          <a href="${teamLink}" style="color:#4A90D9;text-decoration:none;font-weight:600;">${teamLink}</a>
+        </p>
+        <p style="margin:8px 0 0;font-size:12px;color:#9CA3AF;">Share this link with your team members. Each person completes the assessment individually.</p>
+      </div>
+
+      <div style="background:#F7F9FC;border-left:4px solid #4A90D9;padding:16px;border-radius:4px;margin:0 0 16px;">
+        <p style="margin:0 0 8px;font-size:13px;font-weight:600;color:#6B7280;">Your Private Report Link</p>
+        <p style="margin:0;word-break:break-all;">
+          <a href="${reportLink}" style="color:#4A90D9;text-decoration:none;font-weight:600;">${reportLink}</a>
+        </p>
+        <p style="margin:8px 0 0;font-size:12px;color:#9CA3AF;">Bookmark this link — it's your private view of the aggregated team results. Do not share it with team members if you want results to remain anonymised.</p>
+      </div>
+
+      <p style="color:#6B7280;margin:0;line-height:1.5;">
+        We'll email you again when enough responses have been received to generate your team training report.
+      </p>
+    `),
+  };
+}
+
+export function teamThresholdReached(
+  teamName: string,
+  responseCount: number,
+  reportLink: string,
+  aiSummaryPreview: string,
+): { subject: string; html: string } {
+  return {
+    subject: `Team Assessment Ready: ${teamName} (${responseCount} responses)`,
+    html: wrap(`
+      <h2 style="color:#1A1A2E;font-size:18px;margin:0 0 12px;">Your Team Report is Ready</h2>
+      <p style="color:#6B7280;margin:0 0 16px;line-height:1.5;">
+        <strong>${responseCount}</strong> team members have completed the assessment for <strong>"${teamName}"</strong>. Your AI-generated training needs analysis is ready to review.
+      </p>
+
+      <div style="background:#F7F9FC;border-left:4px solid #00A878;padding:16px;border-radius:4px;margin:0 0 16px;">
+        <p style="margin:0 0 8px;font-size:13px;font-weight:600;color:#6B7280;">Report Preview</p>
+        <p style="margin:0;color:#1A1A2E;line-height:1.5;font-size:14px;">${aiSummaryPreview}</p>
+      </div>
+
+      <div style="text-align:center;margin:24px 0;">
+        <a href="${reportLink}" style="display:inline-block;background-color:#00A878;color:#FFFFFF;padding:12px 32px;border-radius:8px;text-decoration:none;font-weight:600;font-size:16px;">
+          View Full Team Report
+        </a>
+      </div>
+
+      <p style="color:#6B7280;margin:0;line-height:1.5;font-size:13px;">
+        Team members can continue completing the assessment — your report will update with new responses.
+      </p>
+    `),
+  };
+}
