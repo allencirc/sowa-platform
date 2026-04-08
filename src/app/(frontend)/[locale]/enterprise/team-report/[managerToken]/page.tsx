@@ -39,6 +39,14 @@ export default async function TeamReportPage({
 
   const aggregated = aggregateTeamResults(team.teamName, responseData);
 
+  // Display-friendly enum values
+  const formatDisplay: Record<string, string> = {
+    IN_PERSON: "In-Person",
+    ONLINE: "Online",
+    BLENDED: "Blended",
+    SELF_PACED: "Self-Paced",
+  };
+
   // Fetch courses that match team gaps for the "Suggested Courses" section
   const gapSlugs = new Set(
     aggregated.topTeamGaps
@@ -71,7 +79,7 @@ export default async function TeamReportPage({
           provider: c.provider,
           cost: c.cost,
           duration: c.duration,
-          deliveryFormat: c.deliveryFormat,
+          deliveryFormat: formatDisplay[c.deliveryFormat] ?? c.deliveryFormat,
           matchedSkills: matched.map(getSkillDisplayName),
           relevance: matched.length,
         };

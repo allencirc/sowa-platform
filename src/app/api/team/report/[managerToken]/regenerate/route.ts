@@ -43,13 +43,19 @@ export async function POST(
     const courseRows = await prisma.course.findMany({
       include: { skills: { include: { skill: true } } },
     });
+    const formatDisplay: Record<string, string> = {
+      IN_PERSON: "In-Person",
+      ONLINE: "Online",
+      BLENDED: "Blended",
+      SELF_PACED: "Self-Paced",
+    };
     const courses = courseRows.map((c) => ({
       title: c.title,
       provider: c.provider,
       skills: c.skills.map((s) => s.skill.slug),
       cost: c.cost,
       duration: c.duration,
-      deliveryFormat: c.deliveryFormat,
+      deliveryFormat: formatDisplay[c.deliveryFormat] ?? c.deliveryFormat,
     }));
 
     const aiReport = await generateTeamReport(aggregated, courses);
