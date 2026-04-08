@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Wind } from "lucide-react";
 import { buttonClassName } from "@/components/ui/Button";
 
@@ -31,8 +32,11 @@ export function HeroSection() {
       className="relative min-h-[70vh] overflow-hidden bg-primary bg-cover bg-center text-text-inverse"
       style={{ backgroundImage: `url(${HERO_IMAGE_URL})` }}
     >
-      {/* Overlay gradient — heavier on the left for text contrast, lighter on the right to show the image */}
-      <div className="absolute inset-0 bg-gradient-to-r from-[#0a1c33]/85 via-[#0a1c33]/40 via-50% to-primary/10" />
+      {/* Next.js Image — proxied through /_next/image so Arc doesn't block it.
+          CSS background-image on the section is the fallback for other browsers. */}
+      <Image src={HERO_IMAGE_URL} alt="" fill className="object-cover" sizes="100vw" priority />
+      {/* Overlay gradient — extends across most of the hero for text readability */}
+      <div className="absolute inset-0 bg-gradient-to-r from-[#0a1c33]/90 via-[#0a1c33]/60 via-60% to-primary/20" />
 
       {/* Decorative turbine silhouettes */}
       <div className="absolute inset-0 pointer-events-none select-none">
