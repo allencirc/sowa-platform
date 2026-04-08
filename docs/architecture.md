@@ -54,6 +54,7 @@ flowchart LR
     FC["Fetchcourses.ie<br/>Course feed"]:::ext
     QX["Qualifax<br/>NFQ reference data"]:::ext
     PIX["Meta Pixel · LinkedIn Insight<br/>(optional, consent-gated)"]:::extOpt
+    SMTP["SMTP Server<br/>Email notifications<br/>(optional)"]:::extOpt
   end
 
   PUB  -- "HTTPS" --> CDN
@@ -81,6 +82,7 @@ flowchart LR
   APIR ==> FC
   APIR ==> QX
   PUBR -.-> PIX
+  APIR -.-> SMTP
 
   APP --> SI
 
@@ -145,6 +147,7 @@ Three boundaries are enforced:
 | Utilities     | clsx + tailwind-merge      | 2.1 / 3.5     | Conditional class names with Tailwind conflict resolution via `cn()` helper                                |
 | Media Storage | Vercel Blob (@vercel/blob) | 2.3.3         | Cloud object storage for uploaded media. EU-region, encrypted at rest, served via edge CDN                 |
 | Export        | ExcelJS                    | 4.4.0         | Server-side Excel (.xlsx) generation for admin report and registration exports                             |
+| Email         | Nodemailer                 | 7.0.13        | SMTP email dispatch for content workflow notifications. Fire-and-forget, never blocks API responses        |
 
 ---
 
