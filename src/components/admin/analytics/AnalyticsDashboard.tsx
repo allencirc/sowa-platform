@@ -102,7 +102,7 @@ export function AnalyticsDashboard({
 }: DashboardProps) {
   const [report, setReport] = useState<ReportId>("overview");
   const [ga4, setGa4] = useState(initialGa4);
-  const [regsTotal, setRegsTotal] = useState(initialRegistrationsTotal);
+  const [regsTotal] = useState(initialRegistrationsTotal);
   const [regsRange, setRegsRange] = useState(initialRegistrationsRange);
   const [from, setFrom] = useState(daysAgo(initialDays));
   const [to, setTo] = useState(todayStr());

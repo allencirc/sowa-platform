@@ -38,11 +38,7 @@ export async function generateWeeklyReportHtml(): Promise<{
   subject: string;
   html: string;
 } | null> {
-  // Fetch current week + previous week for comparison
-  const [current, previous] = await Promise.all([
-    fetchGa4Overview(7),
-    fetchGa4Overview(14), // We'll subtract to get the prior week
-  ]);
+  const current = await fetchGa4Overview(7);
 
   const now = new Date();
   const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);

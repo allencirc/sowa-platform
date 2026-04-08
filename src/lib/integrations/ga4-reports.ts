@@ -22,10 +22,6 @@ type ReportResult<T> =
   | { status: "not_configured"; reason: string }
   | { status: "error"; message: string };
 
-function notConfigured(reason: string): ReportResult<never> {
-  return { status: "not_configured", reason };
-}
-
 type ConfigError =
   | { status: "not_configured"; reason: string }
   | { status: "error"; message: string };
