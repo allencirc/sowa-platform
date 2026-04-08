@@ -262,6 +262,12 @@ function mapSkill(row: AnyRecord): Skill {
     slug: row.slug as string,
     name: row.name as string,
     category: skillCategoryDisplay[row.category as string] ?? (row.category as Skill["category"]),
+    escoUri: (row.escoUri as string) ?? undefined,
+    onetCode: (row.onetCode as string) ?? undefined,
+    isTransferable: (row.isTransferable as boolean) ?? false,
+    adjacentSectors: (row.adjacentSectors as string[]) ?? [],
+    escoLevel: (row.escoLevel as number) ?? undefined,
+    escoType: (row.escoType as string) ?? undefined,
   };
 }
 
@@ -768,6 +774,36 @@ export async function getSkillsByCareer(careerSlug: string): Promise<Skill[]> {
     where: {
       careers: { some: { career: { slug: careerSlug } } },
     },
+  });
+  return rows.map((r) => mapSkill(r as unknown as AnyRecord));
+}
+
+export async function getTransferableSkills(sector?: string): Promise<Skill[]> {
+  const where: Record<string, unknown> = { isTransferable: true };
+  if (sector) {
+    where.adjacentSectors = { has: sector };
+  }
+  const rows = await prisma.skill.findMany({
+    where: where as never,
+    orderBy: { name: "asc" },
+  });
+  return rows.map((r) => mapSkill(r as unknown as AnyRecord));
+}
+
+export async function getTransferableSkillsByCareer(
+  careerSlug: string,
+  sector?: string,
+): Promise<Skill[]> {
+  const where: Record<string, unknown> = {
+    isTransferable: true,
+    careers: { some: { career: { slug: careerSlug } } },
+  };
+  if (sector) {
+    where.adjacentSectors = { has: sector };
+  }
+  const rows = await prisma.skill.findMany({
+    where: where as never,
+    orderBy: { name: "asc" },
   });
   return rows.map((r) => mapSkill(r as unknown as AnyRecord));
 }

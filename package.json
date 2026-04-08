@@ -19,6 +19,7 @@
     "db:migrate": "prisma migrate dev",
     "db:push": "prisma db push",
     "db:seed": "prisma db seed",
+    "db:seed:esco": "npx tsx prisma/seed-esco.ts",
     "db:studio": "prisma studio",
     "postinstall": "prisma generate"
   },

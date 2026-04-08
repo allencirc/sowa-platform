@@ -10,6 +10,8 @@
     "research": "Research",
     "news": "News",
     "diagnostic": "Diagnostic",
+    "enterprise": "Enterprise",
+    "contact": "Contact",
     "search": "Search",
     "getInvolved": "Get Involved",
     "openMenu": "Open menu",
@@ -56,6 +58,38 @@
     },
     "copyright": "© {year} Skillnet Offshore Wind Academy. All rights reserved."
   },
+  "contact": {
+    "title": "Contact Us",
+    "subtitle": "Have a question about offshore wind careers, training, or partnerships? We'd love to hear from you.",
+    "form": {
+      "name": "Full Name",
+      "namePlaceholder": "Your full name",
+      "email": "Email Address",
+      "emailPlaceholder": "you@example.com",
+      "organisation": "Organisation",
+      "organisationPlaceholder": "Your company or institution (optional)",
+      "subject": "Subject",
+      "subjectPlaceholder": "Select a subject...",
+      "subjects": {
+        "GENERAL": "General Inquiry",
+        "TRAINING": "Training Information",
+        "PARTNERSHIP": "Partnership",
+        "CAREER_GUIDANCE": "Career Guidance",
+        "TECHNICAL_SUPPORT": "Technical Support"
+      },
+      "message": "Message",
+      "messagePlaceholder": "How can we help you?",
+      "gdprConsent": "I consent to SOWA processing my personal data for the purpose of this inquiry. Your data will be handled in accordance with our",
+      "gdprPrivacyLink": "Privacy Policy",
+      "submit": "Send Message",
+      "submitting": "Sending..."
+    },
+    "success": {
+      "title": "Message Sent",
+      "description": "Thank you for getting in touch. We'll respond to your inquiry within 2 business days.",
+      "sendAnother": "Send another message"
+    }
+  },
   "diagnostic": {
     "title": "Skills Diagnostic",
     "intro": "Answer a few questions to discover offshore wind career pathways that fit your background.",
@@ -74,5 +108,19 @@
       "languages": "Which languages do you work in professionally?",
       "timeCommitment": "How much time per week can you commit to training?"
     }
+  },
+  "skillsBridge": {
+    "title": "Skills Bridge",
+    "subtitle": "Already working in another industry? See which of your existing skills transfer to this role and what you'll need to develop.",
+    "selectSector": "I'm coming from...",
+    "selectPlaceholder": "Select your industry",
+    "matchLabel": "{percentage}% Skills Match",
+    "matchSummary": "{matched} transferable skill(s), {gap} to develop",
+    "existingSkills": "Your Existing Skills",
+    "skillsToDevelop": "Skills to Develop",
+    "noMatch": "No direct skill matches found for this sector.",
+    "fullMatch": "Great news — your skills fully cover this role!",
+    "escoTooltip": "ESCO Level {level} — {type}",
+    "transferable": "Transferable across sectors"
   }
 }
