@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
-import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
 import { Search, Download, ChevronLeft, ChevronRight } from "lucide-react";
 import { formatDate } from "@/lib/utils";
@@ -30,12 +29,6 @@ interface RegistrationsTableProps {
   initialPage: number;
   initialLimit: number;
 }
-
-const statusColors: Record<string, "warning" | "success" | "error"> = {
-  PENDING: "warning",
-  CONFIRMED: "success",
-  CANCELLED: "error",
-};
 
 const typeOptions = [
   { label: "All Types", value: "" },
