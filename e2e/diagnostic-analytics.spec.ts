@@ -10,7 +10,6 @@ import AxeBuilder from "@axe-core/playwright";
  */
 
 const ADMIN_URL = "/admin/analytics/diagnostic";
-const LOGIN_URL = "/admin/login";
 
 // Helper: log in as admin if not already authenticated
 async function ensureAdminLogin(page: import("@playwright/test").Page) {
