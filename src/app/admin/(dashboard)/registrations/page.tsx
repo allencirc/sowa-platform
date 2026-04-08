@@ -21,6 +21,7 @@ export default async function AdminRegistrationsPage() {
     ...r,
     createdAt: r.createdAt.toISOString(),
     updatedAt: r.updatedAt.toISOString(),
+    attendedAt: r.attendedAt ? r.attendedAt.toISOString() : null,
   }));
 
   return (

@@ -60,6 +60,7 @@ export async function GET(request: NextRequest) {
       "Additional Notes",
       "GDPR Consent",
       "Status",
+      "Attended At",
       "Created At",
     ];
 
@@ -86,6 +87,7 @@ export async function GET(request: NextRequest) {
         r.additionalNotes,
         r.gdprConsent ? "Yes" : "No",
         r.status,
+        r.attendedAt ? r.attendedAt.toISOString() : "",
         r.createdAt.toISOString(),
       ]
         .map(escapeCSV)
