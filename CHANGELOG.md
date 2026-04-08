@@ -4,6 +4,41 @@ All notable changes to the SOWA platform will be documented in this file.
 
 ## Unreleased
 
+### Added — Email notifications for content workflow
+
+Editors and admins now receive email notifications when content moves
+through the publishing workflow. Notifications are sent via SMTP
+(nodemailer) and can be toggled per-user in admin Settings.
+
+- **Email dispatch abstraction** (`src/lib/email.ts`) — SMTP transport
+  with lazy singleton, `EMAIL_ENABLED` kill switch for dev safety,
+  fire-and-forget pattern (never blocks API responses). Four branded
+  HTML templates: submitted for review, approved, rejected, published.
+
+- **Content author resolution** (`src/lib/content-author.ts`) — derives
+  the original author from the earliest `ContentVersion` record, avoiding
+  schema changes to existing content models.
+
+- **Notification orchestrator** (`src/lib/notifications.ts`) — maps
+  status transitions to emails, respects per-user preferences. Triggers:
+  `IN_REVIEW` notifies all admins, `PUBLISHED` notifies the author,
+  rejection (`IN_REVIEW → DRAFT`) notifies the author with the note.
+
+- **Notification preferences API** (`/api/notification-preferences`) —
+  GET (list) and PUT (toggle) endpoints. Preferences default to enabled
+  when no row exists (zero-config for existing users).
+
+- **NotificationSettings UI** (`src/components/admin/NotificationSettings.tsx`)
+  — toggle switches in admin Settings, role-aware (admins see 4 events,
+  editors see 3). Optimistic updates with revert on failure.
+
+- **Prisma migration** `add-notification-preferences` — new
+  `NotificationPreference` model with `@@unique([userId, event])`.
+
+- **Tests** — 7 Vitest unit tests for email dispatch + templates,
+  6 for the notification orchestrator, 3 Playwright e2e tests for
+  API auth enforcement on the preferences endpoint.
+
 ### Added — Diagnostic assessment, phase 1 (engine + infrastructure)
 
 This is the first of two PRs delivering the three diagnostic enhancements

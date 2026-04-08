@@ -6,6 +6,7 @@ import { Settings, User, Shield, Bell, Globe, ExternalLink, Copy, Check } from "
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Badge } from "@/components/ui/Badge";
+import { NotificationSettings } from "@/components/admin/NotificationSettings";
 
 export default function AdminSettingsPage() {
   const { data: session } = useSession();
@@ -91,9 +92,10 @@ export default function AdminSettingsPage() {
             <Bell className="h-5 w-5 text-accent-dark" />
             <h2 className="text-lg font-semibold text-text-primary">Notifications</h2>
           </div>
-          <p className="text-sm text-text-secondary">
-            Notification preferences will be available in a future update.
+          <p className="mb-4 text-sm text-text-secondary">
+            Choose which email notifications you receive for content workflow events.
           </p>
+          <NotificationSettings />
         </div>
 
         {/* SEO Tools */}

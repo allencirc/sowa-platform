@@ -4,6 +4,7 @@ import { applyRateLimit, parseBody, errorResponse } from "@/lib/api-utils";
 import { requireRole } from "@/lib/auth-utils";
 import { isValidTransition, createContentVersion } from "@/lib/versions";
 import { runScheduledPublishing } from "@/lib/scheduled-publish";
+import { notifyStatusChange } from "@/lib/notifications";
 import { z } from "zod";
 import { ContentStatusEnum, ContentTypeEnum } from "@/lib/validations";
 import type { ContentStatus, ContentType } from "@/generated/prisma/client";
@@ -122,6 +123,17 @@ export async function POST(request: NextRequest) {
       snapshot: updated as Record<string, unknown>,
       changedById: user.id!,
       changeNote: changeNote ?? `Status changed: ${currentStatus} → ${newStatus}`,
+    });
+
+    // Fire-and-forget email notifications
+    void notifyStatusChange({
+      contentType: contentType as ContentType,
+      contentId: existing.id,
+      contentTitle: existing.title ?? slug,
+      oldStatus: currentStatus,
+      newStatus,
+      rejectionNote: rejectionNote ?? undefined,
+      actorId: user.id!,
     });
 
     return NextResponse.json({
