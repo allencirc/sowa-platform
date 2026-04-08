@@ -19,6 +19,7 @@ export function Header({ locale, dict }: { locale: Locale; dict: Dictionary }) {
     { label: dict.nav.research, href: `/${locale}/research` },
     { label: dict.nav.news, href: `/${locale}/news` },
     { label: dict.nav.diagnostic, href: `/${locale}/diagnostic` },
+    { label: dict.nav.contact, href: `/${locale}/contact` },
   ];
 
   return (

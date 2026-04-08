@@ -19,6 +19,7 @@ const PUBLIC_ROUTES: string[] = [
   "/diagnostic",
   "/diagnostic/assessment",
   "/news",
+  "/contact",
   "/search",
 ];
 
