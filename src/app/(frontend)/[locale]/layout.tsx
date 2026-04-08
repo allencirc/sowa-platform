@@ -3,6 +3,7 @@ import { type ReactNode } from "react";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { getDictionary, isLocale, locales, type Locale } from "@/lib/i18n";
+import { getSiteSettings } from "@/lib/queries";
 
 const organizationJsonLd = {
   "@context": "https://schema.org",
@@ -57,7 +58,7 @@ export default async function FrontendLayout({
   const { locale: rawLocale } = await params;
   if (!isLocale(rawLocale)) notFound();
   const locale: Locale = rawLocale;
-  const dict = await getDictionary(locale);
+  const [dict, siteSettings] = await Promise.all([getDictionary(locale), getSiteSettings()]);
 
   return (
     <>
@@ -77,7 +78,12 @@ export default async function FrontendLayout({
       <main id="main-content" className="flex-1">
         {children}
       </main>
-      <Footer locale={locale} dict={dict} />
+      <Footer
+        locale={locale}
+        dict={dict}
+        customFooterText={siteSettings.footerText}
+        socialLinks={siteSettings.socialLinks}
+      />
     </>
   );
 }

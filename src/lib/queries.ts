@@ -1,4 +1,6 @@
+import { unstable_cache } from "next/cache";
 import { prisma } from "./prisma";
+import { DEFAULT_SITE_SETTINGS, type SiteSettings } from "./theme-defaults";
 import type {
   Career,
   Course,
@@ -971,3 +973,33 @@ export async function globalSearch(query: string): Promise<SearchResult[]> {
 
   return results;
 }
+
+// ─── Site Settings ──────────────────────────────────────
+
+export const getSiteSettings = unstable_cache(
+  async (): Promise<SiteSettings> => {
+    const row = await prisma.siteSettings.findUnique({
+      where: { id: "default" },
+    });
+    if (!row) return { ...DEFAULT_SITE_SETTINGS };
+    return {
+      colorPrimary: row.colorPrimary ?? DEFAULT_SITE_SETTINGS.colorPrimary,
+      colorPrimaryLight: row.colorPrimaryLight ?? DEFAULT_SITE_SETTINGS.colorPrimaryLight,
+      colorPrimaryDark: row.colorPrimaryDark ?? DEFAULT_SITE_SETTINGS.colorPrimaryDark,
+      colorSecondary: row.colorSecondary ?? DEFAULT_SITE_SETTINGS.colorSecondary,
+      colorSecondaryLight: row.colorSecondaryLight ?? DEFAULT_SITE_SETTINGS.colorSecondaryLight,
+      colorSecondaryDark: row.colorSecondaryDark ?? DEFAULT_SITE_SETTINGS.colorSecondaryDark,
+      colorAccent: row.colorAccent ?? DEFAULT_SITE_SETTINGS.colorAccent,
+      colorAccentLight: row.colorAccentLight ?? DEFAULT_SITE_SETTINGS.colorAccentLight,
+      colorAccentDark: row.colorAccentDark ?? DEFAULT_SITE_SETTINGS.colorAccentDark,
+      headingFont: row.headingFont ?? DEFAULT_SITE_SETTINGS.headingFont,
+      bodyFont: row.bodyFont ?? DEFAULT_SITE_SETTINGS.bodyFont,
+      logoUrl: row.logoUrl ?? DEFAULT_SITE_SETTINGS.logoUrl,
+      faviconUrl: row.faviconUrl ?? DEFAULT_SITE_SETTINGS.faviconUrl,
+      footerText: row.footerText ?? DEFAULT_SITE_SETTINGS.footerText,
+      socialLinks: (row.socialLinks as Record<string, string>) ?? DEFAULT_SITE_SETTINGS.socialLinks,
+    };
+  },
+  ["site-settings"],
+  { revalidate: false, tags: ["site-settings"] },
+);

@@ -452,3 +452,40 @@ export const contactFormSchema = z.object({
     message: "You must consent to data processing to submit this form",
   }),
 });
+
+// ─── Site Settings schemas ──────────────────────────────
+
+import { CURATED_FONTS } from "./theme-defaults";
+
+const hexColorRegex = /^#[0-9a-fA-F]{6}$/;
+
+export const CuratedFontEnum = z.enum(CURATED_FONTS as unknown as [string, ...string[]]);
+
+const socialLinksSchema = z
+  .object({
+    twitter: z.string().url().optional().or(z.literal("")),
+    linkedin: z.string().url().optional().or(z.literal("")),
+    facebook: z.string().url().optional().or(z.literal("")),
+    youtube: z.string().url().optional().or(z.literal("")),
+    instagram: z.string().url().optional().or(z.literal("")),
+  })
+  .optional()
+  .nullable();
+
+export const updateSiteSettingsSchema = z.object({
+  colorPrimary: z.string().regex(hexColorRegex, "Must be a valid hex color").optional().nullable(),
+  colorPrimaryLight: z.string().regex(hexColorRegex).optional().nullable(),
+  colorPrimaryDark: z.string().regex(hexColorRegex).optional().nullable(),
+  colorSecondary: z.string().regex(hexColorRegex).optional().nullable(),
+  colorSecondaryLight: z.string().regex(hexColorRegex).optional().nullable(),
+  colorSecondaryDark: z.string().regex(hexColorRegex).optional().nullable(),
+  colorAccent: z.string().regex(hexColorRegex).optional().nullable(),
+  colorAccentLight: z.string().regex(hexColorRegex).optional().nullable(),
+  colorAccentDark: z.string().regex(hexColorRegex).optional().nullable(),
+  headingFont: CuratedFontEnum.optional().nullable(),
+  bodyFont: CuratedFontEnum.optional().nullable(),
+  logoUrl: z.string().url().optional().nullable().or(z.literal("")),
+  faviconUrl: z.string().url().optional().nullable().or(z.literal("")),
+  footerText: z.string().max(1000).optional().nullable(),
+  socialLinks: socialLinksSchema,
+});

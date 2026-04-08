@@ -4,6 +4,7 @@ import { headers } from "next/headers";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { CookieConsent } from "@/components/layout/CookieConsent";
 import { NonceProvider } from "@/components/NonceProvider";
+import { ThemeProvider } from "@/components/ThemeProvider";
 import { defaultLocale, isLocale, localeBcp47, type Locale } from "@/lib/i18n";
 import "./globals.css";
 
@@ -125,6 +126,7 @@ export default async function RootLayout({
         >
           Skip to main content
         </a>
+        <ThemeProvider />
         <NonceProvider nonce={nonce}>
           {children}
           <CookieConsent />
