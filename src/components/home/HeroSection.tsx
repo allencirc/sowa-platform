@@ -1,6 +1,5 @@
-import Link from "next/link";
 import { Wind } from "lucide-react";
-import { buttonClassName } from "@/components/ui/Button";
+import { AIChatInput } from "@/components/ui/ai-chat-input";
 
 function TurbineSVG({ className }: { className?: string }) {
   return (
@@ -55,30 +54,8 @@ export function HeroSection() {
             sector.
           </p>
 
-          <div className="mt-10 flex flex-wrap gap-4">
-            <Link href="/careers" className={buttonClassName("secondary", "lg")}>
-              Explore Careers
-            </Link>
-            <Link
-              href="/diagnostic"
-              className={buttonClassName(
-                "outline",
-                "lg",
-                "border-white/60 text-white hover:bg-white hover:text-primary",
-              )}
-            >
-              Take Skills Assessment
-            </Link>
-            <Link
-              href="/enterprise"
-              className={buttonClassName(
-                "outline",
-                "lg",
-                "border-white/60 text-white hover:bg-white hover:text-primary",
-              )}
-            >
-              Enterprise Support
-            </Link>
+          <div className="mt-10">
+            <AIChatInput />
           </div>
         </div>
       </div>

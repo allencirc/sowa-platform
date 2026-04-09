@@ -15,7 +15,8 @@ export function Card({ children, className, hover = true, image, badges, onClick
     <div
       className={cn(
         "bg-surface-card rounded-xl border border-gray-100 overflow-hidden",
-        hover && "transition-shadow duration-200 hover:shadow-lg hover:shadow-primary/5",
+        hover &&
+          "transition-[box-shadow,transform] duration-200 hover:shadow-lg hover:shadow-primary/5 hover:-translate-y-0.5",
         onClick && "cursor-pointer",
         className,
       )}

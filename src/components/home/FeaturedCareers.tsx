@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Container } from "@/components/ui/Container";
+import { StaggeredList } from "@/components/ui/StaggeredList";
 import { CareerCard } from "@/components/careers/CareerCard";
 import { getAllCareers } from "@/lib/queries";
 
@@ -27,7 +28,7 @@ export async function FeaturedCareers() {
         </div>
 
         {/* Horizontal scroll on small, grid on large */}
-        <div className="flex gap-5 overflow-x-auto pb-4 snap-x snap-mandatory -mx-4 px-4 sm:mx-0 sm:px-0 lg:grid lg:grid-cols-4 lg:overflow-visible lg:pb-0">
+        <StaggeredList className="flex gap-5 overflow-x-auto pb-4 snap-x snap-mandatory -mx-4 px-4 sm:mx-0 sm:px-0 lg:grid lg:grid-cols-4 lg:overflow-visible lg:pb-0">
           {careers.map((career) => (
             <CareerCard
               key={career.slug}
@@ -35,7 +36,7 @@ export async function FeaturedCareers() {
               className="min-w-[280px] snap-start shrink-0 lg:min-w-0"
             />
           ))}
-        </div>
+        </StaggeredList>
 
         <div className="mt-6 sm:hidden">
           <Link

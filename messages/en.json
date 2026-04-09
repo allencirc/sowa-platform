@@ -225,5 +225,46 @@
     "fullMatch": "Great news — your skills fully cover this role!",
     "escoTooltip": "ESCO Level {level} — {type}",
     "transferable": "Transferable across sectors"
+  },
+  "subscription": {
+    "title": "Stay Updated",
+    "subtitle": "Get the latest offshore wind career news, training opportunities, and events delivered to your inbox.",
+    "emailLabel": "Email Address",
+    "emailPlaceholder": "you@example.com",
+    "nameLabel": "Name (optional)",
+    "namePlaceholder": "Your name",
+    "topicsLabel": "Topics of Interest",
+    "topics": {
+      "CAREERS": "Careers",
+      "TRAINING": "Training",
+      "EVENTS": "Events",
+      "RESEARCH": "Research",
+      "NEWS": "News",
+      "DIAGNOSTIC": "Skills Diagnostic"
+    },
+    "frequencyLabel": "Email Frequency",
+    "frequencies": {
+      "WEEKLY": "Weekly digest",
+      "MONTHLY": "Monthly digest"
+    },
+    "gdprConsent": "I agree to receive emails and accept the {privacyLink}.",
+    "gdprPrivacyLink": "Privacy Policy",
+    "subscribe": "Subscribe",
+    "subscribing": "Subscribing...",
+    "successTitle": "Check Your Inbox",
+    "successMessage": "We've sent a verification link to {email}. Click it to confirm your subscription.",
+    "errorGeneric": "Something went wrong. Please try again.",
+    "errorAlreadySubscribed": "This email is already subscribed.",
+    "preferencesTitle": "Manage Preferences",
+    "preferencesSubtitle": "Update your subscription topics and frequency.",
+    "preferencesUpdated": "Your preferences have been updated.",
+    "unsubscribeTitle": "Unsubscribed",
+    "unsubscribeMessage": "You've been successfully unsubscribed. We're sorry to see you go.",
+    "confirmedTitle": "Subscription Confirmed",
+    "confirmedMessage": "Your email has been verified. You'll start receiving updates soon.",
+    "errorTitle": "Something Went Wrong",
+    "errorMessage": "This link may have expired or is invalid. Please try subscribing again.",
+    "compactTitle": "Subscribe to Updates",
+    "compactSubtitle": "Stay informed about the latest in offshore wind energy."
   }
 }

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Container } from "@/components/ui/Container";
+import { StaggeredList } from "@/components/ui/StaggeredList";
 import { EventCard } from "@/components/events/EventCard";
 import { getAllEvents } from "@/lib/queries";
 
@@ -28,11 +29,11 @@ export async function UpcomingEvents() {
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <StaggeredList className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {events.map((event) => (
             <EventCard key={event.slug} event={event} />
           ))}
-        </div>
+        </StaggeredList>
 
         <div className="mt-6 sm:hidden">
           <Link

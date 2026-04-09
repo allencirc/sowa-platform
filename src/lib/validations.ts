@@ -465,6 +465,45 @@ export const contactFormSchema = z.object({
   }),
 });
 
+// ─── Subscription schemas ───────────────────────────────
+
+export const SubscriptionTopicEnum = z.enum([
+  "CAREERS",
+  "TRAINING",
+  "EVENTS",
+  "RESEARCH",
+  "NEWS",
+  "DIAGNOSTIC",
+]);
+
+export const SubscriptionFrequencyEnum = z.enum(["WEEKLY", "MONTHLY"]);
+
+export const createSubscriptionSchema = z.object({
+  email: z.string().email("Valid email is required"),
+  name: z.string().max(200).optional().or(z.literal("")),
+  topics: z.array(SubscriptionTopicEnum).min(1, "Select at least one topic"),
+  frequency: SubscriptionFrequencyEnum.default("WEEKLY"),
+  gdprConsent: z.boolean().refine((val) => val === true, {
+    message: "You must consent to data processing to subscribe",
+  }),
+});
+
+export const updatePreferencesSchema = z.object({
+  token: z.string().min(1, "Token is required"),
+  topics: z.array(SubscriptionTopicEnum).min(1, "Select at least one topic"),
+  frequency: SubscriptionFrequencyEnum,
+});
+
+export const tokenQuerySchema = z.object({
+  token: z.string().min(1, "Token is required"),
+});
+
+export const subscriberFiltersSchema = paginationSchema.merge(sortSchema).extend({
+  topic: SubscriptionTopicEnum.optional(),
+  verified: z.coerce.boolean().optional(),
+  search: z.string().optional(),
+});
+
 // ─── Site Settings schemas ──────────────────────────────
 
 import { CURATED_FONTS } from "./theme-defaults";

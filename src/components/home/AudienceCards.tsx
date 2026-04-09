@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Compass, GraduationCap, Building2, HandHeart, ArrowRight } from "lucide-react";
 import { Container } from "@/components/ui/Container";
+import { StaggeredList } from "@/components/ui/StaggeredList";
 
 const audiences = [
   {
@@ -33,12 +34,12 @@ export function AudienceCards() {
   return (
     <section className="py-16 sm:py-20 bg-surface">
       <Container>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <StaggeredList className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {audiences.map((item) => (
             <Link
               key={item.title}
               href={item.href}
-              className="group flex flex-col bg-surface-card rounded-xl border border-gray-100 p-6 transition-all duration-200 hover:shadow-lg hover:shadow-primary/5 hover:-translate-y-1"
+              className="group flex flex-col bg-surface-card rounded-xl border border-gray-100 p-6 transition-[box-shadow,transform] duration-200 hover:shadow-lg hover:shadow-primary/5 hover:-translate-y-1"
             >
               <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-secondary/10 text-secondary-dark group-hover:bg-secondary group-hover:text-white transition-colors">
                 <item.icon className="h-6 w-6" />
@@ -50,11 +51,11 @@ export function AudienceCards() {
 
               <div className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-accent-dark group-hover:text-accent-dark transition-colors">
                 Learn more
-                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </div>
             </Link>
           ))}
-        </div>
+        </StaggeredList>
       </Container>
     </section>
   );

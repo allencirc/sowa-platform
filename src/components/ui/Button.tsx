@@ -25,7 +25,7 @@ const sizeStyles: Record<ButtonSize, string> = {
 };
 
 const BUTTON_BASE =
-  "inline-flex items-center justify-center gap-2 rounded-lg font-semibold transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-50 disabled:pointer-events-none cursor-pointer";
+  "inline-flex items-center justify-center gap-2 rounded-lg font-semibold transition-[color,background-color,border-color,transform] duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-50 disabled:pointer-events-none cursor-pointer active:scale-[0.97] motion-reduce:active:scale-100";
 
 /**
  * Returns the class string for a Button visual style. Use this to style a

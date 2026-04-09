@@ -50,12 +50,14 @@ export function MobileMenu({ open, onClose, links }: MobileMenuProps) {
         aria-hidden="true"
       />
 
-      {/* Drawer */}
+      {/* Drawer — Emil's custom drawer easing, asymmetric timing (exit faster) */}
       <div
         id="mobile-menu"
         className={cn(
-          "fixed inset-y-0 right-0 w-80 max-w-full bg-white z-50 shadow-2xl transition-transform duration-300 ease-out lg:hidden",
-          open ? "translate-x-0" : "translate-x-full",
+          "fixed inset-y-0 right-0 w-80 max-w-full bg-white z-50 shadow-2xl transition-transform will-change-transform lg:hidden",
+          open
+            ? "translate-x-0 duration-300 [transition-timing-function:cubic-bezier(0.32,0.72,0,1)]"
+            : "translate-x-full duration-200 ease-out",
         )}
         role="dialog"
         aria-modal="true"

@@ -1,7 +1,9 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
 import { Container } from "@/components/ui/Container";
+import { SubscriptionWidget } from "@/components/frontend/SubscriptionWidget";
 import { getAllCourses } from "@/lib/queries";
+import { getDictionary, isLocale, type Locale } from "@/lib/i18n";
 import { CourseListingClient } from "./CourseListingClient";
 
 export const metadata: Metadata = {
@@ -23,8 +25,10 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function TrainingPage() {
-  const courses = await getAllCourses();
+export default async function TrainingPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale: rawLocale } = await params;
+  const locale: Locale = isLocale(rawLocale) ? rawLocale : "en";
+  const [courses, dict] = await Promise.all([getAllCourses(), getDictionary(locale)]);
 
   return (
     <>
@@ -49,6 +53,9 @@ export default async function TrainingPage() {
           </Suspense>
         </Container>
       </section>
+
+      {/* Subscribe CTA */}
+      <SubscriptionWidget dict={dict.subscription} locale={locale} variant="compact" />
     </>
   );
 }

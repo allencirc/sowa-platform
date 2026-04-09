@@ -438,6 +438,12 @@ The seeded dataset includes:
 
 ---
 
+## WORD DOCUMENT EDITING
+
+When inserting text into Word documents, use the Word MCP's `insert_text_at` tool with a marker string to place content at the correct location. Do not unpack/repack the `.docx` XML. For formatting, use `select_all` first then `format_text`.
+
+---
+
 ## GIT & DEPLOYMENT WORKFLOW
 
 - **Branch + PR for all non-trivial changes.** Create a feature branch, push, open a PR via `gh pr create`. Only typos/copy tweaks go directly to `main`.

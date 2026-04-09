@@ -225,5 +225,46 @@
     "fullMatch": "[TODO] Great news — your skills fully cover this role!",
     "escoTooltip": "[TODO] ESCO Level {level} — {type}",
     "transferable": "[TODO] Transferable across sectors"
+  },
+  "subscription": {
+    "title": "[TODO] Stay Updated",
+    "subtitle": "[TODO] Get the latest offshore wind career news, training opportunities, and events delivered to your inbox.",
+    "emailLabel": "[TODO] Email Address",
+    "emailPlaceholder": "you@example.com",
+    "nameLabel": "[TODO] Name (optional)",
+    "namePlaceholder": "[TODO] Your name",
+    "topicsLabel": "[TODO] Topics of Interest",
+    "topics": {
+      "CAREERS": "[TODO] Careers",
+      "TRAINING": "[TODO] Training",
+      "EVENTS": "[TODO] Events",
+      "RESEARCH": "[TODO] Research",
+      "NEWS": "[TODO] News",
+      "DIAGNOSTIC": "[TODO] Skills Diagnostic"
+    },
+    "frequencyLabel": "[TODO] Email Frequency",
+    "frequencies": {
+      "WEEKLY": "[TODO] Weekly digest",
+      "MONTHLY": "[TODO] Monthly digest"
+    },
+    "gdprConsent": "[TODO] I agree to receive emails and accept the {privacyLink}.",
+    "gdprPrivacyLink": "[TODO] Privacy Policy",
+    "subscribe": "[TODO] Subscribe",
+    "subscribing": "[TODO] Subscribing...",
+    "successTitle": "[TODO] Check Your Inbox",
+    "successMessage": "[TODO] We've sent a verification link to {email}. Click it to confirm your subscription.",
+    "errorGeneric": "[TODO] Something went wrong. Please try again.",
+    "errorAlreadySubscribed": "[TODO] This email is already subscribed.",
+    "preferencesTitle": "[TODO] Manage Preferences",
+    "preferencesSubtitle": "[TODO] Update your subscription topics and frequency.",
+    "preferencesUpdated": "[TODO] Your preferences have been updated.",
+    "unsubscribeTitle": "[TODO] Unsubscribed",
+    "unsubscribeMessage": "[TODO] You've been successfully unsubscribed. We're sorry to see you go.",
+    "confirmedTitle": "[TODO] Subscription Confirmed",
+    "confirmedMessage": "[TODO] Your email has been verified. You'll start receiving updates soon.",
+    "errorTitle": "[TODO] Something Went Wrong",
+    "errorMessage": "[TODO] This link may have expired or is invalid. Please try subscribing again.",
+    "compactTitle": "[TODO] Subscribe to Updates",
+    "compactSubtitle": "[TODO] Stay informed about the latest in offshore wind energy."
   }
 }

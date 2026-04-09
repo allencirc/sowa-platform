@@ -38,6 +38,30 @@ export async function syncNewsletterSubscription(data: NewsletterSync): Promise<
   console.log("[HubSpot] Would sync newsletter subscription:", data.email, data.topics);
 }
 
+interface SubscriptionSync {
+  email: string;
+  topics: string[];
+  frequency: string;
+  verified: boolean;
+}
+
+export async function syncSubscription(data: SubscriptionSync): Promise<void> {
+  // No-op until HubSpot integration is configured
+  if (!process.env.HUBSPOT_API_KEY) return;
+
+  // When real: create/update contact, set custom properties:
+  //   sowa_topic_careers (bool), sowa_topic_training (bool), etc.
+  //   sowa_subscription_frequency (enum: WEEKLY/MONTHLY)
+  //   sowa_subscription_verified (bool)
+  console.log(
+    "[HubSpot] Would sync subscription:",
+    data.email,
+    data.topics,
+    data.frequency,
+    data.verified,
+  );
+}
+
 interface DiagnosticResultsSync {
   email: string;
   name?: string;
