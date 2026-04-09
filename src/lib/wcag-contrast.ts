@@ -39,7 +39,6 @@ export const WCAG_AA_NORMAL = 4.5;
 export const WCAG_AA_LARGE = 3;
 
 const WHITE = "#FFFFFF";
-const TEXT_PRIMARY = "#1A1A2E";
 
 export interface ContrastCheck {
   field: string;
