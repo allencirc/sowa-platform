@@ -168,6 +168,77 @@ export function contentPublished(
   };
 }
 
+// ─── Subscription Email Templates ───────────────────────
+
+export function subscriptionVerification(
+  verifyLink: string,
+  topics: string[],
+): { subject: string; html: string } {
+  const topicList = topics.map((t) => `<li style="margin:2px 0;">${t}</li>`).join("");
+  return {
+    subject: "Verify your SOWA subscription",
+    html: wrap(`
+      <h2 style="color:#1A1A2E;font-size:18px;margin:0 0 12px;">Verify Your Subscription</h2>
+      <p style="color:#6B7280;margin:0 0 16px;line-height:1.5;">
+        Thank you for subscribing to the Skillnet Offshore Wind Academy newsletter. Please confirm your email address to start receiving updates.
+      </p>
+
+      <div style="background:#F7F9FC;border-left:4px solid #00A878;padding:12px 16px;border-radius:4px;margin:0 0 16px;">
+        <p style="margin:0 0 6px;font-size:13px;font-weight:600;color:#6B7280;">Your selected topics:</p>
+        <ul style="margin:0;padding-left:20px;color:#1A1A2E;font-size:14px;line-height:1.6;">
+          ${topicList}
+        </ul>
+      </div>
+
+      <div style="text-align:center;margin:24px 0;">
+        <a href="${verifyLink}" style="display:inline-block;background-color:#00A878;color:#FFFFFF;padding:12px 32px;border-radius:8px;text-decoration:none;font-weight:600;font-size:16px;">
+          Verify My Subscription
+        </a>
+      </div>
+
+      <p style="color:#9CA3AF;margin:0;font-size:12px;line-height:1.5;">
+        If you didn't request this, you can safely ignore this email.
+      </p>
+    `),
+  };
+}
+
+export function subscriptionConfirmed(
+  preferencesLink: string,
+  unsubscribeLink: string,
+): { subject: string; html: string } {
+  return {
+    subject: "Your SOWA subscription is confirmed",
+    html: wrap(`
+      <h2 style="color:#1A1A2E;font-size:18px;margin:0 0 12px;">Subscription Confirmed</h2>
+      <p style="color:#6B7280;margin:0 0 16px;line-height:1.5;">
+        Your email has been verified. You'll start receiving updates from the Skillnet Offshore Wind Academy based on your selected topics and frequency.
+      </p>
+
+      <div style="background:#F7F9FC;padding:16px;border-radius:4px;margin:0 0 16px;text-align:center;">
+        <a href="${preferencesLink}" style="color:#4A90D9;text-decoration:none;font-weight:600;">Manage your preferences</a>
+        <span style="color:#D1D5DB;margin:0 8px;">|</span>
+        <a href="${unsubscribeLink}" style="color:#6B7280;text-decoration:none;font-size:13px;">Unsubscribe</a>
+      </div>
+    `),
+  };
+}
+
+export function subscriptionUnsubscribed(): { subject: string; html: string } {
+  return {
+    subject: "You've been unsubscribed from SOWA",
+    html: wrap(`
+      <h2 style="color:#1A1A2E;font-size:18px;margin:0 0 12px;">Unsubscribed Successfully</h2>
+      <p style="color:#6B7280;margin:0 0 16px;line-height:1.5;">
+        You've been removed from the Skillnet Offshore Wind Academy mailing list. You will no longer receive newsletter emails from us.
+      </p>
+      <p style="color:#6B7280;margin:0;line-height:1.5;font-size:13px;">
+        Changed your mind? You can always subscribe again on our website.
+      </p>
+    `),
+  };
+}
+
 // ─── Team Assessment Email Templates ─────────────────────
 
 export function teamCreated(

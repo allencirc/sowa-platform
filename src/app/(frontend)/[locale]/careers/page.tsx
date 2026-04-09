@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import { Container } from "@/components/ui/Container";
 import { PathwayMap } from "@/components/careers/PathwayMap";
 import { CareerFilters } from "@/components/careers/CareerFilters";
+import { SubscriptionWidget } from "@/components/frontend/SubscriptionWidget";
 import { getAllCareers } from "@/lib/queries";
+import { getDictionary, isLocale, type Locale } from "@/lib/i18n";
 
 export const metadata: Metadata = {
   title: "Career Pathways",
@@ -23,8 +25,10 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function CareersPage() {
-  const careers = await getAllCareers();
+export default async function CareersPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale: rawLocale } = await params;
+  const locale: Locale = isLocale(rawLocale) ? rawLocale : "en";
+  const [careers, dict] = await Promise.all([getAllCareers(), getDictionary(locale)]);
 
   return (
     <>
@@ -50,6 +54,9 @@ export default async function CareersPage() {
           <CareerFilters careers={careers} />
         </Container>
       </section>
+
+      {/* Subscribe CTA */}
+      <SubscriptionWidget dict={dict.subscription} locale={locale} variant="compact" />
     </>
   );
 }

@@ -20,6 +20,7 @@ import {
   Wind,
   Image,
   ClipboardList,
+  Mail,
   Trash2,
   Stethoscope,
   X,
@@ -74,6 +75,12 @@ const navItems: NavItem[] = [
     label: "Registrations",
     href: "/admin/registrations",
     icon: ClipboardList,
+    roles: ["ADMIN", "EDITOR", "VIEWER"],
+  },
+  {
+    label: "Subscribers",
+    href: "/admin/subscribers",
+    icon: Mail,
     roles: ["ADMIN", "EDITOR", "VIEWER"],
   },
   {

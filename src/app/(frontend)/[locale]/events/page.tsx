@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/ui/Container";
+import { SubscriptionWidget } from "@/components/frontend/SubscriptionWidget";
 import { getAllEvents } from "@/lib/queries";
+import { getDictionary, isLocale, type Locale } from "@/lib/i18n";
 import { EventsListClient } from "./EventsListClient";
 
 export const metadata: Metadata = {
@@ -22,8 +24,10 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function EventsPage() {
-  const events = await getAllEvents();
+export default async function EventsPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale: rawLocale } = await params;
+  const locale: Locale = isLocale(rawLocale) ? rawLocale : "en";
+  const [events, dict] = await Promise.all([getAllEvents(), getDictionary(locale)]);
 
   return (
     <>
@@ -44,6 +48,9 @@ export default async function EventsPage() {
           <EventsListClient events={events} />
         </Container>
       </section>
+
+      {/* Subscribe CTA */}
+      <SubscriptionWidget dict={dict.subscription} locale={locale} variant="compact" />
     </>
   );
 }

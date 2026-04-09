@@ -8,7 +8,8 @@ import { UpcomingEvents } from "@/components/home/UpcomingEvents";
 import { DiagnosticCTA } from "@/components/home/DiagnosticCTA";
 import { LatestResearch } from "@/components/home/LatestResearch";
 import { StatsBar } from "@/components/home/StatsBar";
-import { NewsletterSignup } from "@/components/home/NewsletterSignup";
+import { SubscriptionWidget } from "@/components/frontend/SubscriptionWidget";
+import { getDictionary, isLocale, type Locale } from "@/lib/i18n";
 
 export const metadata: Metadata = {
   title: "SOWA — Skillnet Offshore Wind Academy",
@@ -30,7 +31,11 @@ export const metadata: Metadata = {
   },
 };
 
-export default function HomePage() {
+export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale: rawLocale } = await params;
+  const locale: Locale = isLocale(rawLocale) ? rawLocale : "en";
+  const dict = await getDictionary(locale);
+
   return (
     <>
       <HeroSection />
@@ -42,7 +47,7 @@ export default function HomePage() {
       <DiagnosticCTA />
       <LatestResearch />
       <StatsBar />
-      <NewsletterSignup />
+      <SubscriptionWidget dict={dict.subscription} locale={locale} />
     </>
   );
 }
