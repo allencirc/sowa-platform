@@ -1,5 +1,13 @@
 @import "tailwindcss";
 
+/* Emil Kowalski custom easing curves — snappier than CSS defaults.
+   ease-out for enter/exit, ease-in-out for morph/move, ease-drawer for drawers. */
+:root {
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
 @theme inline {
   /* Font stack: Inter (loaded with latin, latin-ext and cyrillic subsets in
      src/app/layout.tsx) first, then system fallbacks that cover Cyrillic
@@ -70,6 +78,15 @@ html {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+  /* Keep opacity transitions for reduced-motion — Emil: remove movement, keep fades */
+  .page-enter {
+    transform: none !important;
+  }
+  @starting-style {
+    .page-enter {
+      transform: none !important;
+    }
+  }
 }
 
 body {
@@ -98,10 +115,27 @@ h6 {
   hyphens: auto;
 }
 
-/* Focus visible ring for accessibility */
+/* Focus visible ring for accessibility — smooth outline-offset transition */
 *:focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 2px;
+  transition: outline-offset 150ms var(--ease-out);
+}
+
+/* Page enter animation — pure CSS, no JS needed */
+.page-enter {
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    opacity 300ms var(--ease-out),
+    transform 300ms var(--ease-out);
+}
+
+@starting-style {
+  .page-enter {
+    opacity: 0;
+    transform: translateY(8px);
+  }
 }
 
 /* Screen reader only utility (backup for Tailwind sr-only) */

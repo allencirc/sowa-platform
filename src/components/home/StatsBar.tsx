@@ -62,11 +62,19 @@ function StatItem({ value, label, suffix }: { value: number; label: string; suff
 
   return (
     <div ref={ref} className="text-center">
-      <div className="text-4xl sm:text-5xl font-bold text-white mb-1">
+      <div
+        className="text-4xl sm:text-5xl font-bold text-white mb-1 transition-opacity duration-500"
+        style={{ opacity: visible ? 1 : 0 }}
+      >
         {count}
         {suffix && <span>{suffix}</span>}
       </div>
-      <div className="text-sm sm:text-base text-white/60 font-medium">{label}</div>
+      <div
+        className="text-sm sm:text-base text-white/60 font-medium transition-opacity duration-500 delay-100"
+        style={{ opacity: visible ? 1 : 0 }}
+      >
+        {label}
+      </div>
     </div>
   );
 }

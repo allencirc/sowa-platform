@@ -16,7 +16,7 @@ export function ResearchCard({ research, featured = false, className }: Research
     <Link
       href={`/research/${research.slug}`}
       className={cn(
-        "group block bg-surface-card rounded-xl border border-gray-100 overflow-hidden transition-all duration-200 hover:shadow-lg hover:shadow-primary/5 hover:-translate-y-0.5",
+        "group block bg-surface-card rounded-xl border border-gray-100 overflow-hidden transition-[box-shadow,transform] duration-200 hover:shadow-lg hover:shadow-primary/5 hover:-translate-y-0.5",
         className,
       )}
     >
@@ -69,7 +69,7 @@ export function ResearchCard({ research, featured = false, className }: Research
 
         <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-accent-dark group-hover:text-accent-dark transition-colors">
           Read more
-          <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+          <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
         </span>
       </div>
     </Link>

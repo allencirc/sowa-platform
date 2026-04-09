@@ -69,8 +69,9 @@ function SingleChoice({
               }
             }}
             className={cn(
-              "w-full text-left p-4 sm:p-5 rounded-xl border-2 transition-all duration-200 cursor-pointer",
+              "w-full text-left p-4 sm:p-5 rounded-xl border-2 transition-[color,background-color,border-color,box-shadow,transform] duration-200 cursor-pointer",
               "hover:border-secondary/40 hover:bg-secondary/5",
+              "active:scale-[0.98] motion-reduce:active:scale-100",
               "focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-dark focus-visible:ring-offset-2",
               isSelected
                 ? "border-secondary bg-secondary/5 shadow-sm shadow-secondary/10"
@@ -149,8 +150,9 @@ function MultipleChoice({
               }
             }}
             className={cn(
-              "w-full text-left p-4 sm:p-5 rounded-xl border-2 transition-all duration-200 cursor-pointer",
+              "w-full text-left p-4 sm:p-5 rounded-xl border-2 transition-[color,background-color,border-color,box-shadow,transform] duration-200 cursor-pointer",
               "hover:border-secondary/40 hover:bg-secondary/5",
+              "active:scale-[0.98] motion-reduce:active:scale-100",
               "focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-dark focus-visible:ring-offset-2",
               isSelected
                 ? "border-secondary bg-secondary/5 shadow-sm shadow-secondary/10"

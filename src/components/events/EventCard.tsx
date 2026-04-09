@@ -51,7 +51,7 @@ export function EventCard({ event, className }: EventCardProps) {
     <Link
       href={`/events/${event.slug}`}
       className={cn(
-        "group block bg-surface-card rounded-xl border border-gray-100 overflow-hidden transition-all duration-200 hover:shadow-lg hover:shadow-primary/5 hover:-translate-y-0.5",
+        "group block bg-surface-card rounded-xl border border-gray-100 overflow-hidden transition-[box-shadow,transform] duration-200 hover:shadow-lg hover:shadow-primary/5 hover:-translate-y-0.5",
         className,
       )}
     >
