@@ -26,9 +26,9 @@ export function EnterpriseHero({ locale, dict }: { locale: Locale; dict: Diction
           </p>
 
           <div className="mt-10 flex flex-wrap gap-4">
-            <Link href={`/${locale}/diagnostic`} className={buttonClassName("secondary", "lg")}>
+            <a href="#team-assessment" className={buttonClassName("secondary", "lg")}>
               {dict.enterprise.ctaDiagnostic}
-            </Link>
+            </a>
             <Link
               href={`/${locale}/training`}
               className={buttonClassName(
