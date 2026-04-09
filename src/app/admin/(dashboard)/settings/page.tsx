@@ -28,6 +28,7 @@ import { Textarea } from "@/components/admin/Textarea";
 import { CURATED_FONTS, DEFAULT_SITE_SETTINGS } from "@/lib/theme-defaults";
 import { getGoogleFontUrl } from "@/lib/fonts";
 import { adminPatch } from "@/hooks/useAdminFetch";
+import { checkPaletteContrast, type ContrastCheck } from "@/lib/wcag-contrast";
 
 interface SiteSettingsForm {
   colorPrimary: string;
@@ -80,10 +81,12 @@ function ColorPicker({
   label,
   value,
   onChange,
+  contrastWarning,
 }: {
   label: string;
   value: string;
   onChange: (v: string) => void;
+  contrastWarning?: ContrastCheck;
 }) {
   return (
     <div className="flex items-center gap-3">
@@ -91,7 +94,7 @@ function ColorPicker({
         type="color"
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="h-10 w-10 cursor-pointer rounded-lg border border-gray-200 p-0.5"
+        className={`h-10 w-10 cursor-pointer rounded-lg border p-0.5 ${contrastWarning && !contrastWarning.passes ? "border-status-error" : "border-gray-200"}`}
       />
       <div className="flex-1">
         <label className="mb-0.5 block text-xs font-medium text-text-secondary">{label}</label>
@@ -101,9 +104,16 @@ function ColorPicker({
             const v = e.target.value;
             if (/^#[0-9a-fA-F]{0,6}$/.test(v)) onChange(v);
           }}
-          className="font-mono text-sm"
+          className={`font-mono text-sm ${contrastWarning && !contrastWarning.passes ? "border-status-error" : ""}`}
           placeholder="#000000"
         />
+        {contrastWarning && !contrastWarning.passes && (
+          <p className="mt-1 text-xs text-status-error">
+            Fails WCAG 2.2 AA ({contrastWarning.ratio.toFixed(1)}:1, needs{" "}
+            {contrastWarning.required}:1). {contrastWarning.usage}. Please contact the development
+            team to update site colours safely.
+          </p>
+        )}
       </div>
     </div>
   );
@@ -118,6 +128,11 @@ export default function AdminSettingsPage() {
   const [success, setSuccess] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [uploading, setUploading] = useState<"logo" | "favicon" | null>(null);
+
+  // WCAG 2.2 AA contrast checks — recomputed on every colour change
+  const contrastChecks = checkPaletteContrast(form);
+  const failedChecks = contrastChecks.filter((c) => !c.passes);
+  const contrastByField = Object.fromEntries(contrastChecks.map((c) => [c.field, c]));
 
   const siteUrl = "https://sowa.skillnetireland.ie";
   const sitemapUrl = `${siteUrl}/sitemap.xml`;
@@ -296,7 +311,12 @@ export default function AdminSettingsPage() {
             <RotateCcw className="mr-1 h-4 w-4" />
             Reset to Defaults
           </Button>
-          <Button variant="primary" size="sm" onClick={handleSave} disabled={saving}>
+          <Button
+            variant="primary"
+            size="sm"
+            onClick={handleSave}
+            disabled={saving || failedChecks.length > 0}
+          >
             {saving ? (
               <Loader2 className="mr-1 h-4 w-4 animate-spin" />
             ) : (
@@ -317,6 +337,15 @@ export default function AdminSettingsPage() {
       {error && (
         <div className="mb-4 rounded-lg border border-status-error/30 bg-status-error/5 px-4 py-3 text-sm text-status-error">
           {error}
+        </div>
+      )}
+      {failedChecks.length > 0 && (
+        <div className="mb-4 rounded-lg border border-status-warning/30 bg-status-warning/5 px-4 py-3 text-sm text-text-primary">
+          <strong className="text-status-warning">WCAG 2.2 AA violation</strong>
+          {" — "}
+          {failedChecks.length} colour{failedChecks.length > 1 ? "s do" : " does"} not meet the
+          minimum contrast ratio. Saving is disabled until all colours pass. Please contact the
+          development team to update site colours safely.
         </div>
       )}
 
@@ -474,16 +503,19 @@ export default function AdminSettingsPage() {
                 label="Main"
                 value={form.colorPrimary}
                 onChange={(v) => updateForm("colorPrimary", v)}
+                contrastWarning={contrastByField.colorPrimary}
               />
               <ColorPicker
                 label="Light"
                 value={form.colorPrimaryLight}
                 onChange={(v) => updateForm("colorPrimaryLight", v)}
+                contrastWarning={contrastByField.colorPrimaryLight}
               />
               <ColorPicker
                 label="Dark"
                 value={form.colorPrimaryDark}
                 onChange={(v) => updateForm("colorPrimaryDark", v)}
+                contrastWarning={contrastByField.colorPrimaryDark}
               />
             </div>
             {/* Secondary */}
@@ -493,16 +525,19 @@ export default function AdminSettingsPage() {
                 label="Main"
                 value={form.colorSecondary}
                 onChange={(v) => updateForm("colorSecondary", v)}
+                contrastWarning={contrastByField.colorSecondary}
               />
               <ColorPicker
                 label="Light"
                 value={form.colorSecondaryLight}
                 onChange={(v) => updateForm("colorSecondaryLight", v)}
+                contrastWarning={contrastByField.colorSecondaryLight}
               />
               <ColorPicker
                 label="Dark"
                 value={form.colorSecondaryDark}
                 onChange={(v) => updateForm("colorSecondaryDark", v)}
+                contrastWarning={contrastByField.colorSecondaryDark}
               />
             </div>
             {/* Accent */}
@@ -512,16 +547,19 @@ export default function AdminSettingsPage() {
                 label="Main"
                 value={form.colorAccent}
                 onChange={(v) => updateForm("colorAccent", v)}
+                contrastWarning={contrastByField.colorAccent}
               />
               <ColorPicker
                 label="Light"
                 value={form.colorAccentLight}
                 onChange={(v) => updateForm("colorAccentLight", v)}
+                contrastWarning={contrastByField.colorAccentLight}
               />
               <ColorPicker
                 label="Dark"
                 value={form.colorAccentDark}
                 onChange={(v) => updateForm("colorAccentDark", v)}
+                contrastWarning={contrastByField.colorAccentDark}
               />
             </div>
           </div>
