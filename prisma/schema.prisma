@@ -405,6 +405,7 @@ model User {
   contentVersions ContentVersion[]
   notificationPreferences NotificationPreference[]
   siteSettingsUpdates SiteSettings[]
+  freshnessAlertResolutions FreshnessAlert[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -543,4 +544,29 @@ model TeamResponse {
 
   @@index([teamAssessmentId])
   @@map("team_responses")
+}
+
+// ─── Freshness Alerts ────────────────────────────────────
+
+enum AlertType {
+  EXPIRED_DATE
+  STALE
+  OUTDATED
+}
+
+model FreshnessAlert {
+  id          String      @id @default(cuid())
+  contentType ContentType
+  contentId   String
+  slug        String
+  title       String
+  alertType   AlertType
+  detectedAt  DateTime    @default(now())
+  resolvedAt  DateTime?
+  resolvedBy  User?       @relation(fields: [resolvedById], references: [id], onDelete: SetNull)
+  resolvedById String?
+
+  @@unique([contentType, contentId, alertType])
+  @@index([resolvedAt])
+  @@map("freshness_alerts")
 }
