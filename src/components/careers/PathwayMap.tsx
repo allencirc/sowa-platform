@@ -14,7 +14,8 @@ import {
   useReactFlow,
   ReactFlowProvider,
 } from "@xyflow/react";
-import "@xyflow/react/dist/style.css";
+// ReactFlow CSS is imported in globals.css (must come after Tailwind's
+// @import to avoid cascade-layer specificity conflicts in Tailwind v4).
 import { cn } from "@/lib/utils";
 import { formatCurrency } from "@/lib/utils";
 import { Badge, SectorBadge } from "@/components/ui/Badge";
@@ -276,7 +277,7 @@ function PathwayMapInner({ careers }: { careers: Career[] }) {
           nodeTypes={nodeTypes}
           onNodeClick={onNodeClick}
           fitView
-          fitViewOptions={{ padding: 0.15 }}
+          fitViewOptions={{ padding: 0.25 }}
           minZoom={0.3}
           maxZoom={1.5}
           proOptions={{ hideAttribution: true }}

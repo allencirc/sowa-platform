@@ -1,5 +1,36 @@
 @import "tailwindcss";
 
+/* ─── ReactFlow overrides ──────────────────────────────────
+   Tailwind v4's @layer-based preflight resets position, height,
+   and overflow on ReactFlow's internal elements. The bundled
+   @import of @xyflow/react/dist/style.css gets hoisted into
+   Tailwind's layer cascade and loses specificity. These un-layered
+   rules restore the critical layout properties ReactFlow needs. */
+@import "@xyflow/react/dist/style.css";
+
+.react-flow {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.react-flow__viewport {
+  pointer-events: none;
+}
+
+.react-flow__node {
+  pointer-events: all;
+  position: absolute;
+}
+
+/* ReactFlow's keyboard-navigation announcements are classless <div>s
+   with inline `display:none` that Tailwind v4's preflight can override.
+   Target them as direct children of .react-flow that have no class. */
+.react-flow > div:not([class]) {
+  display: none !important;
+}
+
 /* Emil Kowalski custom easing curves — snappier than CSS defaults.
    ease-out for enter/exit, ease-in-out for morph/move, ease-drawer for drawers. */
 :root {
