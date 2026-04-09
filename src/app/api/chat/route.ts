@@ -9,7 +9,7 @@ function formatCareers(careers: Career[]): string {
       const salary = c.salaryRange
         ? `€${c.salaryRange.min.toLocaleString()}–€${c.salaryRange.max.toLocaleString()}`
         : "Not specified";
-      return `- ${c.title} | Sector: ${c.sector} | Level: ${c.entryLevel} | Salary: ${salary}\n  ${c.description}\n  Skills: ${c.skills.join(", ")}`;
+      return `- [${c.title}](/en/careers/${c.slug}) | Sector: ${c.sector} | Level: ${c.entryLevel} | Salary: ${salary}\n  ${c.description}\n  Skills: ${c.skills.join(", ")}`;
     })
     .join("\n");
 }
@@ -26,7 +26,7 @@ function formatCourses(courses: Course[]): string {
           })
         : "TBC";
       const nfq = c.nfqLevel ? ` | NFQ Level ${c.nfqLevel}` : "";
-      return `- ${c.title} | Provider: ${c.provider} (${c.providerType}) | Format: ${c.deliveryFormat} | Duration: ${c.duration} | Cost: ${cost} | Next start: ${start}${nfq}\n  ${c.description}`;
+      return `- [${c.title}](/en/training/${c.slug}) | Provider: ${c.provider} (${c.providerType}) | Format: ${c.deliveryFormat} | Duration: ${c.duration} | Cost: ${cost} | Next start: ${start}${nfq}\n  ${c.description}`;
     })
     .join("\n");
 }
@@ -41,7 +41,7 @@ function formatEvents(events: Event[]): string {
         year: "numeric",
       });
       const loc = e.location ? ` | Location: ${e.location}` : "";
-      return `- ${e.title} | Type: ${e.type} | Date: ${date} | ${e.locationType}${loc}\n  ${e.description}`;
+      return `- [${e.title}](/en/events/${e.slug}) | Type: ${e.type} | Date: ${date} | ${e.locationType}${loc}\n  ${e.description}`;
     })
     .join("\n");
 }
@@ -89,9 +89,11 @@ ${formatSkills(skills)}
 
 ## Instructions
 - Answer questions helpfully, referencing specific careers, courses, and events by name
+- When mentioning a career, course, or event, ALWAYS use the markdown link format from the content library above (e.g. [GWO Basic Safety Training](/en/training/gwo-basic-safety-training)). This is critical — the frontend renders these as clickable links.
+- Use **bold** for emphasis on key terms or names
 - If someone asks about transitioning from another sector, identify their transferable skills and suggest specific entry points
 - If someone asks about upcoming courses or events, give specific dates and details
-- Suggest concrete next steps (e.g., "You could start with the GWO Basic Safety Training course which begins on...")
+- Suggest concrete next steps (e.g., "You could start with [GWO Basic Safety Training](/en/training/gwo-basic-safety-training) which begins on...")
 - Keep answers concise — aim for 2–4 short paragraphs max
 - Be encouraging and practical; this is a growing sector with strong demand
 - If you don't have specific information to answer a question, say so honestly and suggest they visit the SOWA website or contact the team

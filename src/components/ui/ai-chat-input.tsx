@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { useState, useEffect, useRef } from "react";
+import Link from "next/link";
 import { Send, Loader2, RotateCcw } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 
@@ -14,6 +15,88 @@ const PLACEHOLDERS = [
   "How do I get started in offshore wind energy?",
 ];
 
+/**
+ * Lightweight markdown renderer — handles links, bold, and paragraphs.
+ * No external dependency needed for this subset.
+ */
+function renderMarkdown(text: string): React.ReactNode[] {
+  const paragraphs = text.split(/\n\n+/);
+
+  return paragraphs.map((para, pIdx) => {
+    const lines = para.split(/\n/);
+    const rendered = lines.map((line, lIdx) => {
+      const parts: React.ReactNode[] = [];
+      // Match markdown links [text](url) and **bold**
+      const regex = /\[([^\]]+)\]\(([^)]+)\)|\*\*([^*]+)\*\*/g;
+      let lastIndex = 0;
+      let match;
+
+      while ((match = regex.exec(line)) !== null) {
+        // Add text before this match
+        if (match.index > lastIndex) {
+          parts.push(line.slice(lastIndex, match.index));
+        }
+
+        if (match[1] && match[2]) {
+          // Link: [text](url)
+          const href = match[2];
+          const isInternal = href.startsWith("/");
+          if (isInternal) {
+            parts.push(
+              <Link
+                key={`${pIdx}-${lIdx}-${match.index}`}
+                href={href}
+                className="text-accent-dark underline underline-offset-2 hover:text-accent font-medium"
+              >
+                {match[1]}
+              </Link>,
+            );
+          } else {
+            parts.push(
+              <a
+                key={`${pIdx}-${lIdx}-${match.index}`}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-accent-dark underline underline-offset-2 hover:text-accent font-medium"
+              >
+                {match[1]}
+              </a>,
+            );
+          }
+        } else if (match[3]) {
+          // Bold: **text**
+          parts.push(
+            <strong key={`${pIdx}-${lIdx}-${match.index}`} className="font-semibold">
+              {match[3]}
+            </strong>,
+          );
+        }
+
+        lastIndex = match.index + match[0].length;
+      }
+
+      // Add remaining text
+      if (lastIndex < line.length) {
+        parts.push(line.slice(lastIndex));
+      }
+
+      return (
+        <React.Fragment key={`${pIdx}-${lIdx}`}>
+          {parts}
+          {lIdx < lines.length - 1 && <br />}
+        </React.Fragment>
+      );
+    });
+
+    return (
+      <p key={pIdx} className="mb-3 last:mb-0">
+        {rendered}
+      </p>
+    );
+  });
+}
+
 const AIChatInput = () => {
   const [placeholderIndex, setPlaceholderIndex] = useState(0);
   const [showPlaceholder, setShowPlaceholder] = useState(true);
@@ -24,6 +107,9 @@ const AIChatInput = () => {
   const [error, setError] = useState("");
   const wrapperRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const hasResponse = !!(answer || error);
+  const isExpanded = hasResponse || loading;
 
   // Cycle placeholder text when input is inactive
   useEffect(() => {
@@ -98,8 +184,6 @@ const AIChatInput = () => {
     inputRef.current?.blur();
   };
 
-  const hasResponse = answer || error;
-
   const placeholderContainerVariants = {
     initial: {},
     animate: { transition: { staggerChildren: 0.025 } },
@@ -137,8 +221,9 @@ const AIChatInput = () => {
   return (
     <motion.div
       ref={wrapperRef}
-      className={`w-full max-w-2xl bg-white/95 backdrop-blur-md border border-white/30 shadow-lg overflow-hidden ${hasResponse ? "rounded-2xl" : "rounded-full"}`}
+      className="w-full max-w-2xl bg-white/95 backdrop-blur-md border border-white/30 shadow-lg overflow-hidden"
       animate={{
+        borderRadius: isExpanded ? 20 : 9999,
         boxShadow:
           isActive || inputValue ? "0 8px 32px 0 rgba(0,0,0,0.16)" : "0 2px 8px 0 rgba(0,0,0,0.08)",
       }}
@@ -238,8 +323,8 @@ const AIChatInput = () => {
               )}
               {error && <p className="py-3 text-sm text-status-error">{error}</p>}
               {answer && (
-                <div className="py-3 text-sm text-text-primary leading-relaxed whitespace-pre-line">
-                  {answer}
+                <div className="py-3 text-sm text-text-primary leading-relaxed">
+                  {renderMarkdown(answer)}
                 </div>
               )}
             </div>
