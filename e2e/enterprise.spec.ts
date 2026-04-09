@@ -12,7 +12,7 @@ test.describe("Enterprise page", () => {
 
     const diagnosticCta = page.getByRole("link", { name: /start team assessment/i }).first();
     await expect(diagnosticCta).toBeVisible();
-    await expect(diagnosticCta).toHaveAttribute("href", /\/diagnostic/);
+    await expect(diagnosticCta).toHaveAttribute("href", "#team-assessment");
 
     const trainingCta = page.getByRole("link", { name: /browse training/i }).first();
     await expect(trainingCta).toBeVisible();
