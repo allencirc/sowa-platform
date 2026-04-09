@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/ui/Container";
 import { SubscriptionWidget } from "@/components/frontend/SubscriptionWidget";
-import { getAllEvents } from "@/lib/queries";
+import { getAllEvents, getAllCourses } from "@/lib/queries";
 import { getDictionary, isLocale, type Locale } from "@/lib/i18n";
-import { EventsListClient } from "./EventsListClient";
+import { EventsPageClient } from "./EventsPageClient";
 
 export const metadata: Metadata = {
   title: "Events & Workshops",
@@ -27,7 +27,11 @@ export const metadata: Metadata = {
 export default async function EventsPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale: rawLocale } = await params;
   const locale: Locale = isLocale(rawLocale) ? rawLocale : "en";
-  const [events, dict] = await Promise.all([getAllEvents(), getDictionary(locale)]);
+  const [events, courses, dict] = await Promise.all([
+    getAllEvents(),
+    getAllCourses(),
+    getDictionary(locale),
+  ]);
 
   return (
     <>
@@ -45,7 +49,7 @@ export default async function EventsPage({ params }: { params: Promise<{ locale:
 
       <section className="py-10 sm:py-14 bg-white">
         <Container>
-          <EventsListClient events={events} />
+          <EventsPageClient events={events} courses={courses} />
         </Container>
       </section>
 
