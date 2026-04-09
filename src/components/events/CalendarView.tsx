@@ -114,6 +114,16 @@ export function CalendarView({ items, className }: CalendarViewProps) {
     return result;
   }, [currentMonth]);
 
+  /* Popover state — position is computed in the click handler, not during render */
+  const [popover, setPopover] = useState<{
+    key: string;
+    date: Date;
+    items: CalendarItem[];
+    position: { left: number; top: number } | null;
+  } | null>(null);
+
+  const gridRef = useRef<HTMLDivElement>(null);
+
   /* Navigation */
   const prevMonth = useCallback(() => {
     setCurrentMonth((m) => new Date(m.getFullYear(), m.getMonth() - 1, 1));
@@ -130,16 +140,6 @@ export function CalendarView({ items, className }: CalendarViewProps) {
     setPopover(null);
   }, [today]);
 
-  /* Popover state */
-  const [popover, setPopover] = useState<{
-    key: string;
-    date: Date;
-    items: CalendarItem[];
-    rect: DOMRect;
-  } | null>(null);
-
-  const gridRef = useRef<HTMLDivElement>(null);
-
   const handleDayClick = useCallback(
     (key: string, date: Date, e: React.MouseEvent<HTMLButtonElement>) => {
       const dayItems = byDate.get(key);
@@ -151,14 +151,21 @@ export function CalendarView({ items, className }: CalendarViewProps) {
         setPopover(null);
         return;
       }
-      const rect = e.currentTarget.getBoundingClientRect();
-      setPopover({ key, date, items: dayItems, rect });
+      // Compute position relative to the grid container (safe — inside event handler)
+      let position: { left: number; top: number } | null = null;
+      const gridEl = gridRef.current;
+      if (window.innerWidth >= 640 && gridEl) {
+        const gridRect = gridEl.getBoundingClientRect();
+        const cellRect = e.currentTarget.getBoundingClientRect();
+        const left = cellRect.left - gridRect.left;
+        const top = cellRect.bottom - gridRect.top + 4;
+        const adjustedLeft = left + 320 > gridRect.width ? gridRect.width - 320 : left;
+        position = { left: Math.max(0, adjustedLeft), top };
+      }
+      setPopover({ key, date, items: dayItems, position });
     },
     [byDate, popover],
   );
-
-  /* Close popover on outside click */
-  const popoverRef = useRef<HTMLDivElement>(null);
 
   return (
     <div className={cn("relative", className)}>
@@ -280,7 +287,6 @@ export function CalendarView({ items, className }: CalendarViewProps) {
 
           {/* Mobile: bottom sheet, Desktop: positioned popover */}
           <div
-            ref={popoverRef}
             className={cn(
               "z-50 bg-white rounded-xl shadow-xl border border-gray-200 p-4",
               // mobile: fixed bottom sheet
@@ -288,18 +294,7 @@ export function CalendarView({ items, className }: CalendarViewProps) {
               // desktop: absolute
               "sm:absolute sm:w-80",
             )}
-            style={
-              typeof window !== "undefined" && window.innerWidth >= 640 && gridRef.current
-                ? (() => {
-                    const gridRect = gridRef.current.getBoundingClientRect();
-                    const left = popover.rect.left - gridRect.left;
-                    const top = popover.rect.bottom - gridRect.top + 4;
-                    // flip left if too close to right edge
-                    const adjustedLeft = left + 320 > gridRect.width ? gridRect.width - 320 : left;
-                    return { left: Math.max(0, adjustedLeft), top };
-                  })()
-                : undefined
-            }
+            style={popover.position ?? undefined}
             role="dialog"
             aria-label={`Events for ${formatPopoverDate(popover.date)}`}
           >
