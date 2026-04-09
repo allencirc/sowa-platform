@@ -41,15 +41,18 @@ export function Header({ locale, dict }: { locale: Locale; dict: Dictionary }) {
 
             {/* Desktop nav */}
             <nav className="hidden lg:flex items-center gap-1" aria-label={dict.nav.mainNavigation}>
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="px-3 py-2 text-sm font-medium text-text-primary rounded-lg hover:bg-surface hover:text-primary transition-colors"
-                >
-                  {link.label}
-                </Link>
-              ))}
+              <ul className="flex items-center gap-1 list-none m-0 p-0">
+                {navLinks.map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      className="px-3 py-2 text-sm font-medium text-text-primary rounded-lg hover:bg-surface hover:text-primary transition-colors"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             </nav>
 
             {/* Right side */}

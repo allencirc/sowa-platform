@@ -6,6 +6,7 @@ import { requireRole, AuthError } from "@/lib/auth-utils";
 import { applyRateLimit, parseBody, errorResponse } from "@/lib/api-utils";
 import { updateSiteSettingsSchema } from "@/lib/validations";
 import { DEFAULT_SITE_SETTINGS } from "@/lib/theme-defaults";
+import { checkPaletteContrast } from "@/lib/wcag-contrast";
 
 export async function GET(request: NextRequest) {
   const rateLimited = applyRateLimit(request);
@@ -57,6 +58,30 @@ export async function PUT(request: NextRequest) {
 
   const parsed = await parseBody(request, updateSiteSettingsSchema);
   if (parsed.error) return parsed.error;
+
+  // Server-side WCAG 2.2 AA contrast enforcement
+  const palette = {
+    colorPrimary: parsed.data.colorPrimary ?? DEFAULT_SITE_SETTINGS.colorPrimary,
+    colorPrimaryLight: parsed.data.colorPrimaryLight ?? DEFAULT_SITE_SETTINGS.colorPrimaryLight,
+    colorPrimaryDark: parsed.data.colorPrimaryDark ?? DEFAULT_SITE_SETTINGS.colorPrimaryDark,
+    colorSecondary: parsed.data.colorSecondary ?? DEFAULT_SITE_SETTINGS.colorSecondary,
+    colorSecondaryLight:
+      parsed.data.colorSecondaryLight ?? DEFAULT_SITE_SETTINGS.colorSecondaryLight,
+    colorSecondaryDark: parsed.data.colorSecondaryDark ?? DEFAULT_SITE_SETTINGS.colorSecondaryDark,
+    colorAccent: parsed.data.colorAccent ?? DEFAULT_SITE_SETTINGS.colorAccent,
+    colorAccentLight: parsed.data.colorAccentLight ?? DEFAULT_SITE_SETTINGS.colorAccentLight,
+    colorAccentDark: parsed.data.colorAccentDark ?? DEFAULT_SITE_SETTINGS.colorAccentDark,
+  };
+  const contrastFailures = checkPaletteContrast(palette).filter((c) => !c.passes);
+  if (contrastFailures.length > 0) {
+    const details = contrastFailures
+      .map((c) => `${c.label}: ${c.ratio.toFixed(1)}:1 (needs ${c.required}:1)`)
+      .join("; ");
+    return errorResponse(
+      `Colours rejected — WCAG 2.2 AA contrast failures: ${details}. Please contact the development team to update site colours safely.`,
+      400,
+    );
+  }
 
   try {
     // Prisma requires Prisma.JsonNull instead of null for nullable Json fields
