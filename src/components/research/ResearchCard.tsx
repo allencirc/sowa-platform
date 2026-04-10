@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 import { FileText, ArrowRight } from "lucide-react";
 import { cn, formatDate } from "@/lib/utils";
 import { Badge } from "@/components/ui/Badge";
@@ -20,20 +19,27 @@ export function ResearchCard({ research, featured = false, className }: Research
         className,
       )}
     >
-      {/* Header image */}
+      {/* Header image — uses <img> with inline object-fit to avoid Arc browser bug with <Image fill> */}
       <div
         className={cn(
-          "relative overflow-hidden bg-gradient-to-br from-primary to-primary-light flex items-center justify-center",
+          "relative overflow-hidden flex items-center justify-center",
+          !research.image && "bg-gradient-to-br from-primary to-primary-light",
           featured ? "h-48" : "h-32",
         )}
       >
         {research.image ? (
-          <Image
+          /* eslint-disable-next-line @next/next/no-img-element */
+          <img
             src={research.image}
             alt={research.title}
-            fill
-            className="object-cover transition-transform duration-300 group-hover:scale-105"
-            sizes={featured ? "(max-width: 768px) 100vw, 50vw" : "(max-width: 768px) 100vw, 33vw"}
+            className="transition-transform duration-300 group-hover:scale-105"
+            style={{
+              position: "absolute",
+              inset: 0,
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+            }}
           />
         ) : (
           <FileText className={cn("text-white/20", featured ? "h-20 w-20" : "h-12 w-12")} />
