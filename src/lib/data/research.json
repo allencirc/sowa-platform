@@ -8,7 +8,7 @@
     "summary": "Comprehensive analysis of the workforce requirements to meet Ireland's offshore wind targets. Identifies critical skills gaps, training needs, and recommendations for education providers and policy makers.",
     "categories": ["Workforce Development", "Policy"],
     "isFeatured": true,
-    "image": "https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=800&h=500&fit=crop"
+    "image": "/images/research/building-potential.jpg"
   },
   {
     "slug": "offshore-wind-skills-action-plan-2024",
@@ -18,7 +18,7 @@
     "publicationDate": "2024-03-20",
     "summary": "Government action plan outlining strategic priorities and actions to develop the skilled workforce needed for Ireland's offshore wind sector.",
     "categories": ["Policy", "Government"],
-    "image": "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&h=500&fit=crop"
+    "image": "/images/research/career-transitions.jpg"
   },
   {
     "slug": "irish-offshore-wind-workforce-forecast",
@@ -28,7 +28,7 @@
     "publicationDate": "2025-11-01",
     "summary": "Projections of workforce demand across all offshore wind roles over the next decade, broken down by project phase and skill category.",
     "categories": ["Workforce Development", "Research"],
-    "image": "https://images.unsplash.com/photo-1548337138-e87d889cc369?w=800&h=500&fit=crop"
+    "image": "/images/research/workforce-demand.jpg"
   },
   {
     "slug": "gwo-training-standards-overview",
@@ -38,7 +38,7 @@
     "publicationDate": "2025-08-10",
     "summary": "Overview of GWO training standards relevant to the Irish offshore wind market, including where to access accredited training and how standards map to career requirements.",
     "categories": ["Standards", "Training"],
-    "image": "https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?w=800&h=500&fit=crop"
+    "image": "/images/research/offshore-wind-skills.jpg"
   },
   {
     "slug": "transition-workers-owe-case-studies",
@@ -48,6 +48,6 @@
     "publicationDate": "2026-01-22",
     "summary": "Real stories of Irish workers who have successfully transitioned from adjacent industries (oil & gas, marine, construction, electrical) into offshore wind careers.",
     "categories": ["Case Studies", "Workforce Development"],
-    "image": "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=800&h=500&fit=crop"
+    "image": "/images/research/digital-skills.jpg"
   }
 ]
