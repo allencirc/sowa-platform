@@ -1,12 +1,22 @@
 "use client";
 
 import { useState, useMemo, useCallback, useEffect } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams, useRouter, useParams } from "next/navigation";
 import Link from "next/link";
-import { Search, ArrowRight, FileText } from "lucide-react";
+import { Search, ArrowRight, FileText, AlertCircle } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Badge } from "@/components/ui/Badge";
 import type { SearchResult } from "@/lib/types";
+
+interface SearchResponse {
+  data: SearchResult[];
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+  };
+}
 
 const typeConfig: Record<
   SearchResult["type"],
@@ -22,21 +32,37 @@ const typeConfig: Record<
 export function SearchClient() {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const params = useParams<{ locale: string }>();
+  const locale = params?.locale ?? "en";
   const initialQuery = searchParams.get("q") ?? "";
   const [query, setQuery] = useState(initialQuery);
   const [results, setResults] = useState<SearchResult[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   // Fetch search results from API
   useEffect(() => {
     if (!query.trim()) {
       setResults([]);
+      setError(null);
       return;
     }
     let cancelled = false;
+    setError(null);
     fetch(`/api/search?q=${encodeURIComponent(query)}`)
-      .then((res) => res.json())
-      .then((data: SearchResult[]) => {
-        if (!cancelled) setResults(data);
+      .then(async (res) => {
+        if (!res.ok) {
+          throw new Error(`Search request failed (${res.status})`);
+        }
+        const json: SearchResponse = await res.json();
+        if (!cancelled) {
+          setResults(Array.isArray(json.data) ? json.data : []);
+        }
+      })
+      .catch((err) => {
+        if (cancelled) return;
+        console.error("Search fetch failed:", err);
+        setResults([]);
+        setError("We couldn't complete your search. Please try again.");
       });
     return () => {
       cancelled = true;
@@ -57,9 +83,9 @@ export function SearchClient() {
   const handleSubmit = useCallback(
     (e: React.FormEvent) => {
       e.preventDefault();
-      router.push(`/search?q=${encodeURIComponent(query)}`, { scroll: false });
+      router.push(`/${locale}/search?q=${encodeURIComponent(query)}`, { scroll: false });
     },
-    [query, router],
+    [query, router, locale],
   );
 
   return (
@@ -104,6 +130,14 @@ export function SearchClient() {
               <Search className="h-12 w-12 text-text-muted/30 mx-auto mb-4" />
               <p className="text-lg text-text-secondary">
                 Start typing to search across all content
+              </p>
+            </div>
+          ) : error ? (
+            <div className="text-center py-16" role="alert">
+              <AlertCircle className="h-12 w-12 text-status-error/60 mx-auto mb-4" />
+              <p className="text-lg text-text-secondary mb-2">{error}</p>
+              <p className="text-sm text-text-muted">
+                If the problem persists, please refresh the page.
               </p>
             </div>
           ) : results.length === 0 ? (
