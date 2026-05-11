@@ -36,7 +36,93 @@ function buildCsp(nonce: string): string {
 function withCsp(response: NextResponse, nonce: string): NextResponse {
   response.headers.set("Content-Security-Policy", buildCsp(nonce));
   response.headers.set("x-nonce", nonce);
+  // When the prototype is gated behind the preview wall, also de-list it from
+  // search engines — defence-in-depth alongside the 401 returned to bots.
+  if (process.env.PREVIEW_WALL === "true") {
+    response.headers.set("X-Robots-Tag", "noindex, nofollow");
+  }
   return response;
+}
+
+// ---------------------------------------------------------------------------
+// Preview wall (basic-auth gate)
+// ---------------------------------------------------------------------------
+
+// Paths that must remain reachable without basic-auth credentials.
+// /api/cron/* is authenticated by Vercel cron via CRON_SECRET (see vercel.json).
+const PREVIEW_WALL_BYPASS_PREFIXES = ["/api/cron"];
+
+const PREVIEW_WALL_BODY = `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SOWA Prototype — Restricted</title>
+  <style>
+    :root { color-scheme: light dark; }
+    body { font-family: system-ui, -apple-system, sans-serif; max-width: 36rem; margin: 4rem auto; padding: 0 1.5rem; line-height: 1.55; color: #1A1A2E; }
+    h1 { font-size: 1.5rem; margin-bottom: 0.5rem; color: #0C2340; }
+    a { color: #4A90D9; }
+    button { font: inherit; padding: 0.5rem 1rem; border-radius: 0.375rem; border: 1px solid currentColor; background: transparent; cursor: pointer; }
+    @media (prefers-color-scheme: dark) { body { color: #F7F9FC; } h1 { color: #F7F9FC; } }
+  </style>
+</head>
+<body>
+  <h1>This prototype is currently restricted.</h1>
+  <p>The SOWA platform prototype is paused from public access while the tender is under review.</p>
+  <p><button onclick="location.reload()">Try signing in again</button></p>
+</body>
+</html>`;
+
+/**
+ * Check the basic-auth preview wall. Returns a 401 response if the request
+ * should be rejected, or `null` if it should pass through.
+ *
+ * Activated only when `PREVIEW_WALL=true`. Credentials come from `PREVIEW_USER`
+ * and `PREVIEW_PASS`. /api/cron/* is bypassed so Vercel cron keeps working.
+ */
+function checkPreviewWall(request: NextRequest): NextResponse | null {
+  if (process.env.PREVIEW_WALL !== "true") return null;
+
+  const { pathname } = request.nextUrl;
+  if (PREVIEW_WALL_BYPASS_PREFIXES.some((p) => pathname.startsWith(p))) {
+    return null;
+  }
+
+  const user = process.env.PREVIEW_USER;
+  const pass = process.env.PREVIEW_PASS;
+  if (!user || !pass) {
+    return new NextResponse("Preview wall is enabled but credentials are not configured.", {
+      status: 503,
+      headers: {
+        "Cache-Control": "no-store",
+        "X-Robots-Tag": "noindex, nofollow",
+      },
+    });
+  }
+
+  const header = request.headers.get("authorization");
+  if (header?.startsWith("Basic ")) {
+    try {
+      const decoded = atob(header.slice(6));
+      const idx = decoded.indexOf(":");
+      if (idx > -1 && decoded.slice(0, idx) === user && decoded.slice(idx + 1) === pass) {
+        return null;
+      }
+    } catch {
+      // Malformed Authorization header — fall through to 401.
+    }
+  }
+
+  return new NextResponse(PREVIEW_WALL_BODY, {
+    status: 401,
+    headers: {
+      "WWW-Authenticate": 'Basic realm="SOWA Prototype", charset="UTF-8"',
+      "Content-Type": "text/html; charset=utf-8",
+      "Cache-Control": "no-store",
+      "X-Robots-Tag": "noindex, nofollow",
+    },
+  });
 }
 
 // Paths that are NOT localised — admin UI, API routes, and Next internals.
@@ -67,6 +153,11 @@ function extractLocale(pathname: string): Locale | null {
 }
 
 export async function proxy(request: NextRequest) {
+  // Preview wall runs first: when PREVIEW_WALL=true, every request needs
+  // basic-auth credentials (PREVIEW_USER/PREVIEW_PASS) except /api/cron/*.
+  const wallResponse = checkPreviewWall(request);
+  if (wallResponse) return wallResponse;
+
   const { pathname } = request.nextUrl;
 
   // Generate a per-request nonce for CSP.
