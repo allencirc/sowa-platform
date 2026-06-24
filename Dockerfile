@@ -24,7 +24,7 @@
 # ---------------------------------------------------------------------------
 
 # ----- Stage 1: dependencies ------------------------------------------------
-FROM node:20-alpine AS deps
+FROM node:26-alpine AS deps
 RUN apk add --no-cache libc6-compat openssl
 WORKDIR /app
 
@@ -34,7 +34,7 @@ COPY prisma ./prisma
 RUN npm ci
 
 # ----- Stage 2: build -------------------------------------------------------
-FROM node:20-alpine AS builder
+FROM node:26-alpine AS builder
 RUN apk add --no-cache libc6-compat openssl
 WORKDIR /app
 
@@ -51,7 +51,7 @@ RUN npm run build
 RUN npm prune --omit=dev
 
 # ----- Stage 3: runner ------------------------------------------------------
-FROM node:20-alpine AS runner
+FROM node:26-alpine AS runner
 RUN apk add --no-cache libc6-compat openssl tini
 WORKDIR /app
 
