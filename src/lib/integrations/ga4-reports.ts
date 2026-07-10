@@ -23,8 +23,7 @@ type ReportResult<T> =
   | { status: "error"; message: string };
 
 type ConfigError =
-  | { status: "not_configured"; reason: string }
-  | { status: "error"; message: string };
+  { status: "not_configured"; reason: string } | { status: "error"; message: string };
 
 function getConfigOrFail(): Ga4Config | ConfigError {
   const cfg = getGa4Config();

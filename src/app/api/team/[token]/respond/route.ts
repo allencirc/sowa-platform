@@ -5,6 +5,7 @@ import { diagnosticAnswersSchema } from "@/lib/validations";
 import { calculateResults } from "@/lib/diagnostic";
 import { sendEmail, teamThresholdReached } from "@/lib/email";
 import { aggregateTeamResults, generateTeamReport, type TeamResponseData } from "@/lib/team-report";
+import { getSiteSettings } from "@/lib/queries";
 import type { TeamResponse as PrismaTeamResponse } from "@/generated/prisma/client";
 import type { Career, Course, DiagnosticQuestion, Skill } from "@/lib/types";
 
@@ -285,7 +286,7 @@ async function handleThresholdReached(
     duration: c.duration,
     deliveryFormat: c.deliveryFormat,
   }));
-  const aiReport = await generateTeamReport(aggregated, coursesForAI);
+  const aiReport = await generateTeamReport(aggregated, coursesForAI, await getSiteSettings());
 
   // Save report and mark as notified
   await prisma.teamAssessment.update({

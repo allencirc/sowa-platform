@@ -6,8 +6,7 @@
  */
 
 import { generateText, getAIProvider } from "./ai";
-import { getSiteSettings } from "./queries";
-import type { SiteSettings } from "./theme-defaults";
+import { DEFAULT_SITE_SETTINGS, type SiteSettings } from "./theme-defaults";
 
 // ─── Types ──────────────────────────────────────────────
 
@@ -115,9 +114,7 @@ export function aggregateTeamResults(
       skill,
       avgPercent,
       severity: (avgPercent < 33 ? "high" : avgPercent < 66 ? "medium" : "low") as
-        | "high"
-        | "medium"
-        | "low",
+        "high" | "medium" | "low",
     }))
     .sort((a, b) => a.avgPercent - b.avgPercent);
 
@@ -184,6 +181,10 @@ export interface CourseForReport {
 export async function generateTeamReport(
   aggregated: AggregatedTeamData,
   courses?: CourseForReport[],
+  // Callers are server-side and should pass SiteSettings; this module must
+  // stay importable from client components (TeamReportView), so it cannot
+  // import the Prisma-backed queries layer itself.
+  settings: SiteSettings = DEFAULT_SITE_SETTINGS,
 ): Promise<string> {
   // Check if AI is available
   if (!getAIProvider()) {
@@ -270,7 +271,6 @@ ${courseList}
 Please write the team training needs analysis report.`;
 
   try {
-    const settings = await getSiteSettings();
     return await generateText(buildTeamReportSystemPrompt(settings), userPrompt, 1500);
   } catch (err) {
     console.error("[TeamReport] AI generation failed, using fallback:", err);

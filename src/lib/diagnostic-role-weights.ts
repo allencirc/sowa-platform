@@ -25,12 +25,7 @@
  */
 
 export type RoleFamilyKey =
-  | "technician"
-  | "engineer"
-  | "marine_ops"
-  | "hse"
-  | "project_commercial"
-  | "data_digital";
+  "technician" | "engineer" | "marine_ops" | "hse" | "project_commercial" | "data_digital";
 
 export interface RoleFamilyDefinition {
   key: RoleFamilyKey;
