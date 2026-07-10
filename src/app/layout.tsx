@@ -6,9 +6,11 @@ import { CookieConsent } from "@/components/layout/CookieConsent";
 import { NonceProvider } from "@/components/NonceProvider";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { defaultLocale, isLocale, localeBcp47, type Locale } from "@/lib/i18n";
+import { getSiteSettings } from "@/lib/queries";
+import { getSiteUrl } from "@/lib/site-url";
 import "./globals.css";
 
-// Subsets cover every script SOWA ships: `latin` for English,
+// Subsets cover every script the platform ships: `latin` for English,
 // `latin-ext` for Polish (ł, ą, ę) and European Portuguese diacritics,
 // and `cyrillic` for Ukrainian. Irish uses standard Latin glyphs already
 // in `latin`. See docs/adr/0001-i18n.md.
@@ -24,82 +26,79 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-export const metadata: Metadata = {
-  metadataBase: new URL("https://sowa.skillnetireland.ie"),
-  title: {
-    default: "SOWA — Skillnet Offshore Wind Academy",
-    template: "%s — SOWA",
-  },
-  description:
-    "Ireland's national careers platform for offshore wind energy. Explore career pathways, training courses, events, and skills diagnostics.",
-  keywords: [
-    "offshore wind",
-    "wind energy careers",
-    "offshore wind training",
-    "Ireland wind energy",
-    "offshore wind jobs",
-    "renewable energy careers",
-    "Skillnet Ireland",
-    "wind technician",
-    "marine operations",
-    "offshore wind academy",
-    "OWE skills",
-    "wind energy courses",
-    "NFQ accredited courses",
-    "energy transition",
-    "green jobs Ireland",
-  ],
-  authors: [{ name: "Skillnet Ireland" }],
-  creator: "Skillnet Offshore Wind Academy",
-  publisher: "Skillnet Ireland",
-  formatDetection: {
-    email: false,
-    telephone: false,
-  },
-  openGraph: {
-    type: "website",
-    locale: "en_IE",
-    url: "https://sowa.skillnetireland.ie",
-    siteName: "Skillnet Offshore Wind Academy",
-    title: "SOWA — Skillnet Offshore Wind Academy",
-    description:
-      "Ireland's national careers platform for offshore wind energy. Explore career pathways, training courses, events, and skills diagnostics.",
-    images: [
-      {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "SOWA — Skillnet Offshore Wind Academy",
-      },
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSiteSettings();
+  const siteUrl = getSiteUrl();
+  const siteTitle = `${settings.siteName} — ${settings.siteFullName}`;
+  const description = `Ireland's national careers platform for ${settings.sectorName}. Explore career pathways, training courses, events, and skills diagnostics.`;
+
+  return {
+    metadataBase: new URL(siteUrl),
+    title: {
+      default: siteTitle,
+      template: `%s — ${settings.siteName}`,
+    },
+    description,
+    keywords: [
+      settings.sectorName,
+      `${settings.sectorName} careers`,
+      `${settings.sectorName} training`,
+      `${settings.sectorName} jobs`,
+      "career pathways",
+      "skills diagnostic",
+      "NFQ accredited courses",
+      "Skillnet Ireland",
+      "green jobs Ireland",
     ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "SOWA — Skillnet Offshore Wind Academy",
-    description:
-      "Ireland's national careers platform for offshore wind energy. Explore career pathways, training courses, events, and skills diagnostics.",
-    images: ["/og-image.png"],
-    creator: "@SkillnetIreland",
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
+    authors: [{ name: settings.siteFullName }],
+    creator: settings.siteFullName,
+    publisher: settings.siteFullName,
+    formatDetection: {
+      email: false,
+      telephone: false,
+    },
+    openGraph: {
+      type: "website",
+      locale: "en_IE",
+      url: siteUrl,
+      siteName: settings.siteFullName,
+      title: siteTitle,
+      description,
+      images: [
+        {
+          url: "/og-image.png",
+          width: 1200,
+          height: 630,
+          alt: siteTitle,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: siteTitle,
+      description,
+      images: ["/og-image.png"],
+    },
+    robots: {
       index: true,
       follow: true,
-      "max-video-preview": -1,
-      "max-image-preview": "large",
-      "max-snippet": -1,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-video-preview": -1,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+      },
     },
-  },
-  icons: {
-    icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
-    apple: [{ url: "/icon.svg" }],
-  },
-  alternates: {
-    canonical: "https://sowa.skillnetireland.ie",
-  },
-};
+    icons: {
+      icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
+      apple: [{ url: "/icon.svg" }],
+    },
+    alternates: {
+      canonical: siteUrl,
+    },
+  };
+}
 
 export default async function RootLayout({
   children,

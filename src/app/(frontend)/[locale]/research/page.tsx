@@ -1,30 +1,33 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/ui/Container";
-import { getAllResearch, getFeaturedResearch } from "@/lib/queries";
+import { getAllResearch, getFeaturedResearch, getSiteSettings } from "@/lib/queries";
 import { ResearchListClient } from "./ResearchListClient";
 
-export const metadata: Metadata = {
-  title: "Research & Publications",
-  description:
-    "Explore the latest research, reports, and publications on Ireland's offshore wind energy workforce and skills landscape.",
-  alternates: { canonical: "/research" },
-  openGraph: {
-    title: "Research & Publications — Offshore Wind Energy",
-    description:
-      "Research, reports, and publications on Ireland's offshore wind energy workforce and skills landscape.",
-    url: "/research",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Research & Publications — SOWA",
-    description: "Research and publications on Ireland's offshore wind workforce.",
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSiteSettings();
+  const description = `Explore the latest research, reports, and publications on Ireland's ${settings.sectorName} workforce and skills landscape.`;
+  return {
+    title: "Research & Publications",
+    description,
+    alternates: { canonical: "/research" },
+    openGraph: {
+      title: `Research & Publications — ${settings.sectorTitle}`,
+      description: `Research, reports, and publications on Ireland's ${settings.sectorName} workforce and skills landscape.`,
+      url: "/research",
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `Research & Publications — ${settings.siteName}`,
+      description: `Research and publications on Ireland's ${settings.sectorName} workforce.`,
+    },
+  };
+}
 
 export default async function ResearchPage() {
   const research = await getAllResearch();
   const featured = await getFeaturedResearch();
+  const settings = await getSiteSettings();
 
   return (
     <>
@@ -34,8 +37,8 @@ export default async function ResearchPage() {
             Research &amp; Publications
           </h1>
           <p className="text-text-secondary max-w-2xl">
-            Key reports, workforce studies, and policy documents shaping Ireland&apos;s offshore
-            wind energy sector.
+            Key reports, workforce studies, and policy documents shaping Ireland&apos;s{" "}
+            {settings.sectorName} sector.
           </p>
         </Container>
       </section>

@@ -3,10 +3,13 @@ import { ArrowRight } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { StaggeredList } from "@/components/ui/StaggeredList";
 import { CareerCard } from "@/components/careers/CareerCard";
-import { getAllCareers } from "@/lib/queries";
+import { getAllCareers, getSiteSettings } from "@/lib/queries";
 
 export async function FeaturedCareers() {
-  const careers = (await getAllCareers()).slice(0, 4);
+  const [careers, settings] = await Promise.all([
+    getAllCareers().then((c) => c.slice(0, 4)),
+    getSiteSettings(),
+  ]);
 
   return (
     <section className="py-16 sm:py-20 bg-white">
@@ -15,7 +18,7 @@ export async function FeaturedCareers() {
           <div>
             <h2 className="text-3xl font-bold text-text-primary">Career Pathways</h2>
             <p className="mt-2 text-text-secondary">
-              Explore roles across Ireland&apos;s offshore wind energy sector.
+              Explore roles across Ireland&apos;s {settings.sectorName} sector.
             </p>
           </div>
           <Link

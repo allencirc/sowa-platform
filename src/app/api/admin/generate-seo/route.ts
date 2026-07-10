@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { applyRateLimit, errorResponse } from "@/lib/api-utils";
 import { generateText, parseJSONResponse } from "@/lib/ai";
+import { getSiteSettings } from "@/lib/queries";
+import type { SiteSettings } from "@/lib/theme-defaults";
 
 interface GenerateSeoRequest {
   title: string;
@@ -14,7 +16,8 @@ interface SeoResult {
   metaKeywords: string;
 }
 
-const SYSTEM_PROMPT = `You are an SEO specialist for the Skillnet Offshore Wind Academy (SOWA), an Irish government-backed initiative developing Ireland's offshore wind workforce. Generate SEO metadata for web pages about offshore wind energy careers, training, events, and research.
+function buildSystemPrompt(settings: SiteSettings): string {
+  return `You are an SEO specialist for the ${settings.siteFullName} (${settings.siteName}), an Irish government-backed initiative developing Ireland's ${settings.sectorName} workforce. Generate SEO metadata for web pages about ${settings.sectorName} careers, training, events, and research.
 
 Return ONLY valid JSON with exactly these keys:
 {
@@ -24,11 +27,12 @@ Return ONLY valid JSON with exactly these keys:
 }
 
 Rules:
-- metaTitle: max 60 characters, include primary keyword, end with " — SOWA" if space allows
+- metaTitle: max 60 characters, include primary keyword, end with " — ${settings.siteName}" if space allows
 - metaDescription: max 155 characters, compelling call-to-action, include primary keyword naturally
-- metaKeywords: 5-8 comma-separated keywords relevant to Irish offshore wind energy
+- metaKeywords: 5-8 comma-separated keywords relevant to the Irish ${settings.sectorName} sector
 
 Do not include any text outside the JSON object.`;
+}
 
 function buildPrompt(data: GenerateSeoRequest): string {
   return `Generate SEO metadata for the following ${data.contentType} page:
@@ -36,7 +40,7 @@ function buildPrompt(data: GenerateSeoRequest): string {
 Title: ${data.title}
 Content: ${data.description.slice(0, 500)}
 
-Generate optimised SEO metadata targeting the Irish offshore wind energy sector audience.`;
+Generate optimised SEO metadata targeting the Irish sector audience.`;
 }
 
 export async function POST(request: NextRequest) {
@@ -62,7 +66,8 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const raw = await generateText(SYSTEM_PROMPT, buildPrompt(body), 256);
+    const settings = await getSiteSettings();
+    const raw = await generateText(buildSystemPrompt(settings), buildPrompt(body), 256);
     const parsed = parseJSONResponse<SeoResult>(raw);
 
     const seo: SeoResult = {

@@ -29,7 +29,7 @@ export function RoleFitView({ result }: RoleFitViewProps) {
         <div>
           <h2 className="text-2xl font-bold text-text-primary">Your best-fit role families</h2>
           <p className="text-sm text-text-secondary">
-            Where your current strengths place you in the offshore wind workforce
+            Where your current strengths place you in the sector&apos;s workforce
           </p>
         </div>
       </div>

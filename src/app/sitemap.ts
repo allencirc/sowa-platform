@@ -6,9 +6,10 @@ import {
   getAllResearch,
   getAllNews,
 } from "@/lib/queries";
+import { getSiteUrl } from "@/lib/site-url";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = "https://sowa.skillnetireland.ie";
+  const baseUrl = getSiteUrl();
 
   const careers = await getAllCareers();
   const courses = await getAllCourses();

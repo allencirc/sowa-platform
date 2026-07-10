@@ -175,7 +175,7 @@ export async function GET(request: NextRequest) {
     // ── CSV export ───────────────────────────────────────
     if (exportFormat === "csv") {
       const lines: string[] = [];
-      lines.push("SOWA Diagnostic Analytics Report");
+      lines.push("Diagnostic Analytics Report");
       lines.push(`Date range: ${effectiveFrom ?? "all"} to ${effectiveTo}`);
       lines.push(`Total completions: ${sessions.length}`);
       lines.push("");
@@ -218,7 +218,7 @@ export async function GET(request: NextRequest) {
         status: 200,
         headers: {
           "Content-Type": "text/csv; charset=utf-8",
-          "Content-Disposition": `attachment; filename="sowa-diagnostic-analytics-${effectiveTo}.csv"`,
+          "Content-Disposition": `attachment; filename="diagnostic-analytics-${effectiveTo}.csv"`,
         },
       });
     }

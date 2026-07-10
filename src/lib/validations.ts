@@ -524,6 +524,13 @@ const socialLinksSchema = z
   .nullable();
 
 export const updateSiteSettingsSchema = z.object({
+  siteName: z.string().max(50).optional().nullable(),
+  siteFullName: z.string().max(150).optional().nullable(),
+  siteTagline: z.string().max(150).optional().nullable(),
+  sectorName: z.string().max(100).optional().nullable(),
+  sectorTitle: z.string().max(100).optional().nullable(),
+  sectorContext: z.string().max(2000).optional().nullable(),
+  contactEmail: z.string().email().optional().nullable().or(z.literal("")),
   colorPrimary: z.string().regex(hexColorRegex, "Must be a valid hex color").optional().nullable(),
   colorPrimaryLight: z.string().regex(hexColorRegex).optional().nullable(),
   colorPrimaryDark: z.string().regex(hexColorRegex).optional().nullable(),

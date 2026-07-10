@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import type { TeamResponse } from "@/generated/prisma/client";
 import { applyRateLimit, errorResponse } from "@/lib/api-utils";
 import { aggregateTeamResults, generateTeamReport, type TeamResponseData } from "@/lib/team-report";
+import { getSiteSettings } from "@/lib/queries";
 
 /**
  * POST /api/team/report/[managerToken]/regenerate — Regenerate AI report.
@@ -58,7 +59,7 @@ export async function POST(
       deliveryFormat: formatDisplay[c.deliveryFormat] ?? c.deliveryFormat,
     }));
 
-    const aiReport = await generateTeamReport(aggregated, courses);
+    const aiReport = await generateTeamReport(aggregated, courses, await getSiteSettings());
 
     await prisma.teamAssessment.update({
       where: { id: team.id },

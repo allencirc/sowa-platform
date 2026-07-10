@@ -11,26 +11,27 @@ import { HowItWorks } from "@/components/enterprise/HowItWorks";
 import { TestimonialPlaceholder } from "@/components/enterprise/TestimonialPlaceholder";
 import { TeamAssessmentForm } from "@/components/enterprise/TeamAssessmentForm";
 import { getDictionary, isLocale, type Locale } from "@/lib/i18n";
+import { getSiteSettings } from "@/lib/queries";
 
-export const metadata: Metadata = {
-  title: "Enterprise Support — SOWA",
-  description:
-    "Workforce planning, skills gap analysis, and training solutions for organisations building offshore wind energy teams in Ireland.",
-  alternates: { canonical: "/enterprise" },
-  openGraph: {
-    title: "Enterprise Support — SOWA",
-    description:
-      "Strategic workforce development solutions for organisations entering or expanding in Ireland's offshore wind energy sector.",
-    url: "/enterprise",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Enterprise Support — SOWA",
-    description:
-      "Build your OWE talent pipeline with SOWA's enterprise workforce development tools.",
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSiteSettings();
+  return {
+    title: `Enterprise Support — ${settings.siteName}`,
+    description: `Workforce planning, skills gap analysis, and training solutions for organisations building ${settings.sectorName} teams in Ireland.`,
+    alternates: { canonical: "/enterprise" },
+    openGraph: {
+      title: `Enterprise Support — ${settings.siteName}`,
+      description: `Strategic workforce development solutions for organisations entering or expanding in Ireland's ${settings.sectorName} sector.`,
+      url: "/enterprise",
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `Enterprise Support — ${settings.siteName}`,
+      description: `Build your ${settings.sectorTitle} talent pipeline with ${settings.siteName}'s enterprise workforce development tools.`,
+    },
+  };
+}
 
 export default async function EnterprisePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale: rawLocale } = await params;

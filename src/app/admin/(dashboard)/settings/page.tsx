@@ -19,6 +19,7 @@ import {
   Loader2,
   Trash2,
   Link2,
+  Tag,
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
@@ -31,6 +32,13 @@ import { adminPatch } from "@/hooks/useAdminFetch";
 import { checkPaletteContrast, type ContrastCheck } from "@/lib/wcag-contrast";
 
 interface SiteSettingsForm {
+  siteName: string;
+  siteFullName: string;
+  siteTagline: string;
+  sectorName: string;
+  sectorTitle: string;
+  sectorContext: string;
+  contactEmail: string;
   colorPrimary: string;
   colorPrimaryLight: string;
   colorPrimaryDark: string;
@@ -55,6 +63,13 @@ interface SiteSettingsForm {
 }
 
 const defaultForm: SiteSettingsForm = {
+  siteName: DEFAULT_SITE_SETTINGS.siteName,
+  siteFullName: DEFAULT_SITE_SETTINGS.siteFullName,
+  siteTagline: DEFAULT_SITE_SETTINGS.siteTagline,
+  sectorName: DEFAULT_SITE_SETTINGS.sectorName,
+  sectorTitle: DEFAULT_SITE_SETTINGS.sectorTitle,
+  sectorContext: DEFAULT_SITE_SETTINGS.sectorContext,
+  contactEmail: DEFAULT_SITE_SETTINGS.contactEmail,
   colorPrimary: DEFAULT_SITE_SETTINGS.colorPrimary,
   colorPrimaryLight: DEFAULT_SITE_SETTINGS.colorPrimaryLight,
   colorPrimaryDark: DEFAULT_SITE_SETTINGS.colorPrimaryDark,
@@ -134,7 +149,7 @@ export default function AdminSettingsPage() {
   const failedChecks = contrastChecks.filter((c) => !c.passes);
   const contrastByField = Object.fromEntries(contrastChecks.map((c) => [c.field, c]));
 
-  const siteUrl = "https://sowa.skillnetireland.ie";
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://sowa.skillnetireland.ie";
   const sitemapUrl = `${siteUrl}/sitemap.xml`;
 
   // Load current settings
@@ -143,6 +158,13 @@ export default function AdminSettingsPage() {
       .then((r) => r.json())
       .then((data) => {
         setForm({
+          siteName: data.siteName ?? defaultForm.siteName,
+          siteFullName: data.siteFullName ?? defaultForm.siteFullName,
+          siteTagline: data.siteTagline ?? defaultForm.siteTagline,
+          sectorName: data.sectorName ?? defaultForm.sectorName,
+          sectorTitle: data.sectorTitle ?? defaultForm.sectorTitle,
+          sectorContext: data.sectorContext ?? defaultForm.sectorContext,
+          contactEmail: data.contactEmail ?? defaultForm.contactEmail,
           colorPrimary: data.colorPrimary ?? defaultForm.colorPrimary,
           colorPrimaryLight: data.colorPrimaryLight ?? defaultForm.colorPrimaryLight,
           colorPrimaryDark: data.colorPrimaryDark ?? defaultForm.colorPrimaryDark,
@@ -203,6 +225,13 @@ export default function AdminSettingsPage() {
     setSuccess(null);
     try {
       const payload = {
+        siteName: form.siteName || null,
+        siteFullName: form.siteFullName || null,
+        siteTagline: form.siteTagline || null,
+        sectorName: form.sectorName || null,
+        sectorTitle: form.sectorTitle || null,
+        sectorContext: form.sectorContext || null,
+        contactEmail: form.contactEmail || null,
         colorPrimary: form.colorPrimary || null,
         colorPrimaryLight: form.colorPrimaryLight || null,
         colorPrimaryDark: form.colorPrimaryDark || null,
@@ -235,6 +264,13 @@ export default function AdminSettingsPage() {
     setSuccess(null);
     try {
       await adminPatch("/api/settings", {
+        siteName: null,
+        siteFullName: null,
+        siteTagline: null,
+        sectorName: null,
+        sectorTitle: null,
+        sectorContext: null,
+        contactEmail: null,
         colorPrimary: null,
         colorPrimaryLight: null,
         colorPrimaryDark: null,
@@ -608,6 +644,108 @@ export default function AdminSettingsPage() {
               The quick brown fox jumps over the lazy dog. This sample text demonstrates how your
               chosen body font will appear across the platform.
             </p>
+          </div>
+        </div>
+
+        {/* Brand identity */}
+        <div className="rounded-xl border border-gray-200 bg-surface-card p-6 lg:col-span-2">
+          <div className="mb-4 flex items-center gap-2">
+            <Tag className="h-5 w-5 text-accent-dark" />
+            <h2 className="text-lg font-semibold text-text-primary">Brand Identity</h2>
+          </div>
+          <p className="mb-4 text-sm text-text-secondary">
+            These values appear throughout the site — headers, footers, page titles, emails, and the
+            AI assistant. Clearing a field restores the platform default.
+          </p>
+          <div className="grid gap-4 lg:grid-cols-2">
+            <div>
+              <label className="mb-1 block text-sm font-medium text-text-secondary">
+                Site Name (short)
+              </label>
+              <Input
+                value={form.siteName}
+                onChange={(e) => updateForm("siteName", e.target.value)}
+                placeholder="e.g. SOWA"
+                maxLength={50}
+              />
+            </div>
+            <div>
+              <label className="mb-1 block text-sm font-medium text-text-secondary">
+                Site Name (full)
+              </label>
+              <Input
+                value={form.siteFullName}
+                onChange={(e) => updateForm("siteFullName", e.target.value)}
+                placeholder="e.g. Skillnet Offshore Wind Academy"
+                maxLength={150}
+              />
+            </div>
+            <div>
+              <label className="mb-1 block text-sm font-medium text-text-secondary">Tagline</label>
+              <Input
+                value={form.siteTagline}
+                onChange={(e) => updateForm("siteTagline", e.target.value)}
+                placeholder="e.g. Offshore Wind Academy"
+                maxLength={150}
+              />
+              <p className="mt-1 text-xs text-text-muted">
+                Shown under the site name in the header.
+              </p>
+            </div>
+            <div>
+              <label className="mb-1 block text-sm font-medium text-text-secondary">
+                Sector (in a sentence)
+              </label>
+              <Input
+                value={form.sectorName}
+                onChange={(e) => updateForm("sectorName", e.target.value)}
+                placeholder="e.g. offshore wind"
+                maxLength={100}
+              />
+              <p className="mt-1 text-xs text-text-muted">
+                Used mid-sentence, e.g. “careers in offshore wind”.
+              </p>
+            </div>
+            <div>
+              <label className="mb-1 block text-sm font-medium text-text-secondary">
+                Sector (in a title)
+              </label>
+              <Input
+                value={form.sectorTitle}
+                onChange={(e) => updateForm("sectorTitle", e.target.value)}
+                placeholder="e.g. Offshore Wind"
+                maxLength={100}
+              />
+              <p className="mt-1 text-xs text-text-muted">
+                Used in headings, e.g. “Your Career in Offshore Wind”.
+              </p>
+            </div>
+            <div>
+              <label className="mb-1 block text-sm font-medium text-text-secondary">
+                Contact Email
+              </label>
+              <Input
+                type="email"
+                value={form.contactEmail}
+                onChange={(e) => updateForm("contactEmail", e.target.value)}
+                placeholder="e.g. info@example.ie"
+                maxLength={150}
+              />
+              <p className="mt-1 text-xs text-text-muted">Shown on the contact page.</p>
+            </div>
+            <div className="lg:col-span-2">
+              <label className="mb-1 block text-sm font-medium text-text-secondary">
+                Sector Context (for the AI assistant)
+              </label>
+              <Textarea
+                value={form.sectorContext}
+                onChange={(e) => updateForm("sectorContext", e.target.value)}
+                placeholder="One or two sentences of market context the AI assistant should know about your sector..."
+                rows={3}
+                maxLength={2000}
+              />
+              <p className="mt-1 text-xs text-text-muted">{form.sectorContext.length}/2000</p>
+            </div>
           </div>
         </div>
 

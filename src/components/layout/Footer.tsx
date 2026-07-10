@@ -69,7 +69,7 @@ export function Footer({ locale, dict, customFooterText, socialLinks }: FooterPr
             <div className="col-span-2 md:col-span-1">
               <Link href={prefix} className="flex items-center gap-2 mb-4">
                 <Wind className="h-8 w-8 text-secondary-dark" />
-                <span className="text-lg font-bold tracking-tight">SOWA</span>
+                <span className="text-lg font-bold tracking-tight">{dict.nav.siteName}</span>
               </Link>
               <p className="text-sm text-text-inverse/60 leading-relaxed">{dict.footer.tagline}</p>
               {customFooterText && (

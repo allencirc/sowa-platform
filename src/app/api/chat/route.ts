@@ -1,6 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { applyRateLimit, errorResponse } from "@/lib/api-utils";
-import { getAllCareers, getAllCourses, getUpcomingEvents, getAllSkills } from "@/lib/queries";
+import {
+  getAllCareers,
+  getAllCourses,
+  getUpcomingEvents,
+  getAllSkills,
+  getSiteSettings,
+} from "@/lib/queries";
+import type { SiteSettings } from "@/lib/theme-defaults";
 import type { Career, Course, Event, Skill } from "@/lib/types";
 
 function formatCareers(careers: Career[]): string {
@@ -59,26 +66,25 @@ function formatSkills(skills: Skill[]): string {
 }
 
 function buildSystemPrompt(
+  settings: SiteSettings,
   careers: Career[],
   courses: Course[],
   events: Event[],
   skills: Skill[],
 ): string {
-  return `You are the SOWA AI Assistant — the public-facing Q&A helper for the Skillnet Offshore Wind Academy (SOWA), a government-backed initiative to develop Ireland's offshore wind workforce.
+  return `You are the ${settings.siteName} AI Assistant — the public-facing Q&A helper for the ${settings.siteFullName} (${settings.siteName}), a government-backed initiative to develop Ireland's ${settings.sectorName} workforce.
 
-Your job is to answer questions from the public about careers, training, events, and skills in Ireland's offshore wind energy (OWE) sector. You have access to SOWA's full content library below.
+Your job is to answer questions from the public about careers, training, events, and skills in Ireland's ${settings.sectorName} sector. You have access to ${settings.siteName}'s full content library below.
 
-## Key context about Ireland's offshore wind sector
-- Ireland has committed to at least 5GW of offshore wind by 2030, and 37GW by 2050
+## Key context about the sector
+- ${settings.sectorContext}
 - This will create thousands of new jobs across multiple disciplines
-- Many skills are transferable from adjacent sectors: oil & gas, maritime, construction, traditional energy, engineering
-- The National Framework of Qualifications (NFQ) and Global Wind Organisation (GWO) standards apply
-- SOWA is funded by Skillnet Ireland and works with Irish and international training providers
+- ${settings.siteName} is funded by Skillnet Ireland and works with Irish and international training providers
 
-## SOWA Career Pathways (${careers.length} careers)
+## ${settings.siteName} Career Pathways (${careers.length} careers)
 ${formatCareers(careers)}
 
-## SOWA Training Courses (${courses.length} courses)
+## ${settings.siteName} Training Courses (${courses.length} courses)
 ${formatCourses(courses)}
 
 ## Upcoming Events (${events.length} events)
@@ -96,9 +102,9 @@ ${formatSkills(skills)}
 - Suggest concrete next steps (e.g., "You could start with [GWO Basic Safety Training](/en/training/gwo-basic-safety-training) which begins on...")
 - Keep answers concise — aim for 2–4 short paragraphs max
 - Be encouraging and practical; this is a growing sector with strong demand
-- If you don't have specific information to answer a question, say so honestly and suggest they visit the SOWA website or contact the team
+- If you don't have specific information to answer a question, say so honestly and suggest they visit the ${settings.siteName} website or contact the team
 - Do not make up information that isn't in the content library above
-- Do not discuss topics unrelated to offshore wind, energy careers, or training`;
+- Do not discuss topics unrelated to the ${settings.sectorName} sector, related careers, or training`;
 }
 
 export async function POST(request: NextRequest) {
@@ -127,14 +133,15 @@ export async function POST(request: NextRequest) {
 
   try {
     // Load current CMS content in parallel
-    const [careers, courses, events, skills] = await Promise.all([
+    const [careers, courses, events, skills, settings] = await Promise.all([
       getAllCareers(),
       getAllCourses(),
       getUpcomingEvents(),
       getAllSkills(),
+      getSiteSettings(),
     ]);
 
-    const systemPrompt = buildSystemPrompt(careers, courses, events, skills);
+    const systemPrompt = buildSystemPrompt(settings, careers, courses, events, skills);
 
     const response = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",

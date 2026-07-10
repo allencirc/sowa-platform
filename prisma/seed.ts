@@ -434,6 +434,27 @@ async function main() {
     },
   });
 
+  // ─── 13. Site Settings (brand identity) ───────────────────
+  // Explicit values for this deployment's brand. A white-label deployment
+  // changes these (or edits them later in Admin → Settings); code falls back
+  // to DEFAULT_SITE_SETTINGS when a field is null.
+  console.log("Seeding site settings...");
+  const brand = {
+    siteName: "SOWA",
+    siteFullName: "Skillnet Offshore Wind Academy",
+    siteTagline: "Offshore Wind Academy",
+    contactEmail: "info@sowa.ie",
+    sectorName: "offshore wind energy",
+    sectorTitle: "Offshore Wind",
+    sectorContext:
+      "Ireland has committed to at least 5GW of offshore wind by 2030, and 37GW by 2050. The sector is growing rapidly with major projects in the Irish and Celtic Seas. Many skills are transferable from adjacent sectors such as oil & gas, maritime, construction, and traditional energy. The National Framework of Qualifications (NFQ) and Global Wind Organisation (GWO) standards apply.",
+  };
+  await prisma.siteSettings.upsert({
+    where: { id: "default" },
+    update: brand,
+    create: { id: "default", ...brand },
+  });
+
   console.log("✅ Seed complete!");
 }
 

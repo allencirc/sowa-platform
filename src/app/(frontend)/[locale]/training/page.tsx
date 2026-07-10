@@ -2,33 +2,39 @@ import { Suspense } from "react";
 import type { Metadata } from "next";
 import { Container } from "@/components/ui/Container";
 import { SubscriptionWidget } from "@/components/frontend/SubscriptionWidget";
-import { getAllCourses } from "@/lib/queries";
+import { getAllCourses, getSiteSettings } from "@/lib/queries";
 import { getDictionary, isLocale, type Locale } from "@/lib/i18n";
 import { CourseListingClient } from "./CourseListingClient";
 
-export const metadata: Metadata = {
-  title: "Training & Courses",
-  description:
-    "Find accredited courses, certifications, and training programmes for offshore wind careers in Ireland. Filter by format, NFQ level, provider, and cost.",
-  alternates: { canonical: "/training" },
-  openGraph: {
-    title: "Training & Courses — Offshore Wind Energy",
-    description:
-      "Find accredited courses, certifications, and training programmes for offshore wind careers in Ireland.",
-    url: "/training",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Training & Courses — SOWA",
-    description: "Accredited courses and training for offshore wind careers in Ireland.",
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSiteSettings();
+  const description = `Find accredited courses, certifications, and training programmes for ${settings.sectorName} careers in Ireland. Filter by format, NFQ level, provider, and cost.`;
+  return {
+    title: "Training & Courses",
+    description,
+    alternates: { canonical: "/training" },
+    openGraph: {
+      title: `Training & Courses — ${settings.sectorTitle}`,
+      description: `Find accredited courses, certifications, and training programmes for ${settings.sectorName} careers in Ireland.`,
+      url: "/training",
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `Training & Courses — ${settings.siteName}`,
+      description: `Accredited courses and training for ${settings.sectorName} careers in Ireland.`,
+    },
+  };
+}
 
 export default async function TrainingPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale: rawLocale } = await params;
   const locale: Locale = isLocale(rawLocale) ? rawLocale : "en";
-  const [courses, dict] = await Promise.all([getAllCourses(), getDictionary(locale)]);
+  const [courses, dict, settings] = await Promise.all([
+    getAllCourses(),
+    getDictionary(locale),
+    getSiteSettings(),
+  ]);
 
   return (
     <>
@@ -39,8 +45,8 @@ export default async function TrainingPage({ params }: { params: Promise<{ local
             Training &amp; Courses
           </h1>
           <p className="text-text-secondary max-w-2xl">
-            Find accredited courses, certifications, and training programmes for offshore wind
-            careers
+            Find accredited courses, certifications, and training programmes for{" "}
+            {settings.sectorName} careers
           </p>
         </Container>
       </section>

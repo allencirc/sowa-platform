@@ -6,7 +6,7 @@ import { Calendar, User, ArrowLeft } from "lucide-react";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
 import { Container } from "@/components/ui/Container";
 import { Badge } from "@/components/ui/Badge";
-import { getNewsBySlug, getAllNews } from "@/lib/queries";
+import { getNewsBySlug, getAllNews, getSiteSettings } from "@/lib/queries";
 import { formatDate } from "@/lib/utils";
 
 interface NewsDetailProps {
@@ -25,6 +25,7 @@ export async function generateMetadata({ params }: NewsDetailProps): Promise<Met
   const { slug } = await params;
   const article = await getNewsBySlug(slug);
   if (!article) return { title: "Article Not Found" };
+  const settings = await getSiteSettings();
   const title = article.metaTitle || `${article.title} — News`;
   const desc = article.metaDescription || article.excerpt.slice(0, 160);
   return {
@@ -42,7 +43,7 @@ export async function generateMetadata({ params }: NewsDetailProps): Promise<Met
     },
     twitter: {
       card: "summary_large_image",
-      title: article.metaTitle || `${article.title} — SOWA`,
+      title: article.metaTitle || `${article.title} — ${settings.siteName}`,
       description: desc,
     },
   };

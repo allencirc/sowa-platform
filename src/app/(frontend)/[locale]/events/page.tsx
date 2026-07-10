@@ -1,36 +1,39 @@
 import type { Metadata } from "next";
 import { Container } from "@/components/ui/Container";
 import { SubscriptionWidget } from "@/components/frontend/SubscriptionWidget";
-import { getAllEvents, getAllCourses } from "@/lib/queries";
+import { getAllEvents, getAllCourses, getSiteSettings } from "@/lib/queries";
 import { getDictionary, isLocale, type Locale } from "@/lib/i18n";
 import { EventsPageClient } from "./EventsPageClient";
 
-export const metadata: Metadata = {
-  title: "Events & Workshops",
-  description:
-    "Upcoming conferences, webinars, workshops, and roadshows for Ireland's offshore wind energy sector. Register for in-person and virtual events.",
-  alternates: { canonical: "/events" },
-  openGraph: {
-    title: "Events & Workshops — Offshore Wind Energy",
-    description:
-      "Upcoming conferences, webinars, workshops, and roadshows for Ireland's offshore wind energy sector.",
-    url: "/events",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Events & Workshops — SOWA",
-    description: "Conferences, webinars, and workshops for Ireland's offshore wind sector.",
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSiteSettings();
+  const description = `Upcoming conferences, webinars, workshops, and roadshows for Ireland's ${settings.sectorName} sector. Register for in-person and virtual events.`;
+  return {
+    title: "Events & Workshops",
+    description,
+    alternates: { canonical: "/events" },
+    openGraph: {
+      title: `Events & Workshops — ${settings.sectorTitle}`,
+      description: `Upcoming conferences, webinars, workshops, and roadshows for Ireland's ${settings.sectorName} sector.`,
+      url: "/events",
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `Events & Workshops — ${settings.siteName}`,
+      description: `Conferences, webinars, and workshops for Ireland's ${settings.sectorName} sector.`,
+    },
+  };
+}
 
 export default async function EventsPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale: rawLocale } = await params;
   const locale: Locale = isLocale(rawLocale) ? rawLocale : "en";
-  const [events, courses, dict] = await Promise.all([
+  const [events, courses, dict, settings] = await Promise.all([
     getAllEvents(),
     getAllCourses(),
     getDictionary(locale),
+    getSiteSettings(),
   ]);
 
   return (
@@ -41,8 +44,8 @@ export default async function EventsPage({ params }: { params: Promise<{ locale:
             Events &amp; Workshops
           </h1>
           <p className="text-text-secondary max-w-2xl">
-            Join our conferences, webinars, workshops, and roadshows to connect with the offshore
-            wind energy community.
+            Join our conferences, webinars, workshops, and roadshows to connect with the{" "}
+            {settings.sectorName} community.
           </p>
         </Container>
       </section>

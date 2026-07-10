@@ -1,13 +1,14 @@
 import Link from "next/link";
+import { getSiteSettings } from "@/lib/queries";
 import { Compass, GraduationCap, Building2, HandHeart, ArrowRight } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { StaggeredList } from "@/components/ui/StaggeredList";
 
-const audiences = [
+const buildAudiences = (sector: string) => [
   {
     icon: Compass,
     title: "Explore Careers",
-    description: "Discover 12 career pathways across offshore wind energy.",
+    description: `Discover 12 career pathways across ${sector}.`,
     href: "/careers",
   },
   {
@@ -30,7 +31,9 @@ const audiences = [
   },
 ];
 
-export function AudienceCards() {
+export async function AudienceCards() {
+  const settings = await getSiteSettings();
+  const audiences = buildAudiences(settings.sectorName);
   return (
     <section className="py-16 sm:py-20 bg-surface">
       <Container>

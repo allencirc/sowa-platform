@@ -19,11 +19,12 @@
     "mainNavigation": "Navegação principal",
     "languageSwitcher": "Mudar idioma",
     "skipToContent": "Saltar para o conteúdo principal",
-    "siteTagline": "[TODO] Offshore Wind Academy"
+    "siteName": "{siteName}",
+    "siteTagline": "{siteTagline}"
   },
   "hero": {
-    "title": "[TODO] Your Career in Offshore Wind Starts Here",
-    "subtitle": "[TODO] Explore career pathways, training courses, events and skills diagnostics for Ireland's offshore wind energy sector.",
+    "title": "[TODO] Your Career in {sectorTitle} Starts Here",
+    "subtitle": "[TODO] Explore career pathways, training courses, events and skills diagnostics for Ireland's {sector} sector.",
     "exploreCareers": "[TODO] Explore Careers",
     "takeAssessment": "[TODO] Take Skills Assessment"
   },
@@ -41,7 +42,7 @@
     "cancel": "Cancelar"
   },
   "footer": {
-    "tagline": "[TODO] Ireland's national careers platform for offshore wind energy.",
+    "tagline": "[TODO] Ireland's national careers platform for {sector}.",
     "columns": {
       "careers": "Carreiras",
       "training": "Formação",
@@ -56,11 +57,11 @@
       "accessibility": "Acessibilidade",
       "cookies": "Cookies"
     },
-    "copyright": "© {year} Skillnet Offshore Wind Academy. Todos os direitos reservados."
+    "copyright": "© {year} {siteFullName}. Todos os direitos reservados."
   },
   "contact": {
     "title": "[TODO] Contact Us",
-    "subtitle": "[TODO] Have a question about offshore wind careers, training, or partnerships? We'd love to hear from you.",
+    "subtitle": "[TODO] Have a question about {sector} careers, training, or partnerships? We'd love to hear from you.",
     "form": {
       "name": "[TODO] Full Name",
       "namePlaceholder": "[TODO] Your full name",
@@ -79,7 +80,7 @@
       },
       "message": "[TODO] Message",
       "messagePlaceholder": "[TODO] How can we help you?",
-      "gdprConsent": "[TODO] I consent to SOWA processing my personal data for the purpose of this inquiry. Your data will be handled in accordance with our",
+      "gdprConsent": "[TODO] I consent to {siteName} processing my personal data for the purpose of this inquiry. Your data will be handled in accordance with our",
       "gdprPrivacyLink": "[TODO] Privacy Policy",
       "submit": "[TODO] Send Message",
       "submitting": "[TODO] Sending..."
@@ -92,14 +93,14 @@
   },
   "diagnostic": {
     "title": "[TODO] Skills Diagnostic",
-    "intro": "[TODO] Answer a few questions to discover offshore wind career pathways that fit your background.",
+    "intro": "[TODO] Answer a few questions to discover {sector} career pathways that fit your background.",
     "start": "[TODO] Start assessment",
     "questionLabel": "[TODO] Question {current} of {total}",
     "progressLabel": "[TODO] Assessment progress",
     "stems": {
-      "experience": "[TODO] How much experience do you have in the offshore wind or broader energy sector?",
+      "experience": "[TODO] How much experience do you have in {sector} or a closely related sector?",
       "background": "[TODO] Which of the following best describes your current background?",
-      "interests": "[TODO] Which areas of offshore wind work interest you most?",
+      "interests": "[TODO] Which areas of {sector} work interest you most?",
       "safetyTraining": "[TODO] Which safety qualifications do you already hold?",
       "technicalSkills": "[TODO] Rate your confidence with technical problem-solving.",
       "digitalSkills": "[TODO] Rate your confidence with digital tools and data analysis.",
@@ -110,14 +111,14 @@
     }
   },
   "enterprise": {
-    "title": "[TODO] Build Your OWE Talent Pipeline",
-    "subtitle": "[TODO] Strategic workforce development solutions for organisations entering or expanding in Ireland's offshore wind energy sector.",
+    "title": "[TODO] Build Your {sectorTitle} Talent Pipeline",
+    "subtitle": "[TODO] Strategic workforce development solutions for organisations entering or expanding in Ireland's {sector} sector.",
     "ctaDiagnostic": "[TODO] Start Team Assessment",
     "ctaTraining": "[TODO] Browse Training",
     "valueCards": {
       "workforcePlanning": {
         "title": "[TODO] Workforce Planning",
-        "description": "[TODO] Plan and build your offshore wind team with structured role mapping and recruitment guidance."
+        "description": "[TODO] Plan and build your {sector} team with structured role mapping and recruitment guidance."
       },
       "skillsGap": {
         "title": "[TODO] Skills Gap Analysis",
@@ -125,7 +126,7 @@
       },
       "trainingDirectory": {
         "title": "[TODO] Training Directory",
-        "description": "[TODO] Access Ireland's most comprehensive directory of accredited OWE training programmes."
+        "description": "[TODO] Access Ireland's most comprehensive directory of accredited {sectorTitle} training programmes."
       },
       "industryIntelligence": {
         "title": "[TODO] Industry Intelligence",
@@ -134,10 +135,10 @@
     },
     "howItWorks": {
       "title": "[TODO] How It Works",
-      "subtitle": "[TODO] Three steps to building your offshore wind workforce.",
+      "subtitle": "[TODO] Three steps to building your {sector} workforce.",
       "step1": {
         "title": "[TODO] Assess",
-        "description": "[TODO] Use our diagnostic tool to benchmark your team's current offshore wind competencies against industry standards."
+        "description": "[TODO] Use our diagnostic tool to benchmark your team's current {sector} competencies against industry standards."
       },
       "step2": {
         "title": "[TODO] Plan",
@@ -150,12 +151,12 @@
     },
     "teamAssessment": {
       "title": "[TODO] Team Skills Assessment",
-      "description": "[TODO] Create a team assessment to benchmark your workforce's offshore wind competencies.",
+      "description": "[TODO] Create a team assessment to benchmark your workforce's {sector} competencies.",
       "features": [
         "[TODO] Each team member completes the same 5-minute diagnostic",
         "[TODO] Results are fully anonymised",
         "[TODO] AI-generated training recommendations",
-        "[TODO] Matched course suggestions from the SOWA training directory"
+        "[TODO] Matched course suggestions from the {siteName} training directory"
       ],
       "form": {
         "teamName": "[TODO] Team / Organisation Name",
@@ -164,7 +165,7 @@
         "managerEmailPlaceholder": "manager@company.com",
         "responseThreshold": "[TODO] Notify Me After",
         "responseThresholdHelp": "[TODO] Number of completed assessments before we email your team report.",
-        "gdprConsent": "[TODO] I consent to SOWA processing this data in accordance with the",
+        "gdprConsent": "[TODO] I consent to {siteName} processing this data in accordance with the",
         "gdprPrivacyLink": "[TODO] Privacy Policy",
         "submit": "[TODO] Create Team Assessment",
         "submitting": "[TODO] Creating...",
@@ -178,8 +179,8 @@
       }
     },
     "diagnosticCta": {
-      "title": "[TODO] Assess Your Team's OWE Readiness",
-      "description": "[TODO] Use our diagnostic tool to evaluate your team's offshore wind skills and identify training priorities."
+      "title": "[TODO] Assess Your Team's {sectorTitle} Readiness",
+      "description": "[TODO] Use our diagnostic tool to evaluate your team's {sector} skills and identify training priorities."
     },
     "trainingCta": {
       "title": "[TODO] Enterprise Training Solutions",
@@ -191,12 +192,12 @@
       "placeholder": "[TODO] Case studies and testimonials coming soon.",
       "quotes": [
         {
-          "quote": "[TODO] SOWA helped us identify the exact skills our team needed to transition into offshore wind operations.",
+          "quote": "[TODO] {siteName} helped us identify the exact skills our team needed to transition into {sector} operations.",
           "author": "[TODO] Operations Director",
           "company": "Atlantic Energy Services"
         },
         {
-          "quote": "[TODO] The diagnostic tool gave us a clear roadmap for upskilling our marine crew for OWE projects.",
+          "quote": "[TODO] The diagnostic tool gave us a clear roadmap for upskilling our marine crew for {sectorTitle} projects.",
           "author": "[TODO] HR Manager",
           "company": "Celtic Marine Group"
         },
@@ -209,7 +210,7 @@
     },
     "contactSection": {
       "title": "[TODO] Discuss Your Workforce Needs",
-      "subtitle": "[TODO] Our enterprise team can help you plan your organisation's offshore wind workforce development strategy."
+      "subtitle": "[TODO] Our enterprise team can help you plan your organisation's {sector} workforce development strategy."
     }
   },
   "skillsBridge": {
@@ -228,7 +229,7 @@
   },
   "subscription": {
     "title": "[TODO] Stay Updated",
-    "subtitle": "[TODO] Get the latest offshore wind career news, training opportunities, and events delivered to your inbox.",
+    "subtitle": "[TODO] Get the latest {sector} career news, training opportunities, and events delivered to your inbox.",
     "emailLabel": "[TODO] Email Address",
     "emailPlaceholder": "you@example.com",
     "nameLabel": "[TODO] Name (optional)",
@@ -265,6 +266,6 @@
     "errorTitle": "[TODO] Something Went Wrong",
     "errorMessage": "[TODO] This link may have expired or is invalid. Please try subscribing again.",
     "compactTitle": "[TODO] Subscribe to Updates",
-    "compactSubtitle": "[TODO] Stay informed about the latest in offshore wind energy."
+    "compactSubtitle": "[TODO] Stay informed about the latest in {sector}."
   }
 }

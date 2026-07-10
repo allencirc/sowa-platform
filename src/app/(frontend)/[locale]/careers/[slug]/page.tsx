@@ -13,6 +13,7 @@ import {
   getCoursesByCareer,
   getSkillsByCareer,
   getAllCareers,
+  getSiteSettings,
 } from "@/lib/queries";
 import { formatCurrency } from "@/lib/utils";
 
@@ -32,6 +33,7 @@ export async function generateMetadata({ params }: CareerDetailProps): Promise<M
   const { slug } = await params;
   const career = await getCareerBySlug(slug);
   if (!career) return { title: "Career Not Found" };
+  const settings = await getSiteSettings();
   const title = career.metaTitle || `${career.title} — Careers`;
   const desc = career.metaDescription || career.description.slice(0, 160);
   return {
@@ -40,7 +42,7 @@ export async function generateMetadata({ params }: CareerDetailProps): Promise<M
     ...(career.metaKeywords && { keywords: career.metaKeywords }),
     alternates: { canonical: `/careers/${career.slug}` },
     openGraph: {
-      title: career.metaTitle || `${career.title} — Offshore Wind Career`,
+      title: career.metaTitle || `${career.title} — ${settings.sectorTitle} Career`,
       description: desc,
       url: `/careers/${career.slug}`,
       type: "article",
@@ -48,7 +50,7 @@ export async function generateMetadata({ params }: CareerDetailProps): Promise<M
     },
     twitter: {
       card: "summary_large_image",
-      title: career.metaTitle || `${career.title} — SOWA`,
+      title: career.metaTitle || `${career.title} — ${settings.siteName}`,
       description: desc,
     },
   };

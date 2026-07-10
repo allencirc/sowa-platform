@@ -110,7 +110,7 @@ export function NewsForm({ article, mode }: NewsFormProps) {
         <h2 className="mb-4 text-lg font-semibold text-text-primary">Article Details</h2>
         <div className="grid gap-4 sm:grid-cols-2">
           <FormField label="Title" required error={errors.title?.message}>
-            <Input {...register("title")} placeholder="e.g. SOWA Launches New Training Programme" />
+            <Input {...register("title")} placeholder="e.g. New Training Programme Announced" />
           </FormField>
           <FormField label="Slug" required error={errors.slug?.message}>
             <Input
@@ -120,7 +120,7 @@ export function NewsForm({ article, mode }: NewsFormProps) {
             />
           </FormField>
           <FormField label="Author" required error={errors.author?.message}>
-            <Input {...register("author")} placeholder="e.g. SOWA Team" />
+            <Input {...register("author")} placeholder="e.g. Editorial Team" />
           </FormField>
           <FormField label="Category" required error={errors.category?.message}>
             <Input {...register("category")} placeholder="e.g. Industry News" />

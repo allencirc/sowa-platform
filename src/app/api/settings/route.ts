@@ -22,6 +22,13 @@ export async function GET(request: NextRequest) {
     }
 
     return NextResponse.json({
+      siteName: row.siteName ?? DEFAULT_SITE_SETTINGS.siteName,
+      siteFullName: row.siteFullName ?? DEFAULT_SITE_SETTINGS.siteFullName,
+      siteTagline: row.siteTagline ?? DEFAULT_SITE_SETTINGS.siteTagline,
+      sectorName: row.sectorName ?? DEFAULT_SITE_SETTINGS.sectorName,
+      sectorTitle: row.sectorTitle ?? DEFAULT_SITE_SETTINGS.sectorTitle,
+      sectorContext: row.sectorContext ?? DEFAULT_SITE_SETTINGS.sectorContext,
+      contactEmail: row.contactEmail ?? DEFAULT_SITE_SETTINGS.contactEmail,
       colorPrimary: row.colorPrimary ?? DEFAULT_SITE_SETTINGS.colorPrimary,
       colorPrimaryLight: row.colorPrimaryLight ?? DEFAULT_SITE_SETTINGS.colorPrimaryLight,
       colorPrimaryDark: row.colorPrimaryDark ?? DEFAULT_SITE_SETTINGS.colorPrimaryDark,
@@ -104,6 +111,13 @@ export async function PUT(request: NextRequest) {
     revalidateTag("site-settings", "default");
 
     return NextResponse.json({
+      siteName: updated.siteName ?? DEFAULT_SITE_SETTINGS.siteName,
+      siteFullName: updated.siteFullName ?? DEFAULT_SITE_SETTINGS.siteFullName,
+      siteTagline: updated.siteTagline ?? DEFAULT_SITE_SETTINGS.siteTagline,
+      sectorName: updated.sectorName ?? DEFAULT_SITE_SETTINGS.sectorName,
+      sectorTitle: updated.sectorTitle ?? DEFAULT_SITE_SETTINGS.sectorTitle,
+      sectorContext: updated.sectorContext ?? DEFAULT_SITE_SETTINGS.sectorContext,
+      contactEmail: updated.contactEmail ?? DEFAULT_SITE_SETTINGS.contactEmail,
       colorPrimary: updated.colorPrimary ?? DEFAULT_SITE_SETTINGS.colorPrimary,
       colorPrimaryLight: updated.colorPrimaryLight ?? DEFAULT_SITE_SETTINGS.colorPrimaryLight,
       colorPrimaryDark: updated.colorPrimaryDark ?? DEFAULT_SITE_SETTINGS.colorPrimaryDark,

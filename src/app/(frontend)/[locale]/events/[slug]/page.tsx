@@ -6,7 +6,7 @@ import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
 import { Container } from "@/components/ui/Container";
 import { Badge } from "@/components/ui/Badge";
 import { RegisterButton } from "@/components/registration/RegisterButton";
-import { getEventBySlug, getAllEvents } from "@/lib/queries";
+import { getEventBySlug, getAllEvents, getSiteSettings } from "@/lib/queries";
 import { prisma } from "@/lib/prisma";
 
 interface EventDetailProps {
@@ -25,6 +25,7 @@ export async function generateMetadata({ params }: EventDetailProps): Promise<Me
   const { slug } = await params;
   const event = await getEventBySlug(slug);
   if (!event) return { title: "Event Not Found" };
+  const settings = await getSiteSettings();
   const title = event.metaTitle || `${event.title} — Events`;
   const desc = event.metaDescription || event.description.slice(0, 160);
   return {
@@ -33,14 +34,14 @@ export async function generateMetadata({ params }: EventDetailProps): Promise<Me
     ...(event.metaKeywords && { keywords: event.metaKeywords }),
     alternates: { canonical: `/events/${event.slug}` },
     openGraph: {
-      title: event.metaTitle || `${event.title} — SOWA Event`,
+      title: event.metaTitle || `${event.title} — ${settings.siteName} Event`,
       description: desc,
       url: `/events/${event.slug}`,
       type: "article",
     },
     twitter: {
       card: "summary_large_image",
-      title: event.metaTitle || `${event.title} — SOWA`,
+      title: event.metaTitle || `${event.title} — ${settings.siteName}`,
       description: desc,
     },
   };

@@ -415,6 +415,13 @@ model User {
 
 model SiteSettings {
   id                  String   @id @default("default")
+  siteName            String?
+  siteFullName        String?
+  siteTagline         String?
+  sectorName          String?
+  sectorTitle         String?
+  sectorContext       String?
+  contactEmail        String?
   colorPrimary        String?
   colorPrimaryLight   String?
   colorPrimaryDark    String?

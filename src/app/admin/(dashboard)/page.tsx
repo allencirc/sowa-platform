@@ -154,7 +154,7 @@ export default async function AdminDashboardPage() {
           Welcome back{session?.user?.name ? `, ${session.user.name}` : ""}
         </h1>
         <p className="mt-1 text-text-secondary">
-          Here&apos;s an overview of the SOWA platform content.
+          Here&apos;s an overview of your platform content.
         </p>
       </div>
 

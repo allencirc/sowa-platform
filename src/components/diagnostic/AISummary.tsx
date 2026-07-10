@@ -44,7 +44,7 @@ interface SummaryRequestBody {
 const situationLabels: Record<string, string> = {
   new_entrant: "Student or considering a career change",
   adjacent: "Working in a related industry",
-  current_owe: "Already working in offshore wind",
+  current_owe: "Already working in the sector",
   employer: "Employer looking to develop workforce",
   educator: "Training provider or educator",
 };

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
+import { getSiteSettings } from "@/lib/queries";
 import type { TeamResponse } from "@/generated/prisma/client";
 import {
   aggregateTeamResults,
@@ -9,12 +10,15 @@ import {
 } from "@/lib/team-report";
 import { TeamReportView } from "@/components/enterprise/TeamReportView";
 
-export const metadata: Metadata = {
-  title: "Team Assessment Report — SOWA",
-  description:
-    "Aggregated team skills assessment results and AI-generated training recommendations.",
-  robots: { index: false, follow: false }, // Private report — no indexing
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSiteSettings();
+  return {
+    title: `Team Assessment Report — ${settings.siteName}`,
+    description:
+      "Aggregated team skills assessment results and AI-generated training recommendations.",
+    robots: { index: false, follow: false }, // Private report — no indexing
+  };
+}
 
 export default async function TeamReportPage({
   params,

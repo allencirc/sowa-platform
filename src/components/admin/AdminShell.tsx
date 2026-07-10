@@ -12,6 +12,8 @@ interface AdminShellProps {
     email: string;
     role: UserRole;
   };
+  /** Short brand name shown in the sidebar header. */
+  siteName: string;
   /**
    * Server-rendered slot for anything that should sit between the topbar and
    * the main content (currently the READ_ONLY banner). Kept as a slot so that
@@ -27,7 +29,7 @@ interface AdminShellProps {
  * viewports the sidebar collapses behind a hamburger so the main content
  * gets the full width.
  */
-export function AdminShell({ user, banner, children }: AdminShellProps) {
+export function AdminShell({ user, siteName, banner, children }: AdminShellProps) {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const pathname = usePathname();
 
@@ -40,6 +42,7 @@ export function AdminShell({ user, banner, children }: AdminShellProps) {
     <div className="flex h-screen overflow-hidden bg-surface">
       <AdminSidebar
         user={user}
+        siteName={siteName}
         mobileOpen={mobileNavOpen}
         onMobileClose={() => setMobileNavOpen(false)}
       />

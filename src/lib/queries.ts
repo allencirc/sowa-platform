@@ -983,6 +983,13 @@ export const getSiteSettings = unstable_cache(
     });
     if (!row) return { ...DEFAULT_SITE_SETTINGS };
     return {
+      siteName: row.siteName ?? DEFAULT_SITE_SETTINGS.siteName,
+      siteFullName: row.siteFullName ?? DEFAULT_SITE_SETTINGS.siteFullName,
+      siteTagline: row.siteTagline ?? DEFAULT_SITE_SETTINGS.siteTagline,
+      sectorName: row.sectorName ?? DEFAULT_SITE_SETTINGS.sectorName,
+      sectorTitle: row.sectorTitle ?? DEFAULT_SITE_SETTINGS.sectorTitle,
+      sectorContext: row.sectorContext ?? DEFAULT_SITE_SETTINGS.sectorContext,
+      contactEmail: row.contactEmail ?? DEFAULT_SITE_SETTINGS.contactEmail,
       colorPrimary: row.colorPrimary ?? DEFAULT_SITE_SETTINGS.colorPrimary,
       colorPrimaryLight: row.colorPrimaryLight ?? DEFAULT_SITE_SETTINGS.colorPrimaryLight,
       colorPrimaryDark: row.colorPrimaryDark ?? DEFAULT_SITE_SETTINGS.colorPrimaryDark,

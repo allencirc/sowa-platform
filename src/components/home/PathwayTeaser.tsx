@@ -1,9 +1,11 @@
 import Link from "next/link";
+import { getSiteSettings } from "@/lib/queries";
 import { ArrowRight, GitBranch } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 
-export function PathwayTeaser() {
+export async function PathwayTeaser() {
+  const settings = await getSiteSettings();
   return (
     <section className="relative py-20 sm:py-24 overflow-hidden bg-gradient-to-br from-primary via-primary to-primary-light text-text-inverse">
       {/* Decorative dots grid */}
@@ -59,8 +61,8 @@ export function PathwayTeaser() {
           <h2 className="text-3xl sm:text-4xl font-bold mb-4">See How Careers Connect</h2>
 
           <p className="text-lg text-white/70 mb-8 leading-relaxed">
-            Explore an interactive map showing how careers connect across the offshore wind sector —
-            from entry-level roles to senior leadership.
+            Explore an interactive map showing how careers connect across the {settings.sectorName}
+            sector — from entry-level roles to senior leadership.
           </p>
 
           <Link href="/careers">

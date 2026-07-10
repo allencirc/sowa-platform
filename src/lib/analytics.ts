@@ -1,5 +1,5 @@
 /**
- * GA4 Analytics — consent-aware, typed event tracking for SOWA platform.
+ * GA4 Analytics — consent-aware, typed event tracking for the platform.
  *
  * No tracking scripts are loaded until the user grants analytics consent.
  * All custom events use a typed helper so call-sites stay refactor-safe.
@@ -219,7 +219,7 @@ export function trackNewsletterSubscribe(params?: { topics?: string[] }) {
 
 /**
  * Conversion event — fired when a user clicks through to an external course
- * provider from a SOWA course page. GA4 event name: `outbound_course_click`.
+ * provider from a course page. GA4 event name: `outbound_course_click`.
  */
 export function trackOutboundCourseClick(params: {
   course_id: string;
@@ -246,7 +246,7 @@ export function trackPathwayExplored(params: { pathway_id: string }) {
 export function trackPageView(url: string) {
   sendEvent("page_view", {
     page_location: url,
-    page_path: new URL(url, "https://sowa.skillnetireland.ie").pathname,
+    page_path: new URL(url, window.location.origin).pathname,
   });
 }
 

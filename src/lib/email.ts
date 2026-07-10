@@ -6,6 +6,27 @@
 
 import nodemailer from "nodemailer";
 import type { Transporter } from "nodemailer";
+import { getSiteSettings } from "@/lib/queries";
+import { DEFAULT_SITE_SETTINGS } from "@/lib/theme-defaults";
+
+// Templates in this file (and freshness/report email builders) may embed
+// brand tokens — {siteName}, {siteFullName}, {sector}, {sectorTitle} — which
+// are resolved from SiteSettings here, at send time. This keeps the template
+// functions synchronous and white-label-safe.
+const BRAND_TOKEN_RE = /\{(siteName|siteFullName|sector|sectorTitle)\}/g;
+
+async function resolveBrandTokens(text: string): Promise<string> {
+  // An email must never fail because the settings lookup did — fall back to
+  // the default brand rather than throwing from inside sendEmail.
+  const settings = await getSiteSettings().catch(() => DEFAULT_SITE_SETTINGS);
+  const tokens: Record<string, string> = {
+    siteName: settings.siteName,
+    siteFullName: settings.siteFullName,
+    sector: settings.sectorName,
+    sectorTitle: settings.sectorTitle,
+  };
+  return text.replace(BRAND_TOKEN_RE, (_, key: string) => tokens[key]);
+}
 
 let transporter: Transporter | null = null;
 
@@ -25,6 +46,9 @@ function getTransporter(): Transporter {
 }
 
 export async function sendEmail(to: string, subject: string, html: string): Promise<void> {
+  subject = await resolveBrandTokens(subject);
+  html = await resolveBrandTokens(html);
+
   if (process.env.EMAIL_ENABLED !== "true") {
     console.log(`[Email] (disabled) Would send to ${to}: ${subject}`);
     return;
@@ -33,7 +57,9 @@ export async function sendEmail(to: string, subject: string, html: string): Prom
   try {
     const transport = getTransporter();
     await transport.sendMail({
-      from: process.env.SMTP_FROM ?? "SOWA Platform <noreply@sowa.skillnetireland.ie>",
+      from:
+        process.env.SMTP_FROM ??
+        (await resolveBrandTokens("{siteName} Platform <noreply@sowa.skillnetireland.ie>")),
       to,
       subject,
       html,
@@ -49,13 +75,13 @@ export async function sendEmail(to: string, subject: string, html: string): Prom
 const BRAND_HEADER = `
   <div style="background-color:#0C2340;padding:24px 32px;text-align:center;">
     <h1 style="color:#FFFFFF;font-family:Inter,system-ui,sans-serif;font-size:20px;margin:0;">
-      SOWA Platform
+      {siteName} Platform
     </h1>
   </div>`;
 
 const BRAND_FOOTER = `
   <div style="padding:16px 32px;text-align:center;font-size:12px;color:#6B7280;font-family:Inter,system-ui,sans-serif;">
-    <p style="margin:0;">Skillnet Offshore Wind Academy</p>
+    <p style="margin:0;">{siteFullName}</p>
     <p style="margin:4px 0 0;">
       <a href="${process.env.NEXTAUTH_URL ?? "https://sowa.skillnetireland.ie"}/admin" style="color:#4A90D9;text-decoration:none;">
         Go to Admin Dashboard
@@ -176,11 +202,11 @@ export function subscriptionVerification(
 ): { subject: string; html: string } {
   const topicList = topics.map((t) => `<li style="margin:2px 0;">${t}</li>`).join("");
   return {
-    subject: "Verify your SOWA subscription",
+    subject: "Verify your {siteName} subscription",
     html: wrap(`
       <h2 style="color:#1A1A2E;font-size:18px;margin:0 0 12px;">Verify Your Subscription</h2>
       <p style="color:#6B7280;margin:0 0 16px;line-height:1.5;">
-        Thank you for subscribing to the Skillnet Offshore Wind Academy newsletter. Please confirm your email address to start receiving updates.
+        Thank you for subscribing to the {siteFullName} newsletter. Please confirm your email address to start receiving updates.
       </p>
 
       <div style="background:#F7F9FC;border-left:4px solid #00A878;padding:12px 16px;border-radius:4px;margin:0 0 16px;">
@@ -208,11 +234,11 @@ export function subscriptionConfirmed(
   unsubscribeLink: string,
 ): { subject: string; html: string } {
   return {
-    subject: "Your SOWA subscription is confirmed",
+    subject: "Your {siteName} subscription is confirmed",
     html: wrap(`
       <h2 style="color:#1A1A2E;font-size:18px;margin:0 0 12px;">Subscription Confirmed</h2>
       <p style="color:#6B7280;margin:0 0 16px;line-height:1.5;">
-        Your email has been verified. You'll start receiving updates from the Skillnet Offshore Wind Academy based on your selected topics and frequency.
+        Your email has been verified. You'll start receiving updates from the {siteFullName} based on your selected topics and frequency.
       </p>
 
       <div style="background:#F7F9FC;padding:16px;border-radius:4px;margin:0 0 16px;text-align:center;">
@@ -226,11 +252,11 @@ export function subscriptionConfirmed(
 
 export function subscriptionUnsubscribed(): { subject: string; html: string } {
   return {
-    subject: "You've been unsubscribed from SOWA",
+    subject: "You've been unsubscribed from {siteName}",
     html: wrap(`
       <h2 style="color:#1A1A2E;font-size:18px;margin:0 0 12px;">Unsubscribed Successfully</h2>
       <p style="color:#6B7280;margin:0 0 16px;line-height:1.5;">
-        You've been removed from the Skillnet Offshore Wind Academy mailing list. You will no longer receive newsletter emails from us.
+        You've been removed from the {siteFullName} mailing list. You will no longer receive newsletter emails from us.
       </p>
       <p style="color:#6B7280;margin:0;line-height:1.5;font-size:13px;">
         Changed your mind? You can always subscribe again on our website.
@@ -247,7 +273,7 @@ export function teamCreated(
   reportLink: string,
 ): { subject: string; html: string } {
   return {
-    subject: `Your SOWA Team Assessment is ready: ${teamName}`,
+    subject: `Your {siteName} Team Assessment is ready: ${teamName}`,
     html: wrap(`
       <h2 style="color:#1A1A2E;font-size:18px;margin:0 0 12px;">Team Assessment Created</h2>
       <p style="color:#6B7280;margin:0 0 16px;line-height:1.5;">

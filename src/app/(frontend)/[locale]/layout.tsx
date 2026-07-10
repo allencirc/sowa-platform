@@ -4,45 +4,43 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { getDictionary, isLocale, locales, type Locale } from "@/lib/i18n";
 import { getSiteSettings } from "@/lib/queries";
+import { getSiteUrl } from "@/lib/site-url";
+import type { SiteSettings } from "@/lib/theme-defaults";
 
-const organizationJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "EducationalOrganization",
-  name: "Skillnet Offshore Wind Academy (SOWA)",
-  alternateName: "SOWA",
-  url: "https://sowa.skillnetireland.ie",
-  logo: "https://sowa.skillnetireland.ie/icon.svg",
-  description:
-    "Ireland's national careers platform for offshore wind energy. Explore career pathways, training courses, events, and skills diagnostics.",
-  parentOrganization: {
-    "@type": "Organization",
-    name: "Skillnet Ireland",
-    url: "https://www.skillnetireland.ie",
-  },
-  areaServed: {
-    "@type": "Country",
-    name: "Ireland",
-  },
-  sameAs: [
-    "https://www.linkedin.com/company/skillnet-ireland",
-    "https://twitter.com/SkillnetIreland",
-  ],
-};
-
-const websiteJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  name: "SOWA — Skillnet Offshore Wind Academy",
-  url: "https://sowa.skillnetireland.ie",
-  potentialAction: {
-    "@type": "SearchAction",
-    target: {
-      "@type": "EntryPoint",
-      urlTemplate: "https://sowa.skillnetireland.ie/search?q={search_term_string}",
+function buildOrganizationJsonLd(settings: SiteSettings, siteUrl: string) {
+  const socialUrls = Object.values(settings.socialLinks ?? {}).filter(Boolean);
+  return {
+    "@context": "https://schema.org",
+    "@type": "EducationalOrganization",
+    name: `${settings.siteFullName} (${settings.siteName})`,
+    alternateName: settings.siteName,
+    url: siteUrl,
+    logo: `${siteUrl}/icon.svg`,
+    description: `Ireland's national careers platform for ${settings.sectorName}. Explore career pathways, training courses, events, and skills diagnostics.`,
+    areaServed: {
+      "@type": "Country",
+      name: "Ireland",
     },
-    "query-input": "required name=search_term_string",
-  },
-};
+    ...(socialUrls.length > 0 ? { sameAs: socialUrls } : {}),
+  };
+}
+
+function buildWebsiteJsonLd(settings: SiteSettings, siteUrl: string) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: `${settings.siteName} — ${settings.siteFullName}`,
+    url: siteUrl,
+    potentialAction: {
+      "@type": "SearchAction",
+      target: {
+        "@type": "EntryPoint",
+        urlTemplate: `${siteUrl}/search?q={search_term_string}`,
+      },
+      "query-input": "required name=search_term_string",
+    },
+  };
+}
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
@@ -59,19 +57,20 @@ export default async function FrontendLayout({
   if (!isLocale(rawLocale)) notFound();
   const locale: Locale = rawLocale;
   const [dict, siteSettings] = await Promise.all([getDictionary(locale), getSiteSettings()]);
+  const siteUrl = getSiteUrl();
 
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(organizationJsonLd),
+          __html: JSON.stringify(buildOrganizationJsonLd(siteSettings, siteUrl)),
         }}
       />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(websiteJsonLd),
+          __html: JSON.stringify(buildWebsiteJsonLd(siteSettings, siteUrl)),
         }}
       />
       <Header locale={locale} dict={dict} />

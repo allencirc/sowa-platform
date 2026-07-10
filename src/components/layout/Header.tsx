@@ -32,7 +32,9 @@ export function Header({ locale, dict }: { locale: Locale; dict: Dictionary }) {
             <Link href={`/${locale}`} className="flex items-center gap-2 shrink-0">
               <Wind className="h-8 w-8 text-secondary-dark" />
               <div className="flex flex-col leading-tight">
-                <span className="text-lg font-bold text-primary tracking-tight">SOWA</span>
+                <span className="text-lg font-bold text-primary tracking-tight">
+                  {dict.nav.siteName}
+                </span>
                 <span className="text-[10px] text-text-secondary leading-none hidden sm:block">
                   {dict.nav.siteTagline}
                 </span>

@@ -3,32 +3,38 @@ import { Container } from "@/components/ui/Container";
 import { PathwayMap } from "@/components/careers/PathwayMap";
 import { CareerFilters } from "@/components/careers/CareerFilters";
 import { SubscriptionWidget } from "@/components/frontend/SubscriptionWidget";
-import { getAllCareers } from "@/lib/queries";
+import { getAllCareers, getSiteSettings } from "@/lib/queries";
 import { getDictionary, isLocale, type Locale } from "@/lib/i18n";
 
-export const metadata: Metadata = {
-  title: "Career Pathways",
-  description:
-    "Explore 12 career pathways across Ireland's offshore wind energy sector. View interactive maps, salary ranges, and progression routes.",
-  alternates: { canonical: "/careers" },
-  openGraph: {
-    title: "Career Pathways — Offshore Wind Energy",
-    description:
-      "Explore 12 career pathways across Ireland's offshore wind energy sector. View interactive maps, salary ranges, and progression routes.",
-    url: "/careers",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Career Pathways — SOWA",
-    description: "Explore 12 career pathways across Ireland's offshore wind energy sector.",
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSiteSettings();
+  const description = `Explore 12 career pathways across Ireland's ${settings.sectorName} sector. View interactive maps, salary ranges, and progression routes.`;
+  return {
+    title: "Career Pathways",
+    description,
+    alternates: { canonical: "/careers" },
+    openGraph: {
+      title: `Career Pathways — ${settings.sectorTitle}`,
+      description,
+      url: "/careers",
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `Career Pathways — ${settings.siteName}`,
+      description: `Explore 12 career pathways across Ireland's ${settings.sectorName} sector.`,
+    },
+  };
+}
 
 export default async function CareersPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale: rawLocale } = await params;
   const locale: Locale = isLocale(rawLocale) ? rawLocale : "en";
-  const [careers, dict] = await Promise.all([getAllCareers(), getDictionary(locale)]);
+  const [careers, dict, settings] = await Promise.all([
+    getAllCareers(),
+    getDictionary(locale),
+    getSiteSettings(),
+  ]);
 
   return (
     <>
@@ -40,8 +46,8 @@ export default async function CareersPage({ params }: { params: Promise<{ locale
               Career Pathways
             </h1>
             <p className="text-text-secondary max-w-2xl">
-              Explore how careers connect across the offshore wind sector — from entry-level roles
-              to senior leadership. Click any role to learn more.
+              Explore how careers connect across the {settings.sectorName} sector — from entry-level
+              roles to senior leadership. Click any role to learn more.
             </p>
           </div>
           <PathwayMap careers={careers} />

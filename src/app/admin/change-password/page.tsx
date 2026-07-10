@@ -4,7 +4,7 @@ import { auth } from "@/lib/auth";
 import { ChangePasswordForm } from "./ChangePasswordForm";
 
 export const metadata = {
-  title: "Change Password — SOWA Admin",
+  title: "Change Password",
 };
 
 export default async function ChangePasswordPage() {

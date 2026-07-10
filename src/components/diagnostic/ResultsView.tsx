@@ -89,9 +89,9 @@ export function ResultsView({
   const mailtoHref = useMemo(() => {
     if (typeof window === "undefined") return "#";
     const url = buildShareUrl(window.location.origin, localePrefix, answers, tab);
-    const subject = encodeURIComponent("My SOWA offshore wind skills profile");
+    const subject = encodeURIComponent("My skills assessment results");
     const body = encodeURIComponent(
-      `Hi,\n\nI just completed the SOWA offshore wind skills assessment. Here's my profile — I'd love your thoughts:\n\n${url}\n\nThanks`,
+      `Hi,\n\nI just completed a skills assessment. Here's my profile — I'd love your thoughts:\n\n${url}\n\nThanks`,
     );
     return `mailto:?subject=${subject}&body=${body}`;
   }, [answers, localePrefix, tab]);

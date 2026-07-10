@@ -60,8 +60,8 @@ export function NewsletterSignup() {
             </div>
             <h3 className="text-2xl font-bold text-text-primary mb-2">You&apos;re subscribed!</h3>
             <p className="text-text-secondary">
-              Thank you for subscribing. We&apos;ll keep you updated on the latest in offshore wind
-              careers and training.
+              Thank you for subscribing. We&apos;ll keep you updated on the latest careers and
+              training news.
             </p>
           </div>
         </Container>
@@ -79,8 +79,7 @@ export function NewsletterSignup() {
 
           <h2 className="text-3xl font-bold text-text-primary mb-2">Stay Updated</h2>
           <p className="text-text-secondary mb-8">
-            Get the latest offshore wind career news, training opportunities, and events delivered
-            to your inbox.
+            Get the latest career news, training opportunities, and events delivered to your inbox.
           </p>
 
           <form onSubmit={handleSubmit}>
