@@ -1,5 +1,7 @@
 import { Wind } from "lucide-react";
 import { AIChatInput } from "@/components/ui/ai-chat-input";
+import { getSiteSettings } from "@/lib/queries";
+import type { Dictionary } from "@/lib/i18n";
 
 function TurbineSVG({ className }: { className?: string }) {
   return (
@@ -18,7 +20,26 @@ function TurbineSVG({ className }: { className?: string }) {
   );
 }
 
-export function HeroSection() {
+/**
+ * Render the hero title with the sector name highlighted in the secondary
+ * colour. Falls back to the plain title when the sector phrase doesn't
+ * appear in the (translated) string.
+ */
+function AccentedTitle({ title, accent }: { title: string; accent: string }) {
+  const idx = title.indexOf(accent);
+  if (idx === -1) return <>{title}</>;
+  return (
+    <>
+      {title.slice(0, idx)}
+      <span className="text-secondary">{accent}</span>
+      {title.slice(idx + accent.length)}
+    </>
+  );
+}
+
+export async function HeroSection({ dict }: { dict: Dictionary["hero"] }) {
+  const settings = await getSiteSettings();
+
   // Section has an explicit bg-primary under the image/gradient so WCAG
   // contrast holds even if the background image fails to load — axe (and
   // users with blocked images) only sees the composited gradient+colour.
@@ -41,17 +62,16 @@ export function HeroSection() {
           <div className="flex items-center gap-2 mb-6">
             <Wind className="h-5 w-5 text-secondary" />
             <span className="text-sm font-semibold tracking-widest uppercase text-secondary">
-              Skillnet Offshore Wind Academy
+              {settings.siteFullName}
             </span>
           </div>
 
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.1]">
-            Your Career in <span className="text-secondary">Offshore Wind</span> Starts Here
+            <AccentedTitle title={dict.title} accent={settings.sectorTitle} />
           </h1>
 
           <p className="mt-6 text-lg sm:text-xl text-white/75 leading-relaxed max-w-xl">
-            Discover pathways, training, and opportunities in Ireland&apos;s fastest-growing energy
-            sector.
+            {dict.subtitle}
           </p>
 
           <div className="mt-10">

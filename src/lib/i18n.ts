@@ -103,8 +103,49 @@ const dictionaries: Record<Locale, () => Promise<Dict>> = {
   pt: () => import("../../messages/pt.json").then((m) => m.default as Dict),
 };
 
+/**
+ * Brand tokens available inside dictionary strings. Values come from
+ * SiteSettings so a white-label deployment rebrands every locale without
+ * touching the message files:
+ *
+ *   {siteName}     — short brand, e.g. "SOWA"
+ *   {siteFullName} — full brand, e.g. "Skillnet Offshore Wind Academy"
+ *   {siteTagline}  — header tagline, e.g. "Offshore Wind Academy"
+ *   {sector}       — sector mid-sentence, e.g. "offshore wind energy"
+ *   {sectorTitle}  — sector in headings, e.g. "Offshore Wind"
+ *
+ * Only these five tokens are interpolated here; anything else (e.g. {year},
+ * {email}) is left for the consumer to fill via `format()`.
+ */
+const BRAND_TOKEN_RE = /\{(siteName|siteFullName|siteTagline|sector|sectorTitle)\}/g;
+
+function interpolateBrand<T>(node: T, tokens: Record<string, string>): T {
+  if (typeof node === "string") {
+    return node.replace(BRAND_TOKEN_RE, (_, key: string) => tokens[key]) as T;
+  }
+  if (Array.isArray(node)) {
+    return node.map((item) => interpolateBrand(item, tokens)) as T;
+  }
+  if (node && typeof node === "object") {
+    return Object.fromEntries(
+      Object.entries(node).map(([key, value]) => [key, interpolateBrand(value, tokens)]),
+    ) as T;
+  }
+  return node;
+}
+
 export async function getDictionary(locale: Locale): Promise<Dict> {
-  return dictionaries[locale]();
+  // Lazy import to avoid a module cycle (queries → types → …) at load time
+  // and to keep this module importable before the Prisma client exists.
+  const { getSiteSettings } = await import("./queries");
+  const [dict, settings] = await Promise.all([dictionaries[locale](), getSiteSettings()]);
+  return interpolateBrand(dict, {
+    siteName: settings.siteName,
+    siteFullName: settings.siteFullName,
+    siteTagline: settings.siteTagline,
+    sector: settings.sectorName,
+    sectorTitle: settings.sectorTitle,
+  });
 }
 
 export type Dictionary = Dict;

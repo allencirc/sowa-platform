@@ -158,7 +158,7 @@ describe("GET /api/admin/diagnostic/analytics", () => {
     expect(res.headers.get("content-type")).toContain("text/csv");
 
     const text = await res.text();
-    expect(text).toContain("SOWA Diagnostic Analytics Report");
+    expect(text).toContain("Diagnostic Analytics Report");
     expect(text).toContain("Category,Average Score (%)");
   });
 

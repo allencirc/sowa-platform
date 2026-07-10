@@ -127,12 +127,14 @@ interface AdminSidebarProps {
     email: string;
     role: UserRole;
   };
+  /** Short brand name shown above “Admin Panel”. */
+  siteName: string;
   /** Controls the mobile drawer. Ignored on lg+ where the sidebar is always visible. */
   mobileOpen: boolean;
   onMobileClose: () => void;
 }
 
-export function AdminSidebar({ user, mobileOpen, onMobileClose }: AdminSidebarProps) {
+export function AdminSidebar({ user, siteName, mobileOpen, onMobileClose }: AdminSidebarProps) {
   const pathname = usePathname();
 
   const filteredItems = navItems.filter((item) => item.roles.includes(user.role));
@@ -191,7 +193,7 @@ export function AdminSidebar({ user, mobileOpen, onMobileClose }: AdminSidebarPr
               <Wind className="h-5 w-5 text-white" />
             </div>
             <div>
-              <p className="text-sm font-bold leading-tight">SOWA</p>
+              <p className="text-sm font-bold leading-tight">{siteName}</p>
               <p className="text-xs text-white/60">Admin Panel</p>
             </div>
           </div>

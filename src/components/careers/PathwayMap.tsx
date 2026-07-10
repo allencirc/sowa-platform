@@ -269,7 +269,7 @@ function PathwayMapInner({ careers }: { careers: Career[] }) {
         data-testid="pathway-map"
         className="h-[520px] rounded-xl border border-gray-200 bg-white overflow-hidden"
         role="img"
-        aria-label="Interactive career pathway map showing connections between offshore wind energy roles. An accessible list of all careers is provided below."
+        aria-label="Interactive career pathway map showing connections between career roles. An accessible list of all careers is provided below."
       >
         <ReactFlow
           nodes={nodes}

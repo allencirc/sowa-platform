@@ -218,7 +218,7 @@ export function RegistrationModal({
               {...register("gdprConsent")}
             />
             <span className="text-sm text-text-secondary">
-              I consent to SOWA processing my personal data for the purpose of this registration.
+              I consent to my personal data being processed for the purpose of this registration.
               Your data will be handled in accordance with our{" "}
               <Link href="/privacy" className="text-accent-dark underline">
                 Privacy Policy

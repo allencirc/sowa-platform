@@ -4,30 +4,33 @@ import Image from "next/image";
 import { Calendar, ArrowRight } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Badge } from "@/components/ui/Badge";
-import { getAllNews } from "@/lib/queries";
+import { getAllNews, getSiteSettings } from "@/lib/queries";
 
 import { formatDate } from "@/lib/utils";
 
-export const metadata: Metadata = {
-  title: "News",
-  description:
-    "Latest news and updates from Ireland's offshore wind energy sector. Industry developments, policy changes, and sector growth.",
-  alternates: { canonical: "/news" },
-  openGraph: {
-    title: "News — Offshore Wind Energy Ireland",
-    description: "Latest news and updates from Ireland's offshore wind energy sector.",
-    url: "/news",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "News — SOWA",
-    description: "Latest news from Ireland's offshore wind energy sector.",
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSiteSettings();
+  return {
+    title: "News",
+    description: `Latest news and updates from Ireland's ${settings.sectorName} sector. Industry developments, policy changes, and sector growth.`,
+    alternates: { canonical: "/news" },
+    openGraph: {
+      title: `News — ${settings.sectorTitle} Ireland`,
+      description: `Latest news and updates from Ireland's ${settings.sectorName} sector.`,
+      url: "/news",
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `News — ${settings.siteName}`,
+      description: `Latest news from Ireland's ${settings.sectorName} sector.`,
+    },
+  };
+}
 
 export default async function NewsPage() {
   const articles = await getAllNews();
+  const settings = await getSiteSettings();
 
   return (
     <>
@@ -35,7 +38,7 @@ export default async function NewsPage() {
         <Container>
           <h1 className="text-3xl sm:text-4xl font-bold text-text-primary mb-2">News</h1>
           <p className="text-text-secondary max-w-2xl">
-            The latest updates from Ireland&apos;s offshore wind energy sector.
+            The latest updates from Ireland&apos;s {settings.sectorName} sector.
           </p>
         </Container>
       </section>

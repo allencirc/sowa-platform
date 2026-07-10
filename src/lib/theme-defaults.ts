@@ -1,7 +1,19 @@
 // Default theme values matching the @theme inline block in globals.css.
 // Used as fallbacks when SiteSettings fields are null.
+//
+// Brand identity fields default to the SOWA deployment so an empty
+// site_settings row renders the tender site unchanged. A white-label
+// deployment overrides these via the admin Settings page or seed data.
 
 export const DEFAULT_SITE_SETTINGS = {
+  siteName: "SOWA",
+  siteFullName: "Skillnet Offshore Wind Academy",
+  siteTagline: "Offshore Wind Academy",
+  sectorName: "offshore wind energy",
+  sectorTitle: "Offshore Wind",
+  contactEmail: "info@sowa.ie",
+  sectorContext:
+    "Ireland has committed to at least 5GW of offshore wind by 2030, and 37GW by 2050. The sector is growing rapidly with major projects in the Irish and Celtic Seas. Many skills are transferable from adjacent sectors such as oil & gas, maritime, construction, and traditional energy. The National Framework of Qualifications (NFQ) and Global Wind Organisation (GWO) standards apply.",
   colorPrimary: "#0c2340",
   colorPrimaryLight: "#1a3a5c",
   colorPrimaryDark: "#081828",

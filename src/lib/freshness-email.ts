@@ -103,7 +103,7 @@ export function generateFreshnessDigestHtml(alerts: FreshnessAlertItem[]): {
     </div>`;
 
   return {
-    subject: `[SOWA] Content Freshness Alert — ${count} item${count !== 1 ? "s" : ""} need attention`,
+    subject: `[{siteName}] Content Freshness Alert — ${count} item${count !== 1 ? "s" : ""} need attention`,
     html: wrap(body),
   };
 }

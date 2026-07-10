@@ -8,11 +8,11 @@ import { AnimatePresence, motion } from "motion/react";
 
 const PLACEHOLDERS = [
   "What are the next upcoming courses?",
-  "How can I transition from oil and gas to wind?",
-  "What skills do I need for offshore wind?",
+  "Which of my existing skills transfer to this sector?",
+  "What skills do I need to get started?",
   "Show me entry-level careers in marine operations",
   "What certifications are available?",
-  "How do I get started in offshore wind energy?",
+  "How do I get started in this industry?",
 ];
 
 /**

@@ -57,7 +57,7 @@ const PREVIEW_WALL_BODY = `<!doctype html>
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>SOWA Prototype — Restricted</title>
+  <title>Prototype — Restricted</title>
   <style>
     :root { color-scheme: light dark; }
     body { font-family: system-ui, -apple-system, sans-serif; max-width: 36rem; margin: 4rem auto; padding: 0 1.5rem; line-height: 1.55; color: #1A1A2E; }
@@ -69,7 +69,7 @@ const PREVIEW_WALL_BODY = `<!doctype html>
 </head>
 <body>
   <h1>This prototype is currently restricted.</h1>
-  <p>The SOWA platform prototype is paused from public access while the tender is under review.</p>
+  <p>This platform prototype is paused from public access while it is under review.</p>
   <p><button onclick="location.reload()">Try signing in again</button></p>
 </body>
 </html>`;
@@ -117,7 +117,7 @@ function checkPreviewWall(request: NextRequest): NextResponse | null {
   return new NextResponse(PREVIEW_WALL_BODY, {
     status: 401,
     headers: {
-      "WWW-Authenticate": 'Basic realm="SOWA Prototype", charset="UTF-8"',
+      "WWW-Authenticate": 'Basic realm="Prototype Preview", charset="UTF-8"',
       "Content-Type": "text/html; charset=utf-8",
       "Cache-Control": "no-store",
       "X-Robots-Tag": "noindex, nofollow",

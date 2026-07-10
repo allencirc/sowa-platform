@@ -1,10 +1,12 @@
 import { ImageResponse } from "next/og";
+import { getSiteSettings } from "@/lib/queries";
 
-export const alt = "SOWA — Skillnet Offshore Wind Academy";
+export const alt = "Site social preview image";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-export default function OGImage() {
+export default async function OGImage() {
+  const settings = await getSiteSettings();
   return new ImageResponse(
     <div
       style={{
@@ -66,7 +68,7 @@ export default function OGImage() {
             fontWeight: 700,
           }}
         >
-          S
+          {settings.siteName.charAt(0)}
         </div>
         <div
           style={{
@@ -76,7 +78,7 @@ export default function OGImage() {
             letterSpacing: "-0.02em",
           }}
         >
-          SOWA
+          {settings.siteName}
         </div>
       </div>
 
@@ -91,7 +93,7 @@ export default function OGImage() {
           textTransform: "uppercase",
         }}
       >
-        Skillnet Offshore Wind Academy
+        {settings.siteFullName}
       </div>
 
       {/* Tagline */}
@@ -104,7 +106,7 @@ export default function OGImage() {
           lineHeight: 1.4,
         }}
       >
-        Ireland&apos;s national careers platform for offshore wind energy
+        Ireland&apos;s national careers platform for {settings.sectorName}
       </div>
 
       {/* Bottom bar */}

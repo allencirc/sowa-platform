@@ -117,7 +117,7 @@ export function SeoFields({
           >
             <Input
               {...register("metaTitle")}
-              placeholder="e.g. Wind Turbine Technician Careers — SOWA"
+              placeholder="e.g. Wind Turbine Technician Careers"
               maxLength={70}
             />
           </FormField>
@@ -142,7 +142,7 @@ export function SeoFields({
           >
             <Input
               {...register("metaKeywords")}
-              placeholder="e.g. offshore wind, careers, technician, Ireland"
+              placeholder="e.g. careers, training, technician, Ireland"
               maxLength={500}
             />
           </FormField>

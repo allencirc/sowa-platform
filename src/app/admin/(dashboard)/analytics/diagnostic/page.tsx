@@ -3,7 +3,7 @@ import { auth } from "@/lib/auth";
 import { DiagnosticAnalyticsDashboard } from "@/components/admin/diagnostic-analytics/DiagnosticAnalyticsDashboard";
 
 export const metadata = {
-  title: "Diagnostic Insights — SOWA Admin",
+  title: "Diagnostic Insights",
   description:
     "Anonymous diagnostic session analytics: completions, skill gaps, role family trends, and locale breakdown.",
 };

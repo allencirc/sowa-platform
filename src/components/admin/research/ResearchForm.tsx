@@ -112,7 +112,7 @@ export function ResearchForm({ research, mode }: ResearchFormProps) {
         <h2 className="mb-4 text-lg font-semibold text-text-primary">Research Details</h2>
         <div className="grid gap-4 sm:grid-cols-2">
           <FormField label="Title" required error={errors.title?.message}>
-            <Input {...register("title")} placeholder="e.g. Offshore Wind Skills Gap Analysis" />
+            <Input {...register("title")} placeholder="e.g. Skills Gap Analysis 2026" />
           </FormField>
           <FormField label="Slug" required error={errors.slug?.message}>
             <Input

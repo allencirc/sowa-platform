@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { applyRateLimit, errorResponse } from "@/lib/api-utils";
 import { generateText, parseJSONResponse } from "@/lib/ai";
+import { getSiteSettings } from "@/lib/queries";
+import type { SiteSettings } from "@/lib/theme-defaults";
 
 interface CareerDraftRequest {
   title: string;
@@ -16,9 +18,10 @@ interface CareerDraftResult {
   growthOutlook: string;
 }
 
-const SYSTEM_PROMPT = `You are a career content specialist for the Skillnet Offshore Wind Academy (SOWA), an Irish government-backed initiative developing Ireland's offshore wind energy workforce.
+function buildSystemPrompt(settings: SiteSettings): string {
+  return `You are a career content specialist for the ${settings.siteFullName} (${settings.siteName}), an Irish government-backed initiative developing Ireland's ${settings.sectorName} workforce.
 
-Generate a professional career page draft for the specified role. The content should be informative, realistic, and tailored to the Irish offshore wind energy sector.
+Generate a professional career page draft for the specified role. The content should be informative, realistic, and tailored to the Irish ${settings.sectorName} sector.
 
 Return ONLY valid JSON with exactly these keys:
 {
@@ -30,22 +33,23 @@ Return ONLY valid JSON with exactly these keys:
 }
 
 Rules:
-- description: 2-3 concise paragraphs describing the role, its importance in the offshore wind sector, and what a typical day involves. Max 800 characters.
+- description: 2-3 concise paragraphs describing the role, its importance in the sector, and what a typical day involves. Max 800 characters.
 - keyResponsibilities: 5-7 specific, actionable bullet points. Each under 120 characters.
-- qualifications: 4-6 realistic qualifications/certifications relevant to the Irish market (NFQ levels, STCW, GWO, etc. where appropriate).
+- qualifications: 4-6 realistic qualifications/certifications relevant to the Irish market (NFQ levels and sector certifications where appropriate).
 - workingConditions: 1 paragraph covering typical environment, hours, travel, and physical requirements. Max 400 characters.
 - growthOutlook: 1 paragraph on career progression, sector growth in Ireland, and future demand. Max 400 characters.
 
 Do not include any text outside the JSON object.`;
+}
 
-function buildPrompt(data: CareerDraftRequest): string {
+function buildPrompt(data: CareerDraftRequest, settings: SiteSettings): string {
   return `Generate a career page draft for:
 
 Job Title: ${data.title}
 Sector: ${data.sector}
 Entry Level: ${data.entryLevel}
 
-Context: Ireland is targeting 5 GW of offshore wind capacity by 2030 and up to 37 GW by 2050. The sector is rapidly growing with major projects in the Irish and Celtic Seas. Write content appropriate for this market context.`;
+Context: ${settings.sectorContext} Write content appropriate for this market context.`;
 }
 
 export async function POST(request: NextRequest) {
@@ -71,7 +75,8 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const raw = await generateText(SYSTEM_PROMPT, buildPrompt(body), 1024);
+    const settings = await getSiteSettings();
+    const raw = await generateText(buildSystemPrompt(settings), buildPrompt(body, settings), 1024);
     const parsed = parseJSONResponse<CareerDraftResult>(raw);
 
     const result: CareerDraftResult = {

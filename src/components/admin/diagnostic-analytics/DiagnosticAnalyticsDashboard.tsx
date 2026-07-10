@@ -113,7 +113,7 @@ export function DiagnosticAnalyticsDashboard({ userRole }: Props) {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `sowa-diagnostic-analytics.csv`;
+    a.download = `diagnostic-analytics.csv`;
     a.click();
     URL.revokeObjectURL(url);
   };

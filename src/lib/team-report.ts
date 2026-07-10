@@ -6,6 +6,8 @@
  */
 
 import { generateText, getAIProvider } from "./ai";
+import { getSiteSettings } from "./queries";
+import type { SiteSettings } from "./theme-defaults";
 
 // ─── Types ──────────────────────────────────────────────
 
@@ -149,24 +151,26 @@ export function aggregateTeamResults(
 
 // ─── AI Report Generation ────────────────────────────────
 
-const TEAM_REPORT_SYSTEM_PROMPT = `You are a workforce development advisor for the Skillnet Offshore Wind Academy (SOWA), Ireland's national initiative to build the offshore wind energy workforce.
+function buildTeamReportSystemPrompt(settings: SiteSettings): string {
+  return `You are a workforce development advisor for the ${settings.siteFullName} (${settings.siteName}), Ireland's national initiative to build the ${settings.sectorName} workforce.
 
 You are writing a team-level training needs analysis report for a manager who has had their team complete a skills diagnostic assessment. The results are anonymised and aggregated — you cannot identify individual team members.
 
 Your report should:
-1. Summarise the team's overall readiness for offshore wind roles
+1. Summarise the team's overall readiness for ${settings.sectorName} roles
 2. Identify the team's collective strengths (skills scoring above 66%)
 3. Highlight the team's critical skill gaps (skills scoring below 33%)
 4. Recommend 3-5 specific training priorities, ordered by impact
-5. For each priority, recommend a SPECIFIC course from the "Available SOWA Platform Courses" list below — use the exact course title, provider name, cost, and format. Explain why that course addresses the gap.
+5. For each priority, recommend a SPECIFIC course from the "Available Platform Courses" list below — use the exact course title, provider name, cost, and format. Explain why that course addresses the gap.
 6. Note any interesting patterns (e.g., strong technical but weak regulatory skills)
 7. Provide an actionable 90-day development plan outline with specific course enrolment milestones
 
 Keep the tone professional but practical. Use clear headings. The audience is a team manager or HR professional, not a technical expert.
 
-Ireland's offshore wind targets: 5GW by 2030, 37GW by 2050. The sector is growing rapidly and skilled teams are a competitive advantage.
+Sector context: ${settings.sectorContext}
 
 Format the response as markdown with ## headings.`;
+}
 
 export interface CourseForReport {
   title: string;
@@ -260,13 +264,14 @@ ${mostCommonGaps || "None"}
 ### Role Family Distribution (top fit per person)
 ${roleDistribution || "Not enough data"}
 
-### Available SOWA Platform Courses
+### Available Platform Courses
 ${courseList}
 
 Please write the team training needs analysis report.`;
 
   try {
-    return await generateText(TEAM_REPORT_SYSTEM_PROMPT, userPrompt, 1500);
+    const settings = await getSiteSettings();
+    return await generateText(buildTeamReportSystemPrompt(settings), userPrompt, 1500);
   } catch (err) {
     console.error("[TeamReport] AI generation failed, using fallback:", err);
     return generateFallbackReport(aggregated);
@@ -301,7 +306,7 @@ function generateFallbackReport(aggregated: AggregatedTeamData): string {
     report += "\n";
     report += `## Recommended Next Steps\n\n`;
     report += `1. Focus training investment on the top ${Math.min(3, gaps.length)} skill gaps identified above\n`;
-    report += `2. Browse the SOWA training directory for accredited courses that address these competencies\n`;
+    report += `2. Browse the platform training directory for accredited courses that address these competencies\n`;
     report += `3. Consider team-wide training for gaps affecting the majority of respondents\n`;
     report += `4. Re-assess in 90 days to measure progress\n`;
   }

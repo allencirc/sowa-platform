@@ -68,7 +68,7 @@ export function CookieConsent() {
               <Shield className="mt-0.5 hidden size-6 shrink-0 text-secondary-dark sm:block" />
               <div className="flex-1 space-y-3">
                 <p className="text-sm leading-relaxed text-text-inverse">
-                  We use cookies to understand how you use SOWA and improve your experience.
+                  We use cookies to understand how you use this site and improve your experience.
                   Analytics cookies help us measure usage; marketing cookies let us reach you on
                   other platforms. You can change your preferences at any time.
                 </p>

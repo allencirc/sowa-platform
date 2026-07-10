@@ -6,7 +6,7 @@ import { fetchGa4Overview } from "@/lib/integrations/ga4";
 import { AnalyticsDashboard } from "@/components/admin/analytics/AnalyticsDashboard";
 
 export const metadata = {
-  title: "Analytics — SOWA Admin",
+  title: "Analytics",
   description:
     "Site traffic, top content, diagnostic completions, and conversion events from Google Analytics 4.",
 };

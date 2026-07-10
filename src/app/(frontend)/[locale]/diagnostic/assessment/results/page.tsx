@@ -4,7 +4,7 @@ import ResultsClient from "./ResultsClient";
 
 export const metadata: Metadata = {
   title: "Your Skills Profile",
-  description: "View and share your personalised SOWA offshore wind skills profile.",
+  description: "View and share your personalised skills profile.",
   robots: { index: false, follow: false },
 };
 

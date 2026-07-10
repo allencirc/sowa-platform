@@ -7,7 +7,7 @@ import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
 import { Container } from "@/components/ui/Container";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
-import { getResearchBySlug, getAllResearch } from "@/lib/queries";
+import { getResearchBySlug, getAllResearch, getSiteSettings } from "@/lib/queries";
 import { formatDate } from "@/lib/utils";
 
 interface ResearchDetailProps {
@@ -26,6 +26,7 @@ export async function generateMetadata({ params }: ResearchDetailProps): Promise
   const { slug } = await params;
   const research = await getResearchBySlug(slug);
   if (!research) return { title: "Research Not Found" };
+  const settings = await getSiteSettings();
   const title = research.metaTitle || `${research.title} — Research`;
   const desc = research.metaDescription || research.summary.slice(0, 160);
   return {
@@ -34,14 +35,14 @@ export async function generateMetadata({ params }: ResearchDetailProps): Promise
     ...(research.metaKeywords && { keywords: research.metaKeywords }),
     alternates: { canonical: `/research/${research.slug}` },
     openGraph: {
-      title: research.metaTitle || `${research.title} — SOWA Research`,
+      title: research.metaTitle || `${research.title} — ${settings.siteName} Research`,
       description: desc,
       url: `/research/${research.slug}`,
       type: "article",
     },
     twitter: {
       card: "summary_large_image",
-      title: research.metaTitle || `${research.title} — SOWA`,
+      title: research.metaTitle || `${research.title} — ${settings.siteName}`,
       description: desc,
     },
   };

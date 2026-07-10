@@ -8,7 +8,7 @@ export default function NewCareerPage() {
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-text-primary">Add Career Profile</h1>
         <p className="mt-1 text-sm text-text-secondary">
-          Create a new career pathway for the SOWA platform.
+          Create a new career pathway for the platform.
         </p>
       </div>
       <CareerForm mode="create" />

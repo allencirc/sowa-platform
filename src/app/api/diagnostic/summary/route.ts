@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { applyRateLimit, errorResponse } from "@/lib/api-utils";
+import { getSiteSettings } from "@/lib/queries";
+import type { SiteSettings } from "@/lib/theme-defaults";
 
 interface SummaryRequestBody {
   background: {
@@ -47,7 +49,7 @@ function buildPrompt(data: SummaryRequestBody): string {
     })
     .join("\n");
 
-  return `The user has completed a skills diagnostic assessment for the Irish offshore wind energy sector. Based on their results, write a personalised ~200-word career guidance summary.
+  return `The user has completed a skills diagnostic assessment for this sector. Based on their results, write a personalised ~200-word career guidance summary.
 
 User background:
 - Current situation: ${background.currentSituation || "Not specified"}
@@ -69,20 +71,22 @@ Write a friendly, encouraging paragraph that:
 2. Highlights their strongest transferable skills based on what they scored well on
 3. Identifies which career paths are most accessible to them and why
 4. Suggests a specific next step (e.g., "Start with [specific course] to build your [specific skill] foundation")
-5. Mentions that Ireland's offshore wind sector is growing rapidly with strong demand for skilled professionals
+5. Mentions that the sector is growing rapidly with strong demand for skilled professionals
 
 Keep the tone warm, practical, and motivating. Do not use bullet points — write flowing prose. Do not include any PII or make assumptions about the user's identity.`;
 }
 
-const SYSTEM_PROMPT = `You are a career guidance advisor specialising in the Irish offshore wind energy (OWE) sector. You work for the Skillnet Offshore Wind Academy (SOWA), a government-backed initiative to develop Ireland's offshore wind workforce.
+function buildSystemPromptForSettings(settings: SiteSettings): string {
+  return `You are a career guidance advisor specialising in the Irish ${settings.sectorName} sector. You work for the ${settings.siteFullName} (${settings.siteName}), a government-backed initiative to develop Ireland's ${settings.sectorName} workforce.
 
 You are knowledgeable about:
-- Ireland's offshore wind targets (at least 5GW by 2030, 37GW by 2050)
-- The key career pathways in OWE: operations & maintenance, marine operations, electrical, survey & design, HSE, policy & regulation, and project management
-- Irish training providers and certification frameworks (NFQ, GWO standards)
-- The transferable skills from adjacent sectors (oil & gas, maritime, construction, energy)
+- The sector: ${settings.sectorContext}
+- The key career pathways on the platform and how they connect
+- Irish training providers and certification frameworks (NFQ and sector standards)
+- The transferable skills from adjacent sectors
 
-Your tone is encouraging, practical, and professional. You help people see a clear path forward into offshore wind careers, regardless of their starting point. You never use jargon without explanation. You are concise — around 200 words.`;
+Your tone is encouraging, practical, and professional. You help people see a clear path forward into ${settings.sectorName} careers, regardless of their starting point. You never use jargon without explanation. You are concise — around 200 words.`;
+}
 
 export async function POST(request: NextRequest) {
   // Feature flag check
@@ -109,6 +113,7 @@ export async function POST(request: NextRequest) {
   }
 
   const userPrompt = buildPrompt(body);
+  const systemPrompt = buildSystemPromptForSettings(await getSiteSettings());
 
   // Try Anthropic API first, fall back to OpenAI
   const anthropicKey = process.env.CLAUDE_KEY || process.env.ANTHROPIC_API_KEY;
@@ -122,9 +127,9 @@ export async function POST(request: NextRequest) {
     let summary: string;
 
     if (anthropicKey) {
-      summary = await callAnthropic(anthropicKey, userPrompt);
+      summary = await callAnthropic(anthropicKey, systemPrompt, userPrompt);
     } else {
-      summary = await callOpenAI(openaiKey!, userPrompt);
+      summary = await callOpenAI(openaiKey!, systemPrompt, userPrompt);
     }
 
     return NextResponse.json({ summary });
@@ -134,7 +139,11 @@ export async function POST(request: NextRequest) {
   }
 }
 
-async function callAnthropic(apiKey: string, userPrompt: string): Promise<string> {
+async function callAnthropic(
+  apiKey: string,
+  systemPrompt: string,
+  userPrompt: string,
+): Promise<string> {
   const response = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
     headers: {
@@ -145,7 +154,7 @@ async function callAnthropic(apiKey: string, userPrompt: string): Promise<string
     body: JSON.stringify({
       model: "claude-haiku-4-5-20251001",
       max_tokens: 512,
-      system: SYSTEM_PROMPT,
+      system: systemPrompt,
       messages: [{ role: "user", content: userPrompt }],
     }),
   });
@@ -164,7 +173,11 @@ async function callAnthropic(apiKey: string, userPrompt: string): Promise<string
   return content.text;
 }
 
-async function callOpenAI(apiKey: string, userPrompt: string): Promise<string> {
+async function callOpenAI(
+  apiKey: string,
+  systemPrompt: string,
+  userPrompt: string,
+): Promise<string> {
   const response = await fetch("https://api.openai.com/v1/chat/completions", {
     method: "POST",
     headers: {
@@ -175,7 +188,7 @@ async function callOpenAI(apiKey: string, userPrompt: string): Promise<string> {
       model: "gpt-4o-mini",
       max_tokens: 512,
       messages: [
-        { role: "system", content: SYSTEM_PROMPT },
+        { role: "system", content: systemPrompt },
         { role: "user", content: userPrompt },
       ],
     }),

@@ -3,32 +3,34 @@ import { notFound } from "next/navigation";
 import { Container } from "@/components/ui/Container";
 import { ContactForm } from "@/components/contact/ContactForm";
 import { getDictionary, isLocale, type Locale } from "@/lib/i18n";
+import { getSiteSettings } from "@/lib/queries";
 import { Mail, MapPin, Clock } from "lucide-react";
 
-export const metadata: Metadata = {
-  title: "Contact Us",
-  description:
-    "Get in touch with the Skillnet Offshore Wind Academy. Ask about careers, training, partnerships, or technical support for Ireland's offshore wind energy sector.",
-  alternates: { canonical: "/contact" },
-  openGraph: {
-    title: "Contact Us — SOWA",
-    description:
-      "Get in touch with the Skillnet Offshore Wind Academy for career guidance, training information, and partnership inquiries.",
-    url: "/contact",
-    type: "website",
-  },
-  twitter: {
-    card: "summary",
-    title: "Contact Us — SOWA",
-    description: "Get in touch with the Skillnet Offshore Wind Academy.",
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSiteSettings();
+  return {
+    title: "Contact Us",
+    description: `Get in touch with the ${settings.siteFullName}. Ask about careers, training, partnerships, or technical support for Ireland's ${settings.sectorName} sector.`,
+    alternates: { canonical: "/contact" },
+    openGraph: {
+      title: `Contact Us — ${settings.siteName}`,
+      description: `Get in touch with the ${settings.siteFullName} for career guidance, training information, and partnership inquiries.`,
+      url: "/contact",
+      type: "website",
+    },
+    twitter: {
+      card: "summary",
+      title: `Contact Us — ${settings.siteName}`,
+      description: `Get in touch with the ${settings.siteFullName}.`,
+    },
+  };
+}
 
 export default async function ContactPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale: rawLocale } = await params;
   if (!isLocale(rawLocale)) notFound();
   const locale: Locale = rawLocale;
-  const dict = await getDictionary(locale);
+  const [dict, settings] = await Promise.all([getDictionary(locale), getSiteSettings()]);
 
   return (
     <>
@@ -61,7 +63,7 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
                   />
                   <div>
                     <h3 className="text-sm font-semibold text-text-primary">Email</h3>
-                    <p className="text-sm text-text-secondary">info@sowa.ie</p>
+                    <p className="text-sm text-text-secondary">{settings.contactEmail}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">

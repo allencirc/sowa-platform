@@ -2,32 +2,35 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { User, Building2, GraduationCap, ArrowRight, Clock, Target, BarChart3 } from "lucide-react";
 import { Container } from "@/components/ui/Container";
+import { getSiteSettings } from "@/lib/queries";
 
-export const metadata: Metadata = {
-  title: "Skills Diagnostic",
-  description:
-    "Assess your offshore wind energy skills in 5 minutes and get personalised career and training recommendations.",
-  alternates: { canonical: "/diagnostic" },
-  openGraph: {
-    title: "OWE Skills Diagnostic — Assess Your Skills",
-    description:
-      "Assess your offshore wind energy skills in 5 minutes and get personalised career and training recommendations.",
-    url: "/diagnostic",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Skills Diagnostic — SOWA",
-    description: "Assess your offshore wind skills in 5 minutes. Get personalised recommendations.",
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSiteSettings();
+  const description = `Assess your ${settings.sectorName} skills in 5 minutes and get personalised career and training recommendations.`;
+  return {
+    title: "Skills Diagnostic",
+    description,
+    alternates: { canonical: "/diagnostic" },
+    openGraph: {
+      title: `${settings.sectorTitle} Skills Diagnostic — Assess Your Skills`,
+      description,
+      url: "/diagnostic",
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `Skills Diagnostic — ${settings.siteName}`,
+      description: `Assess your ${settings.sectorName} skills in 5 minutes. Get personalised recommendations.`,
+    },
+  };
+}
 
 const audiences = [
   {
     icon: User,
     title: "I'm an Individual",
     description:
-      "Discover which offshore wind careers match your skills and find the training you need to get there.",
+      "Discover which careers match your skills and find the training you need to get there.",
     colour: "from-secondary to-secondary-dark",
     iconBg: "bg-secondary/10 text-secondary-dark",
   },

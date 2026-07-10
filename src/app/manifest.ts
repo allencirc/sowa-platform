@@ -1,11 +1,12 @@
 import type { MetadataRoute } from "next";
+import { getSiteSettings } from "@/lib/queries";
 
-export default function manifest(): MetadataRoute.Manifest {
+export default async function manifest(): Promise<MetadataRoute.Manifest> {
+  const settings = await getSiteSettings();
   return {
-    name: "SOWA — Skillnet Offshore Wind Academy",
-    short_name: "SOWA",
-    description:
-      "Ireland's national careers platform for offshore wind energy. Explore career pathways, training courses, events, and skills diagnostics.",
+    name: `${settings.siteName} — ${settings.siteFullName}`,
+    short_name: settings.siteName,
+    description: `Ireland's national careers platform for ${settings.sectorName}. Explore career pathways, training courses, events, and skills diagnostics.`,
     start_url: "/",
     display: "standalone",
     background_color: "#F7F9FC",

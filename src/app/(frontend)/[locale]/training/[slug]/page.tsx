@@ -8,7 +8,13 @@ import { Badge } from "@/components/ui/Badge";
 import { RegisterButton } from "@/components/registration/RegisterButton";
 import { SkillBadge } from "@/components/careers/SkillBadge";
 import { CareerCard } from "@/components/careers/CareerCard";
-import { getCourseBySlug, getAllCourses, getCareersBySlugs, getSkillsBySlugs } from "@/lib/queries";
+import {
+  getCourseBySlug,
+  getAllCourses,
+  getCareersBySlugs,
+  getSkillsBySlugs,
+  getSiteSettings,
+} from "@/lib/queries";
 import { formatDate, formatCurrency } from "@/lib/utils";
 
 interface CourseDetailProps {
@@ -27,6 +33,7 @@ export async function generateMetadata({ params }: CourseDetailProps): Promise<M
   const { slug } = await params;
   const course = await getCourseBySlug(slug);
   if (!course) return { title: "Course Not Found" };
+  const settings = await getSiteSettings();
   const title = course.metaTitle || `${course.title} — Training`;
   const desc = course.metaDescription || course.description.slice(0, 160);
   return {
@@ -35,14 +42,14 @@ export async function generateMetadata({ params }: CourseDetailProps): Promise<M
     ...(course.metaKeywords && { keywords: course.metaKeywords }),
     alternates: { canonical: `/training/${course.slug}` },
     openGraph: {
-      title: course.metaTitle || `${course.title} — Offshore Wind Training`,
+      title: course.metaTitle || `${course.title} — ${settings.sectorTitle} Training`,
       description: desc,
       url: `/training/${course.slug}`,
       type: "article",
     },
     twitter: {
       card: "summary_large_image",
-      title: course.metaTitle || `${course.title} — SOWA`,
+      title: course.metaTitle || `${course.title} — ${settings.siteName}`,
       description: desc,
     },
   };

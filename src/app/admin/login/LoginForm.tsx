@@ -32,7 +32,7 @@ export function LoginForm() {
         name="email"
         type="email"
         label="Email address"
-        placeholder="admin@sowa.ie"
+        placeholder="you@example.com"
         autoComplete="email"
         required
       />

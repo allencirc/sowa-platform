@@ -4,7 +4,7 @@ import { SearchClient } from "./SearchClient";
 
 export const metadata: Metadata = {
   title: "Search",
-  description: "Search across careers, courses, events, research, and news on the SOWA platform.",
+  description: "Search across careers, courses, events, research, and news on this platform.",
   robots: { index: false, follow: true },
 };
 

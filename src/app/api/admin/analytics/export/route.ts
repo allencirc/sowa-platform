@@ -54,7 +54,7 @@ export async function GET(request: NextRequest) {
       return new NextResponse(new Uint8Array(pdfBuffer), {
         headers: {
           "Content-Type": "application/pdf",
-          "Content-Disposition": `attachment; filename="sowa-${reportId}-${dateStr()}.pdf"`,
+          "Content-Disposition": `attachment; filename="analytics-${reportId}-${dateStr()}.pdf"`,
         },
       });
     }
@@ -69,7 +69,7 @@ export async function GET(request: NextRequest) {
     return new NextResponse(csv, {
       headers: {
         "Content-Type": "text/csv; charset=utf-8",
-        "Content-Disposition": `attachment; filename="sowa-${reportId}-${dateStr()}.csv"`,
+        "Content-Disposition": `attachment; filename="analytics-${reportId}-${dateStr()}.csv"`,
       },
     });
   } catch (err) {
@@ -264,7 +264,7 @@ async function generatePdf(
   // Header
   doc.setFontSize(18);
   doc.setTextColor(12, 35, 64); // primary color
-  doc.text("SOWA Analytics Report", 14, 20);
+  doc.text("Analytics Report", 14, 20);
 
   doc.setFontSize(12);
   doc.setTextColor(75, 85, 99); // text-secondary
@@ -299,7 +299,7 @@ async function generatePdf(
     doc.setPage(i);
     doc.setFontSize(8);
     doc.setTextColor(156, 163, 175);
-    doc.text(`SOWA Platform — Page ${i} of ${pageCount}`, 14, doc.internal.pageSize.height - 10);
+    doc.text(`Page ${i} of ${pageCount}`, 14, doc.internal.pageSize.height - 10);
   }
 
   return Buffer.from(doc.output("arraybuffer"));

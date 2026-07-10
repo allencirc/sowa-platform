@@ -150,14 +150,14 @@ export async function generateWeeklyReportHtml(): Promise<{
   <div style="max-width:600px;margin:24px auto;background:#FFFFFF;border-radius:8px;overflow:hidden;border:1px solid #E5E7EB;">
     <div style="background-color:#0C2340;padding:24px 32px;text-align:center;">
       <h1 style="color:#FFFFFF;font-family:Inter,system-ui,sans-serif;font-size:20px;margin:0;">
-        SOWA Platform — Weekly Report
+        {siteName} Platform — Weekly Report
       </h1>
     </div>
     <div style="padding:24px 32px;">
       ${body}
     </div>
     <div style="padding:16px 32px;text-align:center;font-size:12px;color:#6B7280;font-family:Inter,system-ui,sans-serif;">
-      <p style="margin:0;">Skillnet Offshore Wind Academy</p>
+      <p style="margin:0;">{siteFullName}</p>
       <p style="margin:4px 0 0;color:#9CA3AF;">
         This automated report is sent weekly. Configure recipients via <code>REPORT_EMAIL_RECIPIENTS</code>.
       </p>
@@ -167,7 +167,7 @@ export async function generateWeeklyReportHtml(): Promise<{
 </html>`;
 
   return {
-    subject: `SOWA Weekly Report — ${weekStart} – ${weekEnd}`,
+    subject: `{siteName} Weekly Report — ${weekStart} – ${weekEnd}`,
     html,
   };
 }
