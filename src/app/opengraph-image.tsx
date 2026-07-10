@@ -106,7 +106,9 @@ export default async function OGImage() {
           lineHeight: 1.4,
         }}
       >
-        Ireland&apos;s national careers platform for {settings.sectorName}
+        {/* Single string child — Satori requires explicit display:flex on
+            elements with multiple children, so avoid mixing text + expression */}
+        {`Ireland’s national careers platform for ${settings.sectorName}`}
       </div>
 
       {/* Bottom bar */}
